@@ -1,0 +1,34 @@
+*.pem
+
+/build
+/data
+/tools
+/temp
+
+/TODO
+
+# oex
+/src/config.xml
+
+# crx
+/src/manifest.json
+
+# xpi
+/src/install.rdf
+/src/chrome.manifest
+
+# safariextz
+/src/Info.plist
+/src/Settings.plist
+
+# mxaddon
+/src/def.json
+
+/src/*locale*
+
+*.safariextension
+/meta/safariextz/*
+!/meta/safariextz/*.plist
+
+/meta/mxaddon/*
+!/meta/mxaddon/*.json

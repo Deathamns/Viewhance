@@ -1,0 +1,72 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true
+	},
+	"globals": {
+		"vAPI": true,
+		// used instead of "window" if we refer to extension context
+		"self": false,
+		"chrome": false,
+		"safari": false,
+		// global wariables in Opera
+		"opera": false,
+		"widget": false,
+		// global variable in Firefox
+		"Components": false,
+		// global variables in Maxthon
+		"mx": false,
+		"external": false
+	},
+	"rules": {
+		"no-cond-assign": 0,
+		"no-extra-parens": 1,
+		"no-reserved-keys": 1,
+
+		// "consistent-return": 0,
+		// "dot-notation": 1,
+		"no-else-return": 1,
+		"no-eq-null": 2,
+		"no-floating-decimal": 2,
+		"no-labels": 0,
+		"no-new": 0,
+		"no-new-func": 0,
+		"no-param-reassign": 1,
+		"no-return-assign": 0,
+		"no-self-compare": 1,
+		// "no-throw-literal": 1,
+		"radix": 1,
+		"wrap-iife": [1, "inside"],
+
+		"strict": [2, "global"],
+		"no-extra-strict": 2,
+		"global-strict": [2, "always"],
+
+		"no-undefined": 2,
+
+		// "indent": [2, "tab", {"indentSwitchCase": true}],
+		"brace-style": [2, "1tbs"],
+		"comma-style": [2, "last"],
+		// "consistent-this": [1, "that"],
+		"func-style": [2, "expression"],
+		"max-nested-callbacks": [2, 3],
+		"new-parens": 0,
+		"no-array-constructor": 2,
+		"no-inline-comments": 1,
+		"no-lonely-if": 1,
+		"no-mixed-spaces-and-tabs": 2,
+		"no-multiple-empty-lines": [2, {"max": 2}],
+		// "no-nested-ternary": 1,
+		"no-underscore-dangle": 0,
+		"operator-assignment": [2, "always"],
+		// "operator-linebreak": [2, "before"],
+		// "padded-blocks": [1, "never"],
+		"quote-props": [2, "as-needed"],
+		"quotes": [2, "single", "avoid-escape"],
+		"space-after-keywords": 2,
+		"space-before-blocks": 2,
+		"space-before-function-paren": [2, "never"],
+		"space-in-brackets": 2,
+		"spaced-line-comment": [1, "always"]
+	}
+}

@@ -1,0 +1,471 @@
+::-moz-selection {
+	background: #adf;
+}
+
+::selection {
+	background: #adf;
+}
+
+html {
+	min-height: 100%;
+	background-color: #f3f3f5;
+	cursor: default;
+}
+
+body {
+	display: none;
+	position: relative;
+	max-width: 700px;
+	min-height: 300px;
+	margin: 0 auto;
+	padding: 6px 15px 15px;
+	border-top: 0;
+	box-shadow: 0 0 6px #666;
+	-webkit-box-shadow: 0 0 6px #666;
+	background-color: #fff;
+	font: 13px "Lucida Grande", "Lucida Sans Unicode", "Tahoma", sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: #1155ef;
+}
+
+a:hover {
+	color: #000;
+}
+
+:focus {
+	outline: none;
+}
+
+.fn {
+	float: none;
+}
+
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+.cf::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+hr {
+	border: 1px solid #eee;
+	margin: 10px 0;
+}
+
+#right-panel {
+	position: absolute;
+	left: 100%;
+	top: 0;
+}
+
+#right-panel > aside {
+	max-width: 140px;
+	position: fixed;
+	top: 0;
+	padding: 0 5px 3px 8px;
+	box-shadow: 2px 2px 2px #aaa;
+	-webkit-box-shadow: 2px 2px 2px #aaa;
+	background-color: rgba(255, 255, 255, .8);
+	overflow: hidden;
+	text-align: center;
+}
+
+#right-panel > aside, section {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+aside > .app-info {
+	font-weight: bold;
+}
+
+#platform-info {
+	font: normal 8px sans-serif;
+	color: gray;
+}
+
+.hidden,
+body.opera .opera, body.firefox .firefox, body.chrome .chrome,
+body.safari .safari, body.maxthon .maxthon {
+	display: none;
+}
+
+.logo {
+	display: block;
+	width: 128px;
+	height: 128px;
+	margin-top: 5px;
+	border-radius: 10px;
+	background: url(../icon.png) no-repeat center;
+	-webkit-transition: -webkit-box-shadow .2s;
+	transition: box-shadow .2s;
+}
+
+.logo:hover {
+	box-shadow: 0 0 10px #bef;
+	-webkit-box-shadow: 0 0 10px #bef;
+}
+
+body > form > section {
+	display: none;
+}
+
+nav {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+nav > a {
+	display: inline-block;
+	border-bottom: 3px solid transparent;
+	padding: 5px 6px;
+	color: #1155ef;
+	text-decoration: none;
+	-webkit-transition: border-bottom-color .5s;
+	transition: border-bottom-color .5s;
+}
+
+nav > a:hover {
+	-webkit-transition: border-bottom-color 0s;
+	transition: border-bottom-color 0s;
+	border-bottom: 3px solid #aaf;
+	color: #000;
+}
+
+nav > .active {
+	color: #000;
+	border-bottom: 3px solid #000;
+}
+
+.prow {
+	clear: both;
+	padding-bottom: 3px;
+}
+
+.prow, .tiptop {
+	position: relative;
+}
+
+.tip {
+	visibility: hidden;
+	max-width: 100%;
+	width: 33px;
+	height: 25px;
+	z-index: 1;
+	position: absolute;
+	left: -48px;
+	top: -5px;
+	border: 1px solid transparent;
+	padding: 5px 7px;
+	overflow: hidden;
+	opacity: 0;
+	font: 12px/150% Verdana, sans-serif;
+	white-space: pre-wrap;
+	color: rgba(0, 0, 0, 0);
+	-webkit-transition: visibility 0s 0.5s, opacity 0.5s, color .7s;
+	transition: visibility 0s 0.5s, opacity 0.5s, color .7s;
+}
+
+.tiptop:hover > .tip:not(:empty) {
+	visibility: visible;
+	opacity: 1;
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+}
+
+.tip:hover {
+	width: auto;
+	height: auto;
+	left: -45px;
+	border: 1px solid #ddd;
+	border-left: none;
+	border-radius: 6px;
+	padding: 10px;
+	padding-left: 40px;
+	box-shadow: 0 0 10px #666;
+	-webkit-box-shadow: 0 0 10px #666;
+	background-color: rgba(245, 245, 255, .9);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #fff), color-stop(100%, rgba(245, 245, 255, 0)));
+	background-image: linear-gradient(to bottom, #fff, rgba(245, 245, 255, 0));
+	overflow: visible;
+	color: #000;
+}
+
+.tip::before {
+	display: inline-block;
+	margin-right: 20px;
+	border: 3px solid #aaa;
+	border-right: none;
+	border-radius: 10px 6px 6px 10px;
+	padding: 0 6px 2px;
+	text-align: center;
+	text-shadow: 0 0 3px #000, 0 0 3px #000;
+	font: 700 17px Verdana, sans-serif;
+	color: #fff;
+	content: "?";
+}
+
+.tip:hover::before {
+	position: absolute;
+	left: 5px;
+	top: 5px;
+}
+
+.prow > label, .prow > span:not(.clean) {
+	display: inline-block;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 49.6%;
+}
+
+.prow > label {
+	padding-top: 8px;
+}
+
+.prow:hover label:not(.checkbox), label:not(.checkbox):hover {
+	color: #45f;
+}
+
+.prow > span:not(.clean) {
+	float: right;
+	max-width: 50%;
+	margin-top: 4px;
+	text-align: right;
+}
+
+.prow input[type="text"] {
+	width: 300px;
+}
+
+.prow select {
+	max-width: 308px;
+}
+
+.prow input[type="color"] + input[type="text"], .shorter-input {
+	width: 242px;
+	vertical-align: middle;
+}
+
+.prowone > label, .prowone > span {
+	width: auto !important;
+	padding: 2px 0;
+}
+
+.sub-opt {
+	padding-left: 20px;
+}
+
+input, textarea, select, code, .checkbox, .pager > a {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 2px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 3px;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #fff), color-stop(100%, #f5f5f5));
+	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
+	background-color: rgba(242, 242, 242, 0);
+	font: 13px Verdana, sans-serif;
+	-webkit-transition: color .2s, border-color .2s;
+	transition: color .2s, border-color .2s;
+}
+
+pre, code, textarea {
+	font: 13px Consolas, Monaco, monospace;
+	transition: all 0s;
+}
+
+code {
+	display: inline-block;
+	border: 1px solid silver;
+	padding: 3px 5px;
+	background-image: linear-gradient(to bottom, #FFFFFF, #F5F5F5);
+}
+
+select {
+	max-width: 100%;
+}
+
+textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	overflow-x: hidden;
+	resize: none;
+	-webkit-tab-size: 4;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+}
+
+select:focus, textarea:focus,
+input[type="text"]:focus,
+input:hover, select:hover, textarea:hover,
+.prow:hover input, .prow:hover select,
+label:hover input, .pager > a:hover,
+.prow:hover .checkbox, label:hover > .checkbox, .checkbox:hover {
+	border: 1px solid #888;
+}
+
+input[type="checkbox"] {
+	display: none;
+}
+
+.checkbox {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	position: relative;
+	padding: 0;
+	vertical-align: middle;
+	color: transparent;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.checkbox::after {
+	position: absolute;
+	left: 3px;
+	top: 0;
+	font-weight: 700;
+	content: "✔";
+}
+
+input[type="checkbox"]:checked + .checkbox {
+	color: #616161;
+}
+
+input[type="number"], input[type="color"] {
+	width: 50px;
+	text-align: center;
+}
+
+input[type="color"] {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 2px;
+	background: none;
+	vertical-align: middle;
+}
+
+input[type="number"] {
+	width: 60px;
+	box-shadow: none; /* Firefox marks "invalid" inputs */
+}
+
+input[type="range"] {
+	height: 24px;
+	vertical-align: middle;
+}
+
+output {
+	display: inline-block;
+	min-width: 24px;
+}
+
+h3 {
+	clear: left;
+}
+
+.color-helper {
+	float: right;
+	opacity: 0.3;
+	transition: opacity .3s;
+}
+
+.color-helper:hover {
+	opacity: 1;
+}
+
+.color-helper > input[type="text"] {
+	width: 80px !important;
+}
+
+.shortcuts > label {
+	display: block;
+}
+
+.shortcuts > label:hover input {
+	border: 1px solid #aaa;
+}
+
+.shortcuts input, .sub-shortcuts input {
+	width: 35px;
+	margin: 5px;
+	text-align: center;
+}
+
+.sub-shortcuts input {
+	margin: 0;
+}
+
+.sub-shortcuts li {
+	line-height: 200%;
+}
+
+.op-buttons > button, .action-buttons > span {
+	position: relative;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #fff), color-stop(100%, #f5f5f5));
+	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
+	font-weight: 700;
+	font-size: 14px;
+	color: #000;
+	cursor: pointer;
+}
+
+.op-buttons > button {
+	width: 95%;
+	margin-bottom: 10px;
+	padding: 10px 0;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+	font: 700 14px Arial;
+	-webkit-transition: border-color .3s, color .3s;
+	transition: border-color .3s, color .3s;
+}
+
+.op-buttons > button:hover {
+	border: 1px solid #999;
+}
+
+.container-info {
+	text-align: center;
+}
+
+#info-sec > pre {
+	white-space: pre-line;
+}
+
+#locales-table {
+	margin: 0 auto;
+	border-collapse: separate;
+	border-spacing: 25px 2px;
+	font: 13px Consolas, Monaco;
+}
+
+#locales-table > tr:hover {
+	margin: 0 auto;
+	border-collapse: separate;
+	border-spacing: 25px 2px;
+	font: 13px Consolas, Monaco;
+}
+
+#locales-table th:first-child {
+	text-align: left;
+}
+
+#locales-table td:last-child {
+	text-align: center;
+}

@@ -1,0 +1,43 @@
+[{
+	"type": "extension",
+	"frameworkVersion": "1.0.1",
+
+	"guid": "{{000008f5-8a32-4389-a7da-2daa0e9d7760}}",
+	"version": "{version}",
+	"title": {"en": "{name}"},
+	"description": {"_t": "APP_DESCRIPTION"},
+	"author": {
+		"name": "{author}",
+		"email": "{author_email}"
+	},
+
+	"permissions": {"httpRequest": ["*"]},
+
+	"config": "options.html",
+	"service": {
+		"main": "background.html#{name},{version}"
+	},
+
+	"actions": [
+		{
+			"type": "script",
+			"entryPoints": ["doc_start"],
+			"exclude": ["res"],
+			"js": [
+				"includes/app.js",
+				"includes/viewer.js"
+			],
+			"includeFrames": true
+		},
+		{
+			"type": "script",
+			"entryPoints": ["doc_end"],
+			"exclude": ["res"],
+			"js": [
+				"includes/opener.js"
+			],
+			"includeFrames": true
+		}
+	]
+}]
+// {build_date}

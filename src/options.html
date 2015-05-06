@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="shortcut icon" href="./icon-18.png">
+	<link rel="stylesheet" href="./css/options.css">
+	<script src="./includes/app.js"></script>
+	<script src="./js/options.js"></script>
+</head>
+<body spellcheck="false">
+	<nav id="nav-menu">
+		<a href="#general" data-i18n="NAV_GENERAL"></a>
+		<a href="#shortcuts" data-i18n="SHORTCUTS"></a>
+		<a href="#info" data-i18n="NAV_INFO"></a>
+	</nav>
+
+	<form action="#" method="post" autocomplete="off">
+		<div id="right-panel">
+			<aside>
+				<a href="http://tiny.cc/Viewhance" class="logo" title="Home" target="_blank"></a>
+				<div class="app-info">
+					<a href="https://github.com/Deathamns/Viewhance" id="app-name" target="_blank"></a>
+					v<a href="https://github.com/Deathamns/Viewhance/issues" id="app-version" target="_blank"></a>
+				</div>
+				<span id="platform-info"></span>
+				<hr>
+				<div class="op-buttons">
+					<button id="reset-button" type="reset" data-i18n="BUTTON_RESET"></button>
+					<button id="save-button" type="submit" data-i18n="BUTTON_SAVE"></button>
+				</div>
+			</aside>
+		</div>
+
+		<section id="general-sec">
+			<div class="prow">
+				<label for="vw_mode" data-i18n="VW_MODE"></label>
+				<span>
+					<select id="vw_mode" name="mode" class="number">
+						<option value="0" data-i18n="VW_MODE_NATURL"></option>
+						<option value="1" data-i18n="VW_MODE_AUTOFIT"></option>
+						<option value="2" data-i18n="VW_MODE_FITWIDTH"></option>
+						<option value="3" data-i18n="VW_MODE_FITHEIGHT"></option>
+						<option value="4" data-i18n="VW_MODE_BESTFIT"></option>
+					</select>
+				</span>
+			</div>
+
+			<div class="prow tiptop">
+				<div class="tip" data-i18n="VW_MINUPSCALE_TIP"></div>
+
+				<label for="vw_minUpscale" class="sub-opt" data-i18n="VW_MINUPSCALE"></label>
+				<span>
+					<output for="vw_minUpscale">0</output>%
+					<input id="vw_minUpscale" name="minUpscale" type="range" step="1" min="0" max="100">
+				</span>
+			</div>
+
+			<div class="prow tiptop">
+				<div class="tip" data-i18n="VW_MEDIAINFO_TIP"></div>
+
+				<label for="vw_mediaInfo" data-i18n="VW_MEDIAINFO"></label>
+				<span>
+					<datalist id="info-xmpls">
+						<option value="%name (%perc% | %ow&#215;%oh : %ratio)">
+						<option value="%w&#215;%h - %perc">
+						<option value="%name | %ow&#215;%oh | %w&#215;%h / %perc%">
+						<option value="%perc%, %ow&#215;%oh">
+					</datalist>
+					<input id="vw_mediaInfo" name="mediaInfo" type="text" list="info-xmpls" data-i18n="PH_CLICKFORSAMPLE" data-i18n-attr="placeholder">
+				</span>
+			</div>
+
+			<div class="prow tiptop safari maxthon">
+				<div class="tip" data-i18n="VW_FAVICON_TIP"></div>
+
+				<datalist id="favicon-list">
+					<option value="%url">
+					<option value="http://g.etfv.co/%url?defaulticon=none">
+				</datalist>
+
+				<label for="vw_favicon" data-i18n="VW_FAVICON"></label>
+				<span>
+					<input id="vw_favicon" name="favicon" type="text" list="favicon-list" data-i18n="PH_CLICKFORSAMPLE" data-i18n-attr="placeholder">
+				</span>
+			</div>
+
+			<div class="prow tiptop">
+				<div class="tip" data-i18n="CUSTOM_CSS_TIP"></div>
+
+				<label for="vw_customCSS" data-i18n="CUSTOM_CSS"></label>
+
+				<div class="color-helper">
+					<input type="color" value="#c3c3c3"> <input type="text" value="#c3c3c3">
+				</div>
+
+				<textarea id="vw_customCSS" name="customCSS" maxlength="4096" rows="10" data-i18n="CUSTOM_CSS_PH" data-i18n-attr="placeholder"></textarea>
+			</div>
+
+			<div class="prow">
+				<label for="vw_center" data-i18n="VW_CENTER"></label>
+				<span>
+					<input id="vw_center" name="center" type="checkbox">
+					<label for="vw_center" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="vw_wheelZoom" data-i18n="VW_WHEELZOOM"></label>
+				<span>
+					<input id="vw_wheelZoom" name="wheelZoom" type="checkbox">
+					<label for="vw_wheelZoom" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="vw_video" data-i18n="VW_VIDEO"></label>
+				<span>
+					<input id="vw_video" name="video" type="checkbox">
+					<label for="vw_video" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow tiptop">
+				<div class="tip" data-i18n="VW_VIDATTRS_TIP"></div>
+
+				<label for="vw_vidattrs" class="sub-opt" data-i18n="VW_VIDATTRS"></label>
+				<span>
+					<input id="vw_vidattrs" name="vidattrs" type="text" maxlength="100">
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="vw_lpDelay" data-i18n="VW_LPDELAY"></label>
+				<span>
+					<input id="vw_lpDelay" name="lpDelay" type="number" step="50" min="100" max="2000">
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="vw_lpLeft" data-i18n="VW_LPLEFT"></label>
+				<span>
+					<select id="vw_lpLeft" name="lpLeft" class="number">
+						<option value="0" data-i18n="DISABLED"></option>
+						<option value="1" data-i18n="VW_LPA_FITWH"></option>
+					</select>
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="vw_lpRight" data-i18n="VW_LPRIGHT"></label>
+				<span>
+					<select id="vw_lpRight" name="lpRight" class="number">
+						<option value="0" data-i18n="DISABLED"></option>
+						<option value="1" data-i18n="VW_LPA_FITWH"></option>
+					</select>
+				</span>
+			</div>
+
+			<h3 data-i18n="SENDTO"></h3>
+			<textarea name="sendTo" placeholder="exmample.com|http://example.com/?imgurl=%"></textarea>
+		</section>
+
+		<section id="shortcuts-sec">
+			<h3 data-i18n="SHORTCUTS"></h3>
+			<ul class="sub-shortcuts">
+				<li><b>+ / -</b> <span data-i18n="SC_ZOOMINOUT"></span></li>
+				<li data-i18n="VW_SC_FLOATMENU"></li>
+				<li data-i18n="VW_SC_HORIZONTALSCROLL"></li>
+				<li data-i18n="VW_SC_DRAGNDROP"></li>
+				<li data-i18n="VW_SC_RESET"></li>
+				<li data-i18n="VW_SC_FREEZOOM"></li>
+				<li>
+					<input id="key_flipH" name="key_flipH">
+					<label><span data-i18n="SC_FLIPH"></span></label>
+				</li>
+				<li>
+					<input id="key_flipV" name="key_flipV">
+					<label><span data-i18n="SC_FLIPV"></span></label>
+				</li>
+				<li>
+					<input id="key_rotL" name="key_rotL">
+					<label><span data-i18n="SC_ROTL"></span></label>
+				</li>
+				<li>
+					<input id="key_rotR" name="key_rotR">
+					<label><span data-i18n="SC_ROTR"></span></label>
+				</li>
+				<li>
+					<input id="key_mOrig" name="key_mOrig">
+					<label><span data-i18n="SC_MORIG"></span></label>
+				</li>
+				<li>
+					<input id="key_mFit" name="key_mFit">
+					<label><span data-i18n="SC_MFIT"></span></label>
+				</li>
+				<li>
+					<input id="key_mFitW" name="key_mFitW">
+					<label><span data-i18n="SC_MFITW"></span></label>
+				</li>
+				<li>
+					<input id="key_mFitH" name="key_mFitH">
+					<label><span data-i18n="SC_MFITH"></span></label>
+				</li>
+				<li>
+					<input id="key_cycle" name="key_cycle">
+					<label for="key_cycle" data-i18n="VW_SC_CYCLE"></label>
+				</li>
+				<li>
+					<div class="prow">
+						<label for="opener" data-i18n="OPENER"></label>
+						<span>
+							<select id="opener" name="opener" class="number">
+								<option value="0" data-i18n="DISABLED" selected></option>
+								<option value="1" data-i18n="OP_RIGHTLONG"></option>
+								<option value="2" data-i18n="OP_CTRLALTCLICK"></option>
+								<option value="3" data-i18n="OP_BOTH"></option>
+							</select>
+						</span>
+					</div>
+				</li>
+			</ul>
+		</section>
+
+		<section id="info-sec">
+			<h3 data-i18n="TRANSLATIONS"></h3>
+			<table id="locales-table">
+				<thead>
+					<tr>
+						<th data-i18n="LANGUAGE"></th>
+						<th data-i18n="TRANSLATORS"></th>
+					</tr>
+				</thead>
+			</table>
+		</section>
+	</form>
+</body>
