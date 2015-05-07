@@ -23,6 +23,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 	}
 
 	var lastMouseDownTime, lastMouseDownX, lastMouseDownY;
+
 	var checkBG = function(cs) {
 		// ("...\"") - Gecko
 		// (...) or ('...)') - WebKit
@@ -44,6 +45,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 
 		return imgs;
 	};
+
 	var checkIMG = function(node) {
 		var nname = node.nodeName.toUpperCase();
 

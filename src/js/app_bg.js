@@ -146,6 +146,7 @@ if ( self.hasOwnProperty('opera') ) {
 			(chrome.runtime || chrome.extension).onMessage.addListener(callback);
 		}
 	};
+
 	// «
 } else if ( self.hasOwnProperty('safari') ) {
 	// » safariextz
@@ -271,6 +272,7 @@ if ( self.hasOwnProperty('opera') ) {
 			vAPI.runtime.listen(name || 'service', callback);
 		}
 	};
+
 	// «
 } else {
 	// » xpi

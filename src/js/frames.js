@@ -188,8 +188,8 @@ xhr.onreadystatechange = function() {
 		// Seems like in some cases a character encoding is applied anyway,
 		// however it's enough to check only the signature
 		if ( !this.imgType && (this.responseText[1] === 'P' && (chunkSize = 8)
-				|| this.responseText[0] === 'G' && (chunkSize = 6)
-				|| this.responseText[0] === 'R' && (chunkSize = 16)) ) {
+			|| this.responseText[0] === 'G' && (chunkSize = 6)
+			|| this.responseText[0] === 'R' && (chunkSize = 16)) ) {
 			this.imgType = this.responseText.slice(0, chunkSize).split('');
 
 			for ( i = 0; i < this.imgType.length; ++i ) {
