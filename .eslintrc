@@ -25,6 +25,7 @@
 
 		// "consistent-return": 0,
 		// "dot-notation": 1,
+		"dot-location": [2, "property"],
 		"no-else-return": 1,
 		"no-eq-null": 2,
 		"no-floating-decimal": 2,
@@ -43,6 +44,7 @@
 		"global-strict": [2, "always"],
 
 		"no-undefined": 2,
+		"no-unneeded-ternary": 1,
 
 		// "indent": [2, "tab", {"indentSwitchCase": true}],
 		"brace-style": [2, "1tbs"],
@@ -58,6 +60,7 @@
 		"no-multiple-empty-lines": [2, {"max": 2}],
 		// "no-nested-ternary": 1,
 		"no-underscore-dangle": 0,
+		"linebreak-style": [2, "unix"],
 		"operator-assignment": [2, "always"],
 		// "operator-linebreak": [2, "before"],
 		// "padded-blocks": [1, "never"],
