@@ -65,13 +65,13 @@ var dragSlide = [];
 var borderSize = 0;
 var MAXSIZE = 0x7fff;
 
-media.style.display = 'none';
-
 ['class', 'style', 'name'].forEach(function(attr) {
 	doc.documentElement.removeAttribute(attr);
 	doc.body.removeAttribute(attr);
 	media.removeAttribute(attr);
 });
+
+media.style.display = 'none';
 
 if ( head = doc.querySelector('head') ) {
 	doc.documentElement.removeChild(head);
