@@ -1573,7 +1573,7 @@ if ( vAPI.mediaType === 'video' ) {
 	media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 		this.removeEventListener(e.type, onLoadedMetadata);
 
-		if ( vAPI.opera || vAPI.chrome ) {
+		if ( this.videoHeight && (vAPI.opera || vAPI.chrome) ) {
 			doc.addEventListener('fullscreenchange', function() {
 				root.classList.toggle('fullscreen');
 			});
@@ -1601,6 +1601,10 @@ if ( vAPI.mediaType === 'video' ) {
 		};
 
 		var onAttributeChange = function() {
+			if ( !media.controls && vAPI.mediaType === 'audio' ) {
+				media.controls = true;
+			}
+
 			clearTimeout(playerStateSaver);
 			playerStateSaver = setTimeout(savePlayerState, 500);
 		};
@@ -1630,6 +1634,7 @@ if ( vAPI.mediaType === 'video' ) {
 		}
 
 		vAPI.mediaType = 'audio';
+		media.controls = true;
 		doc.title = media.alt;
 
 		doc.addEventListener('keydown', function(ev) {
