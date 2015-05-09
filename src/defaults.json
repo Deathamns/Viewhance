@@ -6,7 +6,6 @@
 	"customCSS": "",
 	"center": true,
 	"wheelZoom": false,
-	"video": true,
 	"mediaAttrs": "autoplay controls",
 	"lpDelay": 350,
 	"lpLeft": 1,

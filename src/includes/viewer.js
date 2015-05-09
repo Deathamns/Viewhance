@@ -8,7 +8,7 @@ if ( !doc || !doc.body || !response || !response.prefs ) {
 }
 
 var cfg = response.prefs;
-var media = doc.body.querySelector('img' + (cfg.video ? ', video' : ''));
+var media = doc.body.querySelector('img, video');
 
 if ( !media ) {
 	init = null;
