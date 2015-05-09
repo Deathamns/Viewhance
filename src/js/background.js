@@ -23,7 +23,7 @@ vAPI.storage.get('cfg', function(prefs) {
 	var xhr = new XMLHttpRequest;
 	xhr.overrideMimeType('application/json;charset=utf-8');
 	xhr.open('GET', 'defaults.json', true);
-	xhr.onload = function() {
+	xhr.addEventListener('load', function() {
 		var forceUpdate = false;
 		var defaultPrefs = JSON.parse(this.responseText);
 		cachedPrefs = prefs ? JSON.parse(prefs) : {};
@@ -37,7 +37,7 @@ vAPI.storage.get('cfg', function(prefs) {
 		}
 
 		cachedPrefs = updatePrefs(cachedPrefs, defaultPrefs, forceUpdate);
-	};
+	});
 	xhr.send();
 });
 
@@ -88,9 +88,9 @@ vAPI.messaging.listen(function(e, origin, postMessage) {
 			var xhr = new XMLHttpRequest;
 			xhr.overrideMimeType('text/plain;charset=utf-8');
 			xhr.open('GET', 'js/frames.js', true);
-			xhr.onload = function() {
+			xhr.addEventListener('load', function() {
 				channel.postMessage({'frames.js': this.responseText});
-			};
+			});
 			xhr.send();
 			break;
 	}

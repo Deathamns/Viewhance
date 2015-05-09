@@ -264,9 +264,10 @@ var onHashChange = function() {
 				$(args).style.display = 'block';
 			}
 
-			var fillLocalesTable = function() {
-				this.onload = null;
-
+			var xhr = new XMLHttpRequest;
+			xhr.overrideMimeType('application/json;charset=utf-8');
+			xhr.open('GET', 'locales.json', true);
+			xhr.addEventListener('load', function() {
 				var alpha2, td;
 				var rows = [];
 				var lngMap = function(el, idx) {
@@ -326,12 +327,7 @@ var onHashChange = function() {
 				}
 
 				vAPI.buildNodes($('locales-table'), rows);
-			};
-
-			var xhr = new XMLHttpRequest;
-			xhr.overrideMimeType('application/json;charset=utf-8');
-			xhr.open('GET', 'locales.json', true);
-			xhr.onload = fillLocalesTable;
+			});
 			xhr.send();
 		}
 	}
@@ -466,7 +462,7 @@ window.addEventListener('load', function() {
 		}
 
 		e.target.value = key;
-		form.onchange(e);
+		onFormChange(e);
 	});
 
 	form.addEventListener('contextmenu', function(e) {
@@ -556,11 +552,11 @@ window.addEventListener('load', function() {
 		var xhr = new XMLHttpRequest;
 		xhr.overrideMimeType('application/json;charset=utf-8');
 		xhr.open('GET', 'defaults.json', true);
-		xhr.onload = function() {
+		xhr.addEventListener('load', function() {
 			defaultPrefs = JSON.parse(this.responseText);
 			load(data.prefs);
 			document.body.style.display = 'block';
-		};
+		});
 		xhr.send();
 	});
 });

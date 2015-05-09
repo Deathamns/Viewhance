@@ -337,8 +337,7 @@ init = function() {
 		menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px)';
 
 		if ( menu.style.filter || menu.style.webkitFilter ) {
-			media.filters = Object.create(null);
-			menu.onchange = function(e) {
+			var onMenuChange = function(e) {
 				var t = e.target;
 				var filterCSS = '';
 				var filterName;
@@ -356,11 +355,15 @@ init = function() {
 				}
 
 				for ( filterName in media.filters ) {
-					filterCSS += filterName + '(' + media.filters[filterName] + ') ';
+					filterCSS += filterName;
+					filterCSS += '(' + media.filters[filterName] + ') ';
 				}
 
 				media.style.filter = media.style.webkitFilter = filterCSS;
 			};
+
+			media.filters = Object.create(null);
+			menu.addEventListener('change', onMenuChange);
 		}
 
 		vAPI.buildNodes(menu.appendChild(doc.createElement('ul')), [
@@ -431,15 +434,18 @@ init = function() {
 
 		// Load favicons only when the menu item is hovered the first time
 		if ( /^https?:$/.test(win.location.protocol) && cfg.sendTo.length ) {
-			menu.querySelector('.send-hosts').onmouseover = function() {
-				this.onmouseover = null;
+			menu.querySelector('.send-hosts')
+				.addEventListener('mouseover', function onHostsHover() {
 				var links = this.querySelectorAll('.send-hosts > ul > li > a');
+
 				[].forEach.call(links, function(a) {
 					var url = a.getAttribute('data-favicon')
 						|| a.host + '/favicon.ico';
-					a.style.backgroundImage = 'url(' + a.protocol + '//' + url + ')';
+					url = a.protocol + '//' + url;
+					a.style.backgroundImage = 'url(' + url + ')';
 				});
-			};
+				this.removeEventListener('mouseover', onHostsHover);
+			});
 		}
 
 		var handleCommand = function(cmd, e) {
@@ -497,30 +503,7 @@ init = function() {
 			}
 		};
 
-		menu.addEventListener(vAPI.browser.wheel, function(e) {
-			var t = e.target;
-
-			if ( t.nodeType === 3 ) {
-				t = t.parentNode;
-			}
-
-			if ( t.type === 'range' ) {
-				t.value = Math.max(
-					t.getAttribute('min'),
-					Math.min(
-						parseInt(t.value, 10) + t.getAttribute('step') * ((-e.wheelDelta || e.deltaY) > 0 ? -1 : 1),
-						t.getAttribute('max')
-					)
-				);
-				menu.onchange(e);
-				pdsp(e);
-			} else if ( !/reset|frames|options/.test(t.getAttribute('data-cmd')
-				|| (t = t.parentNode) && t.getAttribute('data-cmd')) ) {
-				handleCommand(t.getAttribute('data-cmd'), e);
-			}
-		}, false);
-
-		menu.onclick = function(e) {
+		var onMenuClick = function(e) {
 			var target = e.target;
 
 			if ( !target.hasAttribute('data-cmd') ) {
@@ -530,59 +513,6 @@ init = function() {
 			if ( target.hasAttribute('data-cmd') ) {
 				handleCommand(target.getAttribute('data-cmd'), e);
 			}
-		};
-
-		menu.oncontextmenu = function(e) {
-			var target = e.target;
-
-			if ( target.type === 'range' ) {
-				target.value = target.defaultValue;
-				menu.onchange(e);
-				pdsp(e);
-				return;
-			}
-
-			this.onclick(e);
-		};
-
-		menu.addEventListener(vAPI.browser.transitionend, function(e) {
-			if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
-				menu.style.display = 'none';
-			}
-		}, false);
-
-		if ( win.Node.prototype && !win.Node.prototype.contains ) {
-			win.Node.prototype.contains = function(n) {
-				if ( n instanceof Node === false ) {
-					return false;
-				}
-
-				return this === n || !!(this.compareDocumentPosition(n) & 16);
-			};
-		}
-
-		menu.onmouseover = function() {
-			if ( !menu.mtimer ) {
-				return;
-			}
-
-			clearTimeout(menu.mtimer);
-			menu.mtimer = null;
-			menu.style.left = '0';
-			menu.style.opacity = '1';
-		};
-
-		menu.onmouseout = function(e) {
-			if ( this.contains(e.relatedTarget) ) {
-				return;
-			}
-
-			doc.addEventListener('mousemove', menuTrigger, false); // eslint-disable-line
-			menu.mtimer = setTimeout(function() {
-				menu.style.left = '-' + menu.offsetWidth + 'px';
-				menu.style.opacity = '0';
-				menu.mtimer = null;
-			}, 800);
 		};
 
 		var menuTrigger = function(e) {
@@ -607,6 +537,85 @@ init = function() {
 
 			doc.removeEventListener('mousemove', menuTrigger, false);
 		};
+
+		if ( win.Node.prototype && !win.Node.prototype.contains ) {
+			win.Node.prototype.contains = function(n) {
+				if ( n instanceof Node === false ) {
+					return false;
+				}
+
+				return this === n || !!(this.compareDocumentPosition(n) & 16);
+			};
+		}
+
+		menu.addEventListener(vAPI.browser.wheel, function(e) {
+			var t = e.target;
+
+			if ( t.nodeType === 3 ) {
+				t = t.parentNode;
+			}
+
+			if ( t.type === 'range' ) {
+				t.value = Math.max(
+					t.getAttribute('min'),
+					Math.min(
+						parseInt(t.value, 10) + t.getAttribute('step') * ((-e.wheelDelta || e.deltaY) > 0 ? -1 : 1),
+						t.getAttribute('max')
+					)
+				);
+				onMenuChange(e);
+				pdsp(e);
+			} else if ( !/reset|frames|options/.test(t.getAttribute('data-cmd')
+				|| (t = t.parentNode) && t.getAttribute('data-cmd')) ) {
+				handleCommand(t.getAttribute('data-cmd'), e);
+			}
+		});
+
+		menu.addEventListener('click', onMenuClick);
+
+		menu.addEventListener('contextmenu', function(e) {
+			var target = e.target;
+
+			if ( target.type === 'range' ) {
+				target.value = target.defaultValue;
+				onMenuChange(e);
+				pdsp(e);
+				return;
+			}
+
+			onMenuClick(e);
+		});
+
+		menu.addEventListener(vAPI.browser.transitionend, function(e) {
+			if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
+				menu.style.display = 'none';
+			}
+		});
+
+		menu.addEventListener('mouseover', function() {
+			if ( !menu.mtimer ) {
+				return;
+			}
+
+			clearTimeout(menu.mtimer);
+			menu.mtimer = null;
+			menu.style.left = '0';
+			menu.style.opacity = '1';
+		});
+
+		menu.addEventListener('mouseout', function(e) {
+			if ( this.contains(e.relatedTarget) ) {
+				return;
+			}
+
+			doc.addEventListener('mousemove', menuTrigger, false);
+			menu.mtimer = setTimeout(function() {
+				menu.style.left = '-' + menu.offsetWidth + 'px';
+				menu.style.opacity = '0';
+				menu.mtimer = null;
+			}, 800);
+		});
+
 
 		// Safari showed the menu even if the cursor wasn't at the edge
 		setTimeout(function() {
@@ -1623,7 +1632,7 @@ if ( vAPI.mediaType === 'video' ) {
 		vAPI.mediaType = 'audio';
 		doc.title = media.alt;
 
-		doc.onkeydown = function(ev) {
+		doc.addEventListener('keydown', function(ev) {
 			var key = shortcut.key(ev);
 
 			if ( key === 'Space' ) {
@@ -1638,11 +1647,11 @@ if ( vAPI.mediaType === 'video' ) {
 			}
 
 			pdsp(ev);
-		};
+		});
 
-		media.ondblclick = function(ev) {
+		media.addEventListener('dblclick', function(ev) {
 			pdsp(ev);
-		};
+		});
 
 		if ( vAPI.opera || vAPI.firefox ) {
 			return;
@@ -1661,7 +1670,7 @@ if ( vAPI.mediaType === 'video' ) {
 root = doc.documentElement;
 media.id = 'main-media';
 
-media.onerror = function() {
+media.addEventListener('error', function() {
 	// Opera fires an error event on local video files when they're close to the end
 	// Firefox did it a few times too, even if there was nothing wrong with the video
 	if ( media.currentTime > 0.1 && win.location.protocol === 'file:' ) {
@@ -1670,7 +1679,7 @@ media.onerror = function() {
 
 	clearInterval(progress);
 	root.classList.add('load-failed');
-};
+});
 
 if ( win.location.protocol === 'data:' ) {
 	media.alt = vAPI.mediaType + ' (data:)';
@@ -1722,10 +1731,10 @@ setTimeout(function() {
 
 	var header = doc.body.appendChild(doc.createElement('h2'));
 	header.textContent = media.alt;
-	header.onclick = function() {
+	header.addEventListener('click', function() {
 		doc.body.removeChild(this);
 		media.style.display = 'block';
-	};
+	});
 }, 1000);
 
 };

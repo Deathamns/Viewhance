@@ -164,7 +164,7 @@ var maxSize = 20 * 1024 * 1024;
 var xhr = new win.XMLHttpRequest;
 
 xhr.overrideMimeType('text/plain; charset=x-user-defined');
-xhr.onreadystatechange = function() {
+xhr.addEventListener('readystatechange', function() {
 	if ( this.readyState === 2 ) {
 		var contentLength = this.getResponseHeader('Content-Length');
 
@@ -201,7 +201,6 @@ xhr.onreadystatechange = function() {
 
 		if ( !this.imgType ) {
 			this.abort();
-			this.onprogress = null;
 			errorHandler('Not animated...');
 			return;
 		}
@@ -215,7 +214,6 @@ xhr.onreadystatechange = function() {
 	}
 
 	if ( this.responseText.length > maxSize ) {
-		this.onprogress = null;
 		errorHandler('Image is too large...');
 		return;
 	}
@@ -431,7 +429,6 @@ xhr.onreadystatechange = function() {
 
 		// Animation flag
 		if ( bin.packed[6] === '0' ) {
-			this.onprogress = null;
 			errorHandler(this.imgType + ': not animated...');
 			return;
 		}
@@ -461,7 +458,6 @@ xhr.onreadystatechange = function() {
 			}
 
 			if ( !animation.ANIM ) {
-				this.onprogress = null;
 				errorHandler(this.imgType + ': ANIM chunk not found!');
 				return;
 			}
@@ -515,7 +511,6 @@ xhr.onreadystatechange = function() {
 	}
 
 	if ( frames.length < 1 ) {
-		this.onprogress = null;
 		errorHandler(this.imgType + ': not animated...');
 		return;
 	}
@@ -576,12 +571,7 @@ xhr.onreadystatechange = function() {
 		};
 	}
 
-	img.onerror = function() {
-		wrap.textContent = xhr.imgType + ': frame (' + (frames.idx + 1) + ") couldn't be parsed!";
-		wrap.appendChild(this);
-	};
-
-	img.onload = function() {
+	var onImgLoad = function() {
 		if ( drawFullFrame ) {
 			var frame = frames[frames.idx];
 			var prev = frames[frames.idx - 1];
@@ -653,7 +643,7 @@ xhr.onreadystatechange = function() {
 			img.src = generateImageSRC();
 			frames[frames.idx].data = null;
 		} else {
-			img.onload = null;
+			img.removeEventListener('load', onImgLoad);
 			img = null;
 			done();
 			errorHandler(null);
@@ -665,43 +655,8 @@ xhr.onreadystatechange = function() {
 		wrap.children[wrap.children.length - 1].style.display = '';
 		wrap.children[wrap.current].style.display = 'inline-block';
 		currentFrame.value = 1;
-		currentFrame.oninput = function() {
-			if ( parseFloat(speed.value, 10) !== 0 ) {
-				wrap.stop();
-			}
 
-			if ( wrap.classList.contains('showall') ) {
-				wrap.onmouseup({button: 0});
-			}
-
-			wrap.step(null);
-		};
-
-		speed.oninput = function() {
-			wrap.speedValue = parseFloat(speed.value) || 0;
-
-			if ( wrap.speedValue === 0 ) {
-				wrap.stop();
-				wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-				return;
-			}
-
-			wrap.classList.remove('showall');
-			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-			wrap.animate();
-		};
-
-		wrap.wheeler = function(e) {
-			wrap.step((e.deltaY || -e.wheelDelta) > 0);
-			wrap.sotp();
-			e.preventDefault();
-			e.stopImmediatePropagation();
-		};
-
-		wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-		currentFrame.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-
-		wrap.onmouseup = function(e) {
+		var onWrapMouseUp = function(e) {
 			if ( e.button !== 0 ) {
 				return;
 			}
@@ -731,6 +686,43 @@ xhr.onreadystatechange = function() {
 			}
 
 			this.classList.toggle('showall');
+		};
+
+		wrap.addEventListener('mouseup', onWrapMouseUp);
+		wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+		currentFrame.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+
+		currentFrame.addEventListener('input', function() {
+			if ( parseFloat(speed.value, 10) !== 0 ) {
+				wrap.stop();
+			}
+
+			if ( wrap.classList.contains('showall') ) {
+				onWrapMouseUp({button: 0});
+			}
+
+			wrap.step(null);
+		});
+
+		speed.addEventListener('input', function() {
+			wrap.speedValue = parseFloat(speed.value) || 0;
+
+			if ( wrap.speedValue === 0 ) {
+				wrap.stop();
+				wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+				return;
+			}
+
+			wrap.classList.remove('showall');
+			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+			wrap.animate();
+		});
+
+		wrap.wheeler = function(e) {
+			wrap.step((e.deltaY || -e.wheelDelta) > 0);
+			wrap.sotp();
+			e.preventDefault();
+			e.stopImmediatePropagation();
 		};
 
 		wrap.animate = function() {
@@ -780,6 +772,14 @@ xhr.onreadystatechange = function() {
 		};
 	};
 
+	img.addEventListener('load', onImgLoad);
+
+	img.addEventListener('error', function() {
+		wrap.textContent = xhr.imgType
+			+ ': frame (' + (frames.idx + 1) + ") couldn't be parsed!";
+		wrap.appendChild(this);
+	});
+
 	wrap = document.body;
 	wrap.className = 'frames';
 	wrap.textContent = '';
@@ -819,12 +819,11 @@ xhr.onreadystatechange = function() {
 	currentFrame.max = frames.length;
 	frames.idx = 0;
 	processNextFrame();
-};
+});
 
-xhr.onerror = function() {
-	this.onprogress = null;
+xhr.addEventListener('error', function() {
 	errorHandler('Failed to load!');
-};
+});
 
 xhr.open('GET', win.location.href, true);
 xhr.send();
