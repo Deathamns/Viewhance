@@ -1598,11 +1598,11 @@ if ( vAPI.mediaType === 'video' ) {
 			pdsp(ev);
 		};
 
-		if ( vAPI.opera || vAPI.firefox || vAPI.chrome ) {
+		if ( vAPI.opera || vAPI.firefox ) {
 			return;
 		}
 
-		// To not show the black poster when audio restarts or if seek happends
+		// To not show the black poster when audio restarts or if seek happens
 		media.addEventListener('playing', function() {
 			this.poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
 		});
