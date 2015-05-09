@@ -1,11 +1,12 @@
 *.pem
+*.bak
 
-/build
-/data
-/tools
-/temp
-
+/build/
+/data/
+/tools/
 /TODO
+
+/src/*locale*
 
 # oex
 /src/config.xml
@@ -23,8 +24,6 @@
 
 # mxaddon
 /src/def.json
-
-/src/*locale*
 
 *.safariextension
 /meta/safariextz/*
