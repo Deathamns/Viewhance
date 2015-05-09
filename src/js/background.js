@@ -2,25 +2,41 @@
 
 var cachedPrefs;
 
+var updatePrefs = function(newPrefs, oldPrefs, forceUpdate) {
+	var needsUpdate = forceUpdate || false;
+
+	for ( var prefName in oldPrefs ) {
+		if ( !newPrefs.hasOwnProperty(prefName) ) {
+			newPrefs[prefName] = oldPrefs[prefName];
+			needsUpdate = true;
+		}
+	}
+
+	if ( needsUpdate ) {
+		vAPI.storage.set('cfg', JSON.stringify(newPrefs));
+	}
+
+	return newPrefs;
+};
+
 vAPI.storage.get('cfg', function(prefs) {
 	var xhr = new XMLHttpRequest;
 	xhr.overrideMimeType('application/json;charset=utf-8');
 	xhr.open('GET', 'defaults.json', true);
 	xhr.onload = function() {
-		var needsUpdate = false;
-		var defaltPrefs = JSON.parse(this.responseText);
+		var forceUpdate = false;
+		var defaultPrefs = JSON.parse(this.responseText);
 		cachedPrefs = prefs ? JSON.parse(prefs) : {};
 
-		for ( var p in defaltPrefs ) {
-			if ( cachedPrefs[p] === void 0 ) {
-				cachedPrefs[p] = defaltPrefs[p];
-				needsUpdate = true;
+		// Cleanup unused preferences
+		for ( var prefName in cachedPrefs ) {
+			if ( !defaultPrefs.hasOwnProperty(prefName) ) {
+				delete cachedPrefs[prefName];
+				forceUpdate = true;
 			}
 		}
 
-		if ( needsUpdate ) {
-			vAPI.storage.set('cfg', JSON.stringify(cachedPrefs));
-		}
+		cachedPrefs = updatePrefs(cachedPrefs, defaultPrefs, forceUpdate);
 	};
 	xhr.send();
 });
@@ -48,9 +64,8 @@ vAPI.messaging.listen(function(e, origin, postMessage) {
 			channel.postMessage(response);
 			break;
 
-		case 'save':
-			cachedPrefs = message.prefs;
-			vAPI.storage.set('cfg', JSON.stringify(cachedPrefs));
+		case 'savePrefs':
+			cachedPrefs = updatePrefs(message.prefs, cachedPrefs, true);
 			break;
 
 		case 'open':

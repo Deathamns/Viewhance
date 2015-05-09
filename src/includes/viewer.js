@@ -1541,7 +1541,9 @@ if ( vAPI.mediaType === 'video' ) {
 		}
 	});
 
-	['autoplay', 'loop', 'controls', 'muted', 'volume'].forEach(function(attr) {
+	var mediaAttributes = ['autoplay', 'loop', 'controls', 'muted', 'volume'];
+
+	mediaAttributes.forEach(function(attr) {
 		if ( attr === 'volume' ) {
 			media[attr] = root[attr] === void 0 ? 1 : root[attr];
 		} else {
@@ -1565,6 +1567,48 @@ if ( vAPI.mediaType === 'video' ) {
 				root.classList.toggle('fullscreen');
 			});
 		}
+
+		var playerStateSaver;
+		var monitoredAttrs = mediaAttributes.slice(1, -2);
+
+		var savePlayerState = function() {
+			var vidattrs = [];
+
+			mediaAttributes.forEach(function(attr) {
+				if ( attr === 'volume' ) {
+					if ( media.volume < 1 ) {
+						vidattrs.push(attr + '=' + (100 * media.volume | 0));
+					}
+				} else if ( media[attr] ) {
+					vidattrs.push(attr);
+				}
+			});
+
+			vAPI.messaging.send({cmd: 'savePrefs', prefs: {
+				vidattrs: vidattrs.join(' ')
+			}});
+		};
+
+		var onAttributeChange = function() {
+			clearTimeout(playerStateSaver);
+			playerStateSaver = setTimeout(savePlayerState, 500);
+		};
+
+		if ( win.MutationObserver ) {
+			new MutationObserver(onAttributeChange).observe(media, {
+				attributes: true,
+				attributeFilter: monitoredAttrs
+			});
+		} else {
+			// Legacy
+			media.addEventListener('DOMAttrModified', function(ev) {
+				if ( monitoredAttrs.indexOf(ev.attrName) !== -1 ) {
+					onAttributeChange();
+				}
+			});
+		}
+
+		media.addEventListener('volumechange', onAttributeChange);
 
 		if ( media.autoplay ) {
 			setTimeout(media.play.bind(media), 50);

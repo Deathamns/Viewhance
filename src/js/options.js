@@ -241,7 +241,7 @@ var save = function() {
 		}
 	}
 
-	vAPI.messaging.send({cmd: 'save', prefs: prefs});
+	vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
 };
 
 var onHashChange = function() {
