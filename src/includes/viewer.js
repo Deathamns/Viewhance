@@ -1527,27 +1527,29 @@ init = function() {
 };
 
 if ( vAPI.mediaType === 'video' ) {
-	root = {};
-	cfg.vidattrs.split(/\s+/).forEach(function(attribute) {
+	var attributeValues = {};
+	var mediaAttributes = ['autoplay', 'loop', 'controls', 'muted', 'volume'];
+
+	cfg.mediaAttrs.split(/\s+/).forEach(function(attribute) {
 		var attr = attribute.split('=');
 
 		if ( attr[0] === 'volume' ) {
-			root[attr[0]] = Math.min(
+			attributeValues[attr[0]] = Math.min(
 				100,
 				Math.max(0, parseInt(attr[1], 10) / 100)
 			);
 		} else {
-			root[attr[0]] = true;
+			attributeValues[attr[0]] = true;
 		}
 	});
 
-	var mediaAttributes = ['autoplay', 'loop', 'controls', 'muted', 'volume'];
-
 	mediaAttributes.forEach(function(attr) {
 		if ( attr === 'volume' ) {
-			media[attr] = root[attr] === void 0 ? 1 : root[attr];
+			media[attr] = attributeValues[attr] === void 0
+				? 1
+				: attributeValues[attr];
 		} else {
-			media[attr] = root[attr] || false;
+			media[attr] = attributeValues[attr] || false;
 		}
 	});
 
@@ -1572,20 +1574,20 @@ if ( vAPI.mediaType === 'video' ) {
 		var monitoredAttrs = mediaAttributes.slice(1, -2);
 
 		var savePlayerState = function() {
-			var vidattrs = [];
+			var mediaAttrs = [];
 
 			mediaAttributes.forEach(function(attr) {
 				if ( attr === 'volume' ) {
 					if ( media.volume < 1 ) {
-						vidattrs.push(attr + '=' + (100 * media.volume | 0));
+						mediaAttrs.push(attr + '=' + (100 * media.volume | 0));
 					}
 				} else if ( media[attr] ) {
-					vidattrs.push(attr);
+					mediaAttrs.push(attr);
 				}
 			});
 
 			vAPI.messaging.send({cmd: 'savePrefs', prefs: {
-				vidattrs: vidattrs.join(' ')
+				mediaAttrs: mediaAttrs.join(' ')
 			}});
 		};
 

@@ -7,7 +7,7 @@
 	"center": true,
 	"wheelZoom": false,
 	"video": true,
-	"vidattrs": "autoplay controls",
+	"mediaAttrs": "autoplay controls",
 	"lpDelay": 350,
 	"lpLeft": 1,
 	"lpRight": 0,
