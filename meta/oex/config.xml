@@ -9,4 +9,3 @@
 	<license>Copyright 2015 {author}. All rights reserved.</license>
 	<update-description href="{update_url}update_oex.xml"/>
 {locale_info}</widget>
-<!-- {build_date} -->
