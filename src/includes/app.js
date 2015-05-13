@@ -88,7 +88,6 @@ vAPI.buildNodes = function(host, nodes) {
 
 	return host;
 };
-
 // «
 
 if ( self.opera ) {

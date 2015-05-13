@@ -12,12 +12,10 @@ if ( location.hash ) {
 		version: vAPI.app[1]
 	};
 }
-
 // «
 
 if ( self.hasOwnProperty('opera') ) {
 	// » oex
-
 	vAPI.app = {
 		name: widget.name,
 		version: widget.version,
@@ -71,11 +69,9 @@ if ( self.hasOwnProperty('opera') ) {
 			opera.extension.addEventListener('message', callback);
 		}
 	};
-
 	// «
 } else if ( self.hasOwnProperty('chrome') && !self.hasOwnProperty('mx') ) {
 	// » crx
-
 	vAPI.app = chrome.runtime.getManifest();
 	vAPI.app = {
 		name: vAPI.app.name,
@@ -146,11 +142,9 @@ if ( self.hasOwnProperty('opera') ) {
 			(chrome.runtime || chrome.extension).onMessage.addListener(callback);
 		}
 	};
-
 	// «
 } else if ( self.hasOwnProperty('safari') ) {
 	// » safariextz
-
 	vAPI.app.platform = navigator.appVersion.match(/Version\/(\S+)/);
 	vAPI.app.platform = 'Safari' +
 		(vAPI.app.platform ? ' ' + vAPI.app.platform[1] : '') +
@@ -213,11 +207,9 @@ if ( self.hasOwnProperty('opera') ) {
 			vAPI.tabs.create({url: 'options.html', active: true});
 		}
 	}, false);
-
 	// «
 } else if ( self.hasOwnProperty('mx') ) {
 	// » mxaddon
-
 	vAPI.app.platform = 'Maxthon ' +
 		external.mxVersion +
 		' (' + navigator.platform + ')';
@@ -272,11 +264,9 @@ if ( self.hasOwnProperty('opera') ) {
 			vAPI.runtime.listen(name || 'service', callback);
 		}
 	};
-
 	// «
 } else {
 	// » xpi
-
 	var Ci = Components.interfaces;
 
 	vAPI.app.platform = Components
@@ -421,6 +411,5 @@ if ( self.hasOwnProperty('opera') ) {
 			}
 		}
 	});
-
 	// «
 }
