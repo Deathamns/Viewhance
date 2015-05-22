@@ -178,12 +178,16 @@ if ( self.opera ) {
 	};
 
 	if ( window.location.protocol === 'widget:' ) {
-		vAPI.i18nData = document.createElement('script');
-		vAPI.i18nData.src = './strings.js';
-		document.head.appendChild(vAPI.i18nData);
+		document.head.appendChild(
+			document.createElement('script')
+		).src = './strings.js';
 
 		vAPI.i18n = function(s) {
-			return vAPI.i18nData[s] || s;
+			if ( !this.i18nData || !this.i18nData.hasOwnProperty(s) ) {
+				return s;
+			}
+
+			return this.i18nData[s];
 		};
 
 		vAPI.insertHTML = function(n, html) {
@@ -400,7 +404,11 @@ if ( self.opera ) {
 		})();
 
 		vAPI.i18n = function(s) {
-			return this.i18nData[s] || s;
+			if ( !this.i18nData || !this.i18nData.hasOwnProperty(s) ) {
+				return s;
+			}
+
+			return this.i18nData[s];
 		};
 
 		vAPI.insertHTML = function(n, html) {
@@ -488,8 +496,8 @@ if ( self.opera ) {
 
 	if ( location.protocol === 'mxaddon-pkg:' ) {
 		vAPI.i18n = function(s) {
-			var t = vAPI.runtime.locale.t(s) || s;
-			return t[0] === '"' ? JSON.parse(t) : t;
+			var t = this.runtime.locale.t(s);
+			return t[0] === '"' ? JSON.parse(t) : t || s;
 		};
 
 		vAPI.insertHTML = function(n, html) {
