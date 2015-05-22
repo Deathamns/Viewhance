@@ -41,7 +41,6 @@ if [[ "$all" -gt 1 && "$all" -lt 6 ]]; then
 	all=""
 fi
 
-
 # Generating meta-data (locales, manifest files, update files)
 if [[ -z "$no_meta" || ! -f src/locales.json ]]; then
 	if [[ "$pack" ]]; then
@@ -50,7 +49,6 @@ if [[ -z "$no_meta" || ! -f src/locales.json ]]; then
 
 	python tools/build_meta.py $py_args
 fi
-
 
 if [[ -z "$prep" && -z "$pack" ]]; then
 	exit
@@ -119,7 +117,7 @@ while read line; do
     if [[ $line =~ $regex ]]; then
 		meta[${BASH_REMATCH[1]}]="${BASH_REMATCH[2]}"
     fi
-done < "meta/meta.json"
+done < "meta/config.json"
 
 package_path="$( realpath "build/${meta[name]}" )-${meta[version]}"
 
