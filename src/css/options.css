@@ -310,7 +310,8 @@ input[type="text"]:focus,
 input:hover, select:hover, textarea:hover,
 .prow:hover input, .prow:hover select,
 label:hover input, .pager > a:hover,
-.prow:hover .checkbox, label:hover > .checkbox, .checkbox:hover {
+.prow:hover .checkbox, label:hover > .checkbox, .checkbox:hover,
+.sub-shortcuts > li:hover > input:first-child {
 	border: 1px solid #888;
 }
 
