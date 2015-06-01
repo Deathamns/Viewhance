@@ -5,7 +5,7 @@
 	"guid": "{{000008f5-8a32-4389-a7da-2daa0e9d7760}}",
 	"version": "{version}",
 	"title": {"en": "{name}"},
-	"description": {"_t": "APP_DESCRIPTION"},
+	"description": {"_t": "appDescriptionShort"},
 	"author": {
 		"name": "{author}",
 		"email": "{author_email}"

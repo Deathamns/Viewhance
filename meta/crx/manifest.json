@@ -5,7 +5,7 @@
 
 	"version": "{version}",
 	"name": "{name}",
-	"description": "__MSG_APP_DESCRIPTION__",
+	"description": "__MSG_appDescriptionShort__",
 	"homepage_url": "{homepage}",
 	"author": "{author}",
 	"developer": {

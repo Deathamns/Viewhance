@@ -115,7 +115,7 @@ var setDefault = function(selector) {
 
 var load = function(prefs) {
 	var m, field, fieldType, pref;
-	var fields = document.querySelectorAll('[name]');
+	var fields = document.querySelectorAll('form [name]');
 	var i = fields.length;
 
 	while ( i-- ) {
@@ -195,7 +195,7 @@ var load = function(prefs) {
 
 var save = function() {
 	var i, field, fieldType, pref;
-	var fields = document.querySelectorAll('[name]');
+	var fields = document.querySelectorAll('form [name]');
 	var prefs = Object.create(null);
 
 	for ( i = 0; i < fields.length; ++i ) {
@@ -272,8 +272,8 @@ var onHashChange = function() {
 				var rows = [];
 				var lngMap = function(el, idx) {
 					el.name = [
-						el.name || el.fullname || '',
-						el.fullname && el.name ? ' (' + el.fullname + ')' : ''
+						el.name || el.realname || '',
+						el.realname && el.name ? ' (' + el.realname + ')' : ''
 					].join('');
 
 					if ( !el.name ) {
@@ -415,7 +415,7 @@ window.addEventListener('load', function() {
 			delete inputChanges[t.name];
 		}
 
-		$('save-button').style.color = Object.keys(inputChanges).length
+		$('button-save').style.color = Object.keys(inputChanges).length
 			? '#e03c00'
 			: '';
 	};
@@ -486,7 +486,7 @@ window.addEventListener('load', function() {
 
 	form.addEventListener('change', onFormChange);
 
-	var resetButton = $('reset-button');
+	var resetButton = $('button-reset');
 
 	resetButton.reset = function() {
 		delete resetButton.pending;
@@ -525,7 +525,7 @@ window.addEventListener('load', function() {
 		e.preventDefault();
 	});
 
-	$('save-button').addEventListener('click', function(e) {
+	$('button-save').addEventListener('click', function(e) {
 		e.preventDefault();
 
 		if ( e.button !== 0 ) {
