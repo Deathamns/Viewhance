@@ -1,0 +1,166 @@
+{
+	"_translators": [
+		{
+			"email": "kackar(at)outlook(dot)com",
+			"name": "Kaçkar"
+		}
+	],
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Reset"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Opslaan"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Aangepaste stijl (CSS)"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Oorspronkelijke pas-modus"
+		},
+		"disabled": {
+			"#": 0,
+			">": "uit"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Aangepaste favicon"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Deze optie maakt het mogelijk om een aangepaste tab-icoon te gebruiken voor de geopende afbeelding.\nHet adres van de afbeelding kan gebruikt worden als variabele: <b>%url</b>"
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Taal"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Vertalingen"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Vertalers"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "breedte/hoogte passend maken"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Lange druk vertraging (ms)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Linker lange druk aktie"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Rechter lange druk aktie"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Afbeeldings informatie"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Kleine afbeeldingen vergroten"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Normaal gesproken worden kleinere afbeeldingen niet vergroot. Deze optie dwingt afbeeldingen te vergroten.\nDe waarde is in procenten, en vertelt het script om afbeeldingen die groter zijn de gegeven procenten van de breedte of hoogte van de kijker te vergroten (afhankelijk van de vorige optie)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "bevatten"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "best afstemmen"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "hoogte passend maken"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "breedte passend maken"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "natuurlijk formaat"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Info"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "klikken voor voorbeelden..."
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Door sizing modi wisselen: normaal, breedte passend maken, hoogte passend maken"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Hoogte passend maken"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Breedte passend maken"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Horizontaal omdraaien"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Verticaal omdraaien"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Shift + Sleep</b> de afbeelding om free-zoom te gebruiken, <b>Ctrl</b> ingedrukt houden om de selectie te verplaatsen"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Automatisch passen"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Normale grootte"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> herstelt de afbeelding naar origineel formaat, of verlaat de vrije-zoom"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Links roteren"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Rechts roteren"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "In-/uitzoomen"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Afbeelding sturen naar..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Snelkoppelingen"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Zoomen met muiswiel"
+		}
+	}
+}

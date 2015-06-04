@@ -1,0 +1,150 @@
+{
+	"_translators": [
+		{
+			"email": "opeeera(at)myopera(dot)com",
+			"name": "Opeeera"
+		}
+	],
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Palauta oletukset"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Tallenna"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Oletuskoko"
+		},
+		"disabled": {
+			"#": 0,
+			">": "poissa käytöstä"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Oma kuvake"
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Kieli"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "sovita leveyteen tai korkeuteen"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Pitkän hiiren painalluksen viive (ms)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Ykköspainikkeen pitkän painalluksen toiminto"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Kakkospainikkeen pitkän painalluksen toiminto"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Kuvan tiedot"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Suurenna pieniä kuvia (%)"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Tavallisesti pieniä kuvia ei skaalata näkymäalueeseen, mutta tämä asetus pakottaa sen päälle.\nArvo annetaan prosentteina, ja se saa skriptin suurentamaan kuvia, jotka ovat suurempia kuin annettu prosenttiosuus näkymäalueen leveydestä tai korkeudesta (riippuen edellisestä asetuksesta)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "automaattinen sovitus"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "paras sovitus"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "sovita korkeuteen"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "sovita leveyteen"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "luonnollinen koko"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Tietoja"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "klikkaa nähdäksesi esimerkkejä..."
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Siirry suurennustilojen välillä: luonnollinen koko, sovita leveyteen, sovita korkeuteen"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Sovita korkeuteen"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Sovita leveyteen"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Käännä pystysuunnassa"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Käännä vaakasuunnassa"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Pidä Vaihtoa pohjassa ja vedä</b> kuvan päällä käyttääksesi FreeZoomia, pidä <b>Ctrl</b>:ia pohjassa siirtääksesi valittua aluetta"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Automaattinen sovitus"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Luonnollinen koko"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> palauttaa kuvan alkuperäiseen tilaan tai poistuu FreeZoom-tilasta"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Kierrä vasemmalle"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Kierrä oikealle"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Suurenna / pienennä"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Lähetä kuvan osoite..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Näppäinoikotiet"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Suurennus hiiren rullalla"
+		}
+	}
+}

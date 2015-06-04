@@ -1,0 +1,204 @@
+{
+	"_translators": [
+		{
+			"email": "tmnath2(at)gmail(dot)com",
+			"name": "Tmnath"
+		}
+	],
+	"groupless": {
+		"appDescriptionShort": {
+			"#": 2,
+			">": "Des fonctionnalités additionnelles pour l’affichage des images et des vidéos de votre navigateur."
+		}
+	},
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Par défaut"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Sauvegarder"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Centrer le contenu"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Style personnalisé (CSS)"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Redimensionnement"
+		},
+		"disabled": {
+			"#": 0,
+			">": "désactivé"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Favicon personnalisé"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Cette option permet de choisir un icône personnalisé pour l'onglet de l'image ouverte.\nL'adresse de l'image peut être utilisée comme une variable : <b>%url</b>"
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Langue"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Traductions"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Traducteurs"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "adapter à la largeur/hauteur"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Durée du clic prolongé (ms)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Clic gauche prolongé"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Clic droit prolongé"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Options possibles\n<b>autoplay</b> - la vidéo se lance automatiquement\n<b>loop</b> - répéter la vidéo\n<b>controls</b> - montrer les boutons du lecteur\n<b>muted</b> - rendre muet\n<b>volume=0-100</b> - volume par défaut (en pourcentage)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Détails de l'image"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Agrandir les petites images"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "En temps normal, les petites images ne sont pas élargies à la taille de la fenêtre. Cette option les y force.\nLa valeur est un pourcentage, et indique au script d'élargir les images plus grandes qu'un certain pourcentage de la hauteur ou de la largeur de la fenêtre (en fonction de l'option choisie précédemment)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "réduire"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "taille optimale"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "adapter à la hauteur"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "adapter à la largeur"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "taille initiale"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Infos"
+		},
+		"opener": {
+			"#": 0,
+			">": "Ouvre les images des pages web classiques"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "les deux"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + clic droit"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "clic droit prolongé"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "cliquez pour avoir un exemple..."
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Faire défiler les différents modes : taille initiale, adapter à la largeur, adapter à la hauteur"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Adapter à la hauteur"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Adapter à la largeur"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Inverser horizontalement"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Inverser verticalement"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Déplacez le curseur en haut à gauche de la page pour afficher le menu"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Maj + glisser</b> sur l'image pour utiliser le zoom libre, maintenir <b>Ctrl</b> pour déplacer la sélection"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "Pour faire défiler l'image horizontalement, utilisez la molette de la souris en bas à gauche"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Redimensionnement automatique"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Taille initiale"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Échap</b> ramènera l'image à sa taille initiale, ou sortira du zoom libre"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Rotation vers la gauche"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Rotation vers la droite"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Zoom avant / arrière"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Envoyer l'image vers..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Raccourcis"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Zoomer avec la molette"
+		}
+	}
+}

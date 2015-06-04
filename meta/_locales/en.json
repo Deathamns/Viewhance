@@ -1,0 +1,244 @@
+{
+	"_translators": [
+		{
+			"email": "deathamns(at)gmail(dot)com",
+			"name": "Deathamns"
+		}
+	],
+	"groupless": {
+		"?": "Uncategorized strings",
+		"appDescriptionLong": {
+			"#": 3,
+			">": "Enriches the built-in image and media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom informations about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (supported formats: GIF, APNG, WEBP)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
+			"?": "A longer description for the official extension repositories."
+		},
+		"appDescriptionShort": {
+			"#": 2,
+			">": "Additional functionality for the browser's default image and video viewer.",
+			"?": "A short description that appears in the extension manager."
+		}
+	},
+	"options": {
+		"?": "Every string that can be found on the preferences page",
+		"buttonReset": {
+			"#": 0,
+			">": "Default"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Save"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Center content"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Custom style (CSS)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Change the background color, image border/shadow, and hide the scrollbars or the floating menu... \nHover the question mark to see examples, use the color picker above for getting color codes."
+		},
+		"customCssTip": {
+			"#": 1,
+			">": "<code>body {\n background: #f3f3f5; /* Any valid background property (color, url(), gradient...). */\n overflow: hidden; /* Hides the scrollbars. To show them, change \"hidden\" to \"auto\". */\n}\n\n#main-media {\n background: #eef; /* Different background for the image. */\n border: 10px solid white; /* Image border. */\n box-shadow: 0 0 10px grey; /* Shadow of the image. */\n cursor: default !important; /* Don't allow the mouse cursor to change. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Color of the free-zoom mask. */\n}\n\n#menu {\n display: none; /* Disable the floating menu. */\n}\n</code>"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Initial sizing mode"
+		},
+		"disabled": {
+			"#": 0,
+			">": "disabled"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Custom favicon"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "This option allows to set a custom tab-icon for the opened image.\nThe address of the image can be used as a variable: <b>%url</b>"
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Language"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Translations"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Translators"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "fit to width/height"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Long-press delay (ms)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Left long-press action"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Right long-press action"
+		},
+		"mediaAttributes": {
+			"#": 1,
+			">": "Media attributes"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Acceptable attributes\n<b>autoplay</b> - video starts automatically\n<b>loop</b> - repeat the play\n<b>controls</b> - show player controls\n<b>muted</b> - mute sound\n<b>volume=0-100</b> - default volume (percent)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Image informations"
+		},
+		"mediaInfoTip": {
+			"#": 2,
+			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - original width\n<b>%oh</b> - original height\n<b>%ratio</b> - current width / current height\n<b>%w</b> - current width\n<b>%h</b> - current height\n<b>%perc</b> - percent of the original size\n<b>%url</b> - full URL\n<b>%name</b> - filename"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Enlarge small images"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Normally, smaller images won't be upscaled to the view-port. This option forces them to do so.\nThe value is given in percent, and tells the script to enlarge those images that are larger than the given percent of view-port's width or height (it depends on the previous option)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "contain"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "best fit"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "fit to height"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "fit to width"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "natural size"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "General"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Info"
+		},
+		"opener": {
+			"#": 0,
+			">": "Open images from regular web-pages"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "both"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + right click"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "right long-press"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "click for examples..."
+		},
+		"scChangeVolume": {
+			"#": 0,
+			">": "<b>Up / Down</b> Increase/decrease the volume"
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Cycle through sizing modes: natural, fit to width, fit to height"
+		},
+		"scDragndrop": {
+			"#": 2,
+			">": "<b>Hold Ctrl or Alt</b> to allow drag-and-drop, or drag from the right edge of the image, if that fits into the window"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Fit to height"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Fit to width"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Flip horizontal"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Flip vertical"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Move the cursor to the top left edge of the page to show the menu"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Shift + drag</b> on the image to use free-zoom, hold <b>Ctrl</b> to move the selection"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "To scroll the image horizontally, use the mouse wheel over the left bottom edge"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Auto fit"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Natural size"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> will reset the image to its original form, or quits from free-zoom"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Rotate left"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Rotate right"
+		},
+		"scTogglePlay": {
+			"#": 0,
+			">": "<b>Space</b> Toggle play/pause"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Zoom in / out"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Send image to..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Shortcuts"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Zoom with mouse wheel"
+		}
+	}
+}

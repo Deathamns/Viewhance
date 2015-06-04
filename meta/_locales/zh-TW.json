@@ -1,0 +1,110 @@
+{
+	"_translators": [
+		{
+			"email": "tingyang(at)gmail(dot)com",
+			"name": "TYKuo"
+		}
+	],
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "預設"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "儲存"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "初始尺寸模式"
+		},
+		"disabled": {
+			"#": 0,
+			">": "停用"
+		},
+		"favicon": {
+			"#": 0,
+			">": "自訂網站圖標"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "符合寬度/高度"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "長按延遲(毫秒)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "左鍵長按動作"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "右鍵長按動作"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "影像資訊"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "放大小圖片"
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "自動縮放"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "適合圖片"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "符合高度"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "符合寬度"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "原始大小"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "相關訊息"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "點擊以做為範例..."
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "適合高度"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "適合寬度"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "垂直翻轉"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "原始大小"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "向右旋轉"
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "快捷鍵"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "以滑鼠滾輪縮放"
+		}
+	}
+}

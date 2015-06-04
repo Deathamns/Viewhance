@@ -1,0 +1,166 @@
+{
+	"_translators": [
+		{
+			"email": "romulo(at)brazilmail(dot)com",
+			"realname": "Rômulo Godoi"
+		}
+	],
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Padrão"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Salvar"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Estilo de CSS personalizado"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Tamanho de exibição"
+		},
+		"disabled": {
+			"#": 0,
+			">": "desativado"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Ícone personalizado"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Esta opção possibilita adicionar um ícone personalizado à imagem aberta.\nO endereço da imagem pode ser usado como variável: <b>%url</b>"
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Idioma"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Traduções"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Tradutores"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "caber na altura/largura"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Atraso de resposta (ms)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Clique longo com o botão esquerdo do mouse"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Clique longo com o botão direito do mouse"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Informações da imagem."
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Aumentar imagens pequenas"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Geralmente imagens pequenas não são exibidas em grande parte da tela. Esta função força que elas sejam.\nO valor é dado em porcentagem, e informa ao script para deixa-las de acordo com os dados de altura e largura fornecidos (isso depende das opções selecionadas)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "redimensionar à tela"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "redimensionar da melhor forma"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "redimensionar à altura"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "redimensionar à largura"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "tamanho original"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Dados"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "clique para ver exemplos..."
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Trocar entre os modos: tamanho original, caber na altura, caber na largura"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Dimensionar à altura"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Dimensionar à largura"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Virar à horizontal"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Virar à vertical"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Shift + arrastrar</b> em cima da imagem para usar o modo de ampliação de seleção, mantenha pressionado <b>Ctrl</b> (sem soltar <b>Shift</b>) para mover a seleção"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Dimensionar automaticamente"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Tamanho original"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> voltará a imagem à sua forma normal, ou sairá do zoom-livre"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Rodar à esquerda"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Rodar à direita"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Zoom mais/menos"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Enviar imagem para..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Atalhos do teclado"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Fazer zoom ao rodar roda do mouse"
+		}
+	}
+}

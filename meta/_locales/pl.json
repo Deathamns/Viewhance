@@ -1,0 +1,225 @@
+{
+	"_translators": [
+		{
+			"name": "pafflick",
+			"realname": "Paweł Pawlak",
+			"web": "http://www.pafflick.com/"
+		}
+	],
+	"groupless": {
+		"appDescriptionShort": {
+			"#": 2,
+			">": "Rozszerzenie standardowej przeglądarki obrazów i filmów o nowe funkcje."
+		}
+	},
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Resetuj"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Zapisz"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Wyśrodkuj"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Własne style (CSS)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Pozwala zmienić kolor tła, obramowanie i cień dla obrazka i ukryć paski przewijania, lub menu z dodatkowymi funkcjami.\nNajedź na znak zapytania by zobaczyć przykładowy kod. Użyj pipety kolorów powyżej, by znaleźć kod wybranego koloru."
+		},
+		"customCssTip": {
+			"#": 1,
+			">": "<code>body {\n background: #f3f3f5; /* Dowolna deklaracja tła zgodna z CSS (color, url(), gradient...). */\n overflow: hidden; /* Ukrywa paski przewijania. Aby je przywrócić, zmień \"hidden\" na \"auto\". */\n}\n\n#main-media {\n background: #eef; /* Inne tło dla obrazka. */\n border: 10px solid white; /* Obramowanie obrazka. */\n box-shadow: 0 0 10px grey; /* Cień obrazka. */\n cursor: default !important; /* Nie pozwala na zmianę wyglądu kursora. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Kolor maski w trybie powiększania wybranego obszaru. */\n}\n\n#menu {\n display: none; /* Wyłącza menu z dodatkowymi funkcjami. */\n}\n</code>"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Skalowanie obrazów"
+		},
+		"disabled": {
+			"#": 0,
+			">": "brak"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Własna ikona pliku"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Zmienia ikonę pliku w pasku tytułu (domyślnie przeglądarka używa obrazka jako ikony).\nAdres obrazka można wprowadzić za pomocą zmiennej: <b>%url</b>"
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Język"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Tłumaczenia"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Tłumacze"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "zmieść w oknie"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Opóźnienie długiego przytrzymania (ms)"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Funkcja dla przytrzymania lewego przycisku"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Funkcja dla przytrzymania prawego przycisku"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Dopuszczalne parametry:\n<b>autoplay</b> - film jest odtwarzany automatycznie\n<b>loop</b> - odtwórz ponownie po zakończeniu\n<b>controls</b> - pokazuj przyciski kontrolne odtwarzacza\n<b>muted</b> - wycisz film\n<b>volume=0-100</b> - domyślna głośność (wyrażona w procentach)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Informacje o obrazku"
+		},
+		"mediaInfoTip": {
+			"#": 2,
+			">": "Wyświetlaj wybrane informacje o pliku w tytule karty przeglądarki. Lista możliwych opcji:\n<b>%ow</b> - rzeczywista szerokość\n<b>%oh</b> - rzeczywista wysokość\n<b>%ratio</b> - aktualna szerokość / aktualna wysokość\n<b>%w</b> - aktualna szerokość\n<b>%h</b> - aktualna wysokość\n<b>%perc</b> - procent powiększenia\n<b>%url</b> - pełny adres pliku\n<b>%name</b> - nazwa pliku"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Powiększanie małych obrazków"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Domyślnie małe obrazki nie są powiększane do rozmiarów okna. Ta funkcja wymusza ich skalowanie.\nFunkcja ta powoduje powiększenie tych obrazków, których wymiary przekraczają określony procent wysokości lub szerokości okna (w zależności od ustawień poprzedniej funkcji)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "zmieść na ekranie"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "automatyczne dopasowanie"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "dopasuj do wysokości"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "dopasuj do szerokości"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "rzeczywisty wymiar"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "Ogólne"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Info"
+		},
+		"opener": {
+			"#": 0,
+			">": "Otwieraj zwykłe obrazki na stronach"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "obydwa"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + prawy przycisk myszy"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "przytrzymując prawy klawisz myszy"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "kliknij, by zobaczyć przykłady..."
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Przełącza tryby powiększenia: rzeczywiste wymiary, zmieść w poziomie, zmieść w pionie"
+		},
+		"scDragndrop": {
+			"#": 2,
+			">": "<b>Przytrzymaj Ctrl lub Alt</b> by włączyć tryb przeciągania i upuszczania, lub przeciągnij z prawej strony obrazka, jeśli mieści się w oknie przeglądarki"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Dopasuj do wysokości"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Dopasuj do szerokości"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Odbij w poziomie"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Odbij w pionie"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Najedź na lewy górny róg strony by zobaczyć menu"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Przeciągnij z Shiftem</b> na obrazku, by aktywować powiększanie obszarowe. Przytrzymaj <b>Ctrl</b> aby przesunąć zaznaczenie"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "Aby przewijać obrazek w poziomie, użyj kółka myszy w lewym dolnym rogu strony"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Auto dopasowanie"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Rzeczywisty wymiar"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> przywraca domyślne ustawienia obrazka lub opuszcza tryb powiększania wybranego obszaru"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Obróć w lewo"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Obróć w prawo"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Powiększ / Pomniejsz"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Wyślij obrazek do..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Skróty"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Powiększaj za pomocą kółka myszki"
+		}
+	}
+}

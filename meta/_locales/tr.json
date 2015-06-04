@@ -1,0 +1,86 @@
+{
+	"_translators": [
+		{
+			"email": "sanerapaydin86(at)gmail(dot)com",
+			"realname": "Saner Apaydın"
+		}
+	],
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Varsayılan"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Kaydet"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "İlk boyutlandırma modu"
+		},
+		"disabled": {
+			"#": 0,
+			">": "devre dışı"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Özel favicon"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Çevirmenler"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Uzun basış gecikmesi (ms)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Resim bilgileri"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Küçük resimleri büyüt"
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "sığdır"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Bilgi"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "örnekler için tıkla..."
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Yüksekliğe sığdır"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Genişliğe sığdır"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Dikey çevir"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Orijinal boyutlar"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Sağa döndür"
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Kısayollar"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Fare tekeriyle yakınlaştır"
+		}
+	}
+}

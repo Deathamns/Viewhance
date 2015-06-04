@@ -1,0 +1,225 @@
+{
+	"_translators": [
+		{
+			"email": "jaramat(at)email(dot)cz",
+			"name": "jaramat",
+			"realname": "Jaroslav Matura"
+		}
+	],
+	"groupless": {
+		"appDescriptionShort": {
+			"#": 2,
+			">": "Vylepšuje práci s obrázky a videi ve vašem prohlížeči."
+		}
+	},
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Výchozí nastavení"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Uložit"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Zarovnat na střed"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Vlastní styl (CSS)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Zde můžete změnit barvu pozadí stránky nebo obrázku, rám, stín, chování posuvníků, skrýt postranní panel...\nPro zobrazení příkladů přejeďte kurzorem přes otazník vlevo. Přesné kódy barev získáte pomocí tlačítka pro výběr barev výše."
+		},
+		"customCssTip": {
+			"#": 1,
+			">": "<code>body {\n background: #f3f3f5; /* Změní pozadí stránky a obrázku (je-li průhledný). Lze použít všechny platné CSS hodnoty (color, url(), gradient...). */\n overflow: hidden; /* Skryje posuvníky. */\n}\n\n#main-media {\n background: #eef; /* Pozadí obrázku, je-li průhledný. */\n border: 10px solid white; /* Rám obrázku. */\n box-shadow: 0 0 10px grey; /* Stín pod obrázkem. */\n cursor: default !important; /* Vynutí výchozí kurzor (tzn. nezmění se na ručičku či lupu). */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Barva krytí v režimu ručního zvětšení. */\n}\n\n#menu {\n display: none; /* Vypne zobrazování postranního panelu v levém horní rohu. */\n}\n</code>"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Výchozí přiblížení"
+		},
+		"disabled": {
+			"#": 0,
+			">": "zakázáno"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Vlastní ikona"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Toto vám umožňuje nastavit vlastní ikonu, která se zobrazí vedle názvu panelu v prohlížeči.\nChcete-li jako ikonu použít obrázek samotný, použijte proměnnou <b>%url</b>."
+		},
+		"infoLanguage": {
+			"#": 1,
+			">": "Jazyk"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Překlady"
+		},
+		"infoTranslators": {
+			"#": 1,
+			">": "Překladatelé"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "roztáhnout na výšku/šířku"
+		},
+		"longpressDelay": {
+			"#": 0,
+			">": "Prodleva dlouhého stisku"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Akce při dlouhém stisku levého tlačítka myši"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Akce při dlouhém stisku pravého tlačítka myši"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Lze použít tyto atributy:\n<b>autoplay</b> - přehrát video automaticky\n<b>loop</b> - přehrávat dokola\n<b>controls</b> - zobrazit ovládací prvky\n<b>muted</b> - vypnout zvuk\n<b>volume=0-100</b> - výchozí hlasitost (v procentech)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Vlastnosti obrázku"
+		},
+		"mediaInfoTip": {
+			"#": 2,
+			">": "V titulku stránky (v panelu prohlížeče) lze zobrazit tyto vlastnosti obrázku:\n<b>%ow</b> - původní šířka obrázku\n<b>%oh</b> - původní výška obrázku\n<b>%ratio</b> - poměr stran (šířka / výška)\n<b>%w</b> - současná šířka\n<b>%h</b> - současná výška\n<b>%perc</b> - procento zvětšení\n<b>%url</b> - úplná URL adresa\n<b>%name</b> - název souboru"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Zvětšit malé obrázky"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Ve výchozím nastavení nebudou malé obrázky automaticky zvětšovány. Přeje-li si to, použijte tuto volbu.\nObrázky, které jsou větší než daný počet procent šířky nebo výšky okna prohlížeče (záleží na předchozí volbě) budou automaticky roztaženy."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "přizpůsobit automaticky"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "roztáhnout automaticky"
+		},
+		"modeFitToHeight": {
+			"#": 0,
+			">": "roztáhnout na výšku"
+		},
+		"modeFitToWidth": {
+			"#": 0,
+			">": "roztáhnout na šířku"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "původní velikost"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "Obecné"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "O doplňku"
+		},
+		"opener": {
+			"#": 0,
+			">": "Otevřít obrázek ze stránky"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "obojí"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + pravé tlačítko"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "dlouhý stisk pravého tlačítka"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "kliknutím zobrazíte příklady..."
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Přepínat mezi režimy zvětšení: původní velikost, roztáhnout na šířku a roztáhnout na výšku"
+		},
+		"scDragndrop": {
+			"#": 2,
+			">": "<b>Držte Ctrl nebo Alt</b> nebo začněte v pravé části obrázku, chcete-li obrázek přetáhnout jinam (např. mimo okno prohlížeče)"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Roztáhnout na výšku"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Roztáhnout na šířku"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Překlopit vodorovně"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Překlopit svisle"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Přesunutím kurzoru do levého horního rohu stránky vyvoláte postranní panel"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Shift + výběr myší</b> pro vyvolání režimu ručního zvětšení (pro posunutí výběru držte <b>Ctrl</b>)"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "Pro vodorovné posouvání obrázku kolečkem myši přesuňte kurzor do levé dolní části obrázku"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Automaticky"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Skutečná velikost"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> obnoví obrázek do původního stavu (pokud byl např. zvětšen, otočen nebo převrácen) nebo ukončí režim ručního zvětšení"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Otočit vlevo"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Otočit vpravo"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Přiblížit / oddálit"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Odeslat obrázek do..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Klávesové zkratky"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Použít kolečko myši jako lupu"
+		}
+	}
+}
