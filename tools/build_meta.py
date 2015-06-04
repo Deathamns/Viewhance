@@ -9,7 +9,7 @@ from io import open
 from glob import glob
 from copy import deepcopy as obj_deepcopy
 from time import time
-from shutil import rmtree as rmt
+from shutil import rmtree as rmt, copy
 from collections import OrderedDict
 
 osp = os.path
@@ -511,6 +511,11 @@ with open(pj(src_dir, 'Info.plist'), 'wt', encoding='utf-8', newline='\n') as f:
 
     with open(pj(meta_dir, 'safariextz', 'Info.plist'), 'r') as info_plist_tpl:
         f.write(info_plist_tpl.read().format(**config))
+
+    copy(
+        pj(meta_dir, 'safariextz', 'Settings.plist'),
+        pj(src_dir, 'Settings.plist')
+    )
 
 
 with open(pj(src_dir, 'def.json'), 'wt', encoding='utf-8', newline='\n') as f:
