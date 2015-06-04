@@ -614,7 +614,7 @@ if ( self.opera ) {
 				.classes['@mozilla.org/intl/stringbundle;1']
 				.getService(Components.interfaces.nsIStringBundleService)
 				.createBundle(
-					'chrome://' + location.host + '/locale/options.properties'
+					'chrome://' + location.host + '/locale/strings.properties'
 				);
 
 			return function(s) {

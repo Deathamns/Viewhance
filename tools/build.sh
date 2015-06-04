@@ -25,7 +25,7 @@ for arg in $@; do
 			;;
 		xpi | oex | crx | safariextz | mxaddon)
 			let "all++"
-			py_args=+"$arg "
+			py_args+="$arg "
 			;&
 		prep | pack | no-meta)
 			let "${arg//-/_}=1"
@@ -44,7 +44,7 @@ fi
 # Generating meta-data (locales, manifest files, update files)
 if [[ -z "$no_meta" || ! -f src/locales.json ]]; then
 	if [[ "$pack" ]]; then
-		py_args+="upd "
+		py_args+="pack "
 	fi
 
 	python tools/build_meta.py $py_args
@@ -251,7 +251,7 @@ if [[ "${!ext}" || "$all" ]]; then
 			if [[ ! -f "$certs/AppleWWDRCA.cer" ]]; then
 				wget -N -q --show-progress \
 					-O "$certs/AppleWWDRCA.cer" \
-					http://developer.apple.com/certificationauthority/AppleWWDRCA.cer
+					https://developer.apple.com/certificationauthority/AppleWWDRCA.cer
 			fi
 
 			if [[ ! -f "$certs/AppleIncRootCertificate.cer" ]]; then
