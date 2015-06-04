@@ -914,6 +914,13 @@ init = function() {
 
 	var lastMoveX, lastMoveY;
 
+	var onMoveFrame = function() {
+		win.scrollBy(sX - lastMoveX, sY - lastMoveY);
+		sX = lastMoveX;
+		sY = lastMoveY;
+		panning = null;
+	};
+
 	var onMove = function(e) {
 		lastMoveX = e.clientX;
 		lastMoveY = e.clientY;
@@ -955,18 +962,6 @@ init = function() {
 		dragSlide[2] = [lastMoveX, lastMoveY];
 
 		media.dragSlideTime = Date.now();
-	};
-
-	var pan = function() {
-		win.scrollBy(sX - lastMoveX, sY - lastMoveY);
-
-		sX = lastMoveX;
-		sY = lastMoveY;
-	};
-
-	var onMoveFrame = function() {
-		pan();
-		panning = null;
 	};
 
 	var startScroll = function() {
