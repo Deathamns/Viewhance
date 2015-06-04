@@ -54,7 +54,8 @@ var changeColor = function(node, color, time) {
 	}, time || 2000);
 };
 
-var fillOutput = function(node) {
+var fillOutput = function(e) {
+	var node = e.target || e;
 	var op = node.previousElementSibling;
 	op.value = node.value;
 	op.defaultValue = defaultPrefs[node.name];
