@@ -53,17 +53,9 @@
 			"#": 2,
 			">": "Toto vám umožňuje nastavit vlastní ikonu, která se zobrazí vedle názvu panelu v prohlížeči.\nChcete-li jako ikonu použít obrázek samotný, použijte proměnnou <b>%url</b>."
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Jazyk"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Překlady"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Překladatelé"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

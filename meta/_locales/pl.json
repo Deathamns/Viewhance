@@ -53,17 +53,9 @@
 			"#": 2,
 			">": "Zmienia ikonę pliku w pasku tytułu (domyślnie przeglądarka używa obrazka jako ikony).\nAdres obrazka można wprowadzić za pomocą zmiennej: <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Język"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Tłumaczenia"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Tłumacze"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

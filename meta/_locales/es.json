@@ -53,17 +53,9 @@
 			"#": 2,
 			">": "Esta opción permite establecer un <i>favicono</i> personalizado para las pestañas con imágenes abiertas.\nLa dirección de la imagen puede ser usada como variable: <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Idioma"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Traducciones"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Traductores"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

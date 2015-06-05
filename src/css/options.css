@@ -450,23 +450,12 @@ h3 {
 }
 
 #locales-table {
-	margin: 0 auto;
 	border-collapse: separate;
-	border-spacing: 25px 2px;
-	font: 13px Consolas, Monaco;
+	padding: 0 40px;
+	font: 13px/1.4em Consolas, Monaco, monospace;
 }
 
-#locales-table > tr:hover {
-	margin: 0 auto;
-	border-collapse: separate;
-	border-spacing: 25px 2px;
-	font: 13px Consolas, Monaco;
-}
-
-#locales-table th:first-child {
-	text-align: left;
-}
-
-#locales-table td:last-child {
-	text-align: center;
+#locales-table > div > span:not(:empty)::before {
+	margin: 0 10px;
+	content: "\2014";
 }

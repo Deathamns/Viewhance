@@ -44,17 +44,9 @@
 			"#": 2,
 			">": "Cette option permet de choisir un icône personnalisé pour l'onglet de l'image ouverte.\nL'adresse de l'image peut être utilisée comme une variable : <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Langue"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Traductions"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Traducteurs"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

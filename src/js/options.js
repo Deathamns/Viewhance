@@ -269,23 +269,30 @@ var onHashChange = function() {
 			xhr.overrideMimeType('application/json;charset=utf-8');
 			xhr.open('GET', 'locales.json', true);
 			xhr.addEventListener('load', function() {
-				var alpha2, td;
+				var translators;
 				var rows = [];
+				var locales = JSON.parse(this.responseText);
 				var lngMap = function(el, idx) {
 					el.name = [
 						el.name || el.realname || '',
 						el.realname && el.name ? ' (' + el.realname + ')' : ''
 					].join('');
 
+					if ( el.email ) {
+						el.email = el.email
+							.replace(/\(dot\)/g, '.')
+							.replace('(at)', '@');
+					}
+
 					if ( !el.name ) {
 						el.name = el.email || el.web;
 					}
 
 					if ( idx ) {
-						td.nodes.push(', ');
+						translators.nodes.push(', ');
 					}
 
-					td.nodes.push(el.email || el.web
+					translators.nodes.push(el.email || el.web
 						? {
 							tag: 'a',
 							attrs: {href: el.email
@@ -298,33 +305,24 @@ var onHashChange = function() {
 					);
 				};
 
-				var locales = JSON.parse(this.responseText);
+				// _ is the default language
+				delete locales._;
 
-				for ( alpha2 in locales ) {
-					// _ is the default language
-					if ( alpha2 === '_' ) {
-						continue;
-					}
+				for ( var alpha2 in locales ) {
+					var locale = locales[alpha2];
+					translators = {tag: 'span'};
 
-					td = {tag: 'td'};
-
-					rows.push({tag: 'tr', nodes: [
-						{
-							tag: 'td',
-							attrs: locales[alpha2]['%']
-								? {title: locales[alpha2]['%'] + '%'}
-								: null,
-							text: alpha2 + ', ' + locales[alpha2].name
-						},
-						td
-					]});
-
-					if ( locales[alpha2].translators ) {
-						td.nodes = [];
-						locales[alpha2].translators.forEach(lngMap);
+					if ( locale.translators ) {
+						translators.nodes = [];
+						locale.translators.forEach(lngMap);
 					} else {
-						td.text = 'anonymous';
+						translators.text = 'anonymous';
 					}
+
+					rows.push({tag: 'div', nodes: [
+						alpha2 + ', ' + locale.name,
+						translators
+					]});
 				}
 
 				vAPI.buildNodes($('locales-table'), rows);

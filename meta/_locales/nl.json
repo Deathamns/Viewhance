@@ -34,17 +34,9 @@
 			"#": 2,
 			">": "Deze optie maakt het mogelijk om een aangepaste tab-icoon te gebruiken voor de geopende afbeelding.\nHet adres van de afbeelding kan gebruikt worden als variabele: <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Taal"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Vertalingen"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Vertalers"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

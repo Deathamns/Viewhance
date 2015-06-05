@@ -26,10 +26,6 @@
 			"#": 0,
 			">": "Özel favicon"
 		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Çevirmenler"
-		},
 		"longpressDelay": {
 			"#": 0,
 			">": "Uzun basış gecikmesi (ms)"

@@ -34,17 +34,9 @@
 			"#": 2,
 			">": "Esta opção possibilita adicionar um ícone personalizado à imagem aberta.\nO endereço da imagem pode ser usado como variável: <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Idioma"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Traduções"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Tradutores"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

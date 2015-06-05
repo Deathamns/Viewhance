@@ -53,17 +53,9 @@
 			"#": 2,
 			">": "이 옵션으로 이미지가 열린 탭의 아이콘을 바꿀 수 있습니다.\n이미지 주소가 변수로서 쓰일 수 있습니다:\n<b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "언어"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "번역"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "번역자"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

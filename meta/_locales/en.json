@@ -60,17 +60,9 @@
 			"#": 2,
 			">": "This option allows to set a custom tab-icon for the opened image.\nThe address of the image can be used as a variable: <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Language"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Translations"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Translators"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

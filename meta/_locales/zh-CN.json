@@ -34,17 +34,9 @@
 			"#": 2,
 			">": "该选项用于为打开的图片设置一个自定义的标签页图标。\n图片地址可使用以下变量：<b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "语言"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "翻译"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "译者"
 		},
 		"longpressActionFitImage": {
 			"#": 0,

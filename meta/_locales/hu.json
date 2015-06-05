@@ -56,17 +56,9 @@
 			"#": 2,
 			">": "A kép címe használható változóként a megadott értékben: <b>%url</b>"
 		},
-		"infoLanguage": {
-			"#": 1,
-			">": "Nyelv"
-		},
 		"infoTranslations": {
 			"#": 1,
 			">": "Fordítások"
-		},
-		"infoTranslators": {
-			"#": 1,
-			">": "Fordítók"
 		},
 		"longpressActionFitImage": {
 			"#": 0,
