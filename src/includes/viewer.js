@@ -370,36 +370,136 @@ init = function() {
 			{tag: 'li', attrs: {'data-cmd': 'cycle'}, text: '\u2194'},
 			{tag: 'li', attrs: {'data-cmd': 'zoom'}, nodes: [
 				{tag: 'span', attrs: {style: 'visibility: hidden'}, text: '.'},
-				{tag: 'span', attrs: {style: 'transform: rotate(-45deg); position: absolute; left: 20%; font-size: 125%'}, text: '\u26B2'}
+				{
+					tag: 'span',
+					attrs: {
+						style: [
+							'transform: rotate(-45deg)',
+							'position: absolute',
+							'left: 20%',
+							'font-size: 125%'
+						].join(';')
+					},
+					text: '\u26B2'
+				}
 			]},
 			{tag: 'li', attrs: {'data-cmd': 'flip'}, text: '\u21CB'},
 			{tag: 'li', attrs: {'data-cmd': 'rotate'}, text: '\u21BA'},
 			media.filters ? {tag: 'li', attrs: {'class': 'filters'}, nodes: [
 				'\u2261',
 				{tag: 'form', nodes: [{tag: 'ul', nodes: [
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 250, step: 10, value: 100, unit: '%'}
-					}, ' brightness']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 300, step: 25, value: 100, unit: '%'}
-					}, ' contrast']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 1000, step: 50, value: 100, unit: '%'}
-					}, ' saturate']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 100, step: 25, value: 0, unit: '%'}
-					}, ' grayscale']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 100, step: 100, value: 0, unit: '%'}
-					}, ' invert']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 100, step: 20, value: 0, unit: '%'}
-					}, ' sepia']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 360, step: 36, value: 0, unit: 'deg'}
-					}, ' hue-rotate']},
-					{tag: 'li', nodes: [{tag: 'input', attrs: {
-						type: 'range', min: 0, max: 20, step: 1, value: 0, unit: 'px'}}, ' blur']}
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 250,
+								step: 10,
+								value: 100,
+								unit: '%'
+							}
+						},
+						' brightness'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 300,
+								step: 25,
+								value: 100,
+								unit: '%'
+							}
+						},
+						' contrast'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 1000,
+								step: 50,
+								value: 100,
+								unit: '%'
+							}
+						},
+						' saturate'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 100,
+								step: 25,
+								value: 0,
+								unit: '%'
+							}
+						},
+						' grayscale'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 100,
+								step: 100,
+								value: 0,
+								unit: '%'
+							}
+						},
+						' invert'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 100,
+								step: 20,
+								value: 0,
+								unit: '%'
+							}
+						},
+						' sepia'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 360,
+								step: 36,
+								value: 0,
+								unit: 'deg'
+							}
+						},
+						' hue-rotate'
+					]},
+					{tag: 'li', nodes: [
+						{
+							tag: 'input',
+							attrs: {
+								type: 'range',
+								min: 0,
+								max: 20,
+								step: 1,
+								value: 0,
+								unit: 'px'
+							}
+						},
+						' blur'
+					]}
 				]}]}
 			]} : '',
 			{tag: 'li', attrs: {'data-cmd': 'reset'}, text: '\u2715'},
@@ -453,7 +553,9 @@ init = function() {
 				return;
 			}
 
-			var p = e.type.indexOf('wheel') > -1 && (-e.wheelDelta || e.deltaY) > 0 || e.button === 2 ? 1 : 0;
+			var p = e.button === 2
+				|| e.type.indexOf('wheel') > -1
+					&& (-e.wheelDelta || e.deltaY) > 0;
 
 			if ( cmd === 'cycle' ) {
 				media.cycle(!p);
@@ -556,10 +658,11 @@ init = function() {
 			}
 
 			if ( t.type === 'range' ) {
+				var delta = (-e.wheelDelta || e.deltaY) > 0 ? -1 : 1;
 				t.value = Math.max(
 					t.getAttribute('min'),
 					Math.min(
-						parseInt(t.value, 10) + t.getAttribute('step') * ((-e.wheelDelta || e.deltaY) > 0 ? -1 : 1),
+						parseInt(t.value, 10) + t.getAttribute('step') * delta,
 						t.getAttribute('max')
 					)
 				);
@@ -1612,7 +1715,7 @@ if ( vAPI.mediaType === 'video' ) {
 		} else {
 			// Legacy
 			media.addEventListener('DOMAttrModified', function(ev) {
-				if ( monitoredAttrs.indexOf(ev.attrName) !== -1 ) {
+				if ( monitoredAttrs.indexOf(ev.attrName) > -1 ) {
 					onAttributeChange();
 				}
 			});
