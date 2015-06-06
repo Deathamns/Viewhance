@@ -36,11 +36,6 @@ for arg in $@; do
 	esac
 done
 
-# If only some platforms were given, then $all should be disabled
-if [[ "$all" -gt 1 && "$all" -lt 6 ]]; then
-	all=""
-fi
-
 # Generating meta-data (locales, manifest files, update files)
 if [[ -z "$no_meta" || ! -f src/locales.json ]]; then
 	if [[ "$pack" ]]; then
@@ -52,6 +47,11 @@ fi
 
 if [[ -z "$prep" && -z "$pack" ]]; then
 	exit
+fi
+
+# If only some platforms were given, then $all should be disabled
+if [[ "$all" -gt 1 && "$all" -lt 6 ]]; then
+	all=""
 fi
 
 
