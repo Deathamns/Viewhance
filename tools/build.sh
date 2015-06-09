@@ -236,7 +236,7 @@ if [[ "${!ext}" || "$all" ]]; then
 	if [[ "$pack" && !"$prep" ]]; then
 		if command -v xar > /dev/null 2>&1; then
 			key="$( realpath data/keys/key_$ext.pem )"
-			certs="$( realpath meta/$ext/certs )"
+			certs="$( realpath data/certs )"
 			sig_size="$( openssl dgst -binary -sign "$key" < "$key" | wc -c )"
 			tmp="$( realpath "build/tmp" )"
 

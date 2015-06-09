@@ -1,5 +1,6 @@
 *.pem
 *.bak
+*.safariextension
 
 /build/
 /data/
@@ -24,10 +25,3 @@
 
 # mxaddon
 /src/def.json
-
-*.safariextension
-/meta/safariextz/*
-!/meta/safariextz/*.plist
-
-/meta/mxaddon/*
-!/meta/mxaddon/*.json
