@@ -6,7 +6,7 @@ cd "$( dirname "${BASH_SOURCE[0]}" )/.."
 # Build it for every browser
 all=1
 # These arguments will be passed to build_meta.py
-py_args=""
+platforms=""
 
 for arg in $@; do
 	case $arg in
@@ -25,7 +25,7 @@ for arg in $@; do
 			;;
 		xpi | oex | crx | safariextz | mxaddon)
 			let "all++"
-			py_args+="$arg "
+			platforms+="$arg "
 			;&
 		prep | pack | no-meta)
 			let "${arg//-/_}=1"
@@ -39,10 +39,10 @@ done
 # Generating meta-data (locales, manifest files, update files)
 if [[ -z "$no_meta" || ! -f src/locales.json ]]; then
 	if [[ "$pack" ]]; then
-		py_args+="pack "
+		platforms+="pack "
 	fi
 
-	python tools/build_meta.py $py_args
+	python tools/build_meta.py $platforms
 fi
 
 if [[ -z "$prep" && -z "$pack" ]]; then
@@ -55,13 +55,13 @@ if [[ "$all" -gt 1 && "$all" -lt 6 ]]; then
 fi
 
 
-on_prep () {
+on_prep() {
 	if [[ "$prep" && !"$pack" ]]; then
 		echo "Folder ready: $( realpath "build/$1/" )"
 	fi
 }
 
-on_pack () {
+on_pack() {
 	if [[ $1 -eq 0 ]]; then
 		echo "Package ready: $package_path.$2"
 	else
@@ -74,7 +74,7 @@ on_pack () {
 }
 
 # Copy common code
-setup_base () {
+setup_base() {
 	rm -rf "$1"
 	mkdir -p "$1"
 
@@ -91,7 +91,7 @@ setup_base () {
 }
 
 # Include only browser specific code
-split_platform_code () {
+split_platform_code() {
 	local js_list=( "$2/includes/app.js" "$2/js/app_bg.js" )
 
 	for js_file in ${js_list[@]}; do
