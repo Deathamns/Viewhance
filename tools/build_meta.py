@@ -268,7 +268,6 @@ def write_locales_crx():
         locale_file = pj(src_dir, '_locales', alpha2_, 'messages.json')
 
         with open(locale_file, 'wt', encoding='utf-8', newline='\n') as f:
-            write_comment_header(f, alpha2)
             f.write(
                 json.dumps(
                     strings,

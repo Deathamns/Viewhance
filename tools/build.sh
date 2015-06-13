@@ -119,7 +119,7 @@ while read line; do
     fi
 done < "meta/config.json"
 
-package_path="$( realpath "build/${meta[name]}" )-${meta[version]}"
+package_path="$( realpath "build/${meta[name],,}" )-${meta[version]}"
 
 
 ext=xpi
