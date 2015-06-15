@@ -290,7 +290,6 @@ if [[ "${!ext}" || "$all" ]]; then
 	dir="$( realpath "build/$ext" )"
 	setup_base "$dir/"
 
-	rm -f "$dir/icon.png"
 	mkdir -p "$dir/locale/"
 	cp --preserve=mode src/locale/*.ini "$dir/locale/"
 	cp -r --preserve=mode \
