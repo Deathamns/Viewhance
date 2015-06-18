@@ -4,18 +4,18 @@
 
 this.EXPORTED_SYMBOLS = ['docObserver'];
 
+const Ci = Components.interfaces;
+const hostName = Components.stack.filename.match(/:\/\/(\w+)/)[1];
 const {Services} = Components.utils.import(
 	'resource://gre/modules/Services.jsm',
 	null
 );
-const hostName = Components.stack.filename.match(/:\/\/(\w+)/)[1];
 
-let docObserver = {
+const docObserver = {
 	contentBaseURI: 'chrome://' + hostName + '/content/includes/',
 	uniqueSandboxId: 1,
 
 	QueryInterface: (function() {
-		let Ci = Components.interfaces;
 		let {XPCOMUtils} = Components.utils.import(
 			'resource://gre/modules/XPCOMUtils.jsm',
 			null
@@ -36,7 +36,6 @@ let docObserver = {
 	},
 
 	initContentScripts: function(win, js) {
-		let Ci = Components.interfaces;
 		let messager = win
 			.QueryInterface(Ci.nsIInterfaceRequestor)
 			.getInterface(Ci.nsIDocShell)
@@ -125,7 +124,7 @@ let docObserver = {
 			return;
 		}
 
-		if ( doc instanceof win.ImageDocument ) {
+		if ( doc instanceof Ci.nsIImageDocument ) {
 			this.initContentScripts(win, 'viewer.js');
 			return;
 		}
