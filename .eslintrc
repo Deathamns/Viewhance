@@ -46,11 +46,13 @@
 		"no-undefined": 2,
 		"no-unneeded-ternary": 1,
 
-		// "indent": [2, "tab", {"indentSwitchCase": true}],
+		"array-bracket-spacing": 2,
 		"brace-style": [2, "1tbs"],
 		"comma-style": [2, "last"],
 		// "consistent-this": [1, "that"],
 		"func-style": [2, "expression"],
+		// "indent": [2, "tab", {"indentSwitchCase": true}],
+		"linebreak-style": [2, "unix"],
 		"max-nested-callbacks": [2, 3],
 		"new-parens": 0,
 		"no-array-constructor": 2,
@@ -60,7 +62,7 @@
 		"no-multiple-empty-lines": [2, {"max": 2}],
 		// "no-nested-ternary": 1,
 		"no-underscore-dangle": 0,
-		"linebreak-style": [2, "unix"],
+		"object-curly-spacing": 2,
 		"operator-assignment": [2, "always"],
 		// "operator-linebreak": [2, "before"],
 		// "padded-blocks": [1, "never"],
@@ -69,7 +71,6 @@
 		"space-after-keywords": 2,
 		"space-before-blocks": 2,
 		"space-before-function-paren": [2, "never"],
-		"space-in-brackets": 2,
 		"spaced-line-comment": [1, "always"]
 	}
 }
