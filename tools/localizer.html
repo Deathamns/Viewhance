@@ -185,7 +185,6 @@
 	</style>
 </head>
 <body>
-<div id="error-message"></div>
 <div id="exporter">
 	<div>
 		<small>To send your work you need a <a href="https://github.com/join">GitHub</a> account (if you don't have one already), and you must be <a href="https://github.com/login">signed in</a></small>.
@@ -204,9 +203,9 @@ Translator:
 	<option>-- new --</option>
 </select>
 <div id="new-translator">
-<input type="text" id="tr-name" placeholder="nick/online name">
+<input type="text" id="tr-name" placeholder="nick or online name">
 <input type="text" id="tr-realname" placeholder="real name">
-<input type="text" id="tr-addr" placeholder="e-mail/url">
+<input type="text" id="tr-addr" placeholder="e-mail or www">
 all fields are optional
 </div>
 |
@@ -346,7 +345,7 @@ var loadStrings = function(trg) {
 				))));
 			}
 		} catch ( ex ) {
-			$('#error-message').textContent = this.responseText;
+			console.error(this.responseText);
 		}
 
 		if ( this._trg ) {
@@ -423,7 +422,7 @@ var initLocales = function() {
 				)));
 			}
 		} catch ( ex ) {
-			$('#error-message').textContent = this.responseText;
+			console.error(this.responseText);
 			return;
 		}
 
