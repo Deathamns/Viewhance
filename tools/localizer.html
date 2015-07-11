@@ -342,7 +342,7 @@ var loadStrings = function(trg) {
 				locale = JSON.parse(this.responseText);
 			} else {
 				locale = JSON.parse(decodeURIComponent(escape(atob(
-					JSON.parse(this.responseText).content
+					JSON.parse(this.responseText).content.replace(/\s+/g, '')
 				))));
 			}
 		} catch ( ex ) {
@@ -419,7 +419,7 @@ var initLocales = function() {
 				localeNames = this.responseText;
 			} else {
 				localeNames = decodeURIComponent(escape(atob(
-					JSON.parse(this.responseText).content
+					JSON.parse(this.responseText).content.replace(/\s+/g, '')
 				)));
 			}
 		} catch ( ex ) {
