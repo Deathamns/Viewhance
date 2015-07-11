@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Translation</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			font-family: "Lucida Sans Unicode";
+		}
+
+		a {
+			color: #0062ff;
+			text-decoration: none;
+			font-weight: 700;
+		}
+
+		a:hover {
+			color: blue !important;
+		}
+
+		/*kbd::after {
+			background-color: #def;
+			font-size: small;
+			font-weight: 700;
+			color: #06f;
+			content: "↵";
+		}*/
+
+		body {
+			cursor: default;
+			font-size: 13px;
+		}
+
+		code {
+			background-color: #eee;
+			margin: 0px;
+			padding: 0.2em;
+			border: 1px solid #ddd;
+		}
+
+		hr {
+			width: 60%;
+			border: 1px solid #eee;
+		}
+
+		select {
+			max-width: 180px;
+			font-weight: 700;
+		}
+
+		#new-translator {
+			display: none;
+		}
+
+		#exporter {
+			display: none;
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.7);
+			text-align: center;
+		}
+
+		#exporter > div {
+			margin: 0 auto;
+			width: 700px;
+			max-width: 80%;
+			background: white;
+			padding: 10px;
+		}
+
+		#exporter > textarea {
+			max-width: 80%;
+			max-height: 80%;
+		}
+
+		#locales-table {
+			margin: 0 auto;
+			border-collapse: collapse;
+			clear: both;
+		}
+
+		#locales-table td > div, select, textarea, input {
+			font: 13px Consolas;
+		}
+
+		input[type="checkbox"] {
+			vertical-align: middle;
+		}
+
+		.show-incomplete-only > tbody > tr.complete {
+			display: none;
+		}
+
+		#target-language {
+			min-width: 500px;
+			min-width: 30vw;
+		}
+
+		#target-language > small {
+			color: silver;
+		}
+
+		td > textarea {
+			box-sizing: border-box;
+			width: 100%;
+		}
+
+		tr {
+			background-color: #fff;
+			transition: background-color .5s;
+		}
+
+		tr:hover {
+			background-color: #f8f8f8;
+			transition: background-color 0s;
+		}
+
+		td > div {
+			max-height: 200px;
+			overflow: auto;
+		}
+
+		.group-row b {
+			margin-right: 10px;
+		}
+
+		td {
+			border: 1px solid #ddd;
+			padding: 5px;
+			vertical-align: top;
+			white-space: pre-wrap;
+		}
+
+		th {
+			padding: 5px 10px;
+			text-align: center;
+		}
+
+		.group-row {
+			background-color: #f4f4f4;
+		}
+
+		#locales-table > thead > tr:first-child {
+			display: none;
+		}
+
+		#locales-table td:nth-child(even) {
+			text-align: center;
+			font-weight: bold;
+		}
+
+		#locales-table td[colspan] {
+			text-align: left;
+		}
+
+		#locales-table td:first-child:not([colspan]) {
+			font-style: italic;
+		}
+
+		#locales-table td:nth-child(2):not(.out_of_date),
+		#locales-table td:nth-child(4):not(:empty):not(.not_ready) {
+			background-color: #ddffdd;
+		}
+
+		#locales-table td:nth-child(2):empty {
+			background-color: transparent;
+		}
+
+		#locales-table td:nth-child(3) > div:empty {
+			display: inline-block;
+			background-color: #ffbdbd;
+			content: "not translated";
+		}
+
+		.warning,
+		#locales-table td:nth-child(5):empty,
+		#locales-table td:nth-child(4):empty {
+			background-color: #ffeac4 !important;
+		}
+	</style>
+</head>
+<body>
+<div id="error-message"></div>
+<div id="exporter">
+	<div>
+		<small>To send your work you need a <a href="https://github.com/join">GitHub</a> account (if you don't have one already), and you must be <a href="https://github.com/login">signed in</a></small>.
+	</div>
+	<div id="edited-locale">
+		You can edit the <code><span></span>.json</code> file on <a href="https://github.com/Deathamns/Viewhance/edit/master/meta/_locales/">this link</a>.<br>
+		Copy the exported text from below, on the linked page overwrite the whole text, and at the bottom of the page you can propose your changes.
+	</div>
+	<div id="new-locale">
+		Follow this <a href="https://github.com/Deathamns/Viewhance/new/master/meta/_locales">link</a>, name the file as <code><span></span>.json</code>, copy the exported text below, and paste it into the textarea on the linked page, and at the bottom of the page you can propose your changes.
+	</div>
+	<textarea rows="50" cols="120" spellcheck="false"></textarea>
+</div>
+Translator:
+<select id="translators">
+	<option>-- new --</option>
+</select>
+<div id="new-translator">
+<input type="text" id="tr-name" placeholder="nick/online name">
+<input type="text" id="tr-realname" placeholder="real name">
+<input type="text" id="tr-addr" placeholder="e-mail/url">
+all fields are optional
+</div>
+|
+<button id="export-button">Export translation</button>
+<hr>
+<table id="locales-table">
+	<thead>
+		<tr>
+			<td></td>
+			<td></td>
+			<td><div></div></td>
+			<td></td>
+			<td class="trg-string"><div></div></td>
+		</tr>
+		<tr>
+			<th>String ID</th>
+			<th title="Source version">#</th>
+			<th id="source-language" title="Source language"></th>
+			<th title="Target version">#</th>
+			<th id="target-language">
+				<select></select>
+				<small>
+					double click a cell to edit |
+					<label><input type="checkbox"> incomplete only</label>
+				</small>
+			</th>
+		</tr>
+	</thead>
+	<tbody id="string-container"></tbody>
+</table>
+
+<script>
+'use strict';
+
+var localeNames, srcLocale, trgLocale;
+var defLang = 'en';
+var trgLocaleExists = false;
+var isLocal = !location.host || location.host === 'localhost';
+var baseUrl = isLocal
+	? 'http://localhost/meta/'
+	: 'https://api.github.com/repos/Deathamns/Viewhance/contents/meta/';
+
+var $ = function(s, n) {
+	return (n || document).querySelector(s);
+};
+
+var $$ = function(s, n) {
+	return (n || document).querySelectorAll(s);
+};
+
+var xhr = function(url, callback) {
+	var r = new XMLHttpRequest;
+	r.open('GET', url, true);
+	r.onloadend = callback;
+	r.send();
+	return r;
+};
+
+var renderTable = function() {
+	var container = document.createElement('tbody');
+	container.id = 'string-container';
+
+	for ( var groupName in srcLocale ) {
+		if ( groupName[0] === '_' ) {
+			continue;
+		}
+
+		var trTpl = $('#locales-table > thead > tr:first-child');
+		var group = srcLocale[groupName];
+		var groupRow = container
+			.appendChild(document.createElement('tr'))
+			.appendChild(document.createElement('td'));
+		groupRow.setAttribute('colspan', 5);
+		groupRow.parentNode.className = 'group-row';
+
+		for ( var string in group ) {
+			if ( string === '?' ) {
+				groupRow.innerHTML = '<b>' + groupName + '</b>';
+
+				if ( group['?'] ) {
+					groupRow.innerHTML += group['?'];
+				}
+
+				continue;
+			}
+
+			var stringRow = trTpl.cloneNode(true);
+			var trgCol = stringRow.lastElementChild;
+			var srcCol = trgCol.previousElementSibling.previousElementSibling;
+			stringRow.firstElementChild.textContent = string;
+			srcCol.firstElementChild.textContent = group[string]['>'];
+			srcCol.previousElementSibling.textContent = group[string]['#'];
+
+			if ( group[string]['?'] ) {
+				stringRow.firstElementChild.title = group[string]['?'];
+			}
+
+			if ( trgLocale[groupName] && trgLocale[groupName][string] ) {
+				var trgString = trgLocale[groupName][string];
+				trgCol.firstElementChild.textContent = trgString['>'];
+				trgCol.previousElementSibling.textContent = trgString['#'];
+
+				if ( trgString['#'] < group[string]['#'] ) {
+					trgCol.previousElementSibling.className = 'warning';
+				} else {
+					stringRow.classList.add('complete');
+				}
+			}
+
+			container.appendChild(stringRow);
+		}
+	}
+
+	var oldContainer = $('#' + container.id);
+	oldContainer.parentNode.replaceChild(container, oldContainer);
+};
+
+var loadStrings = function(trg) {
+	var src = defLang;
+
+	if ( !localeNames[trg] ) {
+		return;
+	}
+
+	trgLocale = null;
+
+	var onStringsReady = function() {
+		var locale;
+		this.onloadend = null;
+
+		try {
+			if ( isLocal ) {
+				locale = JSON.parse(this.responseText);
+			} else {
+				locale = JSON.parse(decodeURIComponent(escape(atob(
+					JSON.parse(this.responseText).content
+				))));
+			}
+		} catch ( ex ) {
+			$('#error-message').textContent = this.responseText;
+		}
+
+		if ( this._trg ) {
+			trgLocale = locale || {};
+			trgLocaleExists = !!locale;
+
+			if ( locale && src === trg ) {
+				srcLocale = locale;
+			}
+
+			var translatorPicker = $('#translators');
+
+			while ( translatorPicker.childElementCount > 1 ) {
+				translatorPicker.removeChild(
+					translatorPicker.lastElementChild
+				);
+			}
+
+			if ( trgLocaleExists && trgLocale._translators ) {
+				var storedTranslator = localStorage.getItem('translator');
+				var translators = trgLocale._translators;
+
+				for ( var i = 0; i < translators.length; ++i ) {
+					var option = document.createElement('option');
+					option.textContent = translators[i].name
+						|| translators[i].email || translators[i].web
+						|| translators[i].realname;
+
+					translatorPicker.appendChild(option);
+
+					if ( !storedTranslator ) {
+						continue;
+					}
+
+					if ( storedTranslator === JSON.stringify(translators[i]) ) {
+						option.selected = true;
+					}
+				}
+			}
+
+			translatorPicker.onchange();
+		} else {
+			srcLocale = locale;
+		}
+
+		if ( srcLocale && trgLocale ) {
+			renderTable();
+			localStorage.setItem('lastTargetLocale', trg);
+		}
+	};
+
+	if ( !srcLocale && src !== trg ) {
+		xhr(baseUrl + '_locales/' + src + '.json', onStringsReady);
+	}
+
+	xhr(baseUrl + '_locales/' + trg + '.json', onStringsReady)._trg = true;
+};
+
+var initLocales = function() {
+	if ( this && this.onloadend ) {
+		this.onloadend = null;
+	}
+
+	var lngSelector = $('#target-language > select');
+	var optTmpl = document.createElement('option');
+
+	if ( this instanceof XMLHttpRequest ) {
+		try {
+			if ( isLocal ) {
+				localeNames = this.responseText;
+			} else {
+				localeNames = decodeURIComponent(escape(atob(
+					JSON.parse(this.responseText).content
+				)));
+			}
+		} catch ( ex ) {
+			$('#error-message').textContent = this.responseText;
+			return;
+		}
+
+		localStorage.setItem('localeNames', localeNames);
+	}
+
+	localeNames = JSON.parse(localeNames);
+
+	for ( var alpha2 in localeNames ) {
+		var option = optTmpl.cloneNode(false);
+		var nativeName = localeNames[alpha2].native;
+		option.value = alpha2;
+		option.textContent = alpha2 + ', ' + localeNames[alpha2].english
+			+ (nativeName ? ' [' + nativeName + ']' : '');
+		lngSelector.appendChild(option);
+
+		if ( alpha2 === defLang ) {
+			$('#source-language').textContent = option.textContent;
+		}
+	}
+
+	var detectedLanguage = localStorage.getItem('lastTargetLocale');
+
+	if ( !detectedLanguage ) {
+		detectedLanguage = navigator.language.split('-');
+		detectedLanguage = localeNames[detectedLanguage[0]]
+			? detectedLanguage[0]
+			: navigator.language;
+	}
+
+	lngSelector.value = detectedLanguage;
+
+	if ( lngSelector.value === '' ) {
+		lngSelector.value = lngSelector.value.indexOf('-') === -1
+			? lngSelector.value.split('-')[0]
+			: defLang;
+	}
+
+	var onChangeTimer;
+	var changeTargetLanguage = function() {
+		this.defaultValue = this.value;
+		loadStrings(this.value);
+	}.bind(lngSelector);
+
+	lngSelector.defaultValue = lngSelector.value;
+
+	lngSelector.onchange = function() {
+		if ( this.value === this.defaultValue ) {
+			return;
+		}
+
+		clearTimeout(onChangeTimer);
+		onChangeTimer = setTimeout(changeTargetLanguage, 300);
+	};
+
+	loadStrings(lngSelector.value);
+
+	var incompleteCheckbox = $('#target-language input[type="checkbox"]');
+
+	incompleteCheckbox.onchange = function() {
+		if ( this.checked ) {
+			$('#locales-table').classList.add('show-incomplete-only');
+			localStorage.setItem('showIncompleteOnly', '1');
+		} else {
+			$('#locales-table').classList.remove('show-incomplete-only');
+			localStorage.removeItem('showIncompleteOnly');
+		}
+	};
+
+	incompleteCheckbox.checked = !!localStorage.getItem('showIncompleteOnly');
+	incompleteCheckbox.onchange();
+};
+
+var hasTargetChanged = function() {
+	var textAreas = $$('#locales-table td:last-child > textarea');
+	var i = textAreas.length;
+
+	if ( i === 0 ) {
+		return false;
+	}
+
+	while ( i-- ) {
+		if ( textAreas[i].value !== textAreas[i].defaultValue ) {
+			return true
+		}
+	}
+
+	return false;
+};
+
+var toLn = function(str) {
+	return str.replace(/\r\n?/g, '\n');
+};
+
+var countLines = function(str) {
+	if ( typeof str !== 'string' ) {
+		return 1;
+	}
+
+	var i = str.length;
+	var numberOfLines = 1;
+	var formattedStr = toLn(str);
+
+	while ( i-- ) {
+		if ( formattedStr[i] === '\n') {
+			++numberOfLines;
+		}
+	}
+
+	return numberOfLines;
+};
+
+$('#locales-table').ondblclick = function(e) {
+	var target = e.target;
+
+	if ( !target.classList.contains('trg-string') ) {
+		target = target.parentNode;
+
+		if ( !target || !target.classList.contains('trg-string') ) {
+			return;
+		}
+	}
+
+	if ( target.firstElementChild ) {
+		target = target.firstElementChild;
+	}
+
+	if ( target.localName === 'textarea' ) {
+		return;
+	}
+
+	var ta = document.createElement('textarea');
+	ta.value = ta.defaultValue = target.textContent;
+	ta.rows = Math.min(13, countLines(ta.value) + 1);
+	target.parentNode.replaceChild(ta, target);
+	ta.focus();
+};
+
+$('#locales-table').onkeydown = function(e) {
+	if ( e.keyCode !== 27 ) {
+		return;
+	}
+
+	if ( e.target.localName !== 'textarea' ) {
+		return;
+	}
+
+	if ( !e.target.parentNode.classList.contains('trg-string') ) {
+		return;
+	}
+
+	var t = document.createElement('div');
+	t.textContent = e.target.defaultValue;
+	e.target.parentNode.replaceChild(t, e.target);
+};
+
+$('#translators').onchange = function() {
+	$('#new-translator').style.display = this.selectedIndex
+		? 'none'
+		: 'inline-block';
+
+	if ( this.selectedIndex ) {
+		return;
+	}
+
+	var storedTranslator = localStorage.getItem('translator');
+
+	if ( !storedTranslator ) {
+		return;
+	}
+
+	storedTranslator = JSON.parse(storedTranslator);
+
+	if ( storedTranslator.name ) {
+		$('#tr-name').value = storedTranslator.name;
+	}
+
+	if ( storedTranslator.realname ) {
+		$('#tr-realname').value = storedTranslator.realname;
+	}
+
+	if ( storedTranslator.email ) {
+		$('#tr-addr').value = storedTranslator.email
+			.replace('(at)', '@')
+			.replace(/\(dot\)/g, '.');
+	} else if ( storedTranslator.web ) {
+		$('#tr-addr').value = storedTranslator.web;
+	}
+};
+
+$('#export-button').onclick = function(e) {
+	if ( !e.ctrlKey && !hasTargetChanged() ) {
+		return;
+	}
+
+	var rows = $$('#string-container > tr');
+	var targetAlpha2 = $('#target-language > select').value;
+	var defLangSelected = targetAlpha2 === defLang;
+	var data = {_translators: (trgLocale._translators || []).slice()};
+	var group, emptyGroup;
+
+	for ( var i = 0; i < rows.length; ++i ) {
+		var row = rows[i];
+
+		if ( row.classList.contains('group-row') ) {
+			if ( group && emptyGroup ) {
+				delete data[group.name];
+			}
+
+			emptyGroup = true;
+			group = {
+				name: row.firstElementChild.firstElementChild.textContent,
+				description: row.firstElementChild.lastChild.textContent
+			};
+			data[group.name] = {};
+
+			if ( defLangSelected && srcLocale[group.name]['?'] ) {
+				data[group.name]['?'] = srcLocale[group.name]['?'];
+			}
+
+			continue;
+		}
+
+		var srcString = $('td:nth-child(3)', row).textContent;
+		var trgStringContainer = row.lastElementChild.firstElementChild;
+		var trgString = trgStringContainer.localName === 'textarea'
+			? toLn(trgStringContainer.value.trim())
+			: trgStringContainer.textContent;
+		var srcStringVer = $('td:nth-child(2)', row).textContent * 1;
+		var trgStringVer = $('td:nth-child(4)', row).textContent * 1;
+
+		if ( !defLangSelected && (!trgString || srcString === trgString) ) {
+			continue;
+		}
+
+		if ( trgStringContainer.localName === 'textarea' ) {
+			trgStringVer = srcStringVer;
+		}
+
+		var stringName = row.firstElementChild.textContent;
+		var stringData = {
+			'#': trgStringVer,
+			'>': trgString
+		};
+
+		if ( defLangSelected && srcLocale[group.name][stringName]['?'] ) {
+			stringData['?'] = srcLocale[group.name][stringName]['?'];
+		}
+
+		data[group.name][stringName] = stringData;
+
+		if ( emptyGroup ) {
+			emptyGroup = false;
+		}
+	}
+
+	if ( group && emptyGroup ) {
+		delete data[group.name];
+	}
+
+	var transltorIndex = $('#translators').selectedIndex;
+	var translator;
+
+	if ( transltorIndex ) {
+		translator = data._translators[transltorIndex - 1];
+	} else {
+		var val = $('#tr-name').value.trim();
+		var anonymous = true;
+		translator = {};
+
+		if ( val ) {
+			anonymous = false;
+			translator.name = val;
+		}
+
+		val = $('#tr-realname').value.trim();
+
+		if ( val ) {
+			anonymous = false;
+			translator.realname = val;
+		}
+
+		val = $('#tr-addr').value.trim();
+
+		if ( val ) {
+			anonymous = false;
+			translator[val.indexOf('@') === -1 ? 'web' : 'email'] = val;
+
+			if ( translator.email ) {
+				translator.email = translator.email
+					.replace('@', '(at)')
+					.replace('.', '(dot)');
+			}
+		}
+
+		if ( anonymous ) {
+			translator.name = 'anonymous';
+		} else {
+			var sortedTranslator = {};
+			Object.keys(translator).sort().forEach(function(key) {
+				sortedTranslator[key] = translator[key];
+			});
+			translator = sortedTranslator;
+		}
+
+		data._translators.push(translator);
+	}
+
+	localStorage.setItem('translator', JSON.stringify(translator));
+
+	var exporter = $('#exporter');
+	$('#edited-locale').style.display = trgLocaleExists ? 'block' : 'none';
+	$('#new-locale').style.display = trgLocaleExists ? 'none' : 'block';
+
+	if ( trgLocaleExists ) {
+		var editA = $('#edited-locale a');
+		editA.href = editA.href.slice(0, editA.href.lastIndexOf('/') + 1)
+			+ targetAlpha2 + '.json';
+		$('#edited-locale span').textContent = targetAlpha2;
+	} else {
+		$('#new-locale span').textContent = targetAlpha2;
+	}
+
+	exporter.lastElementChild.value = toLn(
+		JSON.stringify(data, null, '\t')
+	);
+	exporter.style.display = 'block';
+	exporter.lastElementChild.select();
+
+	if ( exporter.onclick ) {
+		return;
+	}
+
+	exporter.onclick = function(e) {
+		if ( e.target === this ) {
+			exporter.style.display = 'none';
+			exporter.lastElementChild.value = '';
+		}
+	};
+};
+
+localeNames = localStorage.getItem('localeNames');
+
+if ( localeNames ) {
+	initLocales();
+} else {
+	xhr(baseUrl + 'locale_names.json', initLocales);
+}
+
+</script>
+</body>
+</html>

@@ -14,8 +14,14 @@ Only the latest browser versions are fully supported. It may work on older versi
 - [Safari](http://tiny.cc/Viewhance-safariextz) ~5.1+
 - [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527) 4+
 
+## Contribution ##
+- Translation: You can use [this helper tool](https://rawgit.com/Deathamns/Viewhance/master/tools/localizer.html) for localizing strings. The result can be sent as a pull request on GitHub.
+- Code: if you have a fix for a bug, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge from the main goal - viewing enhancements - (for instance, photo editing capability doesn't belong in this extension).
+
 ## Build ##
 `sh tools/build.sh`
+
+Arguments:
 
 no arguments - Generates meta-data (manifest files, locales) into the `src` directory (all the generated files are listed in `.gitignore`).
 
