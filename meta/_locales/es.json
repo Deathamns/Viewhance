@@ -125,6 +125,10 @@
 			"#": 0,
 			">": "tamaño original"
 		},
+		"navGeneral": {
+			"#": 1,
+			">": "General"
+		},
 		"navInfo": {
 			"#": 0,
 			">": "Información"

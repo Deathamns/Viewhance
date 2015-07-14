@@ -25,7 +25,6 @@ config_path = pj(meta_dir, 'config.json')
 languages = OrderedDict({})
 lng_strings = OrderedDict({})
 app_desc_string = 'appDescriptionShort'
-mandatory_locale_groups = ['options']
 
 with open(config_path, encoding='utf-8') as f:
     config = json.load(f)
@@ -53,7 +52,8 @@ def mkdirs(path):
 
 
 def read_locales(locale_codes, exclude=None):
-    global locale_names
+    global locale_names, languages, lng_strings
+    mandatory_locale_groups = ['options']
 
     if locale_names is None:
         with open(pj(meta_dir, 'locale_names.json'), encoding='utf-8') as f:
@@ -89,14 +89,35 @@ def read_locales(locale_codes, exclude=None):
         lng_strings[alpha2] = OrderedDict({})
 
         for grp in locale:
+            is_def = alpha2 == config['def_lang']
+
+            if not is_def and grp not in lng_strings[config['def_lang']]:
+                continue
+
             # Ignore group description
             if '?' in locale[grp]:
                 del locale[grp]['?']
 
             lng_strings[alpha2][grp] = OrderedDict({})
 
+            if not is_def:
+                def_strings = lng_strings[config['def_lang']][grp]
+
             for string in locale[grp]:
+                # Ignore redundant strings
+                if not is_def:
+                    if locale[grp][string]['>'] == def_strings[string]:
+                        continue
+
                 lng_strings[alpha2][grp][string] = locale[grp][string]['>']
+
+            if len(lng_strings[alpha2][grp]) == 0:
+                del lng_strings[alpha2][grp]
+
+        if len(lng_strings[alpha2]) == 0:
+            del languages[alpha2]
+            del lng_strings[alpha2]
+            continue
 
         # Add groups if they're missing
         for grp in mandatory_locale_groups:
@@ -216,6 +237,34 @@ def write_comment_header(f, alpha2, ini=False, comment=';'):
         f.write('// @translators  {}\n'.format(language['translators']))
 
 
+def write_locales_xpi():
+    for f in glob(pj(src_dir, 'locale', '*.*')):
+        if osp.isdir(f):
+            rmtree(f)
+
+    locale_files = {
+        'options': 'strings.properties'
+    }
+
+    for alpha2 in lng_strings:
+        if not mkdirs(pj(src_dir, 'locale', alpha2)):
+            raise SystemExit('Falied to create locale directory: ' + alpha2)
+
+        for grp in locale_files:
+            locale_file = pj(src_dir, 'locale', alpha2, locale_files[grp])
+
+            with open(locale_file, 'wt', encoding='utf-8', newline='\n') as f:
+                write_comment_header(f, alpha2, True, '#')
+
+                for string in lng_strings[alpha2][grp]:
+                    f.write(string)
+                    f.write('=')
+                    f.write(
+                        lng_strings[alpha2][grp][string].replace('\n', r'\n')
+                    )
+                    f.write('\n')
+
+
 def write_locales_oex_or_safariextz():
     rmtree(pj(src_dir, 'locales'))
 
@@ -269,40 +318,8 @@ def write_locales_crx():
 
         with open(locale_file, 'wt', encoding='utf-8', newline='\n') as f:
             f.write(
-                json.dumps(
-                    strings,
-                    separators=(',', ':'),
-                    ensure_ascii=False
-                )
+                json.dumps(strings, separators=(',', ':'), ensure_ascii=False)
             )
-
-
-def write_locales_xpi():
-    for f in glob(pj(src_dir, 'locale', '*.*')):
-        if osp.isdir(f):
-            rmtree(f)
-
-    locale_files = {
-        'options': 'strings.properties'
-    }
-
-    for alpha2 in lng_strings:
-        if not mkdirs(pj(src_dir, 'locale', alpha2)):
-            raise SystemExit('Falied to create locale directory: ' + alpha2)
-
-        for grp in locale_files:
-            locale_file = pj(src_dir, 'locale', alpha2, locale_files[grp])
-
-            with open(locale_file, 'wt', encoding='utf-8', newline='\n') as f:
-                write_comment_header(f, alpha2, True, '#')
-
-                for string in lng_strings[alpha2][grp]:
-                    f.write(string)
-                    f.write('=')
-                    f.write(
-                        lng_strings[alpha2][grp][string].replace('\n', r'\n')
-                    )
-                    f.write('\n')
 
 
 def write_locales_mxaddon():
@@ -403,7 +420,10 @@ if all_platforms or 'oex' in argv or 'safariextz' in argv:
 
 print('Locales done...')
 
-with open(pj(src_dir, 'config.xml'), 'wt', encoding='utf-8', newline='\n') as f:
+
+config_xml_path = pj(src_dir, 'config.xml')
+
+with open(config_xml_path, 'wt', encoding='utf-8', newline='\n') as f:
     tmp = []
 
     for alpha2 in languages:
@@ -431,7 +451,9 @@ with open(pj(src_dir, 'config.xml'), 'wt', encoding='utf-8', newline='\n') as f:
         f.write(config_xml_tpl.read().format(**config))
 
 
-with open(pj(src_dir, 'manifest.json'), 'wt', encoding='utf-8', newline='\n') as f:
+manifest_json_path = pj(src_dir, 'manifest.json')
+
+with open(manifest_json_path, 'wt', encoding='utf-8', newline='\n') as f:
     with open(pj(meta_dir, 'crx', 'manifest.json'), 'r') as manifest_tpl:
         f.write(
             re.sub(
@@ -442,10 +464,12 @@ with open(pj(src_dir, 'manifest.json'), 'wt', encoding='utf-8', newline='\n') as
         )
 
 
-with open(pj(src_dir, 'install.rdf'), 'wt', encoding='utf-8', newline='\n') as f:
+install_rdf_path = pj(src_dir, 'install.rdf')
+
+with open(install_rdf_path, 'wt', encoding='utf-8', newline='\n') as f:
     from xml.sax.saxutils import escape
 
-    tmp = []
+    i18n = []
     chrome_locales = [
         'locale {} {} ./locale/{}/'.format(
             config['name'],
@@ -455,7 +479,9 @@ with open(pj(src_dir, 'install.rdf'), 'wt', encoding='utf-8', newline='\n') as f
     ]
 
     if len(languages):
-        tmp.append('\n\t\t<!-- Localization -->')
+        i18n.append('\n\t\t<!-- Localization -->')
+
+    t4 = 4 * '\t'
 
     for alpha2 in languages:
         if alpha2 == config['def_lang']:
@@ -467,44 +493,53 @@ with open(pj(src_dir, 'install.rdf'), 'wt', encoding='utf-8', newline='\n') as f
 
         language = languages[alpha2]
 
-        tmp.append(
-            '\t\t<localized>\n'
-            '\t\t\t<r:Description>\n'
-            '\t\t\t\t<locale>' + alpha2 + '</locale>'
-            ' <!-- ' + escape(language['name']) + ' -->\n'
-            '\t\t\t\t<name>' + escape(config['name']) + '</name>\n'
-            '\t\t\t\t<description>' +
+        i18n.append(
+            '\t\t<localized>\n' +
+            '\t\t\t<r:Description>\n' +
+            t4 + '<locale>' + alpha2 + '</locale>' +
+            ' <!-- ' + escape(language['name']) + ' -->\n' +
+            t4 + '<name>' + escape(config['name']) + '</name>\n' +
+            t4 + '<description>' +
             escape(language[app_desc_string]) +
-            '</description>\n'
-            '\t\t\t\t<creator>' + escape(config['author']) + '</creator>\n'
-            '\t\t\t\t<homepageURL>' + escape(config['homepage']) + '</homepageURL>'
+            '</description>\n' +
+            t4 + '<creator>' + escape(config['author']) + '</creator>\n' +
+            t4 + '<homepageURL>' +
+            escape(config['homepage']) +
+            '</homepageURL>'
         )
 
         if language['translators']:
             for translator in language['translators'].split(', '):
-                tmp.append(
-                    '\t\t\t\t<translator>' + escape(translator) + '</translator>'
+                i18n.append(
+                    t4 + '<translator>' + escape(translator) + '</translator>'
                 )
 
-        tmp.append(
+        i18n.append(
             '\t\t\t</r:Description>\n' +
             '\t\t</localized>'
         )
 
-    config['extra'] = '\n'.join(tmp)
-    config['description'] = escape(languages[config['def_lang']][app_desc_string])
+    config['extra'] = '\n'.join(i18n)
+    config['description'] = escape(
+        languages[config['def_lang']][app_desc_string]
+    )
 
     with open(pj(meta_dir, 'xpi', 'install.rdf'), 'r') as install_rdf_tpl:
         f.write(install_rdf_tpl.read().format(**config))
 
-    with open(pj(src_dir, 'chrome.manifest'), 'wt', encoding='utf-8', newline='\n') as chrome_manifest:
-        config['locale_info'] = '\n'.join(chrome_locales)
+    cmpath = pj(src_dir, 'chrome.manifest')
 
-        with open(pj(meta_dir, 'xpi', 'chrome.manifest'), 'r') as chrome_manifest_tpl:
+    with open(cmpath, 'wt', encoding='utf-8', newline='\n') as chrome_manifest:
+        config['locale_info'] = '\n'.join(chrome_locales)
+        cm_tpl_path = pj(meta_dir, 'xpi', 'chrome.manifest')
+
+        with open(cm_tpl_path, 'r') as chrome_manifest_tpl:
             chrome_manifest.write(chrome_manifest_tpl.read().format(**config))
 
 
-with open(pj(src_dir, 'Info.plist'), 'wt', encoding='utf-8', newline='\n') as f:
+info_plist_path = pj(src_dir, 'Info.plist')
+
+with open(info_plist_path, 'wt', encoding='utf-8', newline='\n') as f:
     config['build_number'] = int(time())
     config['description'] = languages[config['def_lang']][app_desc_string]
 
@@ -517,7 +552,9 @@ with open(pj(src_dir, 'Info.plist'), 'wt', encoding='utf-8', newline='\n') as f:
     )
 
 
-with open(pj(src_dir, 'def.json'), 'wt', encoding='utf-8', newline='\n') as f:
+def_json_path = pj(src_dir, 'def.json')
+
+with open(def_json_path, 'wt', encoding='utf-8', newline='\n') as f:
     f.write(u'\ufeff')
 
     with open(pj(meta_dir, 'mxaddon', 'def.json'), 'r') as def_json_tpl:

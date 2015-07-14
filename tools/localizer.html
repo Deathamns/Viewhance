@@ -666,7 +666,7 @@ $('#export-button').onclick = function(e) {
 		var srcStringVer = $('td:nth-child(2)', row).textContent * 1;
 		var trgStringVer = $('td:nth-child(4)', row).textContent * 1;
 
-		if ( !defLangSelected && (!trgString || srcString === trgString) ) {
+		if ( !defLangSelected && !trgString ) {
 			continue;
 		}
 
