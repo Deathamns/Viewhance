@@ -4,9 +4,17 @@
 			"email": "nightroad(at)mail(dot)com",
 			"name": "DurianZheitk",
 			"realname": "Javier Vera"
+		},
+		{
+			"name": "alm",
+			"realname": "A LM"
 		}
 	],
 	"groupless": {
+		"appDescriptionLong": {
+			"#": 3,
+			">": "Enriquece el visor de imágenes y vídeo del navegador con personalizaciones y funcionalidades adicionales.\n\nCaracterísticas: \n- Cambio entre modos de escalado predeterminados mediante atajos de teclado o pulsaciones del ratón\n- Estilo CSS personalizado (color de fondo para la página o multimedia, barras de desplazamiento ocultas...) \n- Información personalizada acerca de la multimedia en el título de la pestaña\n- Menú flotante (colocar el cursor sobre la esquina superior izquierda) \n- Ampliación <i>(zoom)</i> con la rueda del ratón (deshabilitado por defecto)\n- Centrar el contenido (predeterminado) \n- Girar/Voltear (mediante atajos de teclado o desde el menú) \n- Envío de la imagen a diferentes servicios (tales como búsqueda inversa de imágenes) \n- Extracción de cuadros en imágenes animadas (formatos soportados: GIF, APNG, WEBP) \n- Atributos multimedia personalizables (comenzar reproducción automáticamente, repetir la reproducción, mostrar los controles del reproductor, silenciar, volumen) \n- Abrir imágenes desde páginas web mediante una pulsación larga con el botón derecho o un atajo de teclado (deshabilitado por defecto) \n\n\nConsulte la página de Opciones para más detalles."
+		},
 		"appDescriptionShort": {
 			"#": 2,
 			">": "Funciones adicionales para el visor de imágenes y vídeo del navegador."
@@ -73,6 +81,10 @@
 			"#": 0,
 			">": "Acción para una pulsación larga con el botón derecho"
 		},
+		"mediaAttributes": {
+			"#": 1,
+			">": "Atributos multimedia"
+		},
 		"mediaAttributesTip": {
 			"#": 1,
 			">": "Atributos aceptados\n<b>autoplay</b> - comenzar reproducción automáticamente\n<b>loop</b> - repetir la reproducción\n<b>controls</b> - mostrar los controles del reproductor\n<b>muted</b> - sin sonido\n<b>volume=0-100</b> - volumen por defecto (porcentaje)"
@@ -113,10 +125,6 @@
 			"#": 0,
 			">": "tamaño original"
 		},
-		"navGeneral": {
-			"#": 1,
-			">": "General"
-		},
 		"navInfo": {
 			"#": 0,
 			">": "Información"
@@ -140,6 +148,10 @@
 		"phClickForExample": {
 			"#": 1,
 			">": "haz clic para mostrar ejemplos..."
+		},
+		"scChangeVolume": {
+			"#": 0,
+			">": "<b>Arriba / Abajo</b> Aumentar/disminuir volumen"
 		},
 		"scCycleModes": {
 			"#": 0,
@@ -196,6 +208,10 @@
 		"scRotateRight": {
 			"#": 0,
 			">": "Girar a la derecha"
+		},
+		"scTogglePlay": {
+			"#": 0,
+			">": "<b>Barra espaciadora</b> Alterna entre reproducción/pausa"
 		},
 		"scZoom": {
 			"#": 0,
