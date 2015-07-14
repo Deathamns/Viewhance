@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" defaultlocale="{def_lang}" id="opera:extension:Viewhance" version="{version}">
+<widget xmlns="http://www.w3.org/ns/widgets" defaultlocale="{def_lang}" id="opera:extension:{name}" version="{version}">
 	<name>{name}</name>
 	<author href="{homepage}" email="{author_email}">{author}</author>
 	<icon src="icon.png"/>

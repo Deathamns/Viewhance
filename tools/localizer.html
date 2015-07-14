@@ -695,11 +695,11 @@ $('#export-button').onclick = function(e) {
 		delete data[group.name];
 	}
 
-	var transltorIndex = $('#translators').selectedIndex;
+	var translatorIndex = $('#translators').selectedIndex;
 	var translator;
 
-	if ( transltorIndex ) {
-		translator = data._translators[transltorIndex - 1];
+	if ( translatorIndex ) {
+		translator = data._translators[translatorIndex - 1];
 	} else {
 		var val = $('#tr-name').value.trim();
 		var anonymous = true;
@@ -759,7 +759,7 @@ $('#export-button').onclick = function(e) {
 	}
 
 	exporter.lastElementChild.value = toLn(
-		JSON.stringify(data, null, '\t')
+		JSON.stringify(data, null, '\t') + '\n'
 	);
 	exporter.style.display = 'block';
 	exporter.lastElementChild.select();
