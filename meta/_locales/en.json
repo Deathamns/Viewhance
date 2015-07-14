@@ -10,12 +10,12 @@
 		"appDescriptionLong": {
 			"#": 3,
 			">": "Enriches the built-in image and media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom informations about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (supported formats: GIF, APNG, WEBP)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
-			"?": "A longer description for the official extension repositories."
+			"?": "A longer description for the official extension repositories.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
 		},
 		"appDescriptionShort": {
 			"#": 2,
 			">": "Additional functionality for the browser's default image and video viewer.",
-			"?": "A short description that appears in the extension manager."
+			"?": "A short description that appears in the extension manager.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
 		}
 	},
 	"options": {
