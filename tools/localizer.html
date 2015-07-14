@@ -677,7 +677,7 @@ $('#export-button').onclick = function(e) {
 		var stringName = row.firstElementChild.textContent;
 		var stringData = {
 			'#': trgStringVer,
-			'>': trgString
+			'>': trgString.repalce(/[\t ]+\n/g, '\n')
 		};
 
 		if ( defLangSelected && srcLocale[group.name][stringName]['?'] ) {
@@ -759,8 +759,8 @@ $('#export-button').onclick = function(e) {
 	}
 
 	exporter.lastElementChild.value = toLn(
-		JSON.stringify(data, null, '\t') + '\n'
-	);
+		JSON.stringify(data, null, '\t')
+	) + '\n';
 	exporter.style.display = 'block';
 	exporter.lastElementChild.select();
 

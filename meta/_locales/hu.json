@@ -34,7 +34,7 @@
 		},
 		"customCssTextareaPh": {
 			"#": 0,
-			">": "Itt lehetseéges a háttér színének, kép keretének/árnyékának, stb. beállítása, illetve a görgősávok és a lebegő menü elrejtése. \nPéldákért vidd az egérkurzort a kérdőjel fölé, a színkódokhoz pedig használd a fenti színválasztót."
+			">": "Itt lehetseéges a háttér színének, kép keretének/árnyékának, stb. beállítása, illetve a görgősávok és a lebegő menü elrejtése.\nPéldákért vidd az egérkurzort a kérdőjel fölé, a színkódokhoz pedig használd a fenti színválasztót."
 		},
 		"customCssTip": {
 			"#": 1,
