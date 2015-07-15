@@ -1493,6 +1493,26 @@ init = function() {
 				media.reset();
 				break;
 
+			case 'Left':
+				x = e.shiftKey ? -10 : -50;
+				y = 0;
+				break;
+
+			case 'Right':
+				x = e.shiftKey ? 10 : 50;
+				y = 0;
+				break;
+
+			case 'Up':
+				x = 0;
+				y = e.shiftKey ? -10 : -50;
+				break;
+
+			case 'Down':
+				x = 0;
+				y = e.shiftKey ? 10 : 50;
+				break;
+
 			case 'PgUp':
 				x = e.shiftKey ? -winW / 2 : 0;
 				y = e.shiftKey ? 0 : -winH / 2;
