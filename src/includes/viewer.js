@@ -1043,7 +1043,12 @@ init = function() {
 		}
 
 		if ( !panning ) {
-			panning = win.requestAnimationFrame(onMoveFrame);
+			// Smoother in Opera without setTimeout
+			if ( vAPI.opera ) {
+				onMoveFrame();
+			} else {
+				panning = win.requestAnimationFrame(onMoveFrame);
+			}
 		}
 
 		if ( dragSlide.length !== 3 ) {
