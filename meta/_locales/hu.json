@@ -64,6 +64,10 @@
 			"#": 0,
 			">": "szélességhez/magassághoz méretez"
 		},
+		"longpressActionWheelZoom": {
+			"#": 0,
+			">": "egérgörgővel való nagyítás ki/bekapcsolása"
+		},
 		"longpressDelay": {
 			"#": 0,
 			">": "Egérgomb hosszan-tartás ideje (ms)"
@@ -188,6 +192,10 @@
 			"#": 1,
 			">": "A kép vízszintes mozgatása az oldal bal also élén való görgetéssel lehetséges."
 		},
+		"scImgBg": {
+			"#": 0,
+			">": "Kép hátterének váltogatása: alap, fekete, fehér, sakkminta, vagy a <b>Shift</b> lenyomásával egyéni érték megadása"
+		},
 		"scModeContain": {
 			"#": 0,
 			">": "Ablakhoz méretez"
@@ -211,6 +219,10 @@
 		"scTogglePlay": {
 			"#": 0,
 			">": "<b>Space</b> Médiafájlok lejátszása/leállítása"
+		},
+		"scWheelZoom": {
+			"#": 0,
+			">": "Egérgörgővel való nagyítás ki/bekapcsolása"
 		},
 		"scZoom": {
 			"#": 0,
