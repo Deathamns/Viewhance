@@ -19,7 +19,7 @@
 		}
 	},
 	"options": {
-		"?": "Every string that can be found on the preferences page",
+		"?": "Every string that can be found on the Options page",
 		"buttonReset": {
 			"#": 0,
 			">": "Default"
@@ -67,6 +67,10 @@
 		"longpressActionFitImage": {
 			"#": 0,
 			">": "fit to width/height"
+		},
+		"longpressActionWheelZoom": {
+			"#": 0,
+			">": "toggle wheel zooming"
 		},
 		"longpressDelay": {
 			"#": 0,
@@ -215,6 +219,10 @@
 		"scTogglePlay": {
 			"#": 0,
 			">": "<b>Space</b> Toggle play/pause"
+		},
+		"scWheelZoom": {
+			"#": 0,
+			">": "Toggle wheel zooming"
 		},
 		"scZoom": {
 			"#": 0,

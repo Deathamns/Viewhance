@@ -9,7 +9,7 @@
 	"mediaAttrs": "autoplay controls",
 	"lpDelay": 350,
 	"lpLeft": 1,
-	"lpRight": 0,
+	"lpRight": 2,
 	"sendTo": [
 		"TinEye|https://www.tineye.com/search?sort=size&order=desc&url=%url",
 		"Google|https://images.google.com/searchbyimage?image_url=%url",
@@ -30,5 +30,6 @@
 	"key_flipH": "Q",
 	"key_flipV": "W",
 	"key_cycle": "C",
+	"key_wheelZoom": "Z",
 	"opener": 0
 }

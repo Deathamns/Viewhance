@@ -193,7 +193,7 @@ with open(locales_json_path, 'wt', encoding='utf-8', newline='\n') as f:
 
 
 def add_missing_strings():
-    # Fill the current group's untranslated strings
+    # Fill every untranslated string from the default language
     def_locale_strings = lng_strings[config['def_lang']]
 
     for alpha2 in lng_strings:
