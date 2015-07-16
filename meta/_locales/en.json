@@ -196,6 +196,10 @@
 			"#": 1,
 			">": "To scroll the image horizontally, use the mouse wheel over the left bottom edge"
 		},
+		"scImgBg": {
+			"#": 0,
+			">": "Cycle through image backgrounds: default, black, white, check, or hold <b>Shift</b> for custom value"
+		},
 		"scModeContain": {
 			"#": 0,
 			">": "Auto fit"

@@ -880,7 +880,10 @@ init = function() {
 
 		delete this.curdeg;
 		delete this.scale;
+		delete this.bgList;
+		delete this.bgListIndex;
 		style[vAPI.browser.transform] = '';
+		style.background = '';
 		style.width = '';
 		style.height = '';
 		this.resize(0);
@@ -1577,6 +1580,40 @@ init = function() {
 			case cfg.key_flipH: media.flip(media, 0); break;
 			case cfg.key_flipV: media.flip(media, 1); break;
 			case cfg.key_wheelZoom: toggleWheelZoom(); break;
+			case cfg.key_imgBg:
+				if ( vAPI.mediaType !== 'img' ) {
+					break;
+				}
+
+				var bgValue = e.shiftKey && prompt( // eslint-disable-line
+					'background',
+					media.style.background
+				);
+
+				if ( bgValue === null ) {
+					break;
+				}
+
+				if ( bgValue !== false ) {
+					media.style.background = bgValue;
+					break;
+				}
+
+				if ( !media.bgList ) {
+					media.bgList = {};
+					bgValue = window.getComputedStyle(media).background;
+					media.bgList[bgValue] = true;
+					media.bgList['rgb(0, 0, 0)'] = true;
+					media.bgList['rgb(255, 255, 255)'] = true;
+					media.bgList['url(data:image/gif;base64,R0lGODlhFAAUAPABAOjo6P///yH5BAAKAAAALAAAAAAUABQAAAIohI+hy+jAYnhJLnrsxVBP7n1YyHVaSYKhh7Lq+VotPLo1TaW3HEtlAQA7)'] = true;
+					media.bgList = Object.keys(media.bgList).filter(Boolean);
+					media.bgListIndex = 0;
+				}
+
+				media.style.background = media.bgList[
+					++media.bgListIndex % media.bgList.length
+				];
+				break;
 			default: x = true;
 		}
 
