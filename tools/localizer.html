@@ -677,7 +677,7 @@ $('#export-button').onclick = function(e) {
 		var stringName = row.firstElementChild.textContent;
 		var stringData = {
 			'#': trgStringVer,
-			'>': trgString.repalce(/[\t ]+\n/g, '\n')
+			'>': trgString.replace(/[\t ]+\n/g, '\n')
 		};
 
 		if ( defLangSelected && srcLocale[group.name][stringName]['?'] ) {
