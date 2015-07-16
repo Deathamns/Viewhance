@@ -236,6 +236,8 @@ all fields are optional
 </table>
 
 <script>
+/* eslint-disable no-alert, no-console */
+
 'use strict';
 
 var localeNames, srcLocale, trgLocale;
@@ -658,7 +660,6 @@ $('#export-button').onclick = function(e) {
 			continue;
 		}
 
-		var srcString = $('td:nth-child(3)', row).textContent;
 		var trgStringContainer = row.lastElementChild.firstElementChild;
 		var trgString = trgStringContainer.localName === 'textarea'
 			? toLn(trgStringContainer.value.trim())
