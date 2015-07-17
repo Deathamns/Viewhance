@@ -633,6 +633,11 @@ $('#translators').onchange = function() {
 
 $('#export-button').onclick = function(e) {
 	if ( !e.ctrlKey && !hasTargetChanged() ) {
+		alert([
+			'No changes were made...',
+			'',
+			'Ctrl + click to force export.'
+		].join('\n'));
 		return;
 	}
 
