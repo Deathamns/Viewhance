@@ -570,7 +570,11 @@ $('#locales-table').ondblclick = function(e) {
 
 	var ta = document.createElement('textarea');
 	ta.value = ta.defaultValue = target.textContent;
-	ta.rows = Math.min(13, countLines(ta.value) + 1);
+	var guessedLines = countLines(
+		ta.value
+		|| $('td:nth-child(3)', target.parentNode.parentNode).textContent
+	);
+	ta.rows = Math.min(13, guessedLines + 1);
 	target.parentNode.replaceChild(ta, target);
 	ta.focus();
 };
