@@ -90,7 +90,7 @@
 		},
 		"mediaAttributesTip": {
 			"#": 1,
-			">": "Acceptable attributes\n<b>autoplay</b> - video starts automatically\n<b>loop</b> - repeat the play\n<b>controls</b> - show player controls\n<b>muted</b> - mute sound\n<b>volume=0-100</b> - default volume (percent)"
+			">": "Acceptable attributes\n<b>autoplay</b> - video starts automatically\n<b>loop</b> - repeat the play\n<b>controls</b> - show player controls\n<b>muted</b> - mute sound\n<b>volume=0-100</b> - default volume (%)"
 		},
 		"mediaInfo": {
 			"#": 0,

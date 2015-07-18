@@ -86,7 +86,7 @@
 		},
 		"mediaAttributesTip": {
 			"#": 1,
-			">": "Használható attribútumok\n<b>autoplay</b> - automatikus indítás\n<b>loop</b> - lejátszás ismétlése\n<b>controls</b> - lejátszógombok megjelenítése\n<b>muted</b> - hang némítása\n<b>volume=0-100</b> - alapértelmezett hangerő (százalék)"
+			">": "Használható attribútumok\n<b>autoplay</b> - automatikus indítás\n<b>loop</b> - lejátszás ismétlése\n<b>controls</b> - lejátszógombok megjelenítése\n<b>muted</b> - hang némítása\n<b>volume=0-100</b> - alapértelmezett hangerő (%)"
 		},
 		"mediaInfo": {
 			"#": 0,
