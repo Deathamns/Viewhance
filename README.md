@@ -19,7 +19,9 @@ Only the latest browser versions are fully supported. It may work on older versi
 - **Code**: if you have a bug-fix, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge from the main goal - viewing enhancements - (for instance, photo editing capability doesn't belong in this extension).
 
 ## Build ##
-`sh tools/build.sh`
+```
+sh tools/build.sh
+```
 
 Arguments:
 
@@ -36,9 +38,11 @@ no arguments - Generates meta-data (manifest files, locales) into the `src` dire
 ## Development ##
 In order to start hacking, the meta-data (manifest files and locales) needs to be generated, which can be done by running the following bash script (for Windows, it can be used with [Cygwin](https://cygwin.com/install.html)):
 
-`sh tools/build.sh`
+```
+sh tools/build.sh
+```
 
-Without any arguments it will simply run the `tools/build_meta.py` (Python 2/3) script, which could be used instead as well. This step prepares the `src` directory, from which it will be possible to install the extension on any browser (see above).
+Without any arguments it will simply run the `tools/build_meta.py` (Python 2/3) script, which could be used instead as well. This step prepares the `src` directory, from which it will be possible to install the extension on any browser (see below).
 
 Installing from `src` allows to test the changes without any building (usually refreshing the page is enough).
 
@@ -71,6 +75,8 @@ Use the build script to generate the `build/Viewhance.safariextension` platform 
 #### Maxthon ####
 Since this platform is available on Windows only, creating a hard link under the user's `Addons` directory will install the extension. Something like this:
 
-`mklink /H /D /J Maxthon_install_path\UserData\Users\guest\Addons\Viewhance src`
+```
+mklink /H /D /J Maxthon_install_path\UserData\Users\guest\Addons\Viewhance src
+```
 
 (Of course, don't forget to delete the link if you don't use it anymore.)
