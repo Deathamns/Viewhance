@@ -385,7 +385,7 @@ init = function() {
 			]},
 			{tag: 'li', attrs: {'data-cmd': 'flip'}, text: '\u21CB'},
 			{tag: 'li', attrs: {'data-cmd': 'rotate'}, text: '\u21BA'},
-			media.filters ? {tag: 'li', attrs: {'class': 'filters'}, nodes: [
+			media.filters ? {tag: 'li', attrs: {class: 'filters'}, nodes: [
 				'\u2261',
 				{tag: 'form', nodes: [{tag: 'ul', nodes: [
 					{tag: 'li', nodes: [
@@ -504,7 +504,7 @@ init = function() {
 			]} : '',
 			{tag: 'li', attrs: {'data-cmd': 'reset'}, text: '\u2715'},
 			/^https?:$/.test(win.location.protocol) && cfg.sendTo.length
-				? {tag: 'li', attrs: {'class': 'send-hosts'}, nodes: [
+				? {tag: 'li', attrs: {class: 'send-hosts'}, nodes: [
 					'\u2197', {tag: 'ul', nodes: cfg.sendTo.map(function(item) {
 						var host = item.split('|');
 						return {tag: 'li', nodes: [{
@@ -826,11 +826,11 @@ init = function() {
 		this.box = box;
 
 		if ( box.left < 0 ) {
-			s.left = (parseInt(s.left, 10) - box.left - win.pageXOffset) + 'px';
+			s.left = parseInt(s.left, 10) - box.left - win.pageXOffset + 'px';
 		}
 
 		if ( box.top < 0 ) {
-			s.top = (parseInt(s.top, 10) - box.top - win.pageYOffset) + 'px';
+			s.top = parseInt(s.top, 10) - box.top - win.pageYOffset + 'px';
 		}
 	};
 

@@ -21,7 +21,6 @@
 	"rules": {
 		"no-cond-assign": 0,
 		"no-extra-parens": 1,
-		"no-reserved-keys": 1,
 
 		// "consistent-return": 0,
 		// "dot-notation": 1,
@@ -40,8 +39,6 @@
 		"wrap-iife": [1, "inside"],
 
 		"strict": [2, "global"],
-		"no-extra-strict": 2,
-		"global-strict": [2, "always"],
 
 		"no-undefined": 2,
 		"no-unneeded-ternary": 1,
@@ -66,11 +63,11 @@
 		"operator-assignment": [2, "always"],
 		// "operator-linebreak": [2, "before"],
 		// "padded-blocks": [1, "never"],
-		"quote-props": [2, "as-needed"],
+		"quote-props": [2, "consistent-as-needed"],
 		"quotes": [2, "single", "avoid-escape"],
 		"space-after-keywords": 2,
 		"space-before-blocks": 2,
 		"space-before-function-paren": [2, "never"],
-		"spaced-line-comment": [1, "always"]
+		"spaced-comment": [1, "always"]
 	}
 }
