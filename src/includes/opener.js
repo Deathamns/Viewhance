@@ -139,8 +139,10 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		);
 
 		while ( el = xpath.iterateNext() ) {
-			if ( rgxIgnore.test(el.nodeName) && !rgxIgnore.test(e.target.nodeName) ) {
-				continue;
+			if ( rgxIgnore.test(el.nodeName) ) {
+				if ( !rgxIgnore.test(e.target.nodeName) ) {
+					continue;
+				}
 			}
 
 			r = el.getBoundingClientRect();

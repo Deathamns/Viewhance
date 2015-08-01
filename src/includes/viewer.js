@@ -516,7 +516,9 @@ init = function() {
 					})}
 				]}
 				: null,
-			vAPI.mediaType === 'img' ? {tag: 'li', attrs: {'data-cmd': 'frames'}, text: '\u22EF'} : '',
+			vAPI.mediaType === 'img'
+				? {tag: 'li', attrs: {'data-cmd': 'frames'}, text: '\u22EF'}
+				: '',
 			{tag: 'li', attrs: {'data-cmd': 'options'}, text: '\u2713'}
 		]);
 
@@ -1011,7 +1013,7 @@ init = function() {
 		pdsp(e);
 	};
 
-	var toggleWheelZoom = function(keepCfg) {
+	var toggleWheelZoom = function() {
 		var evName = vAPI.browser.wheel;
 		var zoomMenuItemStyle = menu.querySelector('li[data-cmd=zoom]').style;
 
@@ -1025,9 +1027,7 @@ init = function() {
 			zoomMenuItemStyle.display = '';
 		}
 
-		if ( !keepCfg ) {
-			cfg.wheelZoom = !cfg.wheelZoom;
-		}
+		cfg.wheelZoom = !cfg.wheelZoom;
 	};
 
 	var lastMoveX, lastMoveY;
@@ -1641,7 +1641,7 @@ init = function() {
 
 	doc.addEventListener('contextmenu', onContextMenu, false);
 	win.addEventListener('resize', afterCalc, false);
-	toggleWheelZoom(true);
+	toggleWheelZoom();
 
 	if ( vAPI.mediaType === 'video' ) {
 		media.addEventListener('click', function(e) {
