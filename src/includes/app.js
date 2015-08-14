@@ -18,19 +18,16 @@ if ( document instanceof window.HTMLDocument ) {
 		vAPI._ = vAPI.browser.style;
 		vAPI.browser = {
 			wheel: 'onwheel' in vAPI.browser ? 'wheel' : 'mousewheel',
-			transform: ('webkitTransform' in vAPI._ ? 'webkitT' : 't') + 'ransform',
-			'transition-css': ('webkitTransition' in vAPI._
-				? '-webkit-'
-				: ''
-			) + 'transition',
+			transform: 'webkitTransform' in vAPI._
+				? 'webkitTransform'
+				: 'transform',
+			transitionCSS: 'webkitTransition' in vAPI._
+				? '-webkit-transition'
+				: 'transition',
 			transitionend: 'webkitTransition' in vAPI._
 				? 'webkitTransitionEnd'
 				: 'transitionend',
-			'box-sizing-css': ('MozBoxSizing' in vAPI._
-				? '-moz-'
-				: 'WebkitBoxSizing' in vAPI._ ? '-webkit-' : ''
-			) + 'box-sizing',
-			'zoom-in': this.chrome || this.mx || this.safari
+			zoomIn: this.chrome || this.mx || this.safari
 				? '-webkit-zoom-in'
 				: 'zoom-in'
 		};
@@ -158,11 +155,11 @@ if ( self.opera ) {
 			}
 
 			this.listener = function(e) {
-				listener(e.data);
-
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
+
+				listener(e.data);
 			};
 
 			opera.extension.addEventListener('message', this.listener);
@@ -360,11 +357,11 @@ if ( self.opera ) {
 					return;
 				}
 
-				listener(e.message);
-
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
+
+				listener(e.message);
 			};
 
 			safari.self.addEventListener('message', this.listener, false);
@@ -471,11 +468,11 @@ if ( self.opera ) {
 			}
 
 			this.listener = function(e) {
-				listener(e);
-
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
+
+				listener(e);
 			};
 
 			vAPI.runtime.listen(this.listenerId, this.listener);
@@ -567,11 +564,11 @@ if ( self.opera ) {
 			}
 
 			this.listener = function(e) {
-				listener(JSON.parse(e));
-
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
+
+				listener(JSON.parse(e));
 			};
 
 			addMessageListener(this.listener);

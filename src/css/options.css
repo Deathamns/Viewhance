@@ -18,12 +18,11 @@ body {
 	max-width: 700px;
 	min-height: 300px;
 	margin: 0 auto;
-	padding: 6px 15px 15px;
+	box-shadow: 0 0 4px #999;
 	border-top: 0;
-	box-shadow: 0 0 6px #666;
-	-webkit-box-shadow: 0 0 6px #666;
+	padding: 6px 15px 15px;
 	background-color: #fff;
-	font: 13px "Lucida Grande", "Lucida Sans Unicode", "Tahoma", sans-serif;
+	font: 13px "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
 }
 
 a {
@@ -45,9 +44,9 @@ a:hover {
 
 /* http://nicolasgallagher.com/micro-clearfix-hack/ */
 .cf::after {
-	content: "";
 	display: block;
 	clear: both;
+	content: "";
 }
 
 hr {
@@ -57,25 +56,22 @@ hr {
 
 #right-panel {
 	position: absolute;
-	left: 100%;
 	top: 0;
+	left: 100%;
 }
 
 #right-panel > aside {
-	max-width: 140px;
+	z-index: -1;
 	position: fixed;
-	top: 0;
+	max-width: 145px;
+	box-shadow: 2px 2px 2px #ccc;
 	padding: 0 5px 3px 8px;
-	box-shadow: 2px 2px 2px #aaa;
-	-webkit-box-shadow: 2px 2px 2px #aaa;
-	background-color: rgba(255, 255, 255, .8);
+	background-color: #fff;
 	overflow: hidden;
 	text-align: center;
 }
 
 #right-panel > aside, section {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -101,13 +97,12 @@ body.safari .safari, body.maxthon .maxthon {
 	margin-top: 5px;
 	border-radius: 10px;
 	background: url(../icon.png) no-repeat center;
-	-webkit-transition: -webkit-box-shadow .2s;
+	-webkit-transition: box-shadow .2s;
 	transition: box-shadow .2s;
 }
 
 .logo:hover {
 	box-shadow: 0 0 10px #bef;
-	-webkit-box-shadow: 0 0 10px #bef;
 }
 
 body > form > section {
@@ -187,9 +182,7 @@ nav > .active {
 	padding: 10px;
 	padding-left: 40px;
 	box-shadow: 0 0 10px #666;
-	-webkit-box-shadow: 0 0 10px #666;
 	background-color: rgba(245, 245, 255, .9);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #fff), color-stop(100%, rgba(245, 245, 255, 0)));
 	background-image: linear-gradient(to bottom, #fff, rgba(245, 245, 255, 0));
 	overflow: visible;
 	color: #000;
@@ -217,8 +210,6 @@ nav > .active {
 
 .prow > label, .prow > span:not(.clean) {
 	display: inline-block;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	width: 49.6%;
 }
@@ -261,14 +252,11 @@ nav > .active {
 }
 
 input, textarea, select, code, .checkbox, .pager > a {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	margin: 2px;
 	border: 1px solid #ddd;
 	border-radius: 3px;
 	padding: 3px;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #fff), color-stop(100%, #f5f5f5));
 	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
 	background-color: rgba(242, 242, 242, 0);
 	font: 13px Verdana, sans-serif;
@@ -293,8 +281,6 @@ select {
 }
 
 textarea {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	width: 100%;
 	overflow-x: hidden;
@@ -351,8 +337,6 @@ input[type="number"], input[type="color"] {
 }
 
 input[type="color"] {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	padding: 2px;
 	background: none;
@@ -418,7 +402,7 @@ h3 {
 	position: relative;
 	border-radius: 3px;
 	border: 1px solid #ddd;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #fff), color-stop(100%, #f5f5f5));
+	background-color: #fff;
 	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
 	font-weight: 700;
 	font-size: 14px;
@@ -431,7 +415,6 @@ h3 {
 	margin-bottom: 10px;
 	padding: 10px 0;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
-	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
 	font: 700 14px Arial;
 	-webkit-transition: border-color .3s, color .3s;
 	transition: border-color .3s, color .3s;

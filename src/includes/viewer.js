@@ -103,7 +103,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'cursor: default;',
 	'}',
 	'#main-media {',
-		vAPI.browser['box-sizing-css'], ': border-box;',
+		'box-sizing: border-box;',
 		'position: absolute;',
 		'margin: 0;',
 		'background-clip: padding-box;',
@@ -172,7 +172,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'position: fixed;',
 		'top: 0;',
 		'opacity: 0;',
-		vAPI.browser['transition-css'], ': opacity .25s, left .2s;',
+		vAPI.browser.transitionCSS, ': opacity .25s, left .2s;',
 	'}',
 	'ul {',
 		'display: inline-block;',
@@ -210,7 +210,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'top: 0;',
 		'text-align: left;',
 		'opacity: 0;',
-		vAPI.browser['transition-css'], ': visibility .4s, opacity .2s .3s;',
+		vAPI.browser.transitionCSS, ': visibility .4s, opacity .2s .3s;',
 	'}',
 	'li:hover ul {',
 		'display: block;',
@@ -760,11 +760,11 @@ init = function() {
 			m.style.cursor = 'move';
 		} else if ( winH >= m.clientHeight && winW >= m.clientWidth
 			&& winH < m.naturalHeight || winW < m.naturalWidth ) {
-			m.style.cursor = vAPI.browser['zoom-in'];
+			m.style.cursor = vAPI.browser.zoomIn;
 		} else if ( noFit.cur && noFit.real
 			&& (m.clientHeight < m.naturalHeight
 				|| m.clientWidth < m.naturalWidth) ) {
-			m.style.cursor = vAPI.browser['zoom-in'];
+			m.style.cursor = vAPI.browser.zoomIn;
 		} else {
 			m.style.cursor = 'default';
 		}

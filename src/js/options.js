@@ -50,7 +50,7 @@ var changeColor = function(node, color, time) {
 
 	node.style.color = color;
 	node.colorTransitionTimer = setTimeout(function() {
-		changeColor(node, null);
+		changeColor(node);
 	}, time || 2000);
 };
 
@@ -90,10 +90,7 @@ var setDefault = function(selector) {
 	[].forEach.call(nodeList, function(el) {
 		if ( el.type === 'checkbox' ) {
 			el.checked = el.defaultChecked;
-			return;
-		}
-
-		if ( /^SELECT/i.test(el.type) ) {
+		} else if ( !el.type.lastIndexOf('select', 0) ) {
 			var i = el.length;
 
 			while ( i-- ) {
@@ -102,14 +99,12 @@ var setDefault = function(selector) {
 					break;
 				}
 			}
+		} else {
+			el.value = el.defaultValue;
 
-			return;
-		}
-
-		el.value = el.defaultValue;
-
-		if ( el.type === 'range' ) {
-			fillOutput(el);
+			if ( el.type === 'range' ) {
+				fillOutput(el);
+			}
 		}
 	});
 };
@@ -148,7 +143,7 @@ var load = function(prefs) {
 			field.rows = prefs[pref].length || 2;
 			field.defaultValue = defaultPrefs[pref].join('\n');
 			prefs[pref] = prefs[pref].join('\n');
-		} else if ( fieldType.slice(0, 6) === 'select' ) {
+		} else if ( !fieldType.lastIndexOf('select', 0) ) {
 			/* eslint-disable */
 			[].some.call(field, function(el) {
 				if ( el.value == defaultPrefs[pref] ) {
@@ -258,13 +253,8 @@ var onHashChange = function() {
 
 	var section = $(hash + '-sec') || $((hash = 'general') + '-sec');
 
-	if ( hash === 'info' ) {
-		if ( !section._nodeLocalized ) {
-			if ( args[0] ) {
-				args = args[0] === '0' ? 'app-installed' : 'app-updated';
-				$(args).style.display = 'block';
-			}
-
+	if ( !section._nodeLocalized ) {
+		if ( hash === 'info' ) {
 			var xhr = new XMLHttpRequest;
 			xhr.overrideMimeType('application/json;charset=utf-8');
 			xhr.open('GET', 'locales.json', true);
@@ -426,9 +416,11 @@ window.addEventListener('load', function() {
 			e.target.formSaved = true;
 		}
 
-		if ( e.repeat || !e.target.name || e.target.name.indexOf('key_') !== 0
-			|| e.ctrlKey || e.altKey || e.metaKey
-			|| e.which < 47 ) {
+		if ( e.repeat || !e.target.name || e.target.name.indexOf('keys_') !== 0 ) {
+			return;
+		}
+
+		if ( e.ctrlKey || e.altKey || e.metaKey || e.which < 47 ) {
 			return;
 		}
 
@@ -499,11 +491,7 @@ window.addEventListener('load', function() {
 
 		if ( this.pending ) {
 			clearTimeout(this.pending);
-			delete this.pending;
-
-			this.style.color = '';
 			this.nextElementSibling.style.color = '#e03c00';
-
 			inputChanges.formReset = true;
 
 			if ( e.ctrlKey ) {
