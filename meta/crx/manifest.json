@@ -8,10 +8,6 @@
 	"description": "__MSG_appDescriptionShort__",
 	"homepage_url": "{homepage}",
 	"author": "{author}",
-	"developer": {
-		"name": "{author}",
-		"email": "{author_email}"
-	},
 
 	"icons": {
 		"128": "icon.png"
