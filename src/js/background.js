@@ -38,6 +38,13 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			cachedPrefs[key] = newPrefs[key];
 		}
 
+		// In order to initialize sooner on content side, Chrome reads the prefs
+		// there (to avoid messaging), so we have to save all prefs
+		if ( vAPI.chrome ) {
+			vAPI.storage.set('cfg', JSON.stringify(cachedPrefs));
+			return;
+		}
+
 		var prefsToStore = {};
 
 		for ( key in defPrefs ) {

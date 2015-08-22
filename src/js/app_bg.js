@@ -16,12 +16,14 @@ if ( location.hash ) {
 
 if ( self.hasOwnProperty('opera') ) {
 	// » oex
+	vAPI.opera = true;
+
 	vAPI.app = {
 		name: widget.name,
 		version: widget.version,
-		platform: 'Opera ' +
-			window.opera.version() +
-			' (' + navigator.platform + ')'
+		platform: 'Opera '
+			+ window.opera.version()
+			+ ' (' + navigator.platform + ')'
 	};
 
 	vAPI.storage = {
@@ -76,6 +78,8 @@ if ( self.hasOwnProperty('opera') ) {
 	// «
 } else if ( self.hasOwnProperty('chrome') && !self.hasOwnProperty('mx') ) {
 	// » crx
+	vAPI.chrome = true;
+
 	vAPI.app = chrome.runtime.getManifest();
 	vAPI.app = {
 		name: vAPI.app.name,
@@ -153,10 +157,12 @@ if ( self.hasOwnProperty('opera') ) {
 	// «
 } else if ( self.hasOwnProperty('safari') ) {
 	// » safariextz
+	vAPI.safari = true;
+
 	vAPI.app.platform = navigator.appVersion.match(/Version\/(\S+)/);
-	vAPI.app.platform = 'Safari' +
-		(vAPI.app.platform ? ' ' + vAPI.app.platform[1] : '') +
-		' (' + navigator.platform + ')';
+	vAPI.app.platform = 'Safari'
+		+ (vAPI.app.platform ? ' ' + vAPI.app.platform[1] : '')
+		+ ' (' + navigator.platform + ')';
 
 	vAPI.storage = {
 		get: function(key, callback) {
@@ -222,9 +228,9 @@ if ( self.hasOwnProperty('opera') ) {
 	// «
 } else if ( self.hasOwnProperty('mx') ) {
 	// » mxaddon
-	vAPI.app.platform = 'Maxthon ' +
-		external.mxVersion +
-		' (' + navigator.platform + ')';
+	vAPI.app.platform = 'Maxthon '
+		+ external.mxVersion
+		+ ' (' + navigator.platform + ')';
 
 	vAPI.runtime = external.mxGetRuntime();
 
@@ -285,14 +291,15 @@ if ( self.hasOwnProperty('opera') ) {
 	// » xpi
 	var Ci = Components.interfaces;
 
+	vAPI.firefox = true;
+	vAPI.baseURI = 'chrome://' + location.host + '/content/';
+
 	vAPI.app.platform = Components
 		.classes['@mozilla.org/xre/app-info;1']
 		.getService(Ci.nsIXULAppInfo);
-	vAPI.app.platform = vAPI.app.platform.name + ' ' +
-		vAPI.app.platform.version +
-		' (' + navigator.platform + ')';
-
-	vAPI.baseURI = 'chrome://' + location.host + '/content/';
+	vAPI.app.platform = vAPI.app.platform.name + ' '
+		+ vAPI.app.platform.version
+		+ ' (' + navigator.platform + ')';
 
 	vAPI.storage = {
 		pb: Components

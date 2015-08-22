@@ -99,7 +99,7 @@ if ( self.opera ) {
 
 	Object.defineProperty(vAPI, 'mediaType', {
 		get: function() {
-			if ( this._mediaType !== void 0 ) {
+			if ( typeof this._mediaType !== 'undefined' ) {
 				return this._mediaType;
 			}
 
@@ -203,7 +203,7 @@ if ( self.opera ) {
 	});
 
 	Object.defineProperty(vAPI, 'mediaType', {get: function() {
-		if ( this._mediaType !== void 0 ) {
+		if ( typeof this._mediaType !== 'undefined' ) {
 			return this._mediaType;
 		}
 
@@ -218,9 +218,9 @@ if ( self.opera ) {
 			'body[style="margin: 0px;"] > img[style^="-webkit-"]:first-child, ' +
 			// Chropera 29 changed the structure
 			(navigator.appVersion.indexOf('OPR/') !== -1
-				? 'body[style="margin: 0px;"] > ' +
-					'div[style^="display: table"]:only-child >' +
-					'div[style^="display: table-cell"] > img:only-child, '
+				? 'body[style="margin: 0px;"] > '
+					+ 'div[style^="display: table"]:only-child >'
+					+ 'div[style^="display: table-cell"] > img:only-child, '
 				: ''
 			) +
 			'body > video[name=media][controls][autoplay]:first-child:not([src])'
@@ -264,6 +264,8 @@ if ( self.opera ) {
 		send: function(message, callback) {
 			var listener = callback || this.listener;
 
+			// Reading prefs from content scripts seems noticeably faster
+			// (no flicker when loading) than getting them via messaging
 			if ( message.cmd === 'loadPrefs' && !message.property
 				&& !message.getAppInfo ) {
 				chrome.storage.sync.get('cfg', function(obj) {
@@ -311,7 +313,7 @@ if ( self.opera ) {
 	});
 
 	Object.defineProperty(vAPI, 'mediaType', {get: function() {
-		if ( this._mediaType !== void 0 ) {
+		if ( typeof this._mediaType !== 'undefined' ) {
 			return this._mediaType;
 		}
 
@@ -322,8 +324,8 @@ if ( self.opera ) {
 		}
 
 		var media = document.querySelector(
-			'body[style^="margin: 0px"] > img[style^="-webkit-user"]:first-child, ' +
-			'body > video[name=media][controls][autoplay]'
+			'body[style^="margin: 0px"] > img[style^="-webkit-user"]:first-child, '
+			+ 'body > video[name=media][controls][autoplay]'
 		);
 
 		if ( !media ) {
@@ -425,15 +427,15 @@ if ( self.opera ) {
 	});
 
 	Object.defineProperty(vAPI, 'mediaType', {get: function() {
-		if ( this._mediaType !== void 0 ) {
+		if ( typeof this._mediaType !== 'undefined' ) {
 			return this._mediaType;
 		}
 
 		var media = document.querySelector(
-			'body > img#img_elem:first-child, ' +
-			'body > ' +
-				'video[name=media][controls][autoplay]:first-child:not([src]) >' +
-				'source[src]:only-child'
+			'body > img#img_elem:first-child, '
+			+ 'body > '
+			+ 'video[name=media][controls][autoplay]:first-child:not([src]) >'
+			+ 'source[src]:only-child'
 		);
 
 		if ( !media ) {
@@ -513,14 +515,14 @@ if ( self.opera ) {
 	});
 
 	Object.defineProperty(vAPI, 'mediaType', {get: function() {
-		if ( this._mediaType !== void 0 ) {
+		if ( typeof this._mediaType !== 'undefined' ) {
 			return this._mediaType;
 		}
 
 		var selector =
-			'meta[content="width=device-width; height=device-height;"],' +
-			'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],' +
-			'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
+			'meta[content="width=device-width; height=device-height;"],'
+			+ 'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],'
+			+ 'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
 
 		var head = document.head;
 		this._mediaType = '';
@@ -530,8 +532,8 @@ if ( self.opera ) {
 		}
 
 		var media = document.querySelector(
-			'body > img:first-child, ' +
-			'body > video[controls][autoplay]:not([src]):empty'
+			'body > img:first-child, '
+			+ 'body > video[controls][autoplay]:not([src]):empty'
 		);
 
 		if ( !media ) {
