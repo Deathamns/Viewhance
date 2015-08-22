@@ -403,12 +403,13 @@ window.addEventListener('load', function() {
 
 	form.addEventListener('keydown', function(e) {
 		e.stopPropagation();
+		debugger;
 
 		if ( e.which === 13 ) {
 			e.target.formSaved = true;
 		}
 
-		if ( e.repeat || !e.target.name || e.target.name.indexOf('keys_') !== 0 ) {
+		if ( e.repeat || !e.target.name || e.target.name.indexOf('key_') !== 0 ) {
 			return;
 		}
 
@@ -489,7 +490,7 @@ window.addEventListener('load', function() {
 			if ( e.ctrlKey ) {
 				e.preventDefault();
 				var sec = (location.hash || '#general') + '-sec ';
-				setDefault(e + 'input,' + sec + 'select,' + sec + 'textarea');
+				setDefault(sec + 'input,' + sec + 'select,' + sec + 'textarea');
 				this.style.color = 'lime';
 			} else {
 				this.style.color = 'green';
