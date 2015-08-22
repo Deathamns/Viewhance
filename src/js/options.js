@@ -110,25 +110,18 @@ var setDefault = function(selector) {
 };
 
 var load = function(prefs) {
-	var m, field, fieldType, pref;
 	var fields = document.querySelectorAll('form [name]');
 	var i = fields.length;
 
 	while ( i-- ) {
-		field = fields[i];
-		pref = field.name;
+		var field = fields[i];
+		var pref = field.name;
 
 		if ( field.disabled || field.readOnly || defaultPrefs[pref] === void 0 ) {
 			continue;
 		}
 
-		fieldType = field.getAttribute('type') || 'text';
-
-		if ( field.type !== fieldType ) {
-			fieldType = field.type;
-		}
-
-		if ( fieldType === 'checkbox' ) {
+		if ( field.type === 'checkbox' ) {
 			field.defaultChecked = defaultPrefs[pref];
 			pref = !!(prefs[pref] === void 0 ? defaultPrefs : prefs)[pref];
 			field.checked = field.defChecked = pref;
@@ -143,7 +136,7 @@ var load = function(prefs) {
 			field.rows = prefs[pref].length || 2;
 			field.defaultValue = defaultPrefs[pref].join('\n');
 			prefs[pref] = prefs[pref].join('\n');
-		} else if ( !fieldType.lastIndexOf('select', 0) ) {
+		} else if ( !field.type.lastIndexOf('select', 0) ) {
 			/* eslint-disable */
 			[].some.call(field, function(el) {
 				if ( el.value == defaultPrefs[pref] ) {
@@ -159,10 +152,10 @@ var load = function(prefs) {
 		pref = (prefs[pref] === void 0 ? defaultPrefs : prefs)[pref];
 		field.value = field.defValue = pref;
 
-		if ( fieldType === 'range' ) {
-			m = field.previousElementSibling;
+		if ( field.type === 'range' ) {
+			var m = field.previousElementSibling;
 
-			if ( m && m.nodeName === 'OUTPUT' ) {
+			if ( m && m.localName === 'output' ) {
 				fillOutput(field);
 			}
 
@@ -173,7 +166,7 @@ var load = function(prefs) {
 			}
 
 			field.addEventListener('change', fillOutput);
-		} else if ( fieldType === 'text' ) {
+		} else if ( field.type === 'text' ) {
 			if ( !field.previousElementSibling ) {
 				continue;
 			}
@@ -190,23 +183,20 @@ var load = function(prefs) {
 };
 
 var save = function() {
-	var i, field, fieldType, pref;
 	var fields = document.querySelectorAll('form [name]');
 	var prefs = Object.create(null);
 
-	for ( i = 0; i < fields.length; ++i ) {
-		field = fields[i];
-		pref = field.name;
+	for ( var i = 0; i < fields.length; ++i ) {
+		var field = fields[i];
+		var pref = field.name;
 
 		if ( field.disabled || field.readOnly || defaultPrefs[pref] === void 0 ) {
 			continue;
 		}
 
-		fieldType = field.getAttribute('type');
-
-		if ( fieldType === 'checkbox' ) {
+		if ( field.type === 'checkbox' ) {
 			prefs[pref] = field.checked;
-		} else if ( fieldType === 'range' || fieldType === 'number'
+		} else if ( field.type === 'range' || field.type === 'number'
 			|| field.classList.contains('number') ) {
 
 			prefs[pref] = parseFloat(field.value);
@@ -334,7 +324,9 @@ var onHashChange = function() {
 		menu.activeLink.classList.remove('active');
 	}
 
-	if ( menu.activeLink = menu.querySelector('a[href="#' + hash + '"]') ) {
+	menu.activeLink = menu.querySelector('a[href="#' + hash + '"]');
+
+	if ( menu.activeLink ) {
 		menu.activeLink.classList.add('active');
 	}
 };

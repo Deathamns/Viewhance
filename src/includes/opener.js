@@ -47,17 +47,17 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 	};
 
 	var checkIMG = function(node) {
-		var nname = node.nodeName.toUpperCase();
+		var nname = node.localName;
 
-		if ( nname === 'IMG' || nname === 'EMBED' || node.type === 'image' ) {
+		if ( nname === 'img' || nname === 'embed' || node.type === 'image' ) {
 			return node.src;
-		} else if ( nname === 'CANVAS' ) {
+		} else if ( nname === 'canvas' ) {
 			return node.toDataURL();
-		} else if ( nname === 'OBJECT' ) {
+		} else if ( nname === 'object' ) {
 			if ( node.data ) {
 				return node.data;
 			}
-		} else if ( nname === 'AREA' ) {
+		} else if ( nname === 'area' ) {
 			var img = document.querySelector(
 				'img[usemap="#' + node.parentNode.name + '"]'
 			);
@@ -65,14 +65,14 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			if ( img && img.src ) {
 				return img.src;
 			}
-		} else if ( nname === 'VIDEO' ) {
-			nname = document.createElement('canvas');
-			nname.width = node.clientWidth;
-			nname.height = node.clientHeight;
-			nname.getContext('2d').drawImage(
-				node, 0, 0, nname.width, nname.height
+		} else if ( nname === 'video' ) {
+			var canvas = document.createElement('canvas');
+			canvas.width = node.clientWidth;
+			canvas.height = node.clientHeight;
+			canvas.getContext('2d').drawImage(
+				node, 0, 0, canvas.width, canvas.height
 			);
-			return nname.toDataURL('image/jpeg');
+			return canvas.toDataURL('image/jpeg');
 		} else if ( /^\[object SVG/.test(node.toString()) ) {
 			var svgString = (new window.XMLSerializer).serializeToString(
 				node.ownerSVGElement === null
@@ -123,7 +123,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		var url, r;
 		var urls = [];
 		var el = 30;
-		var rgxIgnore = /^(html|body)$/i;
+		var rgxIgnore = /^(html|body)$/;
 		// not exactly what we want
 		var xpath = document.evaluate([
 				'.',
@@ -139,8 +139,8 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		);
 
 		while ( el = xpath.iterateNext() ) {
-			if ( rgxIgnore.test(el.nodeName) ) {
-				if ( !rgxIgnore.test(e.target.nodeName) ) {
+			if ( rgxIgnore.test(el.localName) ) {
+				if ( !rgxIgnore.test(e.target.localName) ) {
 					continue;
 				}
 			}

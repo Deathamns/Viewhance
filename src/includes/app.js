@@ -136,7 +136,7 @@ if ( self.opera ) {
 				window.onmousemove = null;
 			}
 
-			return this._mediaType = media.nodeName.toLowerCase();
+			return this._mediaType = media.localName;
 		},
 		set: function(type) {
 			this._mediaType = type;
@@ -241,7 +241,7 @@ if ( self.opera ) {
 			);
 		}
 
-		return this._mediaType = media.nodeName.toLowerCase();
+		return this._mediaType = media.localName;
 	}, set: function(type) {
 		this._mediaType = type;
 	}});
@@ -334,7 +334,7 @@ if ( self.opera ) {
 			return this._mediaType;
 		}
 
-		return this._mediaType = media.nodeName.toLowerCase();
+		return this._mediaType = media.localName;
 	}, set: function(type) {
 		this._mediaType = type;
 	}});
@@ -448,7 +448,7 @@ if ( self.opera ) {
 			media = document.body.firstElementChild;
 		}
 
-		return this._mediaType = media.nodeName.toLowerCase();
+		return this._mediaType = media.localName;
 	}, set: function(type) {
 		this._mediaType = type;
 	}});

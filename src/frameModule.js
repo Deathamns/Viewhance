@@ -54,6 +54,7 @@ const docObserver = {
 				].join(' | ');
 
 				sandbox = Components.utils.Sandbox([win], {
+					sameZoneAs: win,
 					sandboxName: sandboxId + '[' + sandboxName + ']',
 					sandboxPrototype: win,
 					wantComponents: false,
@@ -136,7 +137,7 @@ const docObserver = {
 
 		let loc = win.location;
 
-		if ( /^(https?|f(tp|ile)):$/.test(loc.protocol) === false ) {
+		if ( /^(https?|ftp|file):$/.test(loc.protocol) === false ) {
 			if ( loc.protocol === 'chrome:' && loc.host === hostName ) {
 				this.initContentScripts(win);
 			}

@@ -55,7 +55,6 @@ var shortcut = {
 	}
 };
 
-var root, head, initParams, panning, winW, winH, sX, sY;
 var noFit = {cur: false, real: false};
 var lastEvent = {};
 var progress = null;
@@ -64,6 +63,7 @@ var freeZoom = null;
 var dragSlide = [];
 var borderSize = 0;
 var MAXSIZE = 0x7fff;
+var root, initParams, panning, winW, winH, sX, sY;
 
 ['class', 'style', 'name'].forEach(function(attr) {
 	doc.documentElement.removeAttribute(attr);
@@ -72,8 +72,9 @@ var MAXSIZE = 0x7fff;
 });
 
 media.style.display = 'none';
+var head = doc.querySelector('head');
 
-if ( head = doc.querySelector('head') ) {
+if ( head ) {
 	doc.documentElement.removeChild(head);
 }
 
@@ -948,7 +949,7 @@ init = function() {
 			media.resize(-1, (width > 10 ? width : width + 3) + 'px');
 		}
 
-		if ( !e.keypress && e.target.nodeName.toUpperCase() !== 'IMG' ) {
+		if ( !e.keypress && e.target.localName !== 'img' ) {
 			return;
 		}
 
