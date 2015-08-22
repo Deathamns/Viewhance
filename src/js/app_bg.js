@@ -31,6 +31,10 @@ if ( self.hasOwnProperty('opera') ) {
 
 		set: function(key, value) {
 			widget.preferences.setItem(key, value);
+		},
+
+		remove: function(key) {
+			widget.preferences.removeItem(key);
 		}
 	};
 
@@ -106,6 +110,10 @@ if ( self.hasOwnProperty('opera') ) {
 			var data = {};
 			data[key] = value;
 			chrome.storage.sync.set(data);
+		},
+
+		remove: function(key) {
+			localStorage.removeItem(key);
 		}
 	};
 
@@ -157,6 +165,10 @@ if ( self.hasOwnProperty('opera') ) {
 
 		set: function(key, value) {
 			safari.extension.settings.setItem(key, value);
+		},
+
+		remove: function(key) {
+			safari.extension.removeItem(key);
 		}
 	};
 
@@ -225,6 +237,10 @@ if ( self.hasOwnProperty('opera') ) {
 
 		set: function(key, value) {
 			return this.mxStorage.setConfig(key, value);
+		},
+
+		remove: function(key) {
+			this.mxStorage.setConfig(key, '');
 		}
 	};
 
@@ -279,7 +295,7 @@ if ( self.hasOwnProperty('opera') ) {
 	vAPI.baseURI = 'chrome://' + location.host + '/content/';
 
 	vAPI.storage = {
-		PB: Components
+		pb: Components
 			.classes['@mozilla.org/preferences-service;1']
 			.getService(Components.interfaces.nsIPrefService)
 			.getBranch('extensions.' + vAPI.app.name + '.'),
@@ -289,7 +305,7 @@ if ( self.hasOwnProperty('opera') ) {
 
 		get: function(key, calblack) {
 			try {
-				calblack(this.PB.getComplexValue(key, Ci.nsISupportsString).data);
+				calblack(this.pb.getComplexValue(key, Ci.nsISupportsString).data);
 			} catch ( ex ) {
 				calblack(null);
 			}
@@ -297,7 +313,11 @@ if ( self.hasOwnProperty('opera') ) {
 
 		set: function(key, value) {
 			this.str.data = value;
-			this.PB.setComplexValue(key, Ci.nsISupportsString, this.str);
+			this.pb.setComplexValue(key, Ci.nsISupportsString, this.str);
+		},
+
+		remove: function(key) {
+			this.pb.clearUserPref(key);
 		}
 	};
 

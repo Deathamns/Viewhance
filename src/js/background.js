@@ -2,43 +2,76 @@
 
 var cachedPrefs;
 
-var updatePrefs = function(newPrefs, oldPrefs, forceUpdate) {
-	var needsUpdate = forceUpdate || false;
-
-	for ( var prefName in oldPrefs ) {
-		if ( !newPrefs.hasOwnProperty(prefName) ) {
-			newPrefs[prefName] = oldPrefs[prefName];
-			needsUpdate = true;
-		}
-	}
-
-	if ( needsUpdate ) {
-		vAPI.storage.set('cfg', JSON.stringify(newPrefs));
-	}
-
-	return newPrefs;
-};
-
-vAPI.storage.get('cfg', function(prefs) {
+var updatePrefs = function(newPrefs, storedPrefs) {
 	var xhr = new XMLHttpRequest;
 	xhr.overrideMimeType('application/json;charset=utf-8');
 	xhr.open('GET', 'defaults.json', true);
 	xhr.addEventListener('load', function() {
-		var forceUpdate = false;
-		var defaultPrefs = JSON.parse(this.responseText);
-		cachedPrefs = prefs ? JSON.parse(prefs) : {};
+		var key;
+		var defPrefs = JSON.parse(this.responseText);
+		cachedPrefs = {};
+		newPrefs = typeof newPrefs === 'string'
+			? JSON.parse(newPrefs)
+			: newPrefs || {};
 
-		// Cleanup unused preferences
-		for ( var prefName in cachedPrefs ) {
-			if ( !defaultPrefs.hasOwnProperty(prefName) ) {
-				delete cachedPrefs[prefName];
-				forceUpdate = true;
+		for ( key in defPrefs ) {
+			cachedPrefs[key] = storedPrefs[key] === void 0
+				? defPrefs[key]
+				: storedPrefs[key];
+
+			if ( newPrefs[key] === void 0 ) {
+				continue;
 			}
+
+			if ( typeof newPrefs[key] !== typeof defPrefs[key] ) {
+				continue;
+			}
+
+			if ( newPrefs[key] === defPrefs[key] ) {
+				cachedPrefs[key] = defPrefs[key];
+				continue;
+			}
+
+			if ( typeof defPrefs[key] === 'object'
+				&& JSON.stringify(newPrefs[key]) === JSON.stringify(defPrefs[key]) ) {
+				cachedPrefs[key] = defPrefs[key];
+				continue;
+			}
+
+			cachedPrefs[key] = newPrefs[key];
 		}
 
-		cachedPrefs = updatePrefs(cachedPrefs, defaultPrefs, forceUpdate);
+		var prefsToStore = {};
+
+		for ( key in defPrefs ) {
+			if ( cachedPrefs[key] === defPrefs[key] ) {
+				continue;
+			}
+
+			if ( typeof defPrefs[key] === 'object' ) {
+				if ( JSON.stringify(cachedPrefs[key]) === JSON.stringify(defPrefs[key]) ) {
+					continue;
+				}
+			}
+
+			prefsToStore[key] = cachedPrefs[key];
+		}
+
+		prefsToStore = JSON.stringify(prefsToStore);
+
+		if ( prefsToStore === '{}' ) {
+			vAPI.storage.remove('cfg');
+		}
+		else if ( prefsToStore !== JSON.stringify(storedPrefs) ) {
+			vAPI.storage.set('cfg', prefsToStore);
+		}
 	});
 	xhr.send();
+};
+
+vAPI.storage.get('cfg', function(cfg) {
+	var storedPrefs = JSON.parse(cfg || '{}');
+	updatePrefs(storedPrefs, storedPrefs);
 });
 
 vAPI.messaging.listen(function(e, origin, postMessage) {
@@ -65,7 +98,9 @@ vAPI.messaging.listen(function(e, origin, postMessage) {
 			break;
 
 		case 'savePrefs':
-			cachedPrefs = updatePrefs(message.prefs, cachedPrefs, true);
+			vAPI.storage.get('cfg', function(cfg) {
+				updatePrefs(message.prefs, JSON.parse(cfg || '{}'));
+			});
 			break;
 
 		case 'open':
