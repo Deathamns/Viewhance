@@ -542,9 +542,7 @@ init = function() {
 				var links = this.querySelectorAll('.send-hosts > ul > li > a');
 
 				[].forEach.call(links, function(a) {
-					var url = a.getAttribute('data-favicon')
-						|| a.host + '/favicon.ico';
-					url = a.protocol + '//' + url;
+					var url = 'https://' + a.host + '/favicon.ico';
 					a.style.backgroundImage = 'url(' + url + ')';
 				});
 				this.removeEventListener('mouseover', onHostsHover);
@@ -721,7 +719,6 @@ init = function() {
 				menu.mtimer = null;
 			}, 800);
 		});
-
 
 		// Safari showed the menu even if the cursor wasn't at the edge
 		setTimeout(function() {
