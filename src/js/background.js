@@ -10,9 +10,6 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 		var key;
 		var defPrefs = JSON.parse(this.responseText);
 		cachedPrefs = {};
-		newPrefs = typeof newPrefs === 'string'
-			? JSON.parse(newPrefs)
-			: newPrefs || {};
 
 		for ( key in defPrefs ) {
 			cachedPrefs[key] = storedPrefs[key] === void 0
@@ -61,8 +58,7 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 
 		if ( prefsToStore === '{}' ) {
 			vAPI.storage.remove('cfg');
-		}
-		else if ( prefsToStore !== JSON.stringify(storedPrefs) ) {
+		} else if ( prefsToStore !== JSON.stringify(storedPrefs) ) {
 			vAPI.storage.set('cfg', prefsToStore);
 		}
 	});

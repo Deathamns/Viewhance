@@ -1931,25 +1931,42 @@ if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
 	return;
 }
 
-if ( vAPI.opera || vAPI.firefox ) {
-	if ( !vAPI.mediaType ) {
-		init = null;
+var firstContact = function() {
+	if ( vAPI.opera || vAPI.firefox ) {
+		if ( !vAPI.mediaType ) {
+			init = null;
+			return;
+		}
+
+		vAPI.messaging.send({cmd: 'loadPrefs'}, function(response) {
+			firstContact = null;
+			init(window, document, response);
+		});
 		return;
 	}
 
 	vAPI.messaging.send({cmd: 'loadPrefs'}, function(response) {
+		firstContact = null;
+
+		if ( !vAPI.mediaType ) {
+			init = null;
+			return;
+		}
+
 		init(window, document, response);
 	});
-	return;
-}
+};
 
-vAPI.messaging.send({cmd: 'loadPrefs'}, function(response) {
-	if ( !vAPI.mediaType ) {
-		init = null;
+firstContact();
+
+var count = 0;
+var pingBackground = setInterval(function() {
+	if ( firstContact === null || ++count > 4 ) {
+		clearInterval(pingBackground);
 		return;
 	}
 
-	init(window, document, response);
-});
+	firstContact();
+}, 3000);
 
 })();
