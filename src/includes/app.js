@@ -154,12 +154,12 @@ if ( self.opera ) {
 				return;
 			}
 
-			this.listener = function(e) {
+			this.listener = function(response) {
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
 
-				listener(e.data);
+				listener(response.data);
 			};
 
 			opera.extension.addEventListener('message', this.listener);
@@ -354,8 +354,8 @@ if ( self.opera ) {
 				return;
 			}
 
-			this.listener = function(e) {
-				if ( e.name !== vAPI.messaging.listenerId ) {
+			this.listener = function(response) {
+				if ( response.name !== vAPI.messaging.listenerId ) {
 					return;
 				}
 
@@ -363,7 +363,7 @@ if ( self.opera ) {
 					vAPI.messaging.listen(null);
 				}
 
-				listener(e.message);
+				listener(response.message);
 			};
 
 			safari.self.addEventListener('message', this.listener, false);
@@ -469,12 +469,12 @@ if ( self.opera ) {
 				return;
 			}
 
-			this.listener = function(e) {
+			this.listener = function(response) {
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
 
-				listener(e);
+				listener(JSON.parse(response));
 			};
 
 			vAPI.runtime.listen(this.listenerId, this.listener);
@@ -486,7 +486,7 @@ if ( self.opera ) {
 			}
 
 			vAPI.runtime.post('service', {
-				message: message,
+				message: JSON.stringify(message),
 				listenerId: this.listenerId,
 				origin: location.href
 			});
@@ -565,12 +565,12 @@ if ( self.opera ) {
 				return;
 			}
 
-			this.listener = function(e) {
+			this.listener = function(response) {
 				if ( once ) {
 					vAPI.messaging.listen(null);
 				}
 
-				listener(JSON.parse(e));
+				listener(JSON.parse(response));
 			};
 
 			addMessageListener(this.listener);

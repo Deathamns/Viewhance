@@ -238,7 +238,8 @@ if ( self.hasOwnProperty('opera') ) {
 		mxStorage: vAPI.runtime.storage,
 
 		get: function(key, callback) {
-			callback(this.mxStorage.getConfig(key));
+			var value = this.mxStorage.getConfig(key);
+			callback(value === '' ? null : value);
 		},
 
 		set: function(key, value) {
@@ -274,10 +275,10 @@ if ( self.hasOwnProperty('opera') ) {
 			var listenerId = msg.listenerId;
 
 			return {
-				msg: msg.message,
+				msg: JSON.parse(msg.message),
 				origin: msg.origin,
 				postMessage: function(message) {
-					vAPI.runtime.post(listenerId, message);
+					vAPI.runtime.post(listenerId, JSON.stringify(message));
 				}
 			};
 		},
