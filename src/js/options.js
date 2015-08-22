@@ -517,10 +517,8 @@ window.addEventListener('load', function() {
 		changeColor(this, 'green');
 	});
 
-	[].forEach.call(document.body.querySelectorAll('.action-buttons') || [], function(el) {
-		el.addEventListener('mousedown', function(e) {
-			e.preventDefault();
-		});
+	form.querySelector('.op-buttons').addEventListener('mousedown', function(e) {
+		e.preventDefault();
 	});
 
 	vAPI.messaging.send({cmd: 'loadPrefs', getAppInfo: true}, function(data) {
