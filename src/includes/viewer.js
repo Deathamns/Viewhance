@@ -539,13 +539,14 @@ init = function() {
 		if ( /^https?:$/.test(win.location.protocol) && cfg.sendTo.length ) {
 			menu.querySelector('.send-hosts')
 				.addEventListener('mouseover', function onHostsHover() {
+				this.removeEventListener('mouseover', onHostsHover);
+
 				var links = this.querySelectorAll('.send-hosts > ul > li > a');
 
 				[].forEach.call(links, function(a) {
-					var url = 'https://' + a.host + '/favicon.ico';
+					var url = '//' + a.host + '/favicon.ico';
 					a.style.backgroundImage = 'url(' + url + ')';
 				});
-				this.removeEventListener('mouseover', onHostsHover);
 			});
 		}
 
