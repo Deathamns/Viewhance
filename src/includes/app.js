@@ -90,6 +90,7 @@ vAPI.buildNodes = function(host, nodes) {
 if ( self.opera ) {
 	// » oex
 	vAPI.opera = true;
+	vAPI.browser.irPixelated = '-o-crisp-edges';
 
 	Object.defineProperty(vAPI, 'fullScreenElement', {
 		get: function() {
@@ -195,6 +196,7 @@ if ( self.opera ) {
 } else if ( self.chrome && !self.mx ) {
 	// » crx
 	vAPI.chrome = true;
+	vAPI.browser.irPixelated = 'pixelated';
 
 	Object.defineProperty(vAPI, 'fullScreenElement', {
 		get: function() {
@@ -305,6 +307,7 @@ if ( self.opera ) {
 } else if ( self.safari ) {
 	// » safariextz
 	vAPI.safari = true;
+	vAPI.browser.irPixelated = '-webkit-crisp-edges';
 
 	Object.defineProperty(vAPI, 'fullScreenElement', {
 		get: function() {
@@ -419,6 +422,7 @@ if ( self.opera ) {
 	// » mxaddon
 	vAPI.maxthon = true;
 	vAPI.runtime = external.mxGetRuntime();
+	vAPI.browser.irPixelated = '-webkit-optimize-contrast';
 
 	Object.defineProperty(vAPI, 'fullScreenElement', {
 		get: function() {
@@ -507,6 +511,7 @@ if ( self.opera ) {
 } else {
 	// » xpi
 	vAPI.firefox = true;
+	vAPI.browser.irPixelated = '-moz-crisp-edges';
 
 	Object.defineProperty(vAPI, 'fullScreenElement', {
 		get: function() {

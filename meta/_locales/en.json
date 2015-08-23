@@ -208,6 +208,10 @@
 			"#": 0,
 			">": "Natural size"
 		},
+		"scPixelate": {
+			"#": 0,
+			">": "Pixelated image"
+		},
 		"scReset": {
 			"#": 0,
 			">": "<b>Esc</b> will reset the image to its original form, or quits from free-zoom"

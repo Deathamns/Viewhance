@@ -36,6 +36,8 @@ const docObserver = {
 	},
 
 	initContentScripts: function(win, js) {
+		let sandbox;
+		let sandboxId = hostName + ':sb:' + this.uniqueSandboxId++;
 		let messager = win
 			.QueryInterface(Ci.nsIInterfaceRequestor)
 			.getInterface(Ci.nsIDocShell)
@@ -43,14 +45,12 @@ const docObserver = {
 			.QueryInterface(Ci.nsIDocShell)
 			.QueryInterface(Ci.nsIInterfaceRequestor)
 			.getInterface(Ci.nsIContentFrameMessageManager);
-		let sandboxId = hostName + ':sb:' + this.uniqueSandboxId++;
-		let sandbox;
 
 		if ( js ) {
 			try {
 				let sandboxName = [
 					win.location.href.slice(0, 100),
-					win.document.title.slice(0, 100)
+					win.document.title.slice(0, 50)
 				].join(' | ');
 
 				sandbox = Components.utils.Sandbox([win], {

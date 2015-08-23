@@ -1578,6 +1578,15 @@ init = function() {
 			case cfg.key_flipH: media.flip(media, 0); break;
 			case cfg.key_flipV: media.flip(media, 1); break;
 			case cfg.key_wheelZoom: toggleWheelZoom(); break;
+			case cfg.key_pixelate:
+				if ( vAPI.mediaType !== 'img' ) {
+					break;
+				}
+
+				media.style.imageRendering = media.style.imageRendering === ''
+					? vAPI.browser.irPixelated
+					: '';
+				break;
 			case cfg.key_imgBg:
 				if ( vAPI.mediaType !== 'img' ) {
 					break;

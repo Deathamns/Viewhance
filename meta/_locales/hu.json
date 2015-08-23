@@ -204,6 +204,10 @@
 			"#": 0,
 			">": "Eredeti méret"
 		},
+		"scPixelate": {
+			"#": 0,
+			">": "Pixeles kép"
+		},
 		"scReset": {
 			"#": 0,
 			">": "<b>Esc</b> a képet az eredeti állapotára állítja, vagy kilép a szabad méretezésből"
