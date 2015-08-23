@@ -38,7 +38,7 @@
 		},
 		"customCssTip": {
 			"#": 1,
-			">": "<code>body {\n background: #f3f3f5; /* Bármilyen elfogadott background érték (szín, url(), színátmenet...). */\n overflow: hidden; /* Elrejti a görgősávot. \"hidden\" változtatása \"auto\"-ra a megjelenítésükhöz. */\n}\n\n#main-media {\n background: #eef; /* Más háttér kizárólag a képnek. */\n border: 10px solid white; /* Egyéni képkeret. */\n box-shadow: 0 0 10px grey; /* Kép körüli árnyék. */\n cursor: default !important; /* Az egérkurzor változatlan marad ezzel az értékkel. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* A szabad méretezés mask színe. */\n}\n\n#menu {\n display: none; /* A lebegő menü elrejtése. */\n}\n</code>"
+			">": "<code>body {\n background: #f3f3f5; /* Bármilyen elfogadott background érték (szín, url(), színátmenet...). */\n overflow: hidden; /* Elrejti a görgősávot. \"hidden\" változtatása \"auto\"-ra a megjelenítésükhöz. */\n}\n\n#media {\n background: #eef; /* Más háttér kizárólag a képnek. */\n border: 10px solid white; /* Egyéni képkeret. */\n box-shadow: 0 0 10px grey; /* Kép körüli árnyék. */\n cursor: default !important; /* Az egérkurzor változatlan marad ezzel az értékkel. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* A szabad méretezés mask színe. */\n}\n\n#menu {\n display: none; /* A lebegő menü elrejtése. */\n}\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,

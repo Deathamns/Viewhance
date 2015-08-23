@@ -34,7 +34,7 @@
 		},
 		"customCssTip": {
 			"#": 1,
-			">": "<code>body {\n background: #f3f3f5; /* Любое допустимое свойство фона (color, url(), gradient...). */\n overflow: hidden; /* Скрыть полосы прокрутки. Чтобы показать их, измените \"hidden\" на \"auto\". */\n}\n\n#main-media {\n background: #eef; /* Различный фон для изображения. */\n border: 10px solid white; /* Граница изображения. */\n box-shadow: 0 0 10px grey; /* Тень изображения. */\n cursor: default !important; /* Запретить изменение курсора. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Цвет маски свободного масштабирования. */\n}\n\n#menu {\n display: none; /* Отключить всплывающее меню. */\n}\n</code>"
+			">": "<code>body {\n background: #f3f3f5; /* Любое допустимое свойство фона (color, url(), gradient...). */\n overflow: hidden; /* Скрыть полосы прокрутки. Чтобы показать их, измените \"hidden\" на \"auto\". */\n}\n\n#media {\n background: #eef; /* Различный фон для изображения. */\n border: 10px solid white; /* Граница изображения. */\n box-shadow: 0 0 10px grey; /* Тень изображения. */\n cursor: default !important; /* Запретить изменение курсора. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Цвет маски свободного масштабирования. */\n}\n\n#menu {\n display: none; /* Отключить всплывающее меню. */\n}\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,

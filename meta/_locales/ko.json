@@ -35,7 +35,7 @@
 		},
 		"customCssTip": {
 			"#": 1,
-			">": "<code>body {\n background: #f3f3f5; /* 아무 유효한 배경 속성 (color, url(), gradient...) */\n overflow: hidden; /* 스크롤 바를 숨깁니다. 보이기 위해서는, \"hidden\"을 \"auto\"로 바꾸세요. */\n}\n\n#main-media {\n background: #eef; /* 이미지를 위한 배경 */\n border: 10px solid white; /* 이미지 테두리 */\n box-shadow: 0 0 10px grey; /* 이미지 그림자 */\n cursor: default !important; /* 마우스 커서의 모양이 변하지 않게 합니다. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* 자유 확대 / 축소 마스크의 색상 */\n}\n\n#menu {\n display: none; /* 떠 있는 메뉴를 비활성화 */\n}\n</code>"
+			">": "<code>body {\n background: #f3f3f5; /* 아무 유효한 배경 속성 (color, url(), gradient...) */\n overflow: hidden; /* 스크롤 바를 숨깁니다. 보이기 위해서는, \"hidden\"을 \"auto\"로 바꾸세요. */\n}\n\n#media {\n background: #eef; /* 이미지를 위한 배경 */\n border: 10px solid white; /* 이미지 테두리 */\n box-shadow: 0 0 10px grey; /* 이미지 그림자 */\n cursor: default !important; /* 마우스 커서의 모양이 변하지 않게 합니다. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* 자유 확대 / 축소 마스크의 색상 */\n}\n\n#menu {\n display: none; /* 떠 있는 메뉴를 비활성화 */\n}\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,

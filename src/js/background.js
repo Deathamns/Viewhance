@@ -73,7 +73,14 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 };
 
 vAPI.storage.get('cfg', function(cfg) {
-	var storedPrefs = JSON.parse(cfg || '{}');
+	var storedPrefs;
+
+	try {
+		storedPrefs = JSON.parse(cfg || '{}');
+	} catch ( ex ) {
+		storedPrefs = {};
+	}
+
 	updatePrefs(storedPrefs, storedPrefs);
 });
 

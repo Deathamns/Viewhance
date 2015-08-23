@@ -35,7 +35,7 @@
 		},
 		"customCssTip": {
 			"#": 1,
-			">": "<code>body {\n background: #f3f3f5; /* Změní pozadí stránky a obrázku (je-li průhledný). Lze použít všechny platné CSS hodnoty (color, url(), gradient...). */\n overflow: hidden; /* Skryje posuvníky. */\n}\n\n#main-media {\n background: #eef; /* Pozadí obrázku, je-li průhledný. */\n border: 10px solid white; /* Rám obrázku. */\n box-shadow: 0 0 10px grey; /* Stín pod obrázkem. */\n cursor: default !important; /* Vynutí výchozí kurzor (tzn. nezmění se na ručičku či lupu). */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Barva krytí v režimu ručního zvětšení. */\n}\n\n#menu {\n display: none; /* Vypne zobrazování postranního panelu v levém horní rohu. */\n}\n</code>"
+			">": "<code>body {\n background: #f3f3f5; /* Změní pozadí stránky a obrázku (je-li průhledný). Lze použít všechny platné CSS hodnoty (color, url(), gradient...). */\n overflow: hidden; /* Skryje posuvníky. */\n}\n\n#media {\n background: #eef; /* Pozadí obrázku, je-li průhledný. */\n border: 10px solid white; /* Rám obrázku. */\n box-shadow: 0 0 10px grey; /* Stín pod obrázkem. */\n cursor: default !important; /* Vynutí výchozí kurzor (tzn. nezmění se na ručičku či lupu). */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Barva krytí v režimu ručního zvětšení. */\n}\n\n#menu {\n display: none; /* Vypne zobrazování postranního panelu v levém horní rohu. */\n}\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,

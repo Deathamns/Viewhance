@@ -103,13 +103,13 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'font: 12px "Trebuchet MS", sans-serif;',
 		'cursor: default;',
 	'}',
-	'#main-media {',
+	'#media {',
 		'box-sizing: border-box;',
 		'position: absolute;',
 		'margin: 0;',
 		'background-clip: padding-box;',
 	'}',
-	'html.audio #main-media {',
+	'html.audio #media {',
 		'width: 50%;',
 		'height: 40px !important;',
 		'min-width: 300px;',
@@ -123,30 +123,30 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'box-shadow: none;',
 		'background: transparent;',
 	'}',
-	'html.load-failed #main-media {',
+	'html.load-failed #media {',
 		'margin: auto',
 		'box-shadow: 0 0 10px red;',
 	'}',
-	'html.fullscreen #main-media {',
+	'html.fullscreen #media {',
 		'background: black !important;',
 	'}',
-	'#main-media:-moz-full-screen {',
+	'#media:-moz-full-screen {',
 		'background: black !important;',
 	'}',
 	'html.load-failed > body > h2 {',
 		'text-shadow: 1px 1px 15px firebrick;',
 	'}',
-	'#main-media.m-1 {',
+	'#media.m-1 {',
 		'width: auto;',
 		'height: auto;',
 		'max-width: 100%;',
 		'max-height: 100%;',
 	'}',
-	'#main-media.m-2 {',
+	'#media.m-2 {',
 		'width: 100%;',
 		'height:auto;',
 	'}',
-	'#main-media.m-3 {',
+	'#media.m-3 {',
 		'height: 100%;',
 		'width: auto;',
 	'}',
@@ -267,9 +267,8 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'#frames.showall > img, #frames.showall > canvas {',
 		'display: inline-block !important;',
 	'}',
-	// Custom or default styling
-	cfg.customCSS || 'body {background: silver; overflow: hidden;}' +
-		'#main-media {background: white; box-shadow: 0 0 5px grey;}'
+	// Custom CSS
+	cfg.css
 ].join('');
 doc.documentElement.insertBefore(head, doc.body);
 
@@ -310,7 +309,7 @@ init = function() {
 	}
 
 	head.appendChild(doc.createElement('style')).textContent =
-		'#main-media {max-width:' +
+		'#media {max-width:' +
 			Math.min(
 				MAXSIZE,
 				Math.floor(media.naturalWidth * MAXSIZE / media.naturalHeight)
@@ -1860,7 +1859,7 @@ if ( vAPI.mediaType === 'video' ) {
 }
 
 root = doc.documentElement;
-media.id = 'main-media';
+media.id = 'media';
 
 media.addEventListener('error', function() {
 	// Opera fires an error event on local video files when they're close to the end

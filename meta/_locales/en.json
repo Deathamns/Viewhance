@@ -42,7 +42,7 @@
 		},
 		"customCssTip": {
 			"#": 1,
-			">": "<code>body {\n background: #f3f3f5; /* Any valid background property (color, url(), gradient...). */\n overflow: hidden; /* Hides the scrollbars. To show them, change \"hidden\" to \"auto\". */\n}\n\n#main-media {\n background: #eef; /* Different background for the image. */\n border: 10px solid white; /* Image border. */\n box-shadow: 0 0 10px grey; /* Shadow of the image. */\n cursor: default !important; /* Don't allow the mouse cursor to change. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Color of the free-zoom mask. */\n}\n\n#menu {\n display: none; /* Disable the floating menu. */\n}\n</code>"
+			">": "<code>body {\n background: #f3f3f5; /* Any valid background property (color, url(), gradient...). */\n overflow: hidden; /* Hides the scrollbars. To show them, change \"hidden\" to \"auto\". */\n}\n\n#media {\n background: #eef; /* Different background for the image. */\n border: 10px solid white; /* Image border. */\n box-shadow: 0 0 10px grey; /* Shadow of the image. */\n cursor: default !important; /* Don't allow the mouse cursor to change. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Color of the free-zoom mask. */\n}\n\n#menu {\n display: none; /* Disable the floating menu. */\n}\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,

@@ -43,7 +43,7 @@
 		},
 		"customCssTip": {
 			"#": 1,
-			">": "<code>body {\n  background: #f3f3f5; /* Cualquier atributo válido para background (color, url(), gradient...). */\n  overflow: hidden; /* Oculta las barras de desplazamiento. Para mostrarlas, cambia \"hidden\" por \"auto\". */\n}\n\n#main-media {\n  background: #eef; /* Cambia el fondo de la imagen. */\n  border: 10px solid white; /* Borde de la imagen. */\n  box-shadow: 0 0 10px grey; /* Sombra de la imagen. */\n  cursor: default !important; /* No permite que el puntero cambie. */\n}\n\n.mask {\n  color: rgba(0, 0, 0, .4); /* Color para el modo de ampliación de selección. */\n}\n\n#menu {\n  display: none; /* Deshabilita el menú flotante. */\n}\n</code>"
+			">": "<code>body {\n  background: #f3f3f5; /* Cualquier atributo válido para background (color, url(), gradient...). */\n  overflow: hidden; /* Oculta las barras de desplazamiento. Para mostrarlas, cambia \"hidden\" por \"auto\". */\n}\n\n#media {\n  background: #eef; /* Cambia el fondo de la imagen. */\n  border: 10px solid white; /* Borde de la imagen. */\n  box-shadow: 0 0 10px grey; /* Sombra de la imagen. */\n  cursor: default !important; /* No permite que el puntero cambie. */\n}\n\n.mask {\n  color: rgba(0, 0, 0, .4); /* Color para el modo de ampliación de selección. */\n}\n\n#menu {\n  display: none; /* Deshabilita el menú flotante. */\n}\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,
