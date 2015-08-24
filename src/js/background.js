@@ -129,12 +129,12 @@ vAPI.messaging.listen(function(e, origin, postMessage) {
 			});
 			break;
 
-		case 'frames.js':
+		case 'loadFile':
 			var xhr = new XMLHttpRequest;
-			xhr.overrideMimeType('text/plain;charset=utf-8');
-			xhr.open('GET', 'js/frames.js', true);
+			xhr.overrideMimeType('text/plain; charset=x-user-defined');
+			xhr.open('GET', message.path, true);
 			xhr.addEventListener('load', function() {
-				channel.postMessage({'frames.js': this.responseText});
+				channel.postMessage(this.responseText);
 			});
 			xhr.send();
 			break;

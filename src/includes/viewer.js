@@ -173,7 +173,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'position: fixed;',
 		'top: 0;',
 		'opacity: 0;',
-		vAPI.browser.transitionCSS, ': opacity .25s, left .2s;',
+		vAPI.browser.transitionCSS, ': opacity .15s, left .2s;',
 	'}',
 	'ul {',
 		'display: inline-block;',
@@ -185,30 +185,52 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'list-style: none;',
 	'}',
 	'li {',
-		'display: block;',
 		'position: relative;',
+		'display: block;',
 	'}',
-	'li[data-cmd] {',
+	'li[data-cmd] > div {',
+		'width: 25px;',
+		'height: 25px;',
+		'margin: 8px 0;',
+		'background-repeat: no-repeat;',
+		'background-size: 100%;',
 		'cursor: pointer;',
 	'}',
-	'li[data-cmd=cycle], li[data-cmd=rotate] {',
-		'position: relative;',
+	'li[data-cmd] > div:hover {',
+		'opacity: .6;',
 	'}',
-	'li[data-cmd=cycle]::after {',
-		'position: absolute;',
-		'left: 25%;',
-		'content: "\u2195";',
+	'li[data-cmd="cycle"] > div {',
+		'background-position: 0 0;',
 	'}',
-	'li[data-cmd=rotate]::after {',
-		'position: absolute;',
-		'left: 2px;',
-		'content: "\u21BB";',
+	'li[data-cmd="zoom"] > div {',
+		'background-position: 0 -125px;',
+	'}',
+	'li[data-cmd="flip"] > div {',
+		'background-position: 0 -50px;',
+	'}',
+	'li[data-cmd="rotate"] > div {',
+		'background-position: 0 -175px;',
+	'}',
+	'li[data-cmd].filters > div {',
+		'background-position: 0 -25px;',
+	'}',
+	'li[data-cmd="reset"] > div {',
+		'background-position: 0 -150px;',
+	'}',
+	'li[data-cmd].send-hosts > div {',
+		'background-position: 0 -200px;',
+	'}',
+	'li[data-cmd="frames"] > div {',
+		'background-position: 0 -75px;',
+	'}',
+	'li[data-cmd="options"] > div {',
+		'background-position: 0 -100px;',
 	'}',
 	'li ul {',
 		'visibility: hidden;',
 		'position: absolute;',
-		'left: 100%;',
 		'top: 0;',
+		'left: 100%;',
 		'text-align: left;',
 		'opacity: 0;',
 		vAPI.browser.transitionCSS, ': visibility .4s, opacity .2s .3s;',
@@ -367,26 +389,12 @@ init = function() {
 		}
 
 		vAPI.buildNodes(menu.appendChild(doc.createElement('ul')), [
-			{tag: 'li', attrs: {'data-cmd': 'cycle'}, text: '\u2194'},
-			{tag: 'li', attrs: {'data-cmd': 'zoom'}, nodes: [
-				{tag: 'span', attrs: {style: 'visibility: hidden'}, text: '.'},
-				{
-					tag: 'span',
-					attrs: {
-						style: [
-							'transform: rotate(-45deg)',
-							'position: absolute',
-							'left: 20%',
-							'font-size: 125%'
-						].join(';')
-					},
-					text: '\u26B2'
-				}
-			]},
-			{tag: 'li', attrs: {'data-cmd': 'flip'}, text: '\u21CB'},
-			{tag: 'li', attrs: {'data-cmd': 'rotate'}, text: '\u21BA'},
-			media.filters ? {tag: 'li', attrs: {class: 'filters'}, nodes: [
-				'\u2261',
+			{tag: 'li', attrs: {'data-cmd': 'cycle'}, nodes: [{tag: 'div'}]},
+			{tag: 'li', attrs: {'data-cmd': 'zoom'}, nodes: [{tag: 'div'}]},
+			{tag: 'li', attrs: {'data-cmd': 'flip'}, nodes: [{tag: 'div'}]},
+			{tag: 'li', attrs: {'data-cmd': 'rotate'}, nodes: [{tag: 'div'}]},
+			media.filters ? {tag: 'li', attrs: {class: 'filters', 'data-cmd': 'filters'}, nodes: [
+				{tag: 'div'},
 				{tag: 'form', nodes: [{tag: 'ul', nodes: [
 					{tag: 'li', nodes: [
 						{
@@ -502,10 +510,11 @@ init = function() {
 					]}
 				]}]}
 			]} : '',
-			{tag: 'li', attrs: {'data-cmd': 'reset'}, text: '\u2715'},
+			{tag: 'li', attrs: {'data-cmd': 'reset'}, nodes: [{tag: 'div'}]},
 			/^https?:$/.test(win.location.protocol) && cfg.sendTo.length
-				? {tag: 'li', attrs: {class: 'send-hosts'}, nodes: [
-					'\u2197', {tag: 'ul', nodes: cfg.sendTo.map(function(item) {
+				? {tag: 'li', attrs: {class: 'send-hosts', 'data-cmd': ''}, nodes: [
+					{tag: 'div'},
+					{tag: 'ul', nodes: cfg.sendTo.map(function(item) {
 						var host = item.split('|');
 						return {tag: 'li', nodes: [{
 							tag: 'a', attrs: {
@@ -517,9 +526,9 @@ init = function() {
 				]}
 				: null,
 			vAPI.mediaType === 'img'
-				? {tag: 'li', attrs: {'data-cmd': 'frames'}, text: '\u22EF'}
+				? {tag: 'li', attrs: {'data-cmd': 'frames'}, nodes: [{tag: 'div'}]}
 				: '',
-			{tag: 'li', attrs: {'data-cmd': 'options'}, text: '\u2713'}
+			{tag: 'li', attrs: {'data-cmd': 'options'}, nodes: [{tag: 'div'}]}
 		]);
 
 		menu.style.cssText = 'display: none; left: -' + menu.offsetWidth + 'px';
@@ -555,7 +564,7 @@ init = function() {
 			}
 
 			var p = e.button === 2
-				|| e.type.indexOf('wheel') > -1
+				|| e.type === vAPI.browser.wheel
 					&& (-e.wheelDelta || e.deltaY) > 0;
 
 			if ( cmd === 'cycle' ) {
@@ -567,17 +576,25 @@ init = function() {
 			} else if ( cmd === 'zoom' ) {
 				pdsp(e);
 				zoomToCenter({wheelDelta: p ? -1 : 1});
-			} else if ( cmd === 'reset' && e.button === 0 ) {
-				media.reset();
+			} else if ( cmd === 'reset' ) {
+				if ( e.button === 0 ) {
+					media.reset();
+				}
+			} else if ( cmd === 'filters' ) {
+				if ( e.button === 2 ) {
+					media.style.filter = media.style.webkitFilter = '';
+					media.filters = {};
+					doc.body.querySelector('#menu li.filters > form').reset();
+				}
 			} else if ( cmd === 'frames' ) {
-				vAPI.messaging.send({cmd: 'frames.js'}, function(data) {
-					var errorHandler = function(msg) {
+				var message = {cmd: 'loadFile', path: 'js/frames.js'};
+				vAPI.messaging.send(message, function(data) {
+					var errorHandler = function(alertMessage) {
 						// Success
-						if ( msg !== null ) {
-							alert(msg); // eslint-disable-line
-							var frms = menu.querySelector('li[data-cmd="frames"]');
-							frms.removeAttribute('data-cmd');
-							frms.style.opacity = '0.2';
+						if ( alertMessage !== null ) {
+							alert(alertMessage); // eslint-disable-line
+							menu.querySelector('li[data-cmd="frames"]')
+								.removeAttribute('data-cmd');
 							return;
 						}
 
@@ -588,15 +605,16 @@ init = function() {
 						}
 					};
 
-					Function(
-						'win',
-						'drawFullFrame',
-						'errorHandler',
-						data['frames.js']
-					)(win, e.button === 0, errorHandler);
+					Function('win', 'drawFullFrame', 'errorHandler', data)(
+						win,
+						e.button === 0,
+						errorHandler
+					);
 				});
-			} else if ( cmd === 'options' && e.button === 0 ) {
-				vAPI.messaging.send({cmd: 'open', url: 'options.html'});
+			} else if ( cmd === 'options' ) {
+				if ( e.button === 0 ) {
+					vAPI.messaging.send({cmd: 'open', url: 'options.html'});
+				}
 			} else {
 				p = null;
 			}
@@ -607,14 +625,10 @@ init = function() {
 		};
 
 		var onMenuClick = function(e) {
-			var target = e.target;
+			var cmd = e.target.parentNode.getAttribute('data-cmd');
 
-			if ( !target.hasAttribute('data-cmd') ) {
-				target = target.parentNode;
-			}
-
-			if ( target.hasAttribute('data-cmd') ) {
-				handleCommand(target.getAttribute('data-cmd'), e);
+			if ( cmd ) {
+				handleCommand(cmd, e);
 			}
 		};
 
@@ -629,6 +643,27 @@ init = function() {
 
 			if ( menu.style.display === 'block' ) {
 				return;
+			}
+
+			if ( !menu.iconsLoaded ) {
+				var bgImage = win.getComputedStyle(menu).backgroundImage;
+
+				if ( bgImage && bgImage !== 'none' ) {
+					menu.iconsLoaded = true;
+				}
+			}
+
+			if ( !menu.iconsLoaded ) {
+				var message = {cmd: 'loadFile', path: 'css/menu_icons.b64png'};
+
+				vAPI.messaging.send(message, function(img) {
+					var sheet = document.head.querySelector('style').sheet;
+					sheet.insertRule(
+						'li[data-cmd] > div { background-image: url(' + img + '); }',
+						sheet.cssRules.length
+					);
+					menu.iconsLoaded = true;
+				});
 			}
 
 			menu.style.display = 'block';
@@ -870,10 +905,10 @@ init = function() {
 		}
 
 		var filters = doc.body.querySelector('#menu li.filters > form');
-		var style = this.style;
+		var mediaStyle = this.style;
 
 		if ( filters ) {
-			style.filter = style.webkitFilter = '';
+			mediaStyle.filter = mediaStyle.webkitFilter = '';
 			media.filters = {};
 			filters.reset();
 		}
@@ -882,10 +917,10 @@ init = function() {
 		delete this.scale;
 		delete this.bgList;
 		delete this.bgListIndex;
-		style[vAPI.browser.transform] = '';
-		style.background = '';
-		style.width = '';
-		style.height = '';
+		mediaStyle[vAPI.browser.transform] = '';
+		mediaStyle.background = '';
+		mediaStyle.width = '';
+		mediaStyle.height = '';
 		this.resize(0);
 	};
 

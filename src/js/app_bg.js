@@ -55,18 +55,20 @@ if ( self.hasOwnProperty('opera') ) {
 			opera.extension.tabs.create({
 				url: params.url,
 				focused: params.active,
-				'private': params.incognito
+				private: params.incognito
 			});
 		}
 	};
 
 	vAPI.messaging = {
-		parseMessage: function(msg) {
+		parseMessage: function(request) {
+			var messagePort = request.source;
+
 			return {
-				msg: msg.data,
-				origin: msg.origin,
+				msg: request.data,
+				origin: request.origin,
 				postMessage: function(message) {
-					msg.source.postMessage(message);
+					messagePort.postMessage(message);
 				}
 			};
 		},
@@ -196,13 +198,13 @@ if ( self.hasOwnProperty('opera') ) {
 	};
 
 	vAPI.messaging = {
-		parseMessage: function(msg) {
-			var sourcePage = msg.target.page;
-			var listenerId = msg.name;
+		parseMessage: function(request) {
+			var sourcePage = request.target.page;
+			var listenerId = request.name;
 
 			return {
-				msg: msg.message,
-				origin: msg.target.url,
+				msg: request.message,
+				origin: request.target.url,
 				postMessage: function(message) {
 					sourcePage.dispatchMessage(listenerId, message);
 				}
@@ -271,12 +273,12 @@ if ( self.hasOwnProperty('opera') ) {
 	};
 
 	vAPI.messaging = {
-		parseMessage: function(msg) {
-			var listenerId = msg.listenerId;
+		parseMessage: function(request) {
+			var listenerId = request.listenerId;
 
 			return {
-				msg: JSON.parse(msg.message),
-				origin: msg.origin,
+				msg: JSON.parse(request.message),
+				origin: request.origin,
 				postMessage: function(message) {
 					vAPI.runtime.post(listenerId, JSON.stringify(message));
 				}
@@ -365,13 +367,13 @@ if ( self.hasOwnProperty('opera') ) {
 				.getService(Ci.nsIMessageListenerManager);
 		},
 
-		parseMessage: function(msg) {
-			var listenerId = msg.data.listenerId;
-			var messager = msg.target.messageManager;
+		parseMessage: function(request) {
+			var listenerId = request.data.listenerId;
+			var messager = request.target.messageManager;
 
 			return {
-				msg: msg.data.data,
-				origin: msg.data.origin,
+				msg: request.data.data,
+				origin: request.data.origin,
 				postMessage: function(message) {
 					messager.sendAsyncMessage(
 						listenerId,

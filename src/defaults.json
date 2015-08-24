@@ -3,7 +3,7 @@
 	"minUpscale": 0,
 	"mediaInfo": "%ow\u00d7%oh | %name (%perc%)",
 	"favicon": "",
-	"css": "body { background: silver; overflow: hidden; }\n#media { background: white; box-shadow: 0 0 5px grey; }",
+	"css": "body { background: silver; overflow: hidden; }\n#media { background: #fafafa; box-shadow: 0 0 5px grey; }",
 	"center": true,
 	"wheelZoom": false,
 	"mediaAttrs": "autoplay controls",
