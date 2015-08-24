@@ -126,7 +126,6 @@ def read_locales(locale_codes, exclude=None):
 
         if 'groupless' in lng_strings[alpha2]:
             grp = lng_strings[alpha2]['groupless']
-            del lng_strings[alpha2]['groupless']
         else:
             grp = {}
 
@@ -148,6 +147,9 @@ if config['def_lang'] not in languages:
 
 read_locales('*', [config['def_lang']])
 
+for alpha2 in lng_strings:
+    if 'groupless' in lng_strings[alpha2]:
+        del lng_strings[alpha2]['groupless']
 
 locales_json_path = pj(src_dir, 'locales.json')
 
