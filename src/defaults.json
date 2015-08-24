@@ -10,7 +10,7 @@
 	"lpDelay": 350,
 	"lpLeft": 1,
 	"lpRight": 2,
-	"sendTo": [
+	"sendToHosts": [
 		"TinEye|https://www.tineye.com/search?sort=size&order=desc&url=%url",
 		"Google|https://images.google.com/searchbyimage?image_url=%url",
 		"Bing|https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=%url",

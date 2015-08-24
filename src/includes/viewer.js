@@ -511,10 +511,10 @@ init = function() {
 				]}]}
 			]} : '',
 			{tag: 'li', attrs: {'data-cmd': 'reset'}, nodes: [{tag: 'div'}]},
-			/^https?:$/.test(win.location.protocol) && cfg.sendTo.length
+			/^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length
 				? {tag: 'li', attrs: {class: 'send-hosts', 'data-cmd': ''}, nodes: [
 					{tag: 'div'},
-					{tag: 'ul', nodes: cfg.sendTo.map(function(item) {
+					{tag: 'ul', nodes: cfg.sendToHosts.map(function(item) {
 						var host = item.split('|');
 						return {tag: 'li', nodes: [{
 							tag: 'a', attrs: {
@@ -544,7 +544,7 @@ init = function() {
 		}, false);
 
 		// Load favicons only when the menu item is hovered the first time
-		if ( /^https?:$/.test(win.location.protocol) && cfg.sendTo.length ) {
+		if ( /^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length ) {
 			menu.querySelector('.send-hosts')
 				.addEventListener('mouseover', function onHostsHover() {
 				this.removeEventListener('mouseover', onHostsHover);

@@ -128,7 +128,7 @@ var load = function(prefs) {
 			continue;
 		}
 
-		if ( pref === 'sendTo' ) {
+		if ( pref === 'sendToHosts' ) {
 			if ( !Array.isArray(prefs[pref]) ) {
 				prefs[pref] = defaultPrefs[pref];
 			}
@@ -214,7 +214,7 @@ var save = function() {
 
 			field.value = prefs[pref];
 		} else {
-			if ( pref === 'sendTo' ) { // eslint-disable-line
+			if ( pref === 'sendToHosts' ) { // eslint-disable-line
 				prefs[pref] = field.value.trim().split(/[\r\n]+/).filter(Boolean);
 				field.rows = prefs[pref].length || 2;
 			} else {
