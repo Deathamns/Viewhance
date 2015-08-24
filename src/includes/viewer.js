@@ -611,10 +611,11 @@ init = function() {
 						errorHandler
 					);
 				});
-			} else if ( cmd === 'options' ) {
-				if ( e.button === 0 ) {
-					vAPI.messaging.send({cmd: 'open', url: 'options.html'});
-				}
+			} else if ( cmd === 'options' && e.button !== 1 ) {
+				vAPI.messaging.send({
+					cmd: 'open',
+					url: 'options.html' + (e.button === 2 ? '#shortcuts' : '')
+				});
 			} else {
 				p = null;
 			}
