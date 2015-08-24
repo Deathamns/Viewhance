@@ -1246,6 +1246,10 @@ init = function() {
 			return;
 		}
 
+		if ( menu && menu.style.display === 'block' ) {
+			menu.style.display = 'none';
+		}
+
 		if ( !e.shiftKey && vAPI.mediaType === 'video' ) {
 			var topPart = Math.min(
 				this.clientHeight - 40,
