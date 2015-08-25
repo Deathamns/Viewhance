@@ -1119,6 +1119,7 @@ init = function() {
 		dragSlide[2] = [lastMoveX, lastMoveY];
 
 		media.dragSlideTime = Date.now();
+		pdsp(e);
 	};
 
 	var startScroll = function() {
@@ -1204,6 +1205,7 @@ init = function() {
 		media.mctx.clearRect(0, 0, media.mask.width, media.mask.height);
 		media.mctx.fillRect(0, 0, media.mask.width, media.mask.height);
 		media.mctx.clearRect(freeZoom.x, freeZoom.y, freeZoom.w, freeZoom.h);
+		pdsp(e);
 	};
 
 	var longpressHandler = function() {
