@@ -55,7 +55,7 @@ Create a [proxy file](https://developer.mozilla.org/en-US/Add-ons/Setting_up_ext
 Copy the created file into the [`path of your profile`](https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data#w_how-do-i-find-my-profile)`/extensions` directory.
 
 #### Opera ####
-For Opera 12: Open the Extension manager (`Ctrl+Shift+E`), and drag-n-drop the generated `config.xml` file from the `src` directory onto the browser window.
+For Opera 12: Open the Extension manager (<kbd>Ctrl+Shift+E</kbd>), and drag-n-drop the generated `config.xml` file from the `src` directory onto the browser window.
 
 For Opera 15+ see Chromium.
 
