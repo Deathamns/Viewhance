@@ -2,7 +2,7 @@ dest="$( realpath "build/$platform" )"
 
 setup_base "$dest/"
 platform_dir="$( realpath "platform/$platform" )"
-cp ${useln:-} "$platform_dir/js/app.js" "$dest/includes/"
+cp "$platform_dir/js/app.js" "$dest/includes/"
 cp ${useln:-} "$platform_dir/js/app_bg.js" "$dest/js/"
 cp -r ${useln:-} "$platform_dir/icons" "$dest/"
 append_common_code "$dest/includes/app.js"

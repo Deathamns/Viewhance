@@ -2,9 +2,10 @@ dir_name="${config[name]}.safariextension"
 dest="$( realpath "build/$dir_name" )"
 
 setup_base "$dest/"
+platform_dir="$( realpath "platform/$platform" )"
 cp "platform/$platform/js/app.js" "$dest/includes/"
-cp "platform/$platform/js/app_bg.js" "$dest/js/"
-cp "platform/$platform/meta/Settings.plist" "$dest/"
+cp ${useln:-} "$platform_dir/js/app_bg.js" "$dest/js/"
+cp ${useln:-} "$platform_dir/meta/Settings.plist" "$dest/"
 append_common_code "$dest/includes/app.js"
 
 if [[ -z "$pack" ]]; then
@@ -17,8 +18,8 @@ if ! command -v xar > /dev/null 2>&1; then
 	return
 fi
 
-key="$( realpath platform/$platform/secret/key.pem )"
-certs="$( realpath platform/$platform/secret/certs )"
+key="$platform_dir/secret/key.pem"
+certs="$platform_dir/secret/certs"
 sig_size="$( openssl dgst -binary -sign "$key" < "$key" | wc -c )"
 tmp="$( realpath "build/tmp" )"
 

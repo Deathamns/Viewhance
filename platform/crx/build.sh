@@ -1,8 +1,9 @@
 dest="$( realpath "build/$platform" )"
 
 setup_base "$dest/"
-cp "platform/$platform/js/app_bg.js" "$dest/js/"
+platform_dir="$( realpath "platform/$platform" )"
 cp "platform/$platform/js/app.js" "$dest/includes/"
+cp ${useln:-} "$platform_dir/js/app_bg.js" "$dest/js/"
 append_common_code "$dest/includes/app.js"
 
 if [[ -z "$pack" ]]; then
