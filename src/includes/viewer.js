@@ -108,6 +108,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'position: absolute;',
 		'margin: 0;',
 		'background-clip: padding-box;',
+		'image-orientation: from-image;',
 	'}',
 	'html.audio #media {',
 		'width: 50%;',
@@ -316,9 +317,6 @@ init = function() {
 
 	if ( vAPI.mediaType === 'img' ) {
 		doc.body.replaceChild(media, doc.images[0]);
-	} else if ( vAPI.mediaType === 'video' ) {
-		media.naturalWidth = media.videoWidth;
-		media.naturalHeight = media.videoHeight;
 	}
 
 	[].forEach.call(doc.body.childNodes, function(node) {
@@ -333,17 +331,32 @@ init = function() {
 		return;
 	}
 
+	var mediaWidth, mediaHeight;
+
+	if ( vAPI.mediaType === 'img' ) {
+		mediaWidth = media.naturalWidth;
+		mediaHeight = media.naturalHeight;
+
+		if ( mediaWidth !== mediaHeight ) {
+			// image-orientation in Firefox doesn't flip natural sizes
+			if ( mediaWidth / mediaHeight === media.height / media.width ) {
+				mediaWidth = media.naturalHeight;
+				mediaHeight = media.naturalWidth;
+			}
+		}
+	} else {
+		mediaWidth = media.videoWidth;
+		mediaHeight = media.videoHeight;
+	}
+
 	head.appendChild(doc.createElement('style')).textContent =
-		'#media {max-width:' +
-			Math.min(
-				MAXSIZE,
-				Math.floor(media.naturalWidth * MAXSIZE / media.naturalHeight)
-			) +
-			'px;max-height:' +
-			Math.min(
-				MAXSIZE,
-				Math.floor(media.naturalHeight * MAXSIZE / media.naturalWidth)
-			) + 'px}';
+		'#media {max-width:' + Math.min(
+			MAXSIZE,
+			Math.floor(mediaWidth * MAXSIZE / mediaHeight)
+		) + 'px; max-height:' + Math.min(
+			MAXSIZE,
+			Math.floor(mediaHeight * MAXSIZE / mediaWidth)
+		) + 'px}';
 
 	if ( !cfg.mediaInfo ) {
 		cfg.mediaInfo = false;
@@ -771,13 +784,13 @@ init = function() {
 		switch ( param ) {
 			case 'w': return m.clientWidth;
 			case 'h': return m.clientHeight;
-			case 'ow': return m.naturalWidth;
-			case 'oh': return m.naturalHeight;
+			case 'ow': return mediaWidth;
+			case 'oh': return mediaHeight;
 			case 'url': return win.location.href;
 			case 'name': return m.alt;
 			case 'ratio':
 				return Math.round(m.clientWidth / m.clientHeight * 100) / 100;
-			case 'perc': return Math.round(m.clientWidth * 100 / m.naturalWidth);
+			case 'perc': return Math.round(m.clientWidth * 100 / mediaWidth);
 		}
 	};
 
@@ -790,11 +803,10 @@ init = function() {
 		if ( m.clientWidth > winW || m.clientHeight > winH ) {
 			m.style.cursor = 'move';
 		} else if ( winH >= m.clientHeight && winW >= m.clientWidth
-			&& winH < m.naturalHeight || winW < m.naturalWidth ) {
+			&& winH < mediaHeight || winW < mediaWidth ) {
 			m.style.cursor = vAPI.browser.zoomIn;
 		} else if ( noFit.cur && noFit.real
-			&& (m.clientHeight < m.naturalHeight
-				|| m.clientWidth < m.naturalWidth) ) {
+			&& (m.clientHeight < mediaHeight || m.clientWidth < mediaWidth) ) {
 			m.style.cursor = vAPI.browser.zoomIn;
 		} else {
 			m.style.cursor = 'default';
@@ -871,7 +883,7 @@ init = function() {
 
 		noFit = {
 			cur: box.width <= winW && box.height <= winH,
-			real: this.naturalWidth <= winW && this.naturalHeight <= winH
+			real: mediaWidth <= winW && mediaHeight <= winH
 		};
 	};
 
@@ -1482,14 +1494,15 @@ init = function() {
 			return;
 		}
 
-		if ( e.clientX !== lastEvent.clientX || e.clientY !== lastEvent.clientY ) {
+		if ( e.clientX !== lastEvent.clientX
+			|| e.clientY !== lastEvent.clientY ) {
 			return;
 		}
 
 		if ( media.mode < 2 && noFit.real ) {
 			if ( media.mode === -1 ) {
 				media.resize(0);
-			} else if ( winW / winH < media.naturalWidth / media.naturalHeight ) {
+			} else if ( winW / winH < mediaWidth / mediaHeight ) {
 				media.resize(2);
 			} else if ( winH === media.offsetHeight && winW > media.offsetWidth ) {
 				media.resize(2);
@@ -1497,8 +1510,8 @@ init = function() {
 				media.resize(3);
 			}
 		} else if ( media.mode === 1 || noFit.cur ) {
-			if ( media.naturalWidth === media.clientWidth
-				&& media.naturalHeight === media.clientHeight ) {
+			if ( mediaWidth === media.clientWidth
+				&& mediaHeight === media.clientHeight ) {
 				return;
 			}
 
@@ -1515,8 +1528,8 @@ init = function() {
 				}
 			}
 
-			x = x * media.naturalWidth / media.clientWidth - winW / 2;
-			y = y * media.naturalHeight / media.clientHeight - winH / 2;
+			x = x * mediaWidth / media.clientWidth - winW / 2;
+			y = y * mediaHeight / media.clientHeight - winH / 2;
 
 			media.resize(0);
 			win.scrollTo(x, y);
@@ -1722,24 +1735,24 @@ init = function() {
 	progress = [];
 
 	if ( cfg.minUpscale ) {
-		if ( media.naturalWidth >= winW * cfg.minUpscale / 100 ) {
+		if ( mediaWidth >= winW * cfg.minUpscale / 100 ) {
 			progress[0] = true;
 		}
 
-		if ( media.naturalHeight >= winH * cfg.minUpscale / 100 ) {
+		if ( mediaHeight >= winH * cfg.minUpscale / 100 ) {
 			progress[1] = true;
 		}
 	}
 
 	if ( media.mode === 4 ) {
-		if ( media.naturalWidth / media.naturalHeight > winW / winH ) {
+		if ( mediaWidth / mediaHeight > winW / winH ) {
 			media.mode = 3;
 		} else {
 			media.mode = 2;
 		}
 	} else if ( media.mode === 1 || media.mode === 0 && noFit.real ) {
 		if ( progress.length ) {
-			if ( media.naturalWidth / media.naturalHeight > winW / winH ) {
+			if ( mediaWidth / mediaHeight > winW / winH ) {
 				media.mode = 2;
 			} else {
 				media.mode = 3;
@@ -1747,9 +1760,9 @@ init = function() {
 		}
 	}
 
-	if ( media.mode === 2 && media.naturalWidth < winW && !progress[0] ) {
+	if ( media.mode === 2 && mediaWidth < winW && !progress[0] ) {
 		media.mode = 0;
-	} else if ( media.mode === 3 && media.naturalHeight < winH && !progress[1] ) {
+	} else if ( media.mode === 3 && mediaHeight < winH && !progress[1] ) {
 		media.mode = 0;
 	}
 
