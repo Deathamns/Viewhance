@@ -1,0 +1,18 @@
+content viewhance
+
+locale viewhance en ./locale/en/
+locale viewhance cs ./locale/cs/
+locale viewhance el ./locale/el/
+locale viewhance es ./locale/es/
+locale viewhance fi ./locale/fi/
+locale viewhance fr ./locale/fr/
+locale viewhance hu ./locale/hu/
+locale viewhance ko ./locale/ko/
+locale viewhance nl ./locale/nl/
+locale viewhance pl ./locale/pl/
+locale viewhance pt-BR ./locale/pt-BR/
+locale viewhance ru ./locale/ru/
+locale viewhance tr ./locale/tr/
+locale viewhance uk ./locale/uk/
+locale viewhance zh-CN ./locale/zh-CN/
+locale viewhance zh-TW ./locale/zh-TW/

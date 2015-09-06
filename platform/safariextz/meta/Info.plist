@@ -27,14 +27,14 @@
 	<dict>
 		<key>Scripts</key>
 		<dict>
-			<key>End</key>
-			<array>
-				<string>includes/opener.js</string>
-			</array>
 			<key>Start</key>
 			<array>
 				<string>includes/app.js</string>
 				<string>includes/viewer.js</string>
+			</array>
+			<key>End</key>
+			<array>
+				<string>includes/opener.js</string>
 			</array>
 		</dict>
 		<key>Whitelist</key>
@@ -60,7 +60,7 @@
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
-	<string>{update_url}update_safariextz.plist</string>
+	<string>{update_url}{update_file}</string>
 	<key>Website</key>
 	<string>{homepage}</string>
 </dict>

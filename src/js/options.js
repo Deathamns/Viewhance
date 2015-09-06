@@ -15,24 +15,24 @@ var localizeNodes = function(nodes) {
 			continue;
 		}
 
-		var els = nodes[i].querySelectorAll('[data-i18n]');
+		var els = nodes[i].querySelectorAll('[data-l10n]');
 		var l = els.length;
 
 		while ( l-- ) {
-			var i18nString = vAPI.i18n(els[l].dataset.i18n);
-			var i18nAttr = els[l].dataset.i18nAttr;
-			els[l].removeAttribute('data-i18n');
+			var l10nString = vAPI.l10n(els[l].dataset.l10n);
+			var l10nAttr = els[l].dataset.l10nAttr;
+			els[l].removeAttribute('data-l10n');
 
-			if ( !i18nAttr ) {
-				vAPI.insertHTML(els[l], i18nString);
+			if ( !l10nAttr ) {
+				vAPI.insertHTML(els[l], l10nString);
 				continue;
 			}
 
-			if ( /^(title|placeholder)$/i.test(i18nAttr) ) {
-				els[l][i18nAttr] = i18nString;
+			if ( /^(title|placeholder)$/i.test(l10nAttr) ) {
+				els[l][l10nAttr] = l10nString;
 			}
 
-			els[l].removeAttribute('data-i18n-attr');
+			els[l].removeAttribute('data-l10n-attr');
 		}
 
 		nodes[i]._nodeLocalized = true;

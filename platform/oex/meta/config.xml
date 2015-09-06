@@ -7,5 +7,5 @@
 	<feature name="opera:share-cookies" required="false"/>
 	<access origin="*" subdomains="true"/>
 	<license>Copyright 2015 {author}. All rights reserved.</license>
-	<update-description href="{update_url}update_oex.xml"/>
+	<update-description href="{update_url}{update_file}.xml"/>
 {locale_info}</widget>

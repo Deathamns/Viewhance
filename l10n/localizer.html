@@ -188,11 +188,11 @@
 		<small>To send your work you need a <a href="https://github.com/join">GitHub</a> account (if you don't have one already), and you must be <a href="https://github.com/login">signed in</a></small>.
 	</div>
 	<div id="edited-locale">
-		You can edit the <code><span></span>.json</code> file on <a href="https://github.com/Deathamns/Viewhance/edit/master/meta/_locales/">this link</a>.<br>
+		You can edit the <code><span></span>.json</code> file on <a href="https://github.com/Deathamns/Viewhance/edit/master/locales/">this link</a>.<br>
 		Copy the exported text from below, on the linked page overwrite the whole text, and at the bottom of the page you can propose your changes.
 	</div>
 	<div id="new-locale">
-		Follow <a href="https://github.com/Deathamns/Viewhance/new/master/meta/_locales">this link</a>, name the file as <code><span></span>.json</code>, copy the exported text from below, paste it into the textarea on the linked page, and at the bottom of the page you can propose your changes.
+		Follow <a href="https://github.com/Deathamns/Viewhance/new/master/locales">this link</a>, name the file as <code><span></span>.json</code>, copy the exported text from below, paste it into the textarea on the linked page, and at the bottom of the page you can propose your changes.
 	</div>
 	<textarea rows="50" cols="120" spellcheck="false"></textarea>
 </div>
@@ -245,8 +245,8 @@ var defLang = 'en';
 var trgLocaleExists = false;
 var isLocal = !location.host || location.host === 'localhost';
 var baseUrl = isLocal
-	? 'http://localhost/meta/'
-	: 'https://api.github.com/repos/Deathamns/Viewhance/contents/meta/';
+	? 'http://localhost/l10n/'
+	: 'https://api.github.com/repos/Deathamns/Viewhance/contents/l10n/';
 
 var $ = function(s, n) {
 	return (n || document).querySelector(s);
@@ -437,10 +437,10 @@ var loadStrings = function(trg) {
 	};
 
 	if ( !srcLocale && src !== trg ) {
-		xhr(baseUrl + '_locales/' + src + '.json', onStringsReady);
+		xhr(baseUrl + 'locales/' + src + '.json', onStringsReady);
 	}
 
-	xhr(baseUrl + '_locales/' + trg + '.json', onStringsReady)._trg = true;
+	xhr(baseUrl + 'locales/' + trg + '.json', onStringsReady)._trg = true;
 };
 
 var initLocales = function() {

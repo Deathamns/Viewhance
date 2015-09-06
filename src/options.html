@@ -9,9 +9,9 @@
 </head>
 <body spellcheck="false">
 	<nav id="nav-menu">
-		<a href="#general" data-i18n="navGeneral"></a>
-		<a href="#shortcuts" data-i18n="shortcuts"></a>
-		<a href="#info" data-i18n="navInfo"></a>
+		<a href="#general" data-l10n="navGeneral"></a>
+		<a href="#shortcuts" data-l10n="shortcuts"></a>
+		<a href="#info" data-l10n="navInfo"></a>
 	</nav>
 
 	<form action="#" method="post" autocomplete="off">
@@ -25,30 +25,30 @@
 				<span id="platform-info"></span>
 				<hr>
 				<div class="op-buttons">
-					<button id="button-reset" type="reset" data-i18n="buttonReset"></button>
-					<button id="button-save" type="submit" data-i18n="buttonSave"></button>
+					<button id="button-reset" type="reset" data-l10n="buttonReset"></button>
+					<button id="button-save" type="submit" data-l10n="buttonSave"></button>
 				</div>
 			</aside>
 		</div>
 
 		<section id="general-sec">
 			<div class="prow">
-				<label for="default-mode" data-i18n="defaultMode"></label>
+				<label for="default-mode" data-l10n="defaultMode"></label>
 				<span>
 					<select id="default-mode" name="mode" class="number">
-						<option value="0" data-i18n="modeNatural"></option>
-						<option value="1" data-i18n="modeAutoFit"></option>
-						<option value="2" data-i18n="modeFitToWidth"></option>
-						<option value="3" data-i18n="modeFitToHeight"></option>
-						<option value="4" data-i18n="modeBestFit"></option>
+						<option value="0" data-l10n="modeNatural"></option>
+						<option value="1" data-l10n="modeAutoFit"></option>
+						<option value="2" data-l10n="modeFitToWidth"></option>
+						<option value="3" data-l10n="modeFitToHeight"></option>
+						<option value="4" data-l10n="modeBestFit"></option>
 					</select>
 				</span>
 			</div>
 
 			<div class="prow tiptop">
-				<div class="tip" data-i18n="minUpscaleTip"></div>
+				<div class="tip" data-l10n="minUpscaleTip"></div>
 
-				<label for="min-upscale" class="sub-opt" data-i18n="minUpscale"></label>
+				<label for="min-upscale" class="sub-opt" data-l10n="minUpscale"></label>
 				<span>
 					<output for="min-upscale">0</output>%
 					<input id="min-upscale" name="minUpscale" type="range" step="1" min="0" max="100">
@@ -56,9 +56,9 @@
 			</div>
 
 			<div class="prow tiptop">
-				<div class="tip" data-i18n="mediaInfoTip"></div>
+				<div class="tip" data-l10n="mediaInfoTip"></div>
 
-				<label for="media-info" data-i18n="mediaInfo"></label>
+				<label for="media-info" data-l10n="mediaInfo"></label>
 				<span>
 					<datalist id="info-xmpls">
 						<option value="%name (%perc% | %ow&#215;%oh : %ratio)">
@@ -66,39 +66,39 @@
 						<option value="%name | %ow&#215;%oh | %w&#215;%h / %perc%">
 						<option value="%perc%, %ow&#215;%oh">
 					</datalist>
-					<input id="media-info" name="mediaInfo" type="text" list="info-xmpls" data-i18n="phClickForExample" data-i18n-attr="placeholder">
+					<input id="media-info" name="mediaInfo" type="text" list="info-xmpls" data-l10n="phClickForExample" data-l10n-attr="placeholder">
 				</span>
 			</div>
 
 			<div class="prow tiptop safari maxthon">
-				<div class="tip" data-i18n="faviconTip"></div>
+				<div class="tip" data-l10n="faviconTip"></div>
 
 				<datalist id="favicon-list">
 					<option value="%url">
 					<option value="http://g.etfv.co/%url?defaulticon=none">
 				</datalist>
 
-				<label for="favicon" data-i18n="favicon"></label>
+				<label for="favicon" data-l10n="favicon"></label>
 				<span>
-					<input id="favicon" name="favicon" type="text" list="favicon-list" data-i18n="phClickForExample" data-i18n-attr="placeholder">
+					<input id="favicon" name="favicon" type="text" list="favicon-list" data-l10n="phClickForExample" data-l10n-attr="placeholder">
 				</span>
 			</div>
 
 			<div class="prow tiptop">
-				<div class="tip" data-i18n="customCssTip"></div>
+				<div class="tip" data-l10n="customCssTip"></div>
 
-				<label for="custom-css" data-i18n="customCss"></label>
+				<label for="custom-css" data-l10n="customCss"></label>
 
 				<div class="color-helper">
 					<input type="color" value="#c3c3c3">
 					<input type="text" value="#c3c3c3">
 				</div>
 
-				<textarea id="custom-css" name="css" maxlength="4096" rows="10" data-i18n="customCssTextareaPh" data-i18n-attr="placeholder"></textarea>
+				<textarea id="custom-css" name="css" maxlength="4096" rows="10" data-l10n="customCssTextareaPh" data-l10n-attr="placeholder"></textarea>
 			</div>
 
 			<div class="prow">
-				<label for="center-content" data-i18n="centerContent"></label>
+				<label for="center-content" data-l10n="centerContent"></label>
 				<span>
 					<input id="center-content" name="center" type="checkbox">
 					<label for="center-content" class="checkbox"></label>
@@ -106,7 +106,7 @@
 			</div>
 
 			<div class="prow">
-				<label for="wheel-zoom" data-i18n="wheelZoom"></label>
+				<label for="wheel-zoom" data-l10n="wheelZoom"></label>
 				<span>
 					<input id="wheel-zoom" name="wheelZoom" type="checkbox">
 					<label for="wheel-zoom" class="checkbox"></label>
@@ -114,115 +114,115 @@
 			</div>
 
 			<div class="prow tiptop">
-				<div class="tip" data-i18n="mediaAttributesTip"></div>
+				<div class="tip" data-l10n="mediaAttributesTip"></div>
 
-				<label for="media-attributes" data-i18n="mediaAttributes"></label>
+				<label for="media-attributes" data-l10n="mediaAttributes"></label>
 				<span>
 					<input id="media-attributes" name="mediaAttrs" type="text" maxlength="100">
 				</span>
 			</div>
 
 			<div class="prow">
-				<label for="longpress-delay" data-i18n="longpressDelay"></label>
+				<label for="longpress-delay" data-l10n="longpressDelay"></label>
 				<span>
 					<input id="longpress-delay" name="lpDelay" type="number" step="50" min="100" max="2000">
 				</span>
 			</div>
 
 			<div class="prow">
-				<label for="longpress-left" data-i18n="longpressLeft"></label>
+				<label for="longpress-left" data-l10n="longpressLeft"></label>
 				<span>
 					<select id="longpress-left" name="lpLeft" class="number">
-						<option value="0" data-i18n="disabled"></option>
-						<option value="1" data-i18n="longpressActionFitImage"></option>
-						<option value="2" data-i18n="longpressActionWheelZoom"></option>
+						<option value="0" data-l10n="disabled"></option>
+						<option value="1" data-l10n="longpressActionFitImage"></option>
+						<option value="2" data-l10n="longpressActionWheelZoom"></option>
 					</select>
 				</span>
 			</div>
 
 			<div class="prow">
-				<label for="longpress-right" data-i18n="longpressRight"></label>
+				<label for="longpress-right" data-l10n="longpressRight"></label>
 				<span>
 					<select id="longpress-right" name="lpRight" class="number">
-						<option value="0" data-i18n="disabled"></option>
-						<option value="1" data-i18n="longpressActionFitImage"></option>
-						<option value="2" data-i18n="longpressActionWheelZoom"></option>
+						<option value="0" data-l10n="disabled"></option>
+						<option value="1" data-l10n="longpressActionFitImage"></option>
+						<option value="2" data-l10n="longpressActionWheelZoom"></option>
 					</select>
 				</span>
 			</div>
 
-			<h3 data-i18n="sendTo"></h3>
+			<h3 data-l10n="sendTo"></h3>
 			<textarea name="sendToHosts" placeholder="exmample.com|http://example.com/?imgurl=%"></textarea>
 		</section>
 
 		<section id="shortcuts-sec">
-			<h3 data-i18n="shortcuts"></h3>
+			<h3 data-l10n="shortcuts"></h3>
 			<ul class="sub-shortcuts">
-				<li><b>+ / -</b> <span data-i18n="scZoom"></span></li>
-				<li data-i18n="scFloatMenu"></li>
-				<li data-i18n="scHorizontalScroll"></li>
-				<li data-i18n="scDragndrop"></li>
-				<li data-i18n="scReset"></li>
-				<li data-i18n="scFreeZoom"></li>
-				<li data-i18n="scTogglePlay"></li>
-				<li data-i18n="scChangeVolume"></li>
+				<li><b>+ / -</b> <span data-l10n="scZoom"></span></li>
+				<li data-l10n="scFloatMenu"></li>
+				<li data-l10n="scHorizontalScroll"></li>
+				<li data-l10n="scDragndrop"></li>
+				<li data-l10n="scReset"></li>
+				<li data-l10n="scFreeZoom"></li>
+				<li data-l10n="scTogglePlay"></li>
+				<li data-l10n="scChangeVolume"></li>
 				<li>
 					<input id="sc-flip-horizontal" name="key_flipH">
-					<label for="sc-flip-horizontal" data-i18n="scFlipHorizontal"></label>
+					<label for="sc-flip-horizontal" data-l10n="scFlipHorizontal"></label>
 				</li>
 				<li>
 					<input id="sc-flip-vertical" name="key_flipV">
-					<label for="sc-flip-vertical" data-i18n="scFlipVertical"></label>
+					<label for="sc-flip-vertical" data-l10n="scFlipVertical"></label>
 				</li>
 				<li>
 					<input id="sc-rotate-left" name="key_rotL">
-					<label for="sc-rotate-left" data-i18n="scRotateLeft"></label>
+					<label for="sc-rotate-left" data-l10n="scRotateLeft"></label>
 				</li>
 				<li>
 					<input id="sc-rotate-right" name="key_rotR">
-					<label for="sc-rotate-right" data-i18n="scRotateRight"></label>
+					<label for="sc-rotate-right" data-l10n="scRotateRight"></label>
 				</li>
 				<li>
 					<input id="sc-mode-natural" name="key_mOrig">
-					<label for="sc-mode-natural" data-i18n="scModeNatural"></label>
+					<label for="sc-mode-natural" data-l10n="scModeNatural"></label>
 				</li>
 				<li>
 					<input id="sc-mode-contain" name="key_mFit">
-					<label for="sc-mode-contain" data-i18n="scModeContain"></label>
+					<label for="sc-mode-contain" data-l10n="scModeContain"></label>
 				</li>
 				<li>
 					<input id="sc-fit-to-width" name="key_mFitW">
-					<label for="sc-fit-to-width" data-i18n="scFitToWidth"></label>
+					<label for="sc-fit-to-width" data-l10n="scFitToWidth"></label>
 				</li>
 				<li>
 					<input id="sc-fit-to-height" name="key_mFitH">
-					<label for="sc-fit-to-height" data-i18n="scFitToHeight"></label>
+					<label for="sc-fit-to-height" data-l10n="scFitToHeight"></label>
 				</li>
 				<li>
 					<input id="sc-cycle-modes" name="key_cycle">
-					<label for="sc-cycle-modes" data-i18n="scCycleModes"></label>
+					<label for="sc-cycle-modes" data-l10n="scCycleModes"></label>
 				</li>
 				<li>
 					<input id="sc-img-bg" name="key_imgBg">
-					<label for="sc-img-bg" data-i18n="scImgBg"></label>
+					<label for="sc-img-bg" data-l10n="scImgBg"></label>
 				</li>
 				<li>
 					<input id="sc-pixelate" name="key_pixelate">
-					<label for="sc-pixelate" data-i18n="scPixelate"></label>
+					<label for="sc-pixelate" data-l10n="scPixelate"></label>
 				</li>
 				<li>
 					<input id="sc-wheel-zoom" name="key_wheelZoom">
-					<label for="sc-wheel-zoom" data-i18n="scWheelZoom"></label>
+					<label for="sc-wheel-zoom" data-l10n="scWheelZoom"></label>
 				</li>
 				<li>
 					<div class="prow">
-						<label for="opener" data-i18n="opener"></label>
+						<label for="opener" data-l10n="opener"></label>
 						<span>
 							<select id="opener" name="opener" class="number">
-								<option value="0" data-i18n="disabled" selected></option>
-								<option value="1" data-i18n="openerRightLong"></option>
-								<option value="2" data-i18n="openerCtrlAltClick"></option>
-								<option value="3" data-i18n="openerBoth"></option>
+								<option value="0" data-l10n="disabled" selected></option>
+								<option value="1" data-l10n="openerRightLong"></option>
+								<option value="2" data-l10n="openerCtrlAltClick"></option>
+								<option value="3" data-l10n="openerBoth"></option>
 							</select>
 						</span>
 					</div>
@@ -231,7 +231,7 @@
 		</section>
 
 		<section id="info-sec">
-			<h3><a href="https://github.com/Deathamns/Viewhance#contribution" data-i18n="infoTranslations"></a></h3>
+			<h3><a href="https://github.com/Deathamns/Viewhance#contribution" data-l10n="infoTranslations"></a></h3>
 			<div id="locales-table"></div>
 
 			<h3>Icons</h3>

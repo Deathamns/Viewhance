@@ -183,7 +183,7 @@ nav > .active {
 	border-radius: 6px;
 	padding: 10px;
 	padding-left: 40px;
-	background-color: rgba(245, 245, 255, .9);
+	background-color: #fff;
 	background-image: linear-gradient(to bottom, #fff, rgba(245, 245, 255, 0));
 	color: #000;
 }

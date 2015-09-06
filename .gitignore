@@ -1,27 +1,7 @@
 *.pem
 *.bak
-*.safariextension
 
+secret/
 /build/
 /data/
-/tools/
 /TODO
-
-/src/*locale*
-
-# oex
-/src/config.xml
-
-# crx
-/src/manifest.json
-
-# xpi
-/src/install.rdf
-/src/chrome.manifest
-
-# safariextz
-/src/Info.plist
-/src/Settings.plist
-
-# mxaddon
-/src/def.json
