@@ -94,7 +94,7 @@ if ( location.protocol === 'safari-extension:' ) {
 
 if ( !window.requestAnimationFrame ) {
 	window.requestAnimationFrame = function(cb) {
-		return window.setTimeout(cb, 1000 / 60);
+		return window.setTimeout(cb, 0xf);
 	};
 }
 

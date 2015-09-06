@@ -782,12 +782,6 @@ init = function() {
 	};
 
 	var afterCalcCallback = function() {
-		// Gecko and WebKit/Blink render scrollbars for a split of a second,
-		// even if the image fits into the view-port
-		winH = doc.compatMode[0] === 'B' ? doc.body : root;
-		winW = winH.clientWidth;
-		winH = winH.clientHeight;
-
 		var m = media;
 
 		m.calcFit();
@@ -821,10 +815,7 @@ init = function() {
 			return;
 		}
 
-		winH = doc.compatMode[0] === 'B' ? doc.body : root;
-		winW = winH.clientWidth;
-		winH = winH.clientHeight;
-
+		media.calcFit();
 		media.setPos();
 		setTimeout(afterCalcCallback, 0xf);
 	};
@@ -872,6 +863,10 @@ init = function() {
 	};
 
 	media.calcFit = function() {
+		winH = doc.compatMode[0] === 'B' ? doc.body : root;
+		winW = winH.clientWidth;
+		winH = winH.clientHeight;
+
 		var box = this.box || this.getBoundingClientRect();
 
 		noFit = {
@@ -1728,11 +1723,11 @@ init = function() {
 
 	if ( cfg.minUpscale ) {
 		if ( media.naturalWidth >= winW * cfg.minUpscale / 100 ) {
-			progress[0] = 1;
+			progress[0] = true;
 		}
 
 		if ( media.naturalHeight >= winH * cfg.minUpscale / 100 ) {
-			progress[1] = 1;
+			progress[1] = true;
 		}
 	}
 
