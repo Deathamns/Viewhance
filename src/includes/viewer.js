@@ -1653,7 +1653,8 @@ init = function() {
 
 				if ( !media.bgList ) {
 					media.bgList = {};
-					bgValue = window.getComputedStyle(media).background;
+					bgValue = window.getComputedStyle(media);
+					bgValue = bgValue.background || bgValue.backgroundColor;
 					media.bgList[bgValue] = true;
 					media.bgList['rgb(0, 0, 0)'] = true;
 					media.bgList['rgb(255, 255, 255)'] = true;
