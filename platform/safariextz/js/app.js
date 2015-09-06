@@ -6,13 +6,13 @@ vAPI.safari = true;
 
 vAPI.browser = {
 	irPixelated: '-webkit-crisp-edges',
-	transform: 'webkitTransform' in document.documentElement
+	transform: 'webkitTransform' in document.documentElement.style
 		? 'webkitTransform'
 		: 'transform',
-	transitionCSS: 'webkitTransition' in document.documentElement
+	transitionCSS: 'webkitTransition' in document.documentElement.style
 		? '-webkit-transition'
 		: 'transition',
-	transitionend: 'webkitTransition' in document.documentElement
+	transitionend: 'webkitTransition' in document.documentElement.style
 		? 'webkitTransitionEnd'
 		: 'transitionend',
 	wheel: 'onwheel' in document.documentElement ? 'wheel' : 'mousewheel',

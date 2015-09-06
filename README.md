@@ -50,7 +50,7 @@ The same effect is achieved by running `sh build.sh meta [platform(s)]` command.
 ## Development ##
 For testing you can build (described above) the extension for a selected platform, and install it from the `build/_platform_` directory for your browser.
 
-Some browsers (on some platforms) support reading the files through symbolic links, and for them there is a `useln` argument for the `build.sh` script to create symbolic links instead of copying the common files. `useln` is ignored when `pack` is used.
+Some browsers (on some platforms) support reading the files through symbolic links, and for them there is a `useln` argument for the `build.sh` script to create symbolic links instead of copying the project files. `useln` is ignored when `pack` is used.
 
 Alternatively, the extension can be built into a packaged file, which can be installed as well.
 
