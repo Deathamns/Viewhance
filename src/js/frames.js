@@ -518,7 +518,8 @@ xhr.addEventListener('readystatechange', function() {
 	var generateImageSRC, wrap, speed, currentFrame;
 	var canvas = document.createElement('canvas');
 	var ctx = canvas.getContext('2d');
-	var img = new Image;
+	// "new Image" doesn't work in Maxthon
+	var img = document.createElement('img');
 
 	canvas.width = animation.width;
 	canvas.height = animation.height;
@@ -663,7 +664,7 @@ xhr.addEventListener('readystatechange', function() {
 
 			if ( e.ctrlKey ) {
 				if ( e.target.toDataURL && speed.value < 1 ) {
-					var canvasImg = new Image;
+					var canvasImg = document.createElement('img');
 					canvasImg.src = e.target.toDataURL();
 					this.replaceChild(canvasImg, e.target);
 					wrap.step(null);
