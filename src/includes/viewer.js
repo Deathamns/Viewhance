@@ -812,7 +812,7 @@ init = function() {
 			m.style.cursor = 'default';
 		}
 
-		if ( !cfg.mediaInfo || !(m.naturalWidth && m.naturalHeight) ) {
+		if ( !cfg.mediaInfo || !(mediaWidth && mediaHeight) ) {
 			return;
 		}
 
@@ -847,7 +847,7 @@ init = function() {
 		this.mode = mode;
 		this.className = 'm-' + mode;
 
-		if ( this.naturalWidth ) {
+		if ( mediaWidth ) {
 			afterCalc();
 		}
 	};

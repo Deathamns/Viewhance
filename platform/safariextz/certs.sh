@@ -5,7 +5,6 @@
 # Makes it runnable from any directory
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-
 if [[ -f "secret/key.pem" ]]; then
 	echo "key.pem file already exists!"
 	exit
