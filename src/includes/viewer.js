@@ -581,7 +581,7 @@ init = function() {
 
 			var p = e.button === 2
 				|| e.type === vAPI.browser.wheel
-					&& (-e.wheelDelta || e.deltaY) > 0;
+					&& (e.deltaY || -e.wheelDelta) > 0;
 
 			if ( cmd === 'cycle' ) {
 				media.cycle(!p);
@@ -591,7 +591,7 @@ init = function() {
 				media.rotate(!p, e.ctrlKey);
 			} else if ( cmd === 'zoom' ) {
 				pdsp(e);
-				zoomToCenter({wheelDelta: p ? -1 : 1});
+				zoomToCenter({deltaY: p ? 1 : -1});
 			} else if ( cmd === 'reset' ) {
 				if ( e.button === 0 ) {
 					media.reset();
@@ -711,7 +711,7 @@ init = function() {
 			}
 
 			if ( t.type === 'range' ) {
-				var delta = (-e.wheelDelta || e.deltaY) > 0 ? -1 : 1;
+				var delta = (e.deltaY || -e.wheelDelta) > 0 ? -1 : 1;
 				t.value = Math.max(
 					t.getAttribute('min'),
 					Math.min(
@@ -985,7 +985,7 @@ init = function() {
 		var w = media.offsetWidth;
 		var h = media.offsetHeight;
 
-		if ( (-e.wheelDelta || e.deltaY) > 0 ) {
+		if ( (e.deltaY || -e.wheelDelta) > 0 ) {
 			media.resize(-1, Math.max(1, w * 0.75) + 'px');
 		} else {
 			var width = w * (4 / 3);
@@ -1006,10 +1006,9 @@ init = function() {
 	};
 
 	var zoomToCenter = function(e) {
-		pdsp(e);
 		wheelZoom({
 			keypress: true,
-			wheelDelta: e.wheelDelta,
+			deltaY: e.deltaY || -e.wheelDelta,
 			clientX: winW / 2,
 			clientY: winH / 2,
 			offsetX: win.pageXOffset + media.offsetLeft + winW / 2,
@@ -1039,14 +1038,15 @@ init = function() {
 		stopScroll(); // eslint-disable-line
 
 		var x = 0;
-		var y = ((-e.wheelDelta || e.deltaY) > 0 ? winH : -winH) / 5;
+		var y = ((e.deltaX || e.deltaY || -e.wheelDelta) > 0 ? winH : -winH) / 5;
 
 		if ( media.clientWidth <= winW && media.clientHeight > winH ) {
 			if ( !cfg.hiddenScrollbars ) {
 				return;
 			}
 		} else if ( media.clientHeight <= winH && media.clientWidth > winW
-			|| e.clientX < winW / 2 && e.clientY > winH - 100 ) {
+			|| e.clientX < winW / 2 && e.clientY > winH - 100
+			|| e.deltaX && !e.deltaY ) {
 			x = (y < 0 ? -winW : winW) / 5;
 			y = 0;
 		} else if ( !cfg.hiddenScrollbars ) {
@@ -1554,8 +1554,8 @@ init = function() {
 		}
 
 		if ( key === '+' || key === '-' ) {
-			e.wheelDelta = key === '+' ? 1 : -1;
-			zoomToCenter(e);
+			pdsp(e);
+			zoomToCenter({deltaY: key === '+' ? 1 : -1});
 			return;
 		}
 
