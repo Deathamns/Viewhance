@@ -689,36 +689,6 @@ xhr.addEventListener('readystatechange', function() {
 			this.classList.toggle('showall');
 		};
 
-		wrap.addEventListener('mouseup', onWrapMouseUp);
-		wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-		currentFrame.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-
-		currentFrame.addEventListener('input', function() {
-			if ( parseFloat(speed.value, 10) !== 0 ) {
-				wrap.stop();
-			}
-
-			if ( wrap.classList.contains('showall') ) {
-				onWrapMouseUp.call(wrap, {button: 0});
-			}
-
-			wrap.step(null);
-		});
-
-		speed.addEventListener('input', function() {
-			wrap.speedValue = parseFloat(speed.value) || 0;
-
-			if ( wrap.speedValue === 0 ) {
-				wrap.stop();
-				wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-				return;
-			}
-
-			wrap.classList.remove('showall');
-			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-			wrap.animate();
-		});
-
 		wrap.wheeler = function(e) {
 			wrap.step((e.deltaY || -e.wheelDelta) > 0);
 			wrap.sotp();
@@ -771,6 +741,36 @@ xhr.addEventListener('readystatechange', function() {
 			currentFrame.nextElementSibling.value = currentFrame.value
 				+ ' / ' + frames.length;
 		};
+
+		wrap.addEventListener('mouseup', onWrapMouseUp);
+		wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+		currentFrame.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+
+		currentFrame.addEventListener('input', function() {
+			if ( parseFloat(speed.value, 10) !== 0 ) {
+				wrap.stop();
+			}
+
+			if ( wrap.classList.contains('showall') ) {
+				onWrapMouseUp.call(wrap, {button: 0});
+			}
+
+			wrap.step(null);
+		});
+
+		speed.addEventListener('input', function() {
+			wrap.speedValue = parseFloat(speed.value) || 0;
+
+			if ( wrap.speedValue === 0 ) {
+				wrap.stop();
+				wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+				return;
+			}
+
+			wrap.classList.remove('showall');
+			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+			wrap.animate();
+		});
 	};
 
 	img.addEventListener('load', onImgLoad);
