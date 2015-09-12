@@ -698,7 +698,7 @@ xhr.addEventListener('readystatechange', function() {
 			}
 
 			if ( wrap.classList.contains('showall') ) {
-				onWrapMouseUp({button: 0});
+				onWrapMouseUp.call(wrap, {button: 0});
 			}
 
 			wrap.step(null);
