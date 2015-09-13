@@ -104,6 +104,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'cursor: default;',
 	'}',
 	'#media {',
+		'display: block',
 		'box-sizing: border-box;',
 		'position: absolute;',
 		'margin: 0;',
@@ -325,7 +326,7 @@ init = function() {
 		}
 	});
 
-	media.style.display = 'block';
+	media.style.display = '';
 
 	if ( vAPI.mediaType === 'audio' ) {
 		return;
@@ -1967,7 +1968,7 @@ setTimeout(function() {
 			? !media.naturalWidth && doc.images[0].naturalWidth
 			: !media.videoWidth && doc.body.querySelector('video').videoWidth) ) {
 		// TODO: audio/video
-		doc.images[0].style.display = 'block';
+		doc.images[0].style.display = '';
 		clearInterval(progress);
 		return;
 	}
@@ -1978,7 +1979,7 @@ setTimeout(function() {
 	header.textContent = media.alt;
 	header.addEventListener('click', function() {
 		doc.body.removeChild(this);
-		media.style.display = 'block';
+		media.style.display = '';
 	});
 }, 1000);
 
