@@ -103,7 +103,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		lastMouseDownY = e.clientY;
 	}, true);
 
-	window.addEventListener('contextmenu', function(e) {
+	document.addEventListener('contextmenu', function(e) {
 		if ( e.button !== 2 || !lastMouseDownTime ) {
 			return;
 		}
@@ -125,7 +125,8 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		var el = 30;
 		var rgxIgnore = /^(html|body)$/;
 		// not exactly what we want
-		var xpath = document.evaluate([
+		var xpath = document.evaluate(
+			[
 				'.',
 				'./ancestor::*[position()<' + el + ']',
 				'./preceding::*[position()<' + el + '][not(head) and not(ancestor::head)]',
