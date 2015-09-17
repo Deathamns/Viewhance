@@ -1556,7 +1556,7 @@ init = function() {
 
 		if ( key === '+' || key === '-' ) {
 			pdsp(e);
-			zoomToCenter({deltaY: key === '+' ? 1 : -1});
+			zoomToCenter({deltaY: key === '+' ? -1 : 1});
 			return;
 		}
 
