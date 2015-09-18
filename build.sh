@@ -3,9 +3,6 @@
 # Makes it runnable from any directory
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-# Windows under cygwin needed this
-alias cp="cp --preserve=mode"
-
 # Create build directory if doesn't exist
 mkdir -p build
 
@@ -35,7 +32,7 @@ on_pack() {
 # Copy common code
 setup_base() {
 	mkdir -p "$1"
-	/usr/bin/find "$1" -mmin +0.05 -delete
+	/usr/bin/find "$1"* -mmin +0.1 -delete
 	cp -r ${useln:-} "$( realpath src )"/* "$1"
 }
 
