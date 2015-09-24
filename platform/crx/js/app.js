@@ -105,7 +105,14 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}
 
-		if ( media.src !== location.href && media.currentSrc !== location.href ) {
+		var source = media.querySelector('source');
+
+		// Latest Chromium versions use <source>
+		if ( source ) {
+			if ( source.src !== location.href ) {
+				return this._mediaType;
+			}
+		} else if ( media.src !== location.href && media.currentSrc !== location.href ) {
 			return this._mediaType;
 		}
 
