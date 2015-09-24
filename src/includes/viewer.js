@@ -1736,7 +1736,7 @@ init = function() {
 	media.calcFit();
 	progress = [];
 
-	if ( cfg.minUpscale ) {
+	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
 		if ( mediaWidth >= winW * cfg.minUpscale / 100 ) {
 			progress[0] = true;
 		}
