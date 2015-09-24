@@ -63,7 +63,8 @@ var freeZoom = null;
 var dragSlide = [];
 var borderSize = 0;
 var MAXSIZE = 0x7fff;
-var root, initParams, panning, winW, winH, sX, sY;
+var initPingsLeft = 600;
+var root, panning, winW, winH, sX, sY;
 
 ['class', 'style', 'name'].forEach(function(attr) {
 	doc.documentElement.removeAttribute(attr);
@@ -301,8 +302,8 @@ doc.documentElement.insertBefore(head, doc.body);
 
 init = function() {
 	if ( !(media.naturalWidth || media.width || media.videoWidth
-		|| vAPI.mediaType === 'audio' || initParams === null) ) {
-		if ( initParams && ++initParams.loop >= initParams.maxLoop && progress ) {
+		|| initPingsLeft > 0 || vAPI.mediaType === 'audio') ) {
+		if ( progress && --initPingsLeft > 0 ) {
 			clearInterval(progress);
 		}
 
@@ -1948,13 +1949,12 @@ if ( win.location.protocol === 'data:' ) {
 }
 
 if ( media.naturalWidth || media.videoWidth || vAPI.mediaType === 'audio' ) {
-	initParams = null;
+	initPingsLeft = 0;
 	init();
 	return;
 }
 
-initParams = {loop: 0, wait: 150, maxLoop: 900};
-progress = setInterval(init, initParams.wait);
+progress = setInterval(init, 100);
 
 setTimeout(function() {
 	if ( root.classList.contains(vAPI.mediaType) ) {
