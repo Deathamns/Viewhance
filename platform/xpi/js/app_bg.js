@@ -129,7 +129,73 @@ vAPI.messaging.globalMessageManager.loadFrameScript(
 	true
 );
 
+// It's easier if we disable browser settings,
+// instead of handling the damage done by the default behavior
+vAPI._browserPrefs = {
+	get prefBranch() {
+		return Components
+			.classes['@mozilla.org/preferences-service;1']
+			.getService(Components.interfaces.nsIPrefService)
+			.getBranch('browser.');
+	},
+	targetPrefs: [
+		'enable_automatic_image_resizing',
+		'enable_click_image_resizing'
+	],
+
+	suppress: function() {
+		delete this.suppress;
+
+		var prefBranch = this.prefBranch;
+		var newTargetPrefs = [];
+
+		for ( var i = 0; i < this.targetPrefs.length; ++i ) {
+			var value;
+			var prefName = this.targetPrefs[i];
+
+			try {
+				value = prefBranch.getBoolPref(prefName);
+			} catch ( ex ) {
+				continue;
+			}
+
+			if ( value === false ) {
+				continue;
+			}
+
+			newTargetPrefs.push(prefName);
+			prefBranch.setBoolPref(prefName, false);
+		}
+
+		if ( newTargetPrefs.length ) {
+			this.targetPrefs = newTargetPrefs;
+			return;
+		}
+
+		// If there won't be anything to restore...
+		vAPI._browserPrefs = {
+			restore: function() {}
+		};
+	},
+
+	restore: function() {
+		var prefName;
+		var prefBranch = this.prefBranch;
+
+		while ( prefName = this.targetPrefs.pop() ) {
+			prefBranch.setBoolPref(prefName, true);
+		}
+	}
+};
+
+vAPI._browserPrefs.suppress();
+
+// This function will run even when the browser is closing
 window.addEventListener('unload', function() {
+	vAPI._browserPrefs.restore();
+
+	// TODO: return here when the browser is exiting
+
 	var messaging = vAPI.messaging;
 	var gmm = messaging.globalMessageManager;
 	gmm.removeDelayedFrameScript(messaging.frameScript);
