@@ -1,11 +1,11 @@
-/* global APP_STARTUP, APP_SHUTDOWN, ADDON_UNINSTALL */
+/* global APP_SHUTDOWN, ADDON_UNINSTALL */
 
 'use strict';
 
 let bgProcess;
 const addonName = 'Viewhance';
 
-this.startup = function(data, reason) {
+this.startup = function(data) {
 	let appShell = Components
 		.classes['@mozilla.org/appshell/appShellService;1']
 		.getService(Components.interfaces.nsIAppShellService);
@@ -16,20 +16,20 @@ this.startup = function(data, reason) {
 		}
 
 		let hDoc = appShell.hiddenDOMWindow.document;
-
+		let bgURI = 'chrome://' + addonName + '/content/background.html';
 		bgProcess = hDoc.documentElement.appendChild(
 			hDoc.createElementNS('http://www.w3.org/1999/xhtml', 'iframe')
 		);
-
-		let bgURI = 'chrome://' + addonName + '/content/background.html';
-
 		// Sending addon data synchronously to the background page
 		bgProcess.src = bgURI + '#' + [addonName, data.version];
 	};
 
-	if ( reason !== APP_STARTUP ) {
+	try {
+		void appShell.hiddenDOMWindow.document;
 		onReady();
 		return;
+	} catch ( ex ) {
+		//
 	}
 
 	let ww = Components
@@ -55,11 +55,9 @@ this.startup = function(data, reason) {
 };
 
 this.shutdown = function(data, reason) {
-	if ( reason === APP_SHUTDOWN ) {
-		return;
+	if ( reason !== APP_SHUTDOWN ) {
+		bgProcess.parentNode.removeChild(bgProcess);
 	}
-
-	bgProcess.parentNode.removeChild(bgProcess);
 };
 
 this.install = function() {

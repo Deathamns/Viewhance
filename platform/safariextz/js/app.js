@@ -20,11 +20,12 @@ vAPI.browser = {
 };
 
 vAPI.messaging = {
-	listenerId: Math.random().toString(36).slice(2),
+	_listenerId: Math.random().toString(36).slice(2),
+	listener: null,
 
 	listen: function(listener, once) {
 		if ( this.listener ) {
-			safari.self.removeEventListener('message', this.listener, false);
+			safari.self.removeEventListener('message', this.listener);
 		}
 
 		if ( typeof listener !== 'function' ) {
@@ -33,7 +34,7 @@ vAPI.messaging = {
 		}
 
 		this.listener = function(response) {
-			if ( response.name !== vAPI.messaging.listenerId ) {
+			if ( response.name !== vAPI.messaging._listenerId ) {
 				return;
 			}
 
@@ -44,7 +45,7 @@ vAPI.messaging = {
 			listener(response.message);
 		};
 
-		safari.self.addEventListener('message', this.listener, false);
+		safari.self.addEventListener('message', this.listener);
 	},
 
 	send: function(message, callback) {
@@ -52,7 +53,7 @@ vAPI.messaging = {
 			this.listen(callback, true);
 		}
 
-		safari.self.tab.dispatchMessage(this.listenerId, message);
+		safari.self.tab.dispatchMessage(this._listenerId, message);
 	}
 };
 
@@ -107,7 +108,7 @@ Object.defineProperty(vAPI, 'fullScreenElement', {
 
 Object.defineProperty(vAPI, 'mediaType', {
 	get: function() {
-		if ( typeof this._mediaType !== 'undefined' ) {
+		if ( this._mediaType !== void 0 ) {
 			return this._mediaType;
 		}
 

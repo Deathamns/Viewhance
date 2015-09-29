@@ -14,6 +14,8 @@ vAPI.browser = {
 };
 
 vAPI.messaging = {
+	listener: null,
+
 	listen: function(listener) {
 		if ( this.listener ) {
 			chrome.runtime.onMessage.removeListener(this.listener);
@@ -78,7 +80,7 @@ Object.defineProperty(vAPI, 'fullScreenElement', {
 
 Object.defineProperty(vAPI, 'mediaType', {
 	get: function() {
-		if ( typeof this._mediaType !== 'undefined' ) {
+		if ( this._mediaType !== void 0 ) {
 			return this._mediaType;
 		}
 
@@ -112,15 +114,10 @@ Object.defineProperty(vAPI, 'mediaType', {
 			if ( source.src !== location.href ) {
 				return this._mediaType;
 			}
-		} else if ( media.src !== location.href && media.currentSrc !== location.href ) {
-			return this._mediaType;
-		}
-
-		if ( media.parentNode !== document.body ) {
-			document.body.replaceChild(
-				media,
-				document.body.firstElementChild
-			);
+		} else if ( media.src !== location.href ) {
+			if ( media.currentSrc !== location.href ) {
+				return this._mediaType;
+			}
 		}
 
 		return this._mediaType = media.localName;

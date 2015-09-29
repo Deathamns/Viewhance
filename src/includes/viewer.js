@@ -66,13 +66,18 @@ var MAXSIZE = 0x7fff;
 var initPingsLeft = 600;
 var root, panning, winW, winH, sX, sY;
 
-['class', 'style', 'name'].forEach(function(attr) {
-	doc.documentElement.removeAttribute(attr);
-	doc.body.removeAttribute(attr);
-	media.removeAttribute(attr);
+[doc.documentElement, doc.body, media].forEach(function(node) {
+	var i = node.attributes.length;
+
+	while ( i-- ) {
+		var attrName = node.attributes[i].name;
+
+		if ( node !== media || attrName !== 'src' ) {
+			node.removeAttribute(attrName);
+		}
+	}
 });
 
-media.style.display = 'none';
 var head = doc.querySelector('head');
 
 if ( head ) {
@@ -94,15 +99,13 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'html, body {',
 		'width: 100%;',
 		'height: 100%;',
-		'-webkit-user-select: none;',
-		'-moz-user-select: none;',
-		'-ms-user-select: none;',
-	'}',
-	'body {',
 		'margin: 0;',
 		'padding: 0;',
 		'font: 12px "Trebuchet MS", sans-serif;',
 		'cursor: default;',
+		'-webkit-user-select: none;',
+		'-moz-user-select: none;',
+		'-ms-user-select: none;',
 	'}',
 	'#media {',
 		'display: block',
@@ -136,9 +139,6 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'#media:-moz-full-screen {',
 		'background: black !important;',
 	'}',
-	'html.load-failed > body > h2 {',
-		'text-shadow: 1px 1px 15px firebrick;',
-	'}',
 	'#media.m-1 {',
 		'width: auto;',
 		'height: auto;',
@@ -152,14 +152,6 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'#media.m-3 {',
 		'height: 100%;',
 		'width: auto;',
-	'}',
-	'h2 {',
-		'margin: 0;',
-		'padding-top: 15%;',
-		'text-align: center;',
-		'text-shadow: 1px 1px 15px #000;',
-		'font: 700 30px "Trebuchet MS", sans-serif;',
-		'color: #fff;',
 	'}',
 	'a {',
 		'text-decoration: none;',
@@ -301,9 +293,8 @@ head.appendChild(doc.createElement('style')).textContent = [
 doc.documentElement.insertBefore(head, doc.body);
 
 init = function() {
-	if ( !(media.naturalWidth || media.width || media.videoWidth
-		|| initPingsLeft > 0 || vAPI.mediaType === 'audio') ) {
-		if ( progress && --initPingsLeft > 0 ) {
+	if ( vAPI.mediaType === 'img' && !media.naturalWidth ) {
+		if ( progress && --initPingsLeft < 1 ) {
 			clearInterval(progress);
 		}
 
@@ -315,19 +306,18 @@ init = function() {
 		progress = null;
 	}
 
+	media.id = 'media';
 	root.classList.add(vAPI.mediaType);
 
-	if ( vAPI.mediaType === 'img' ) {
-		doc.body.replaceChild(media, doc.images[0]);
+	if ( media.parentNode !== doc.body ) {
+		doc.body.replaceChild(media, doc.body.firstElementChild);
 	}
 
-	[].forEach.call(doc.body.childNodes, function(node) {
-		if ( media !== node ) {
-			node.parentNode.removeChild(node);
-		}
-	});
-
-	media.style.display = '';
+	while ( media.previousSibling || media.nextSibling) {
+		media.parentNode.removeChild(
+			media.previousSibling || media.nextSibling
+		);
+	}
 
 	if ( vAPI.mediaType === 'audio' ) {
 		return;
@@ -351,14 +341,16 @@ init = function() {
 		mediaHeight = media.videoHeight;
 	}
 
-	head.appendChild(doc.createElement('style')).textContent =
+	doc.head.querySelector('style').sheet.insertRule(
 		'#media {max-width:' + Math.min(
 			MAXSIZE,
 			Math.floor(mediaWidth * MAXSIZE / mediaHeight)
 		) + 'px; max-height:' + Math.min(
 			MAXSIZE,
 			Math.floor(mediaHeight * MAXSIZE / mediaWidth)
-		) + 'px}';
+		) + 'px}',
+		0
+	);
 
 	if ( !cfg.mediaInfo ) {
 		cfg.mediaInfo = false;
@@ -367,7 +359,7 @@ init = function() {
 	cfg.hiddenScrollbars = win.getComputedStyle(root).overflow === 'hidden'
 		|| win.getComputedStyle(doc.body).overflow === 'hidden';
 
-	var menu = doc.body.appendChild(doc.createElement('div'));
+	var menu = root.appendChild(doc.createElement('div'));
 	menu.id = 'menu';
 
 	if ( win.getComputedStyle(menu).display === 'none' ) {
@@ -559,7 +551,7 @@ init = function() {
 			}
 
 			pdsp(e, !!t.textContent);
-		}, false);
+		});
 
 		// Load favicons only when the menu item is hovered the first time
 		if ( /^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length ) {
@@ -586,23 +578,23 @@ init = function() {
 					&& (e.deltaY || -e.wheelDelta) > 0;
 
 			if ( cmd === 'cycle' ) {
-				media.cycle(!p);
+				cycleModes(!p);
 			} else if ( cmd === 'flip' ) {
-				media.flip(media, p);
+				flipMedia(media, p);
 			} else if ( cmd === 'rotate' ) {
-				media.rotate(!p, e.ctrlKey);
+				rotateMedia(!p, e.ctrlKey);
 			} else if ( cmd === 'zoom' ) {
 				pdsp(e);
 				zoomToCenter({deltaY: p ? 1 : -1});
 			} else if ( cmd === 'reset' ) {
 				if ( e.button === 0 ) {
-					media.reset();
+					resetMedia();
 				}
 			} else if ( cmd === 'filters' ) {
 				if ( e.button === 2 ) {
 					media.style.filter = media.style.webkitFilter = '';
 					media.filters = {};
-					doc.body.querySelector('#menu li.filters > form').reset();
+					doc.querySelector('#menu li.filters > form').reset();
 				}
 			} else if ( cmd === 'frames' ) {
 				var message = {cmd: 'loadFile', path: 'js/frames.js'};
@@ -616,10 +608,17 @@ init = function() {
 							return;
 						}
 
-						if ( vAPI.maxthon ) {
-							win.addEventListener('mousedown', function(ev) {
-								pdsp(ev, false);
-							}, true);
+						doc.body.removeEventListener(
+							vAPI.browser.wheel,
+							onWheel
+						);
+						doc.body.removeEventListener(
+							vAPI.browser.wheel,
+							wheelZoom
+						);
+
+						if ( menu ) {
+							menu.parentNode.removeChild(menu);
 						}
 					};
 
@@ -676,7 +675,7 @@ init = function() {
 				var message = {cmd: 'loadFile', path: 'css/menu_icons.b64png'};
 
 				vAPI.messaging.send(message, function(img) {
-					var sheet = document.head.querySelector('style').sheet;
+					var sheet = doc.head.querySelector('style').sheet;
 					sheet.insertRule(
 						'li[data-cmd] > div { background-image: url(' + img + '); }',
 						sheet.cssRules.length
@@ -692,7 +691,7 @@ init = function() {
 				menu.style.opacity = '1';
 			}, 50);
 
-			doc.removeEventListener('mousemove', menuTrigger, false);
+			doc.removeEventListener('mousemove', menuTrigger);
 		};
 
 		if ( win.Node.prototype && !win.Node.prototype.contains ) {
@@ -766,7 +765,7 @@ init = function() {
 				return;
 			}
 
-			doc.addEventListener('mousemove', menuTrigger, false);
+			doc.addEventListener('mousemove', menuTrigger);
 			menu.mtimer = setTimeout(function() {
 				menu.style.left = '-' + menu.offsetWidth + 'px';
 				menu.style.opacity = '0';
@@ -776,7 +775,7 @@ init = function() {
 
 		// Safari showed the menu even if the cursor wasn't at the edge
 		setTimeout(function() {
-			doc.addEventListener('mousemove', menuTrigger, false);
+			doc.addEventListener('mousemove', menuTrigger);
 		}, 500);
 	}
 
@@ -798,8 +797,7 @@ init = function() {
 
 	var afterCalcCallback = function() {
 		var m = media;
-
-		m.calcFit();
+		calcFit();
 
 		// Change curosr according to sizing
 		if ( m.clientWidth > winW || m.clientHeight > winH ) {
@@ -825,47 +823,47 @@ init = function() {
 	};
 
 	var afterCalc = function() {
-		if ( !media.calcFit ) {
+		if ( !calcFit ) {
 			return;
 		}
 
-		media.calcFit();
-		media.setPos();
+		calcFit();
+		setMediaPos();
 		setTimeout(afterCalcCallback, 0xf);
 	};
 
-	media.resize = function(m, w) {
+	var resizeMedia = function(m, w) {
 		var mode = m === void 0 ? 1 : m;
 
 		if ( mode === -1 ) {
 			if ( w ) {
-				this.style.width = w;
+				media.style.width = w;
 			}
-		} else if ( this.mode === -1 ) {
-			this.style.width = '';
-			this.style.height = '';
+		} else if ( media.mode === -1 ) {
+			media.style.width = '';
+			media.style.height = '';
 		}
 
-		this.mode = mode;
-		this.className = 'm-' + mode;
+		media.mode = mode;
+		media.className = 'm-' + mode;
 
 		if ( mediaWidth ) {
 			afterCalc();
 		}
 	};
 
-	media.setPos = function() {
-		var s = this.style;
+	var setMediaPos = function() {
+		var s = media.style;
 
 		if ( cfg.center ) {
-			s.top = Math.max(0, (winH - this.offsetHeight) / 2) + 'px';
-			s.left = Math.max(0, (winW - this.offsetWidth) / 2) + 'px';
+			s.top = Math.max(0, (winH - media.offsetHeight) / 2) + 'px';
+			s.left = Math.max(0, (winW - media.offsetWidth) / 2) + 'px';
 		} else {
 			s.top = s.left = '0';
 		}
 
-		var box = this.getBoundingClientRect();
-		this.box = box;
+		var box = media.getBoundingClientRect();
+		media.box = box;
 
 		if ( box.left < 0 ) {
 			s.left = parseInt(s.left, 10) - box.left - win.pageXOffset + 'px';
@@ -876,12 +874,12 @@ init = function() {
 		}
 	};
 
-	media.calcFit = function() {
+	var calcFit = function() {
 		winH = doc.compatMode[0] === 'B' ? doc.body : root;
 		winW = winH.clientWidth;
 		winH = winH.clientHeight;
 
-		var box = this.box || this.getBoundingClientRect();
+		var box = media.box || media.getBoundingClientRect();
 
 		noFit = {
 			cur: box.width <= winW && box.height <= winH,
@@ -889,8 +887,8 @@ init = function() {
 		};
 	};
 
-	media.cycle = function(back) {
-		var mode = (this.mode === 1 ? 0 : this.mode) - (back ? 1 : -1);
+	var cycleModes = function(back) {
+		var mode = (media.mode === 1 ? 0 : media.mode) - (back ? 1 : -1);
 
 		if ( mode === 1 ) {
 			mode -= back ? 1 : -1;
@@ -900,12 +898,12 @@ init = function() {
 			mode = 0;
 		}
 
-		this.resize(mode);
+		resizeMedia(mode);
 	};
 
-	media.reset = function() {
+	var resetMedia = function() {
 		if ( freeZoom ) {
-			doc.removeEventListener('mousemove', drawMask, false);
+			doc.removeEventListener('mousemove', drawMask);
 			doc.body.removeChild(media.mask);
 
 			freeZoom = null;
@@ -917,8 +915,8 @@ init = function() {
 			return;
 		}
 
-		var filters = doc.body.querySelector('#menu li.filters > form');
-		var mediaStyle = this.style;
+		var filters = doc.querySelector('#menu li.filters > form');
+		var mediaStyle = media.style;
 
 		if ( filters ) {
 			mediaStyle.filter = mediaStyle.webkitFilter = '';
@@ -926,58 +924,58 @@ init = function() {
 			filters.reset();
 		}
 
-		delete this.curdeg;
-		delete this.scale;
-		delete this.bgList;
-		delete this.bgListIndex;
+		delete media.curdeg;
+		delete media.scale;
+		delete media.bgList;
+		delete media.bgListIndex;
 		mediaStyle[vAPI.browser.transform] = '';
 		mediaStyle.background = '';
 		mediaStyle.width = '';
 		mediaStyle.height = '';
-		this.resize(0);
+		resizeMedia(0);
 	};
 
-	media.flip = function(el, horizontal) {
-		if ( !this.scale ) {
-			this.scale = {h: 1, v: 1};
+	var flipMedia = function(el, horizontal) {
+		if ( !media.scale ) {
+			media.scale = {h: 1, v: 1};
 		}
 
-		this.scale[horizontal ? 'h' : 'v'] *= -1;
+		media.scale[horizontal ? 'h' : 'v'] *= -1;
 
-		var transformCss = this.scale.h !== 1 || this.scale.v !== 1
-			? 'scale(' + this.scale.h + ',' + this.scale.v + ')'
+		var transformCss = media.scale.h !== 1 || media.scale.v !== 1
+			? 'scale(' + media.scale.h + ',' + media.scale.v + ')'
 			: '';
 
-		if ( this.curdeg ) {
-			transformCss += ' rotate(' + this.curdeg + 'deg)';
+		if ( media.curdeg ) {
+			transformCss += ' rotate(' + media.curdeg + 'deg)';
 		}
 
-		this.style[vAPI.browser.transform] = transformCss;
+		media.style[vAPI.browser.transform] = transformCss;
 	};
 
-	media.rotate = function(deg, fine) {
+	var rotateMedia = function(deg, fine) {
 		var rot;
 
-		if ( !this.curdeg ) {
-			this.curdeg = 0;
+		if ( !media.curdeg ) {
+			media.curdeg = 0;
 		}
 
 		if ( deg ) {
-			this.curdeg += fine ? 10 : 90;
+			media.curdeg += fine ? 10 : 90;
 		} else {
-			this.curdeg -= fine ? 10 : 90;
+			media.curdeg -= fine ? 10 : 90;
 		}
 
-		win.status = this.curdeg + '°';
+		win.status = media.curdeg + '°';
 
-		rot = 'rotate(' + this.curdeg + 'deg)';
+		rot = 'rotate(' + media.curdeg + 'deg)';
 
-		if ( this.scale ) {
-			rot += ' scale(' + this.scale.h + ', ' + this.scale.v + ')';
+		if ( media.scale ) {
+			rot += ' scale(' + media.scale.h + ', ' + media.scale.v + ')';
 		}
 
-		this.style[vAPI.browser.transform] = rot;
-		this.setPos();
+		media.style[vAPI.browser.transform] = rot;
+		setMediaPos();
 	};
 
 	var wheelZoom = function(e) {
@@ -988,10 +986,10 @@ init = function() {
 		var h = media.offsetHeight;
 
 		if ( (e.deltaY || -e.wheelDelta) > 0 ) {
-			media.resize(-1, Math.max(1, w * 0.75) + 'px');
+			resizeMedia(-1, Math.max(1, w * 0.75) + 'px');
 		} else {
 			var width = w * (4 / 3);
-			media.resize(-1, (width > 10 ? width : width + 3) + 'px');
+			resizeMedia(-1, (width > 10 ? width : width + 3) + 'px');
 		}
 
 		if ( !e.keypress && e.target.localName !== 'img' ) {
@@ -1028,7 +1026,7 @@ init = function() {
 
 		if ( cancelAction ) {
 			cancelAction = false;
-			e.preventDefault();
+			pdsp(e, true, false);
 		}
 	};
 
@@ -1064,12 +1062,12 @@ init = function() {
 		var zoomMenuItemStyle = menu.querySelector('li[data-cmd=zoom]').style;
 
 		if ( cfg.wheelZoom ) {
-			doc.removeEventListener(evName, onWheel, false);
-			doc.addEventListener(evName, wheelZoom, false);
+			doc.body.removeEventListener(evName, onWheel);
+			doc.body.addEventListener(evName, wheelZoom);
 			zoomMenuItemStyle.display = 'none';
 		} else {
-			doc.removeEventListener(evName, wheelZoom, false);
-			doc.addEventListener(evName, onWheel, false);
+			doc.body.removeEventListener(evName, wheelZoom);
+			doc.body.addEventListener(evName, onWheel);
 			zoomMenuItemStyle.display = '';
 		}
 
@@ -1135,41 +1133,42 @@ init = function() {
 	};
 
 	var startScroll = function() {
-		progress = setInterval(function() {
-			win.scrollBy(dragSlide[0], dragSlide[1]);
+		win.scrollBy(dragSlide[0], dragSlide[1]);
 
-			if ( dragSlide[0] ) {
-				if ( Math.abs(dragSlide[0]) < 1 ) {
-					dragSlide[0] = 0;
-				}
-
-				dragSlide[0] /= 1.11;
+		if ( dragSlide[0] ) {
+			if ( Math.abs(dragSlide[0]) < 1 ) {
+				dragSlide[0] = 0;
 			}
 
-			if ( dragSlide[1] ) {
-				if ( Math.abs(dragSlide[1]) < 1 ) {
-					dragSlide[1] = 0;
-				}
+			dragSlide[0] /= 1.11;
+		}
 
-				dragSlide[1] /= 1.11;
+		if ( dragSlide[1] ) {
+			if ( Math.abs(dragSlide[1]) < 1 ) {
+				dragSlide[1] = 0;
 			}
 
-			var atRight = root.scrollWidth - win.pageXOffset === winW;
-			var atBottom = root.scrollHeight - win.pageYOffset === winH;
+			dragSlide[1] /= 1.11;
+		}
 
-			if ( !(dragSlide[0] && dragSlide[1])
-				|| !win.pageYOffset && !win.pageXOffset
-				|| !win.pageYOffset && atRight
-				|| atBottom && !win.pageXOffset
-				|| atBottom && atRight ) {
-				stopScroll();
-			}
-		}, 25);
+		var atRight = root.scrollWidth - win.pageXOffset === winW;
+		var atBottom = root.scrollHeight - win.pageYOffset === winH;
+
+		if ( !(dragSlide[0] && dragSlide[1])
+			|| !win.pageYOffset && !win.pageXOffset
+			|| !win.pageYOffset && atRight
+			|| atBottom && !win.pageXOffset
+			|| atBottom && atRight ) {
+			stopScroll();
+			return;
+		}
+
+		progress = setTimeout(startScroll, 25);
 	};
 
 	var stopScroll = function(e) {
 		if ( e ) {
-			doc.removeEventListener(e.type, stopScroll);
+			this.removeEventListener(e.type, stopScroll);
 		}
 
 		if ( !dragSlide.length ) {
@@ -1233,12 +1232,12 @@ init = function() {
 			if ( media.mode === 2 || media.clientWidth === b.clientWidth
 				|| b.clientHeight > media.clientHeight && winW < b.clientWidth ) {
 				x = media.clientWidth;
-				media.resize(3);
+				resizeMedia(3);
 				x = lastEvent.layerX * media.clientWidth / x - winW / 2;
 				y = 0;
 			} else {
 				y = media.clientHeight;
-				media.resize(2);
+				resizeMedia(2);
 				x = 0;
 				y = lastEvent.layerY * media.clientHeight / y - winH / 2;
 			}
@@ -1265,10 +1264,8 @@ init = function() {
 		}
 
 		if ( !e.shiftKey && vAPI.mediaType === 'video' ) {
-			var topPart = Math.min(
-				this.clientHeight - 40,
-				this.clientHeight / 2
-			);
+			var topPart = this.clientHeight;
+			topPart = Math.min(topPart - 40, topPart / 2);
 
 			if ( (e.offsetY || e.layerY || 0) > topPart ) {
 				return;
@@ -1287,8 +1284,7 @@ init = function() {
 					}
 				}
 
-				e.preventDefault();
-
+				pdsp(e, true, false);
 				win.focus();
 				sX = e.clientX;
 				sY = e.clientY;
@@ -1329,7 +1325,7 @@ init = function() {
 					this.mctx = this.mask.getContext('2d');
 				}
 
-				doc.addEventListener('mousemove', drawMask, false);
+				doc.addEventListener('mousemove', drawMask);
 
 				var h = !!(this.curdeg && Math.sin(this.curdeg));
 				var w = h ? this.offsetHeight : this.offsetWidth;
@@ -1391,7 +1387,7 @@ init = function() {
 			doc.removeEventListener('mousemove', onMove, true);
 
 			if ( freeZoom ) {
-				doc.removeEventListener('mousemove', drawMask, false);
+				doc.removeEventListener('mousemove', drawMask);
 				doc.body.removeChild(media.mask);
 
 				var w = Math.min(
@@ -1453,7 +1449,7 @@ init = function() {
 				var cy = (win.pageYOffset + y + h / 2) * nimgh /
 					media.clientHeight - winH / 2 - scrollbars;
 
-				media.resize(-1, nimgw + 'px');
+				resizeMedia(-1, nimgw + 'px');
 
 				win.scrollTo(cx, cy);
 				return;
@@ -1472,7 +1468,7 @@ init = function() {
 					dragSlide[0] = x;
 					dragSlide[1] = y;
 					startScroll();
-					doc.addEventListener(vAPI.browser.wheel, stopScroll);
+					doc.body.addEventListener(vAPI.browser.wheel, stopScroll);
 					return;
 				}
 			}
@@ -1503,13 +1499,13 @@ init = function() {
 
 		if ( media.mode < 2 && noFit.real ) {
 			if ( media.mode === -1 ) {
-				media.resize(0);
+				resizeMedia(0);
 			} else if ( winW / winH < mediaWidth / mediaHeight ) {
-				media.resize(2);
+				resizeMedia(2);
 			} else if ( winH === media.offsetHeight && winW > media.offsetWidth ) {
-				media.resize(2);
+				resizeMedia(2);
 			} else {
-				media.resize(3);
+				resizeMedia(3);
 			}
 		} else if ( media.mode === 1 || noFit.cur ) {
 			if ( mediaWidth === media.clientWidth
@@ -1533,10 +1529,10 @@ init = function() {
 			x = x * mediaWidth / media.clientWidth - winW / 2;
 			y = y * mediaHeight / media.clientHeight - winH / 2;
 
-			media.resize(0);
+			resizeMedia(0);
 			win.scrollTo(x, y);
 		} else {
-			media.resize(1);
+			resizeMedia(1);
 		}
 	}, true);
 
@@ -1565,7 +1561,7 @@ init = function() {
 
 		switch ( key ) {
 			case 'Esc':
-				media.reset();
+				resetMedia();
 				break;
 
 			case 'Left':
@@ -1616,22 +1612,22 @@ init = function() {
 		if ( x !== true ) {
 			if ( x !== void 0 ) {
 				win[z ? 'scrollTo' : 'scrollBy'](x, y);
-				e.preventDefault();
+				pdsp(e, true, false);
 			}
 
 			return;
 		}
 
 		switch ( key ) {
-			case cfg.key_mOrig: media.resize(0); break;
-			case cfg.key_mFit: media.resize(1); break;
-			case cfg.key_mFitW: media.resize(2); break;
-			case cfg.key_mFitH: media.resize(3); break;
-			case cfg.key_cycle: media.cycle(e.shiftKey); break;
-			case cfg.key_rotL: media.rotate(false, e.shiftKey); break;
-			case cfg.key_rotR: media.rotate(true, e.shiftKey); break;
-			case cfg.key_flipH: media.flip(media, 0); break;
-			case cfg.key_flipV: media.flip(media, 1); break;
+			case cfg.key_mOrig: resizeMedia(0); break;
+			case cfg.key_mFit: resizeMedia(1); break;
+			case cfg.key_mFitW: resizeMedia(2); break;
+			case cfg.key_mFitH: resizeMedia(3); break;
+			case cfg.key_cycle: cycleModes(e.shiftKey); break;
+			case cfg.key_rotL: rotateMedia(false, e.shiftKey); break;
+			case cfg.key_rotR: rotateMedia(true, e.shiftKey); break;
+			case cfg.key_flipH: flipMedia(media, 0); break;
+			case cfg.key_flipV: flipMedia(media, 1); break;
 			case cfg.key_wheelZoom: toggleWheelZoom(); break;
 			case cfg.key_pixelate:
 				if ( vAPI.mediaType !== 'img' ) {
@@ -1663,7 +1659,7 @@ init = function() {
 
 				if ( !media.bgList ) {
 					media.bgList = {};
-					bgValue = window.getComputedStyle(media);
+					bgValue = win.getComputedStyle(media);
 					bgValue = bgValue.background || bgValue.backgroundColor;
 					media.bgList[bgValue] = true;
 					media.bgList['rgb(0, 0, 0)'] = true;
@@ -1702,8 +1698,12 @@ init = function() {
 		}
 	}, true);
 
-	doc.addEventListener('contextmenu', onContextMenu, false);
-	win.addEventListener('resize', afterCalc, false);
+	doc.addEventListener('contextmenu', onContextMenu, true);
+	win.addEventListener('resize', function() {
+		media.removeAttribute('width');
+		media.removeAttribute('height');
+		afterCalc();
+	});
 	toggleWheelZoom();
 
 	if ( vAPI.mediaType === 'video' ) {
@@ -1733,7 +1733,7 @@ init = function() {
 	}
 
 	media.mode = cfg.mode;
-	media.calcFit();
+	calcFit();
 	progress = [];
 
 	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
@@ -1769,17 +1769,63 @@ init = function() {
 	}
 
 	progress = null;
-	media.resize(media.mode);
+	resizeMedia(media.mode);
 
 	// Some browsers (Safari, Firefox) won't position the media without this
 	setTimeout(function() {
-		media.setPos();
+		setMediaPos();
 	}, 30);
 };
 
-if ( vAPI.mediaType === 'video' ) {
+root = doc.documentElement;
+
+media.addEventListener('error', function() {
+	// Opera fires an error event on local video files when they're close to the end
+	// Firefox did it a few times too, even if there was nothing wrong with the video
+	if ( media.currentTime > 0.1 && win.location.protocol === 'file:' ) {
+		return;
+	}
+
+	clearInterval(progress);
+	root.classList.add('load-failed');
+});
+
+if ( win.location.protocol === 'data:' ) {
+	media.alt = vAPI.mediaType + ' (data:)';
+
+	if ( !cfg.mediaInfo ) {
+		doc.title = media.alt;
+	}
+} else {
+	media.alt = (win.location.href
+		.replace(/#.*/, '')
+		.match(/(?:[^\/]+)?$/)[0] || vAPI.mediaType
+	).split('?')[0];
+
+	try {
+		// Some Unicode characters caused problems for decodeURIComponent
+		media.alt = decodeURIComponent(media.alt);
+	} catch ( ex ) {
+		//
+	}
+}
+
+if ( vAPI.mediaType === 'img' ) {
+	// Try to prevent default browser action
+	doc.body.addEventListener('click', function(e) {
+		e.stopImmediatePropagation();
+	}, true);
+
+	if ( media.naturalWidth ) {
+		initPingsLeft = 0;
+		init();
+		return;
+	}
+
+	progress = setInterval(init, 100);
+} else {
 	var attributeValues = {};
-	var mediaAttributes = ['autoplay', 'loop', 'controls', 'muted', 'volume'];
+	var mediaAttributes = ['autoplay', 'controls', 'loop', 'muted', 'volume'];
 
 	cfg.mediaAttrs.split(/\s+/).forEach(function(attribute) {
 		var attr = attribute.split('=');
@@ -1872,12 +1918,14 @@ if ( vAPI.mediaType === 'video' ) {
 		}
 
 		if ( this.videoHeight ) {
+			init();
 			return;
 		}
 
 		vAPI.mediaType = 'audio';
 		media.controls = true;
 		doc.title = media.alt;
+		init();
 
 		doc.addEventListener('keydown', function(ev) {
 			var key = shortcut.key(ev);
@@ -1909,79 +1957,7 @@ if ( vAPI.mediaType === 'video' ) {
 			this.poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
 		});
 	});
-} else {
-	media = doc.createElement('img');
-	media.src = win.location.href;
 }
-
-root = doc.documentElement;
-media.id = 'media';
-
-media.addEventListener('error', function() {
-	// Opera fires an error event on local video files when they're close to the end
-	// Firefox did it a few times too, even if there was nothing wrong with the video
-	if ( media.currentTime > 0.1 && win.location.protocol === 'file:' ) {
-		return;
-	}
-
-	clearInterval(progress);
-	root.classList.add('load-failed');
-});
-
-if ( win.location.protocol === 'data:' ) {
-	media.alt = vAPI.mediaType + ' (data:)';
-
-	if ( !cfg.mediaInfo ) {
-		doc.title = media.alt;
-	}
-} else {
-	media.alt = (win.location.href
-		.replace(/#.*/, '')
-		.match(/(?:[^\/]+)?$/)[0] || vAPI.mediaType
-	).split('?')[0];
-
-	try {
-		// Some Unicode characters caused problems for decodeURIComponent
-		media.alt = decodeURIComponent(media.alt);
-	} catch ( ex ) {
-		//
-	}
-}
-
-if ( media.naturalWidth || media.videoWidth || vAPI.mediaType === 'audio' ) {
-	initPingsLeft = 0;
-	init();
-	return;
-}
-
-progress = setInterval(init, 100);
-
-setTimeout(function() {
-	if ( root.classList.contains(vAPI.mediaType) ) {
-		return;
-	}
-
-	// Firefox won't show the image if a site uses CSP settings,
-	// so we should use the default image
-	if ( (vAPI.firefox || vAPI.maxthon)
-		&& (vAPI.mediaType === 'img'
-			? !media.naturalWidth && doc.images[0].naturalWidth
-			: !media.videoWidth && doc.body.querySelector('video').videoWidth) ) {
-		// TODO: audio/video
-		doc.images[0].style.display = '';
-		clearInterval(progress);
-		return;
-	}
-
-	media.style.display = 'none';
-
-	var header = doc.body.appendChild(doc.createElement('h2'));
-	header.textContent = media.alt;
-	header.addEventListener('click', function() {
-		doc.body.removeChild(this);
-		media.style.display = '';
-	});
-}, 1000);
 
 };
 

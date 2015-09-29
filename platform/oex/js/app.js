@@ -14,6 +14,8 @@ vAPI.browser = {
 };
 
 vAPI.messaging = {
+	listener: null,
+
 	listen: function(listener, once) {
 		if ( this.listener ) {
 			opera.extension.removeEventListener('message', this.listener);
@@ -64,7 +66,7 @@ if ( window.location.protocol === 'widget:' ) {
 
 if ( !window.requestAnimationFrame ) {
 	window.requestAnimationFrame = function(cb) {
-		return window.setTimeout(cb, 0xf);
+		return window.setTimeout(cb, 25);
 	};
 }
 
@@ -77,14 +79,16 @@ Object.defineProperty(vAPI, 'fullScreenElement', {
 
 Object.defineProperty(vAPI, 'mediaType', {
 	get: function() {
-		if ( typeof this._mediaType !== 'undefined' ) {
+		if ( this._mediaType !== void 0 ) {
 			return this._mediaType;
 		}
+
+		this._mediaType = '';
 
 		var selector = 'link[rel=stylesheet][href^="opera:style/"]';
 
 		if ( !document.head || !document.head.querySelector(selector) ) {
-			return this._mediaType = '';
+			return this._mediaType;
 		}
 
 		var media = document.querySelector(
@@ -92,29 +96,27 @@ Object.defineProperty(vAPI, 'mediaType', {
 		);
 
 		if ( !media ) {
-			return this._mediaType = '';
+			return this._mediaType;
 		}
 
-		if ( media.parentNode !== document.body ) {
-			// media file
-			document.body.replaceChild(
-				media,
-				document.body.firstElementChild
-			);
-		} else {
-			// image
-			window.donotrun = media.error = true;
-			media.naturalWidth = 0;
+		this._mediaType = media.localName;
 
+		if ( this._mediaType === 'img' ) {
+			// Clean up default image viewer
+			media = document.body.querySelector('img[src=""]');
+			window.donotrun = true;
+			media.error = true;
+			// media.naturalWidth = 0;
 			media.onclick = null;
-			window.ondragstart = null;
+			media.onerror = null;
 			window.onkeypress = null;
+			window.ondragstart = null;
 			window.onmousedown = null;
 			window.onmouseup = null;
 			window.onmousemove = null;
 		}
 
-		return this._mediaType = media.localName;
+		return this._mediaType;
 	},
 
 	set: function(type) {

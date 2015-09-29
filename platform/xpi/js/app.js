@@ -16,6 +16,23 @@ vAPI.browser = {
 };
 
 vAPI.messaging = {
+	listener: null,
+
+	_toggleListener: function(e) {
+		if ( !vAPI.messaging.listener ) {
+			return;
+		}
+
+		if ( e.type === 'pagehide' ) {
+			removeMessageListener();
+			return;
+		}
+
+		if ( e.persisted ) {
+			addMessageListener(vAPI.messaging.listener);
+		}
+	},
+
 	listen: function(listener, once) {
 		if ( this.listener ) {
 			removeMessageListener();
@@ -47,26 +64,11 @@ vAPI.messaging = {
 			data: message,
 			origin: window.location.href
 		});
-	},
-
-	toggleListener: function(e) {
-		if ( !vAPI.messaging.listener ) {
-			return;
-		}
-
-		if ( e.type === 'pagehide' ) {
-			removeMessageListener();
-			return;
-		}
-
-		if ( e.persisted ) {
-			addMessageListener(vAPI.messaging.listener);
-		}
 	}
 };
 
-window.addEventListener('pagehide', vAPI.messaging.toggleListener, true);
-window.addEventListener('pageshow', vAPI.messaging.toggleListener, true);
+window.addEventListener('pagehide', vAPI.messaging._toggleListener, true);
+window.addEventListener('pageshow', vAPI.messaging._toggleListener, true);
 
 if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 	vAPI.l10n = (function() {
@@ -121,12 +123,11 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}
 
+		var head = document.head;
 		var selector =
 			'meta[content="width=device-width; height=device-height;"],'
 			+ 'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],'
 			+ 'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
-
-		var head = document.head;
 		this._mediaType = '';
 
 		if ( !head || head.querySelectorAll(selector).length !== 3 ) {

@@ -3,7 +3,7 @@
 var vAPI = Object.create(null);
 
 vAPI.maxthon = true;
-vAPI.runtime = external.mxGetRuntime();
+vAPI._runtime = external.mxGetRuntime();
 
 vAPI.app = (function() {
 	var extInfo = location.hash.slice(1).split(',');
@@ -17,35 +17,35 @@ vAPI.app = (function() {
 })();
 
 vAPI.storage = {
-	mxStorage: vAPI.runtime.storage,
+	_mxStorage: vAPI._runtime.storage,
 
 	get: function(key, callback) {
-		var value = this.mxStorage.getConfig(key);
+		var value = this._mxStorage.getConfig(key);
 		callback(value === '' ? null : value);
 	},
 
 	set: function(key, value) {
-		return this.mxStorage.setConfig(key, value);
+		return this._mxStorage.setConfig(key, value);
 	},
 
 	remove: function(key) {
-		this.mxStorage.setConfig(key, '');
+		this._mxStorage.setConfig(key, '');
 	}
 };
 
 vAPI.tabs = {
-	mxTabs: new mx.browser.tabs, // eslint-disable-line
+	_mxTabs: new mx.browser.tabs, // eslint-disable-line
 
 	getSelected: function(callback) {
-		callback(this.mxTabs.getCurrentTab());
+		callback(this._mxTabs.getCurrentTab());
 	},
 
 	create: function(params) {
 		if ( /^[a-z-]{2,10}:/.test(params.url) === false ) {
-			params.url = vAPI.runtime.getPrivateUrl() + params.url;
+			params.url = vAPI._runtime.getPrivateUrl() + params.url;
 		}
 
-		this.mxTabs.newTab({
+		this._mxTabs.newTab({
 			url: params.url,
 			activate: params.active
 		});
@@ -60,12 +60,12 @@ vAPI.messaging = {
 			msg: JSON.parse(request.message),
 			origin: request.origin,
 			postMessage: function(message) {
-				vAPI.runtime.post(listenerId, JSON.stringify(message));
+				vAPI._runtime.post(listenerId, JSON.stringify(message));
 			}
 		};
 	},
 
 	listen: function(callback, name) {
-		vAPI.runtime.listen(name || 'service', callback);
+		vAPI._runtime.listen(name || 'service', callback);
 	}
 };

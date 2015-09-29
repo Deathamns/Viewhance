@@ -3,7 +3,7 @@
 var vAPI = Object.create(null);
 
 vAPI.maxthon = true;
-vAPI.runtime = external.mxGetRuntime();
+vAPI._runtime = external.mxGetRuntime();
 
 vAPI.browser = {
 	irPixelated: '-webkit-optimize-contrast',
@@ -15,12 +15,13 @@ vAPI.browser = {
 };
 
 vAPI.messaging = {
-	listenerId: Math.random().toString(36).slice(2),
-	emptyListener: function() {},
+	_listenerId: Math.random().toString(36).slice(2),
+	_emptyListener: function() {},
+	listener: null,
 
 	listen: function(listener, once) {
 		if ( this.listener ) {
-			vAPI.runtime.listen(this.listenerId, this.emptyListener);
+			vAPI._runtime.listen(this._listenerId, this._emptyListener);
 		}
 
 		if ( typeof listener !== 'function' ) {
@@ -36,7 +37,7 @@ vAPI.messaging = {
 			listener(JSON.parse(response));
 		};
 
-		vAPI.runtime.listen(this.listenerId, this.listener);
+		vAPI._runtime.listen(this._listenerId, this.listener);
 	},
 
 	send: function(message, callback) {
@@ -44,9 +45,9 @@ vAPI.messaging = {
 			this.listen(callback, true);
 		}
 
-		vAPI.runtime.post('service', {
+		vAPI._runtime.post('service', {
 			message: JSON.stringify(message),
-			listenerId: this.listenerId,
+			listenerId: this._listenerId,
 			origin: location.href
 		});
 	}
@@ -72,7 +73,7 @@ Object.defineProperty(vAPI, 'fullScreenElement', {
 
 Object.defineProperty(vAPI, 'mediaType', {
 	get: function() {
-		if ( typeof this._mediaType !== 'undefined' ) {
+		if ( this._mediaType !== void 0 ) {
 			return this._mediaType;
 		}
 
@@ -82,6 +83,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 			+ 'video[name=media][controls][autoplay]:first-child:not([src]) >'
 			+ 'source[src]:only-child'
 		);
+		this._mediaType = '';
 
 		if ( !media ) {
 			return this._mediaType;
@@ -93,6 +95,14 @@ Object.defineProperty(vAPI, 'mediaType', {
 
 		if ( media.parentNode !== document.body ) {
 			media = document.body.firstElementChild;
+		} else if ( media.localName === 'img' ) {
+			var stopPropagation = function(e) {
+				e.stopPropagation();
+			};
+			// Suppress event listeners added by Maxthon
+			document.documentElement.addEventListener('mousedown', stopPropagation);
+			document.documentElement.addEventListener('keydown', stopPropagation);
+			document.documentElement.addEventListener('mousewheel', stopPropagation);
 		}
 
 		return this._mediaType = media.localName;
