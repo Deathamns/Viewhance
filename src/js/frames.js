@@ -124,12 +124,12 @@ var BinaryTools = function(data) {
 if ( !win.opera ) {
 	// Solves utf8 problems
 	win.btoa = function(b64str) {
-		var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 		var c1, c2;
-		var pos = 0;
-		var res = '';
+		var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 		var mod = b64str.length % 3;
 		var l = b64str.length - mod;
+		var pos = 0;
+		var res = '';
 
 		while ( pos < l ) {
 			c1 = b64str.charCodeAt(pos++) & 0xff;
@@ -141,19 +141,21 @@ if ( !win.opera ) {
 			res += b64chars[c1 & 0x3f];
 		}
 
-		if ( mod ) {
-			c1 = b64str.charCodeAt(pos++) & 0xff;
-			res += b64chars[c1 >> 2];
+		if ( mod === 0 ) {
+			return res;
+		}
 
-			if ( mod === 1 ) {
-				res += b64chars[(c1 & 3) << 4];
-				res += '==';
-			} else {
-				c2 = b64str.charCodeAt(pos++) & 0xff;
-				res += b64chars[(c1 & 3) << 4 | c2 >> 4];
-				res += b64chars[(c2 & 0x0f) << 2];
-				res += '=';
-			}
+		c1 = b64str.charCodeAt(pos++) & 0xff;
+		res += b64chars[c1 >> 2];
+
+		if ( mod === 1 ) {
+			res += b64chars[(c1 & 3) << 4];
+			res += '==';
+		} else {
+			c2 = b64str.charCodeAt(pos++) & 0xff;
+			res += b64chars[(c1 & 3) << 4 | c2 >> 4];
+			res += b64chars[(c2 & 0x0f) << 2];
+			res += '=';
 		}
 
 		return res;
@@ -179,24 +181,35 @@ xhr.addEventListener('readystatechange', function() {
 		return;
 	}
 
+	var i, chunkSize;
+
 	if ( !this.imgType ) {
 		// PNG or GIF or WEBP signature
 		imgHead = /^(?:\x89(PNG)\r\n\x1a\n|(GIF)8[79]a|RIFF....(WEBP)VP8X)/;
-
 		this.imgType = this.responseText.match(imgHead);
 
 		// Seems like in some cases a character encoding is applied anyway,
 		// however it's enough to check only the signature
-		if ( !this.imgType && (this.responseText[1] === 'P' && (chunkSize = 8)
-			|| this.responseText[0] === 'G' && (chunkSize = 6)
-			|| this.responseText[0] === 'R' && (chunkSize = 16)) ) {
-			this.imgType = this.responseText.slice(0, chunkSize).split('');
-
-			for ( i = 0; i < this.imgType.length; ++i ) {
-				this.imgType[i] = this.imgType[i].charCodeAt(0) & 0xff;
+		if ( !this.imgType ) {
+			if ( this.responseText[1] === 'P' ) {
+				chunkSize = 8;
+			} else if ( this.responseText[0] === 'G' ) {
+				chunkSize = 6;
+			} else if ( this.responseText[0] === 'R' ) {
+				chunkSize = 1;
 			}
 
-			this.imgType = String.fromCharCode.apply(null, this.imgType).match(imgHead);
+			if ( chunkSize ) {
+				this.imgType = this.responseText.slice(0, chunkSize).split('');
+
+				for ( i = 0; i < this.imgType.length; ++i ) {
+					this.imgType[i] = this.imgType[i].charCodeAt(0) & 0xff;
+				}
+
+				this.imgType = String.fromCharCode
+					.apply(null, this.imgType)
+					.match(imgHead);
+			}
 		}
 
 		if ( !this.imgType ) {
@@ -218,7 +231,7 @@ xhr.addEventListener('readystatechange', function() {
 		return;
 	}
 
-	var i, IHDR, chunkType, chunkSize;
+	var IHDR, chunkType;
 	var frames = [];
 	var bin = new BinaryTools(this.responseText);
 	var animation = {};
@@ -681,9 +694,9 @@ xhr.addEventListener('readystatechange', function() {
 					wrap.step(null);
 				}
 
-				this.addEventListener(vAPI.browser.wheel, this.wheeler, false);
+				this.addEventListener(vAPI.browser.wheel, this.wheeler);
 			} else {
-				this.removeEventListener(vAPI.browser.wheel, this.wheeler, false);
+				this.removeEventListener(vAPI.browser.wheel, this.wheeler);
 			}
 
 			this.classList.toggle('showall');
@@ -691,7 +704,7 @@ xhr.addEventListener('readystatechange', function() {
 
 		wrap.wheeler = function(e) {
 			wrap.step((e.deltaY || -e.wheelDelta) > 0);
-			wrap.sotp();
+			wrap.stop();
 			e.preventDefault();
 			e.stopImmediatePropagation();
 		};
@@ -743,8 +756,8 @@ xhr.addEventListener('readystatechange', function() {
 		};
 
 		wrap.addEventListener('mouseup', onWrapMouseUp);
-		wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
-		currentFrame.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+		wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler);
+		currentFrame.addEventListener(vAPI.browser.wheel, wrap.wheeler);
 
 		currentFrame.addEventListener('input', function() {
 			if ( parseFloat(speed.value, 10) !== 0 ) {
@@ -763,12 +776,12 @@ xhr.addEventListener('readystatechange', function() {
 
 			if ( wrap.speedValue === 0 ) {
 				wrap.stop();
-				wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+				wrap.addEventListener(vAPI.browser.wheel, wrap.wheeler);
 				return;
 			}
 
 			wrap.classList.remove('showall');
-			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler, false);
+			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler);
 			wrap.animate();
 		});
 	};
@@ -786,7 +799,7 @@ xhr.addEventListener('readystatechange', function() {
 	wrap.textContent = '';
 	vAPI.buildNodes(wrap, [
 		{tag: 'a', attrs: {
-			'class': 'back',
+			class: 'back',
 			href: win.location.href
 		}, text: '\u2190'},
 		' ',
@@ -809,7 +822,7 @@ xhr.addEventListener('readystatechange', function() {
 			min: 1
 		}}, ' ',
 		{tag: 'output', attrs: {
-			'for': 'currentFrame'
+			for: 'currentFrame'
 		}, text: '1 / ' + frames.length}, ' ',
 		{tag: 'div', attrs: {id: 'frames'}}
 	]);
