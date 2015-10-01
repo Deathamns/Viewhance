@@ -651,7 +651,7 @@ init = function() {
 		};
 
 		var menuTrigger = function(e) {
-			if ( panning || freeZoom ) {
+			if ( panning || freeZoom || e.shiftKey ) {
 				return;
 			}
 
@@ -799,7 +799,7 @@ init = function() {
 		var m = media;
 		calcFit();
 
-		// Change curosr according to sizing
+		// Change cursor according to sizing
 		if ( m.clientWidth > winW || m.clientHeight > winH ) {
 			m.style.cursor = 'move';
 		} else if ( winH >= m.clientHeight && winW >= m.clientWidth
@@ -828,7 +828,7 @@ init = function() {
 		}
 
 		calcFit();
-		setMediaPos();
+		adjustPosition();
 		setTimeout(afterCalcCallback, 0xf);
 	};
 
@@ -852,7 +852,7 @@ init = function() {
 		}
 	};
 
-	var setMediaPos = function() {
+	var adjustPosition = function() {
 		var s = media.style;
 
 		if ( cfg.center ) {
@@ -975,7 +975,7 @@ init = function() {
 		}
 
 		media.style[vAPI.browser.transform] = rot;
-		setMediaPos();
+		adjustPosition();
 	};
 
 	var wheelZoom = function(e) {
@@ -1773,7 +1773,7 @@ init = function() {
 
 	// Some browsers (Safari, Firefox) won't position the media without this
 	setTimeout(function() {
-		setMediaPos();
+		adjustPosition();
 	}, 30);
 };
 

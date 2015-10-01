@@ -64,9 +64,9 @@ if ( window.location.protocol === 'widget:' ) {
 	};
 }
 
-if ( !window.requestAnimationFrame ) {
-	window.requestAnimationFrame = function(cb) {
-		return window.setTimeout(cb, 25);
+if ( this.requestAnimationFrame === void 0 ) {
+	this.requestAnimationFrame = function(callback) {
+		return window.setTimeout(callback, 25);
 	};
 }
 
