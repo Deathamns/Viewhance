@@ -61,10 +61,6 @@
 			"#": 0,
 			">": "zmieść w oknie"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Opóźnienie długiego przytrzymania (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Funkcja dla przytrzymania lewego przycisku"

@@ -52,10 +52,6 @@
 			"#": 0,
 			">": "adapter à la largeur/hauteur"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Durée du clic prolongé (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Clic gauche prolongé"

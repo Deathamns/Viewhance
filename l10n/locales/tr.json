@@ -26,10 +26,6 @@
 			"#": 0,
 			">": "Özel favicon"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Uzun basış gecikmesi (ms)"
-		},
 		"mediaInfo": {
 			"#": 0,
 			">": "Resim bilgileri"

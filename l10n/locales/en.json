@@ -72,10 +72,6 @@
 			"#": 0,
 			">": "toggle wheel zooming"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Long-press delay (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Left long-press action"

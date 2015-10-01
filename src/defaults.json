@@ -7,7 +7,6 @@
 	"center": true,
 	"wheelZoom": false,
 	"mediaAttrs": "autoplay controls loop",
-	"lpDelay": 350,
 	"lpLeft": 1,
 	"lpRight": 2,
 	"sendToHosts": [

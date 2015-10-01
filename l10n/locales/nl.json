@@ -42,10 +42,6 @@
 			"#": 0,
 			">": "breedte/hoogte passend maken"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Lange druk vertraging (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Linker lange druk aktie"

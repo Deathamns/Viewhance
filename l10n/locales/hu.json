@@ -68,10 +68,6 @@
 			"#": 0,
 			">": "egérgörgővel való nagyítás ki/bekapcsolása"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Egérgomb hosszan-tartás ideje (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Bal hosszan-tartás funkciója"

@@ -69,10 +69,6 @@
 			"#": 0,
 			">": "ajustar a la anchura/altura"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Retraso para activar una pulsación larga (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Acción para una pulsación larga con el botón izquierdo"

@@ -42,10 +42,6 @@
 			"#": 0,
 			">": "caber na altura/largura"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Atraso de resposta (ms)"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Clique longo com o botão esquerdo do mouse"

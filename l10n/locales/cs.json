@@ -61,10 +61,6 @@
 			"#": 0,
 			">": "roztáhnout na výšku/šířku"
 		},
-		"longpressDelay": {
-			"#": 0,
-			">": "Prodleva dlouhého stisku"
-		},
 		"longpressLeft": {
 			"#": 0,
 			">": "Akce při dlouhém stisku levého tlačítka myši"

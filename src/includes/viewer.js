@@ -1295,10 +1295,6 @@ init = function() {
 			}
 		}
 
-		if ( !cfg.lpDelay ) {
-			return;
-		}
-
 		// For fine move and free zoom
 		if ( e.shiftKey ) {
 			cancelAction = true;
@@ -1375,7 +1371,7 @@ init = function() {
 		lastEvent.layerX = e.offsetX || e.layerX || 0;
 		lastEvent.layerY = e.offsetY || e.layerY || 0;
 		lastEvent.button = e.button;
-		progress = setTimeout(longpressHandler, cfg.lpDelay);
+		progress = setTimeout(longpressHandler, 300);
 	}, true);
 
 	doc.addEventListener('mouseup', function(e) {
