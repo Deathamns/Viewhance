@@ -1229,8 +1229,8 @@ init = function() {
 			var x, y;
 			var b = doc.body;
 
-			if ( media.mode === 2 || media.clientWidth === b.clientWidth
-				|| b.clientHeight > media.clientHeight && winW < b.clientWidth ) {
+			if ( mediaWidth / mediaHeight > winW / winH && media.mode !== 3
+				|| media.mode === 2 ) {
 				x = media.clientWidth;
 				resizeMedia(3);
 				x = lastEvent.layerX * media.clientWidth / x - winW / 2;
@@ -1358,8 +1358,15 @@ init = function() {
 			}
 		}
 
-		if ( e.shiftKey || e.button === 0 && !cfg.lpLeft
-			|| e.button === 2 && !cfg.lpRight ) {
+		if ( e.shiftKey ) {
+			return;
+		}
+
+		if ( e.button === 0 && !cfg.lpLeft ) {
+			return;
+		}
+
+		if ( e.button === 2 && !cfg.lpRight ) {
 			return;
 		}
 
@@ -1368,7 +1375,6 @@ init = function() {
 		lastEvent.layerX = e.offsetX || e.layerX || 0;
 		lastEvent.layerY = e.offsetY || e.layerY || 0;
 		lastEvent.button = e.button;
-
 		progress = setTimeout(longpressHandler, cfg.lpDelay);
 	}, true);
 
