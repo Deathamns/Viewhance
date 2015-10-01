@@ -88,14 +88,6 @@
 			"#": 0,
 			">": "taille optimale"
 		},
-		"modeFitToHeight": {
-			"#": 0,
-			">": "adapter à la hauteur"
-		},
-		"modeFitToWidth": {
-			"#": 0,
-			">": "adapter à la largeur"
-		},
 		"modeNatural": {
 			"#": 0,
 			">": "taille initiale"

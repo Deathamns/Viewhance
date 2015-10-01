@@ -1738,7 +1738,6 @@ init = function() {
 		});
 	}
 
-	media.mode = cfg.mode;
 	calcFit();
 	progress = [];
 
@@ -1752,18 +1751,16 @@ init = function() {
 		}
 	}
 
-	if ( media.mode === 4 ) {
-		if ( mediaWidth / mediaHeight > winW / winH ) {
-			media.mode = 3;
-		} else {
-			media.mode = 2;
-		}
-	} else if ( media.mode === 1 || media.mode === 0 && noFit.real ) {
+	if ( cfg.mode === 2 ) {
+		media.mode = mediaWidth / mediaHeight > winW / winH ? 3 : 2;
+	} else if ( cfg.mode > 2 ) {
+		media.mode = 0;
+	} else {
+		media.mode = cfg.mode;
+
 		if ( progress.length ) {
-			if ( mediaWidth / mediaHeight > winW / winH ) {
-				media.mode = 2;
-			} else {
-				media.mode = 3;
+			if ( media.mode === 1 || media.mode === 0 && noFit.real ) {
+				media.mode = mediaWidth / mediaHeight > winW / winH ? 2 : 3;
 			}
 		}
 	}
@@ -1778,9 +1775,7 @@ init = function() {
 	resizeMedia(media.mode);
 
 	// Some browsers (Safari, Firefox) won't position the media without this
-	setTimeout(function() {
-		adjustPosition();
-	}, 30);
+	setTimeout(adjustPosition, 30);
 };
 
 root = doc.documentElement;

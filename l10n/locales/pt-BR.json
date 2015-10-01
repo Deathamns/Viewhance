@@ -74,14 +74,6 @@
 			"#": 0,
 			">": "redimensionar da melhor forma"
 		},
-		"modeFitToHeight": {
-			"#": 0,
-			">": "redimensionar à altura"
-		},
-		"modeFitToWidth": {
-			"#": 0,
-			">": "redimensionar à largura"
-		},
 		"modeNatural": {
 			"#": 0,
 			">": "tamanho original"

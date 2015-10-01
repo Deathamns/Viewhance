@@ -62,14 +62,6 @@
 			"#": 0,
 			">": "paras sovitus"
 		},
-		"modeFitToHeight": {
-			"#": 0,
-			">": "sovita korkeuteen"
-		},
-		"modeFitToWidth": {
-			"#": 0,
-			">": "sovita leveyteen"
-		},
 		"modeNatural": {
 			"#": 0,
 			">": "luonnollinen koko"

@@ -112,14 +112,6 @@
 			"#": 0,
 			">": "illeszkedés az ablakhoz"
 		},
-		"modeFitToHeight": {
-			"#": 0,
-			">": "magassághoz méretez"
-		},
-		"modeFitToWidth": {
-			"#": 0,
-			">": "szélességhez méretez"
-		},
 		"modeNatural": {
 			"#": 0,
 			">": "eredeti méret"

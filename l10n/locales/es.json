@@ -113,14 +113,6 @@
 			"#": 0,
 			">": "mejor ajuste"
 		},
-		"modeFitToHeight": {
-			"#": 0,
-			">": "ajustar solo a lo alto"
-		},
-		"modeFitToWidth": {
-			"#": 0,
-			">": "ajustar solo a lo ancho"
-		},
 		"modeNatural": {
 			"#": 0,
 			">": "tamaño original"

@@ -116,14 +116,6 @@
 			"#": 0,
 			">": "best fit"
 		},
-		"modeFitToHeight": {
-			"#": 0,
-			">": "fit to height"
-		},
-		"modeFitToWidth": {
-			"#": 0,
-			">": "fit to width"
-		},
 		"modeNatural": {
 			"#": 0,
 			">": "natural size"
