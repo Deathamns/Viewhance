@@ -228,12 +228,12 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'left: 100%;',
 		'text-align: left;',
 		'opacity: 0;',
-		vAPI.browser.transitionCSS, ': visibility .4s, opacity .2s .3s;',
 	'}',
 	'li:hover ul {',
 		'display: block;',
 		'visibility: visible;',
 		'opacity: 1;',
+		vAPI.browser.transitionCSS, ': visibility .4s, opacity .2s .3s;',
 	'}',
 	'li ul > li {',
 		'display: block !important;',
@@ -555,17 +555,19 @@ init = function() {
 
 		// Load favicons only when the menu item is hovered the first time
 		if ( /^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length ) {
-			menu.querySelector('.send-hosts')
-				.addEventListener('mouseover', function onHostsHover() {
-				this.removeEventListener('mouseover', onHostsHover);
-
+			menu.onHostsHover = function(e) {
+				this.removeEventListener(e.type, menu.onHostsHover);
+				delete menu.onHostsHover;
 				var links = this.querySelectorAll('.send-hosts > ul > li > a');
-
 				[].forEach.call(links, function(a) {
-					var url = '//' + a.host + '/favicon.ico';
-					a.style.backgroundImage = 'url(' + url + ')';
+					a.style.backgroundImage = 'url(//' + a.host + '/favicon.ico)';
 				});
-			});
+			};
+
+			menu.querySelector('.send-hosts > ul').addEventListener(
+				vAPI.browser.transitionend,
+				menu.onHostsHover
+			);
 		}
 
 		var handleCommand = function(cmd, e) {
