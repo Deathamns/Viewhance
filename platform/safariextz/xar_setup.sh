@@ -1,8 +1,10 @@
 #!/bin/sh
+set -e
 
 # http://mackyle.github.com/xar/howtosign.html
-
-wget --no-check-certificate https://github.com/mackyle/xar/archive/master.tar.gz
+wget -q --show-progress \
+	--no-check-certificate \
+	https://github.com/mackyle/xar/archive/master.tar.gz
 tar xf master.tar.gz xar-master/xar
 rm master.tar.gz
 cd xar-master/xar
