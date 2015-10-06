@@ -610,15 +610,6 @@ init = function() {
 							return;
 						}
 
-						doc.body.removeEventListener(
-							vAPI.browser.wheel,
-							onWheel
-						);
-						doc.body.removeEventListener(
-							vAPI.browser.wheel,
-							wheelZoom
-						);
-
 						if ( menu ) {
 							menu.parentNode.removeChild(menu);
 						}
@@ -707,6 +698,8 @@ init = function() {
 		}
 
 		menu.addEventListener(vAPI.browser.wheel, function(e) {
+			pdsp(e);
+
 			var t = e.target;
 
 			if ( t.nodeType === 3 ) {
@@ -723,7 +716,6 @@ init = function() {
 					)
 				);
 				onMenuChange(e);
-				pdsp(e);
 			} else if ( !/reset|frames|options/.test(t.getAttribute('data-cmd')
 				|| (t = t.parentNode) && t.getAttribute('data-cmd')) ) {
 				handleCommand(t.getAttribute('data-cmd'), e);
@@ -969,7 +961,6 @@ init = function() {
 		}
 
 		win.status = media.curdeg + '°';
-
 		rot = 'rotate(' + media.curdeg + 'deg)';
 
 		if ( media.scale ) {
@@ -980,9 +971,18 @@ init = function() {
 		adjustPosition();
 	};
 
+	var isValidWheelTarget = function(t) {
+		var d = doc;
+		return t === media || t === d.body || t === d.documentElement;
+	};
+
 	var wheelZoom = function(e) {
-		stopScroll(); // eslint-disable-line
+		if ( !isValidWheelTarget(e.target) ) {
+			return;
+		}
+
 		pdsp(e);
+		stopScroll(); // eslint-disable-line
 
 		var w = media.offsetWidth;
 		var h = media.offsetHeight;
@@ -1009,6 +1009,7 @@ init = function() {
 
 	var zoomToCenter = function(e) {
 		wheelZoom({
+			target: media,
 			keypress: true,
 			deltaY: e.deltaY || -e.wheelDelta,
 			clientX: winW / 2,
@@ -1033,6 +1034,12 @@ init = function() {
 	};
 
 	var onWheel = function(e) {
+		if ( !isValidWheelTarget(e.target) ) {
+			return;
+		}
+
+		pdsp(e);
+
 		if ( media.clientWidth <= winW && media.clientHeight <= winH ) {
 			return;
 		}
@@ -1056,7 +1063,6 @@ init = function() {
 		}
 
 		win.scrollBy(x, y);
-		pdsp(e);
 	};
 
 	var toggleWheelZoom = function() {
@@ -1064,12 +1070,12 @@ init = function() {
 		var zoomMenuItemStyle = menu.querySelector('li[data-cmd=zoom]').style;
 
 		if ( cfg.wheelZoom ) {
-			doc.body.removeEventListener(evName, onWheel);
-			doc.body.addEventListener(evName, wheelZoom);
+			doc.removeEventListener(evName, onWheel, true);
+			doc.addEventListener(evName, wheelZoom, true);
 			zoomMenuItemStyle.display = 'none';
 		} else {
-			doc.body.removeEventListener(evName, wheelZoom);
-			doc.body.addEventListener(evName, onWheel);
+			doc.removeEventListener(evName, wheelZoom, true);
+			doc.addEventListener(evName, onWheel, true);
 			zoomMenuItemStyle.display = '';
 		}
 
@@ -1472,7 +1478,7 @@ init = function() {
 					dragSlide[0] = x;
 					dragSlide[1] = y;
 					startScroll();
-					doc.body.addEventListener(vAPI.browser.wheel, stopScroll);
+					win.addEventListener(vAPI.browser.wheel, stopScroll, true);
 					return;
 				}
 			}
@@ -1697,9 +1703,7 @@ init = function() {
 			}
 		}
 
-		if ( x !== true ) {
-			pdsp(e);
-		}
+		pdsp(e, x !== true, true);
 	}, true);
 
 	doc.addEventListener('contextmenu', onContextMenu, true);

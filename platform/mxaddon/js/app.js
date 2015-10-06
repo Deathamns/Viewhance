@@ -55,7 +55,7 @@ vAPI.messaging = {
 
 if ( location.protocol === 'mxaddon-pkg:' ) {
 	vAPI.l10n = function(s) {
-		var t = this.runtime.locale.t(s);
+		var t = this._runtime.locale.t(s);
 		return t[0] === '"' ? JSON.parse(t) : t || s;
 	};
 
@@ -102,7 +102,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 			// Suppress event listeners added by Maxthon
 			document.documentElement.addEventListener('mousedown', stopPropagation);
 			document.documentElement.addEventListener('keydown', stopPropagation);
-			document.documentElement.addEventListener('mousewheel', stopPropagation);
+			media.parentNode.replaceChild(media.cloneNode(false), media);
 		}
 
 		return this._mediaType = media.localName;
