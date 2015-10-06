@@ -41,7 +41,7 @@ export)
 	openssl pkcs12 -nodes -in "$pfx" | openssl rsa -out "secret/key.pem"
 
 	echo "Now you can install the following two:"
-	echo "$( realpath "$pem")"
+	echo "$( realpath "$der")"
 	echo "$( realpath "$pfx")"
 	;;
 xar-certs)
