@@ -1,3 +1,5 @@
+/* eslint indent:0 */
+
 'use strict';
 
 var init = function(win, doc, response) {
@@ -366,10 +368,11 @@ init = function() {
 		doc.body.removeChild(menu);
 		menu = null;
 	} else {
+		var onMenuChange;
 		menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px)';
 
 		if ( menu.style.filter || menu.style.webkitFilter ) {
-			var onMenuChange = function(e) {
+			onMenuChange = function(e) {
 				var t = e.target;
 				var filterCSS = '';
 				var filterName;
@@ -789,6 +792,41 @@ init = function() {
 		}
 	};
 
+	var adjustPosition = function() {
+		var s = media.style;
+
+		if ( cfg.center ) {
+			s.top = Math.max(0, (winH - media.offsetHeight) / 2) + 'px';
+			s.left = Math.max(0, (winW - media.offsetWidth) / 2) + 'px';
+		} else {
+			s.top = s.left = '0';
+		}
+
+		var box = media.getBoundingClientRect();
+		media.box = box;
+
+		if ( box.left < 0 ) {
+			s.left = parseInt(s.left, 10) - box.left - win.pageXOffset + 'px';
+		}
+
+		if ( box.top < 0 ) {
+			s.top = parseInt(s.top, 10) - box.top - win.pageYOffset + 'px';
+		}
+	};
+
+	var calcFit = function() {
+		winH = doc.compatMode[0] === 'B' ? doc.body : root;
+		winW = winH.clientWidth;
+		winH = winH.clientHeight;
+
+		var box = media.box || media.getBoundingClientRect();
+
+		noFit = {
+			cur: box.width <= winW && box.height <= winH,
+			real: mediaWidth <= winW && mediaHeight <= winH
+		};
+	};
+
 	var afterCalcCallback = function() {
 		var m = media;
 		calcFit();
@@ -844,41 +882,6 @@ init = function() {
 		if ( mediaWidth ) {
 			afterCalc();
 		}
-	};
-
-	var adjustPosition = function() {
-		var s = media.style;
-
-		if ( cfg.center ) {
-			s.top = Math.max(0, (winH - media.offsetHeight) / 2) + 'px';
-			s.left = Math.max(0, (winW - media.offsetWidth) / 2) + 'px';
-		} else {
-			s.top = s.left = '0';
-		}
-
-		var box = media.getBoundingClientRect();
-		media.box = box;
-
-		if ( box.left < 0 ) {
-			s.left = parseInt(s.left, 10) - box.left - win.pageXOffset + 'px';
-		}
-
-		if ( box.top < 0 ) {
-			s.top = parseInt(s.top, 10) - box.top - win.pageYOffset + 'px';
-		}
-	};
-
-	var calcFit = function() {
-		winH = doc.compatMode[0] === 'B' ? doc.body : root;
-		winW = winH.clientWidth;
-		winH = winH.clientHeight;
-
-		var box = media.box || media.getBoundingClientRect();
-
-		noFit = {
-			cur: box.width <= winW && box.height <= winH,
-			real: mediaWidth <= winW && mediaHeight <= winH
-		};
 	};
 
 	var cycleModes = function(back) {
@@ -1140,6 +1143,22 @@ init = function() {
 		pdsp(e);
 	};
 
+	var stopScroll = function(e) {
+		if ( e ) {
+			this.removeEventListener(e.type, stopScroll);
+		}
+
+		if ( !dragSlide.length ) {
+			return;
+		}
+
+		clearInterval(progress);
+		progress = null;
+		cancelAction = false;
+		dragSlide.length = 0;
+		media.dragSlideTime = false;
+	};
+
 	var startScroll = function() {
 		win.scrollBy(dragSlide[0], dragSlide[1]);
 
@@ -1172,22 +1191,6 @@ init = function() {
 		}
 
 		progress = setTimeout(startScroll, 25);
-	};
-
-	var stopScroll = function(e) {
-		if ( e ) {
-			this.removeEventListener(e.type, stopScroll);
-		}
-
-		if ( !dragSlide.length ) {
-			return;
-		}
-
-		clearInterval(progress);
-		progress = null;
-		cancelAction = false;
-		dragSlide.length = 0;
-		media.dragSlideTime = false;
 	};
 
 	var drawMask = function(e) {
@@ -1235,7 +1238,6 @@ init = function() {
 
 		if ( action === 1 ) {
 			var x, y;
-			var b = doc.body;
 
 			if ( mediaWidth / mediaHeight > winW / winH && media.mode !== 3
 				|| media.mode === 2 ) {
@@ -1454,14 +1456,13 @@ init = function() {
 					nimgh = MAXSIZE;
 				}
 
-				var cx = (win.pageXOffset + x + w / 2) * nimgw /
-					media.clientWidth - winW / 2 - scrollbars;
-				var cy = (win.pageYOffset + y + h / 2) * nimgh /
-					media.clientHeight - winH / 2 - scrollbars;
+				x = (win.pageXOffset + x + w / 2) * nimgw / media.clientWidth
+					- winW / 2 - scrollbars;
+				y = (win.pageYOffset + y + h / 2) * nimgh / media.clientHeight
+					- winH / 2 - scrollbars;
 
 				resizeMedia(-1, nimgw + 'px');
-
-				win.scrollTo(cx, cy);
+				win.scrollTo(x, y);
 				return;
 			} else if ( dragSlide.length === 3 ) {
 				x = dragSlide[0][0] - dragSlide[2][0];

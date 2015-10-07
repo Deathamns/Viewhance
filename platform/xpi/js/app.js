@@ -124,8 +124,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 		}
 
 		var head = document.head;
-		var selector =
-			'meta[content="width=device-width; height=device-height;"],'
+		var selector
+			= 'meta[content="width=device-width; height=device-height;"],'
 			+ 'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],'
 			+ 'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
 		this._mediaType = '';
@@ -144,7 +144,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 		}
 
 		if ( media.src && media.src === window.location.href ) {
-			return this._mediaType = 'img';
+			this._mediaType = 'img';
+			return this._mediaType;
 		}
 
 		// When media is redirected the currentSrc doesn't change
@@ -152,7 +153,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}*/
 
-		return this._mediaType = 'video';
+		this._mediaType = 'video';
+		return this._mediaType;
 	},
 
 	set: function(type) {

@@ -8,7 +8,7 @@ vAPI.app = chrome.runtime.getManifest();
 vAPI.app = {
 	name: vAPI.app.name,
 	version: vAPI.app.version,
-	platform: (function(){
+	platform: (function() {
 		var vendor = navigator.appVersion.match(
 			/(Chromium|OPR|RockMelt|Comodo_Dragon|CoolNovo|Iron)\/(\S+)/
 		);

@@ -173,10 +173,9 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		e.stopImmediatePropagation();
 		e.preventDefault();
 
-		var i;
 		var filter = {};
 
-		for ( i = 0; i < urls.length; ++i ) {
+		for ( var i = 0; i < urls.length; ++i ) {
 			if ( urls[i] === 'about:blank' ) {
 				continue;
 			}

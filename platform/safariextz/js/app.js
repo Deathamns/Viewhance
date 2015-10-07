@@ -131,7 +131,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}
 
-		return this._mediaType = media.localName;
+		this._mediaType = media.localName;
+		return this._mediaType;
 	},
 
 	set: function(type) {

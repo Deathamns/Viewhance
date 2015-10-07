@@ -92,15 +92,15 @@ Object.defineProperty(vAPI, 'mediaType', {
 		}
 
 		var media = document.querySelector(
-			'body[style="margin: 0px;"] > img[style^="-webkit-"]:first-child, ' +
+			'body[style="margin: 0px;"] > img[style^="-webkit-"]:first-child, '
 			// Chropera 29 changed the structure
-			(navigator.appVersion.indexOf('OPR/') !== -1
-				? 'body[style="margin: 0px;"] > '
+			+ (navigator.appVersion.indexOf('OPR/') === 1
+				? ''
+				: 'body[style="margin: 0px;"] > '
 					+ 'div[style^="display: table"]:only-child >'
 					+ 'div[style^="display: table-cell"] > img:only-child, '
-				: ''
-			) +
-			'body > video[name=media][controls][autoplay]:first-child:not([src])'
+			)
+			+ 'body > video[name=media][controls][autoplay]:first-child:not([src])'
 		);
 
 		if ( !media ) {
@@ -120,7 +120,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 			}
 		}
 
-		return this._mediaType = media.localName;
+		this._mediaType = media.localName;
+		return this._mediaType;
 	},
 
 	set: function(type) {

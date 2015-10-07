@@ -77,7 +77,8 @@ var BinaryTools = function(data) {
 			return null;
 		}
 
-		var pos;
+		var pos, i;
+		var integer = 0;
 
 		if ( position === void 0 || position < 0 ) {
 			pos = this.pos;
@@ -85,9 +86,6 @@ var BinaryTools = function(data) {
 		} else {
 			pos = position;
 		}
-
-		var i;
-		var integer = 0;
 
 		if ( this.littleEndian ) {
 			i = bytes - 1;
@@ -257,7 +255,11 @@ xhr.addEventListener('readystatechange', function() {
 				IHDR = bin.readString(5);
 				// Skip crc
 				bin.pos += 4;
-			} else if ( !frames.length && chunkType === 'acTL' ) {
+			} else if ( chunkType === 'acTL' ) {
+				if ( frames.length ) {
+					continue;
+				}
+
 				animation.numFrames = bin.readInt(4, bin.pos + 8);
 				animation.numPlays = bin.readInt(4, bin.pos + 12);
 				bin.pos += 20;
@@ -304,11 +306,11 @@ xhr.addEventListener('readystatechange', function() {
 
 				// Skip crc
 				bin.pos += 4;
-			} else if ( !frames.length ) {
+			} else if ( frames.length ) {
+				bin.pos += bin.readInt(4, bin.pos) + 12;
+			} else {
 				// Read the full chunk (length + chunk type + chunkdate + crc)
 				imgHead += bin.readString(bin.readInt(4, bin.pos) + 12);
-			} else {
-				bin.pos += bin.readInt(4, bin.pos) + 12;
 			}
 		}
 	} else if ( this.imgType === 'GIF' ) {
@@ -320,7 +322,7 @@ xhr.addEventListener('readystatechange', function() {
 				this.pos += this.readInt(1, this.pos) + 1;
 
 				if ( bin.pos >= bin.length ) {
-					throw this.imgType + ': end reached...';
+					throw Error(this.imgType + ': end reached...');
 				}
 			} while ( this.readInt(1, this.pos) !== 0x00 );
 
@@ -365,13 +367,16 @@ xhr.addEventListener('readystatechange', function() {
 					frames.push({
 						delay: bin.readInt(2, bin.pos + 2) * 10 || 100,
 						// -1 in order to match PNG's indexes, also treat 0 as 1
-						disposeOp: Math.max(0, parseInt(bin.packed.slice(3, -2), 2) - 1),
-									// sentinel + ext_label
-						data: bin.readString(4, bin.pos - 2) +
-									// with zero delay
-									bin.intToBytes(0, 2) +
-									// transparent color index + block terminator
-									bin.readString(2, bin.pos + 4)
+						disposeOp: Math.max(
+							0,
+							parseInt(bin.packed.slice(3, -2), 2) - 1
+						),
+							// sentinel + ext_label
+						data: bin.readString(4, bin.pos - 2)
+							// with zero delay
+							+ bin.intToBytes(0, 2)
+							// transparent color index + block terminator
+							+ bin.readString(2, bin.pos + 4)
 					});
 
 					bin.pos += 6;
@@ -543,20 +548,20 @@ xhr.addEventListener('readystatechange', function() {
 
 		generateImageSRC = function() {
 			var frm = frames[frames.idx];
-			var _IHDR = 'IHDR' +
-				bin.intToBytes(frm.width) +
-				bin.intToBytes(frm.height) +
-				IHDR;
+			var _IHDR = 'IHDR'
+				+ bin.intToBytes(frm.width)
+				+ bin.intToBytes(frm.height)
+				+ IHDR;
 
 			_IHDR += bin.intToBytes(crc32(_IHDR));
 
 			return 'data:image/png;base64,' + win.btoa(
-				'\x89PNG\r\n\x1a\n' +
-				chunkSize + _IHDR +
-				imgHead +
-				bin.intToBytes(frm.data.length - 4) + frm.data +
-				bin.intToBytes(crc32(frm.data)) +
-				imgEnd
+				'\x89PNG\r\n\x1a\n'
+				+ chunkSize + _IHDR
+				+ imgHead
+				+ bin.intToBytes(frm.data.length - 4) + frm.data
+				+ bin.intToBytes(crc32(frm.data))
+				+ imgEnd
 			);
 		};
 	} else if ( this.imgType === 'GIF' ) {
@@ -567,12 +572,12 @@ xhr.addEventListener('readystatechange', function() {
 			var frm = frames[frames.idx];
 
 			return 'data:image/gif;base64,' + win.btoa(
-				'GIF89a' +
-				bin.intToBytes(frm.width, 2) + bin.intToBytes(frm.height, 2) +
-				imgHead +
-				frm.data + chunkSize +
-				bin.readString(frm._data[0], frm._data[1]) +
-				';'
+				'GIF89a'
+				+ bin.intToBytes(frm.width, 2) + bin.intToBytes(frm.height, 2)
+				+ imgHead
+				+ frm.data + chunkSize
+				+ bin.readString(frm._data[0], frm._data[1])
+				+ ';'
 			);
 		};
 	} else if ( this.imgType === 'WEBP' ) {
@@ -650,18 +655,6 @@ xhr.addEventListener('readystatechange', function() {
 		currentFrame.value = frames.idx;
 
 		processNextFrame(); // eslint-disable-line
-	};
-
-	var processNextFrame = function() {
-		if ( frames.idx < frames.length ) {
-			img.src = generateImageSRC();
-			frames[frames.idx].data = null;
-		} else {
-			img.removeEventListener('load', onImgLoad);
-			img = null;
-			done();
-			errorHandler(null);
-		}
 	};
 
 	var done = function() {
@@ -784,6 +777,18 @@ xhr.addEventListener('readystatechange', function() {
 			wrap.removeEventListener(vAPI.browser.wheel, wrap.wheeler);
 			wrap.animate();
 		});
+	};
+
+	var processNextFrame = function() {
+		if ( frames.idx < frames.length ) {
+			img.src = generateImageSRC();
+			frames[frames.idx].data = null;
+		} else {
+			img.removeEventListener('load', onImgLoad);
+			img = null;
+			done();
+			errorHandler(null);
+		}
 	};
 
 	img.addEventListener('load', onImgLoad);

@@ -90,7 +90,7 @@ var setDefault = function(selector) {
 	[].forEach.call(nodeList, function(el) {
 		if ( el.type === 'checkbox' ) {
 			el.checked = el.defaultChecked;
-		} else if ( !el.type.lastIndexOf('select', 0) ) {
+		} else if ( el.type.lastIndexOf('select', 0) === 0 ) {
 			var i = el.length;
 
 			while ( i-- ) {
@@ -136,7 +136,7 @@ var load = function(prefs) {
 			field.rows = prefs[pref].length || 2;
 			field.defaultValue = defaultPrefs[pref].join('\n');
 			prefs[pref] = prefs[pref].join('\n');
-		} else if ( !field.type.lastIndexOf('select', 0) ) {
+		} else if ( field.type.lastIndexOf('select', 0) === 0 ) {
 			/* eslint-disable */
 			[].some.call(field, function(el) {
 				if ( el.value == defaultPrefs[pref] ) {
@@ -198,7 +198,6 @@ var save = function() {
 			prefs[pref] = field.checked;
 		} else if ( field.type === 'range' || field.type === 'number'
 			|| field.classList.contains('number') ) {
-
 			prefs[pref] = parseFloat(field.value);
 
 			if ( field.min ) {
@@ -403,7 +402,6 @@ window.addEventListener('load', function() {
 
 	form.addEventListener('keydown', function(e) {
 		e.stopPropagation();
-		debugger;
 
 		if ( e.which === 13 ) {
 			e.target.formSaved = true;

@@ -105,7 +105,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 			media.parentNode.replaceChild(media.cloneNode(false), media);
 		}
 
-		return this._mediaType = media.localName;
+		this._mediaType = media.localName;
+		return this._mediaType;
 	},
 
 	set: function(type) {
