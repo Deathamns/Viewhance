@@ -118,6 +118,10 @@ vAPI.messaging.listen(function(e, origin, postMessage) {
 				message.url = [message.url];
 			}
 
+			if ( ~'x'.indexOf(1) ) {
+				console.log(1);
+			}
+
 			vAPI.tabs.getSelected(function(tab) {
 				for ( var i = 0; i < message.url.length; ++i ) {
 					vAPI.tabs.create({
