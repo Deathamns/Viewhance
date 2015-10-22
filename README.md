@@ -15,8 +15,8 @@ Only the latest browser versions are fully supported. It may work on older versi
 - [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527) 4+
 
 ## Contribution ##
-- **Localization**: You can use [this helper tool](https://rawgit.com/Deathamns/Viewhance/master/l10n/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
-- **Code**: if you have a bug-fix, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge from the main goal - viewing enhancements - (for instance, photo editing capability doesn't belong in this extension).
+- **Localization** You can use [this helper tool](https://rawgit.com/Deathamns/Viewhance/master/l10n/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
+- **Code** If you have a bug-fix, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge from the main goal - viewing enhancements - (for instance, photo editing capability doesn't belong in this extension).
 
 ## Build ##
 ```
