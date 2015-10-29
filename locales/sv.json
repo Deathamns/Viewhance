@@ -1,0 +1,237 @@
+{
+	"_translators": [
+		{
+			"email": "johanohlin(at)gmx(dot)com",
+			"name": "Jojan",
+			"realname": "Johan Öhlin"
+		}
+	],
+	"groupless": {
+		"appDescriptionLong": {
+			"#": 3,
+			">": "Berikar den inbyggda bildvisaren med flera möjligheter till anpassning och funktioner.\n\nFunktioner:\n - Storlekslägen och möjligheten att växla mellan dem med hjälp av genvägar eller musklick\n - Egenanpassad CSS (för bakgrundsfärg för sidan eller mediet, dölja skrollister, m.m.)\n - Egenanpassad information i flikens titel\n - Flytande menyer (med muspekaren över övre vänstra hörnet)\n - Zooma med skrollhjulet (av som standard)\n - Centrera innehållet (på som standard)\n - Rotera och spegla (via genvägar eller meny)\n - Skicka mediets adress till andra tjänster (såsom bakvänd bildsökning)\n - Spara en bild i en animerad bild (stödjer GIF, APNG och WEBP)\n - Anpassa medieattribut (autouppspelning, loopa, kontroller, ljudnivåer)\n - Öppna bilder från en vanlig webbsida med långvarig högerklick eller via genväg (av som standard)\n\nSe inställningarna för detaljer."
+		},
+		"appDescriptionShort": {
+			"#": 2,
+			">": "Extra funktionalitet till webbläsarens egen bildvisare och videospelare."
+		}
+	},
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Nollställ"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Spara"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Centrera innehållet"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Egen stilmall (CSS)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Byt bakgrundsfärgen, ändra bilden skugga och ram, dölj skrollisterna och de flytande menyerna...\nMed musen över frågetecknet, kan du se fler exempel. Använd färgpaletten ovan för att få färghexkoder."
+		},
+		"customCssTip": {
+			"#": 1,
+			">": "<code>body {\n background: #f3f3f5; /* Välj en acceptabel bakgrundsegenskap (color, url(), gradient, etc.). */\n overflow: hidden; /* Döljer skrollisterna. För att visa dem, byt från \"hidden\" till \"auto\". */\n}\n\n# media {\n background: #eef; /* Annan bakgrundsfärg för bilden. */\n border: 10px solid white; /* Bildram. */\n box-shadow: 0 0 10px grey; /* Bildskugga. */\n cursor: default !important; /* Tillåter inte muspekaren att ändras. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Färg för fri-zoommasken. */\n}\n\n#menu {\n display: none; /* Tillåt inte flytande menyer. */\n}\n</code>"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Initalstorlek"
+		},
+		"disabled": {
+			"#": 0,
+			">": "avstängt"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Egen adressikon"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Med denna inställning, ställer du in egen adressikon för de öppnade bilderna.\nBildens adress kan användas med variabeln <b>%url</b>"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Översättningar"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "passa till höjd eller bredd"
+		},
+		"longpressActionWheelZoom": {
+			"#": 0,
+			">": "skifta skrollhjulszoomning"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Handling vid långvarig vänsterklick"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Handling vid långvarig högerklick"
+		},
+		"mediaAttributes": {
+			"#": 1,
+			">": "Medieattribut"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Accepterade attribut\n<b>autoplay</b> - starta videon automatiskt\n<b>loop</b> - loopa uppspelning\n<b>controls</b> - visa kontroller\n<b>muted</b> - tysta videon\n<b>volume=0-100</b> - standardvolym i procent"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Bildinformation"
+		},
+		"mediaInfoTip": {
+			"#": 2,
+			">": "Visa egenanpassad information i flikens titelfält. Den kan innehålla följande variabler:\n<b>%ow</b> - originalbredd\n<b>%oh</b> - originalhöjd\n<b>%ratio</b> - förhållande mellan nuvarande bredd och höjd\n<b>%w</b> - nuvarande bredd\n<b>%h</b> - nuvarande höjd\n<b>%perc</b> - procent av originalstorleken\n<b>%url</b> - hela adressen\n<b>%name</b> - filnamnet"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Förstora små bilder"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Normalt burkar små bilder inte skalas upp i bildvyn. Detta tvingar små bilder att växa.\nVärdet är givet i procent och anger gränsen för hur små bilderna är i förhållande till bildvyns storlek."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "fyll"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "optimal anpassning"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "naturlig storlek"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "Generellt"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Information"
+		},
+		"opener": {
+			"#": 0,
+			">": "Öppna bilder från vanliga webbplatser"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "både och"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + högerklick"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "långvarig högerklick"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "klicka för exempel..."
+		},
+		"scChangeVolume": {
+			"#": 0,
+			">": "<b>Upp eller ned</b> för att höja eller sänka volymen"
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Bläddra igenom storlekslägen: naturlig, passa till bredd, passa till höjd"
+		},
+		"scDragndrop": {
+			"#": 2,
+			">": "<b>Håll Ctrl eller Alt</b< för att dra och släppa bilder, eller dra från bildens högra kant om det passar fönstret"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "Passa till höjd"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "Passa till bredd"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Spegla horisontellt"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Spegla vertikalt"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Flytta muspekaren till sidans övre vänstra hörn för att visa menyn"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Skift + dra</b> i bilden för att använda fri zoomning; håll <b>Ctrl</b> för att flytta valet"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "För att skrolla bilden horisontellt: använd skrollhjulet  vid nedre vänstra kanten"
+		},
+		"scImgBg": {
+			"#": 0,
+			">": "Bläddra igenom bildbakgrunder: default, black, white, check eller håll <b>Skift</b> för egna värden"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Autoanpassning"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Naturlig storlek"
+		},
+		"scPixelate": {
+			"#": 0,
+			">": "Pixelera bild"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> kommer nollställa bilden eller avsluta zoomläget"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Rotera åt vänster"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Rotera åt höger"
+		},
+		"scTogglePlay": {
+			"#": 0,
+			">": "<b>Blanksteg</b> för att växla mellan spela och pausa"
+		},
+		"scWheelZoom": {
+			"#": 0,
+			">": "Skifta skrollhjulszoomning"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Zooma in eller ut"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Skicka bilden till..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Genvägar"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Zooma med skrollhjulet"
+		}
+	}
+}
