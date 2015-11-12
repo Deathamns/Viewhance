@@ -28,16 +28,16 @@ vAPI.storage = {
 		.classes['@mozilla.org/supports-string;1']
 		.createInstance(Components.interfaces.nsISupportsString),
 
-	get: function(key, calblack) {
+	get: function(key, callback) {
 		try {
-			calblack(
+			callback(
 				this._pb.getComplexValue(
 					key,
 					Components.interfaces.nsISupportsString
 				).data
 			);
 		} catch ( ex ) {
-			calblack(null);
+			callback(null);
 		}
 	},
 

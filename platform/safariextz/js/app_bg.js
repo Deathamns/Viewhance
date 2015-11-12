@@ -26,7 +26,7 @@ vAPI.storage = {
 	},
 
 	remove: function(key) {
-		safari.extension.removeItem(key);
+		safari.extension.settings.removeItem(key);
 	}
 };
 
