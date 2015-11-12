@@ -47,12 +47,12 @@ const docObserver = {
 			.getInterface(Ci.nsIContentFrameMessageManager);
 
 		if ( js ) {
-			try {
-				let sandboxName = [
-					win.location.href.slice(0, 100),
-					win.document.title.slice(0, 50)
-				].join(' | ');
+			let sandboxName = [
+				win.location.href.slice(0, 100),
+				win.document.title.slice(0, 50)
+			].join(' | ');
 
+			try {
 				sandbox = Components.utils.Sandbox([win], {
 					sameZoneAs: win,
 					sandboxName: sandboxId + '[' + sandboxName + ']',
