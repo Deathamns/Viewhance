@@ -65,6 +65,7 @@
 		"guard-for-in": 0,
 		"no-alert": 1,
 		"no-caller": 2,
+		"no-case-declarations": 2,
 		"no-div-regex": 2,
 		"no-else-return": 1,
 		"no-empty-label": 2,
@@ -131,7 +132,6 @@
 		"no-use-before-define": 1,
 
 		// Stylistic Issues
-
 		"array-bracket-spacing": [2, "never"],
 		"block-spacing": [2, "always"],
 		"brace-style": [2, "1tbs"],
