@@ -75,21 +75,6 @@ hr {
 	box-sizing: border-box;
 }
 
-aside > .app-info {
-	font-weight: bold;
-}
-
-#platform-info {
-	font: normal 8px sans-serif;
-	color: gray;
-}
-
-.hidden,
-body.opera .opera, body.firefox .firefox, body.chrome .chrome,
-body.safari .safari, body.maxthon .maxthon {
-	display: none;
-}
-
 .logo {
 	display: block;
 	width: 128px;
@@ -105,7 +90,19 @@ body.safari .safari, body.maxthon .maxthon {
 	box-shadow: 0 0 10px #bef;
 }
 
-body > form > section {
+aside > .app-info {
+	font-weight: bold;
+}
+
+#platform-info {
+	font: normal 8px sans-serif;
+	color: gray;
+}
+
+body > form > section,
+.hidden,
+body.opera .opera, body.firefox .firefox, body.chrome .chrome,
+body.safari .safari, body.maxthon .maxthon {
 	display: none;
 }
 
