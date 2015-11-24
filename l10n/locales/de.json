@@ -1,0 +1,235 @@
+{
+	"_translators": [
+		{
+			"name": "sioh"
+		}
+	],
+	"groupless": {
+		"appDescriptionLong": {
+			"#": 3,
+			">": "Erweitert den eingebauten Bild- und Medienbetrachter um Anpassungsmöglichkeiten und Funktionen.\n\nFunktionen:\n- Standardgrößen und deren Wechsel mittels Tastaturkürzeln und Maus\n- Eigene CSS (Hintergrundfarbe, Scrollbalken ...)\n- Dynamisches Menü (Maussensitiv)\n- Mausradunterstützung\n- Standardmäßiges Zentrieren\n- Drehen/Spiegeln (Mittels Tastaturkürzel oder via Menü)\n- Versenden der URL an verschiedene Dienste (bspw. zur Rückwärtssuche)\n- Einzelbildextraktion bei animierten Bildern (GIF, APNG, WEBP)\n- Anpassbare Attribute (Autoplay, Schleife, Steuerung, Lautstärke, Stummschaltung)\n- Öffnen von Bildern aus Webseiten heraus mittels langem Rechtsklick oder per Tastaturkürzel (Standardmäßig deaktiviert)\n\nSiehe Einstellungen für weitere Hinweise."
+		},
+		"appDescriptionShort": {
+			"#": 2,
+			">": "Erweiterte Funktionalität des eingebauten Bildbetrachters und Videoplayers."
+		}
+	},
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Standard"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Speichern"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Inhalt zentrieren"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Angepasster Style (CSS)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Änderung der Hintergrundfarbe, Rahmen/Schatten, Verstecken der Scrollbalken oder des Menüs...\nFür Beispiele mit der Maus über das Fragezeichen fahren und den Color Picker für die Farbinformationen"
+		},
+		"customCssTip": {
+			"#": 1,
+			">": "<code>body {\n background: #f3f3f5; /* Jedes gültige Hintergrundmerkmal (color, url(), gradient...). */\n overflow: hidden; /* Verstecken der Scrollbalken. Zum sichtbarmachen \"hidden\" durch \"auto\" ersetzen. */\n}\n\n#media {\n background: #eef; /* Verschiedene Hintergründe für Bilder. */\n border: 10px solid white; /* Bildrahmen. */\n box-shadow: 0 0 10px grey; /* Bildschatten. */\n cursor: default !important; /* Unterdrücken der Änderung des Mauszeigers. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* Farbe der stufenlosen Zoommaske. */\n}\n\n#menu {\n display: none; /* Dynamisches Menü abschalten. */\n}\n</code>"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Darstellungsmodus beim Aufruf"
+		},
+		"disabled": {
+			"#": 0,
+			">": "abgeschaltet"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Angepasstes Favicon"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Diese Einstellung erlaubt das setzen eines eigenen Icons für das Tab (Favicon) des geöffneten Bildes. Die Adresse des Bildes kann als Variable verwendet werden: <b>%url</b>"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Übersetzungen"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "an Höhe/Breite anpassen"
+		},
+		"longpressActionWheelZoom": {
+			"#": 0,
+			">": "Zoom mittels Mausrad"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Aktion bei langem Linkklick"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Aktion bei langem Rechtsklick"
+		},
+		"mediaAttributes": {
+			"#": 1,
+			">": "Medienattribute"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Mögliche Attribute\n<b>autoplay</b> - Video automatisch abspielen\n<b>loop</b> - In Schleife abspielen\n<b>controls</b> - Anzeige der Steuerungselemente\n<b>muted</b> - Stummschaltung\n<b>volume=0-100</b> - Standardlautstärke (%)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Bildinformationen"
+		},
+		"mediaInfoTip": {
+			"#": 2,
+			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - Originalbreite\n<b>%oh</b> - Originalhöhe\n<b>%ratio</b> - Aktuelle Breite : Aktuelle Höhe\n<b>%w</b> - Aktuelle Breite\n<b>%h</b> - Aktuelle Höhe\n<b>%perc</b> - Vergrößerung in Prozent\n<b>%url</b> - vollständige URL\n<b>%name</b> - Dateiname"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Kleine Bilder vergrößern"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Durch diese Einstellung werden kleine Bilder vergrößert. Jene Bilder welche größer als der Angegebene Prozentwert sind werden gemäß der vorigen Einstellung vergrößert."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "eingepasst"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "An Breite/Höhe angepasst"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "Originalgröße"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "Generelle Einstellungen"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Info"
+		},
+		"opener": {
+			"#": 0,
+			">": "Öffne Bilder von gewöhnlichen Webseiten"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "beides"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Strg + Alt + Rechtsklick"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "langer Rechtsklick"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "Für Beispiele drücken"
+		},
+		"scChangeVolume": {
+			"#": 0,
+			">": "<b>Auf / Ab</b> um Lautstärke anzupassen"
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Durchwechseln der Darstellungsmodi: Original, An Breite angepasst, An Höhe angepasst"
+		},
+		"scDragndrop": {
+			"#": 2,
+			">": "<b>Strg / Alt</b> gedrückt halten für Drag 'n' Drop oder von der rechten Ecke des Bildes ziehen sollte es auf diese Weise ins Fenster passen"
+		},
+		"scFitToHeight": {
+			"#": 0,
+			">": "An Höhe anpassen"
+		},
+		"scFitToWidth": {
+			"#": 0,
+			">": "An Breite anpassen"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Horizontales Spiegeln"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Vertikales Spiegeln"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Für Menü den Mauszeiger in die linke, obere Ecke bewegen"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Umschalt + ziehen</b> des Bildes für Freihandzoom, <Strg> gedrückt halten um die Auswahl zu bewegen"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "Zum horizontalen Scrollen den Mauszeiger in die linke, untere Ecke bewegen und das Mausrad verwenden"
+		},
+		"scImgBg": {
+			"#": 0,
+			">": "Durchwechseln der Hintergrundfarben: Standard, Schwarz, Weiß, Kariert oder <b>Umschalt</B>-Taste für eigene Farbe"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Automatische Größenanpassung"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Originale Größe"
+		},
+		"scPixelate": {
+			"#": 0,
+			">": "Pixelinterpolation de-/aktivieren"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> Zum zurücksetzen des Bildes auf seine Originaleinstellungen oder um den Freihandzoom zu verlassen"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Drehen (entgegen Uhrzeigersinn)"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Drehen (im Uhrzeigersinn)"
+		},
+		"scTogglePlay": {
+			"#": 0,
+			">": "<b>Space</b> Wechsel Play/Pause"
+		},
+		"scWheelZoom": {
+			"#": 0,
+			">": "Wechsel Mausradzoom"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Rein- / Rauszoomen"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Bild senden an..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Tastaturkürzel"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Mausradzoom"
+		}
+	}
+}
