@@ -23,7 +23,7 @@ Only the latest browser versions are fully supported. It may work on older versi
 sh build.sh [platform(s)] [meta] [useln] [pack]
 ```
 
-The script prepares extension directories for each platform, and if the `pack` argument is supplied, it will create installable packages (and update files depending on the platform). All the output of this script goes to the `build` directory.
+The script prepares extension directories for each platform, and if the `pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes to the `build` directory.
 
 Optionally, it accepts platform codes (any directory name under `platform`) in case if the build should happen only for the desired platforms, since all platforms will be processed by default.
 
@@ -44,7 +44,7 @@ sh build.sh xpi oex
 sh build.sh crx pack
 ```
 
-For generating only meta-data (manifest and locales files, and/or update files when the `pack` argument is given), the `build_meta.py` script can be used (requires Python3). Similarly, it accepts the *platform codes* and the `pack` argument.
+For generating only meta-data (manifest and locales files, and/or update-files when the `pack` argument is given), the `build_meta.py` script can be used (requires Python3). Similarly, it accepts the *platform codes* and the `pack` argument.
 The same effect is achieved by running `sh build.sh meta [platform(s)]` command.
 
 ## Development ##
