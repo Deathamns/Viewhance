@@ -10,7 +10,7 @@ if ( !doc || !doc.body || !response || !response.prefs ) {
 }
 
 var cfg = response.prefs;
-var media = doc.body.querySelector('img, video');
+var media = doc.body.querySelector('img, video, audio');
 
 if ( !media ) {
 	init = null;
@@ -118,6 +118,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'image-orientation: from-image;',
 	'}',
 	'html.audio #media {',
+		'box-sizing: inherit;',
 		'width: 50%;',
 		'height: 40px !important;',
 		'min-width: 300px;',

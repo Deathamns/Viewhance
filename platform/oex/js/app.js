@@ -91,9 +91,11 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}
 
-		var media = document.querySelector(
-			'body > img[src=""], body > div > video[src=""]'
-		);
+		var media = document.querySelector([
+			'body > img[src=""]',
+			'body > div > video[src=""]:only-child',
+			'body > div > audio[src=""]:only-child'
+		].join(', '));
 
 		if ( !media ) {
 			return this._mediaType;
