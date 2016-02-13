@@ -23,18 +23,21 @@ Only the latest browser versions are fully supported. It may work on older versi
 sh build.sh [platform(s)] [meta] [useln] [pack]
 ```
 
-The script prepares extension directories for each platform, and if the `pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes to the `build` directory.
-
-Optionally, it accepts platform codes (any directory name under `platform`) in case if the build should happen only for the desired platforms, since all platforms will be processed by default.
-
 Windows users need [Cygwin](https://cygwin.com/install.html) to run the script.
+
+The script prepares installable directories for each platform, and if the `pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes to the `build` directory.
+
+Optionally, it accepts platform names (any directory name under the `platform` directory) in case if the build should happen only for the desired platforms, since all platforms will be processed by default.
+
+For generating only meta-data (manifest and locale files, and/or update-files when the `pack` argument is set), the `build_meta.py` script can be used (requires Python3). Similarly, it accepts the *platform names* and the `pack` argument.
+The same effect is achieved by running `sh build.sh meta [platform(s)]` command.
 
 Examples:
 ```
-# Prepare directories for every supported platform
+# Prepare directories for every available platform
 sh build.sh
 
-# Prepare directories and package them for every supported platform
+# Prepare directories and package them for every available platform
 sh build.sh pack
 
 # Prepare directories for Firefox and Opera
@@ -42,13 +45,13 @@ sh build.sh xpi oex
 
 # Prepare and package for Chromium
 sh build.sh crx pack
+
+# Generate meta-data for Maxthon and Safari
+sh build.sh meta mxaddon safariextz
 ```
 
-For generating only meta-data (manifest and locales files, and/or update-files when the `pack` argument is given), the `build_meta.py` script can be used (requires Python3). Similarly, it accepts the *platform codes* and the `pack` argument.
-The same effect is achieved by running `sh build.sh meta [platform(s)]` command.
-
 ## Development ##
-For testing you can build (described above) the extension for a selected platform, and install it from the `build/_platform_` directory for your browser.
+For testing, you can build (described above) the extension for a selected platform, and install it from the `build/_platform_` directory for your browser.
 
 Some browsers (on some platforms) support reading the files through symbolic links, and for them there is a `useln` argument for the `build.sh` script to create symbolic links instead of copying the project files. `useln` is ignored when `pack` is used.
 
@@ -73,7 +76,7 @@ Open `chrome://extensions` in a tab, and drag-n-drop the `build/crx` directory o
 - Select the `build/Viewhance.safariextension` directory, and Install (assuming the developer certificates are already installed)
 
 #### Maxthon ####
-This platform is available only on Windows. Installation happens by copying the `build/mxaddon` directory into user's `Addons`, or creating a junction (soft link) to the same directory. Creating a junction (don't forget to delete the link if you don't use it anymore):
+This platform is available only on Windows. Installation happens by copying the `build/mxaddon` directory into user's `Addons`, or creating a junction (soft link) to the same directory. Creating a junction (don't forget to delete the link if you won't use it anymore):
 
 ```
 mklink /H /D /J Maxthon_install_path\UserData\Users\guest\Addons\Viewhance build\mxaddon
