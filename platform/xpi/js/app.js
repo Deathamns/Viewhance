@@ -103,7 +103,7 @@ if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 				html,
 				parser.SanitizerAllowStyle,
 				false,
-				io.newURI(document.baseURI, null, null),
+				io.newURI('about:blank', null, null),
 				document.documentElement
 			));
 		};
