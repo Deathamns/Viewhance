@@ -1086,8 +1086,6 @@ init = function() {
 			return;
 		}
 
-		pdsp(e);
-
 		if ( media.box.width <= winW && media.box.height <= winH ) {
 			return;
 		}
@@ -1110,6 +1108,7 @@ init = function() {
 			return;
 		}
 
+		pdsp(e);
 		win.scrollBy(x, y);
 	};
 
