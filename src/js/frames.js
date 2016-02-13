@@ -179,7 +179,7 @@ xhr.addEventListener('readystatechange', function() {
 		return;
 	}
 
-	var i, chunkSize;
+	var i, chunkSize, imgHead;
 
 	if ( !this.imgType ) {
 		// PNG or GIF or WEBP signature
@@ -233,7 +233,7 @@ xhr.addEventListener('readystatechange', function() {
 	var frames = [];
 	var bin = new BinaryTools(this.responseText);
 	var animation = {};
-	var imgHead = '';
+	imgHead = '';
 
 	if ( this.imgType === 'PNG' ) {
 		// https://wiki.mozilla.org/APNG_Specification
