@@ -57,17 +57,6 @@ var shortcut = {
 	}
 };
 
-var noFit = {cur: false, real: false};
-var lastEvent = {};
-var progress = null;
-var cancelAction = false;
-var freeZoom = null;
-var dragSlide = [];
-var borderSize = 0;
-var MAXSIZE = 0x7fff;
-var initPingsLeft = 600;
-var root, panning, winW, winH, sX, sY;
-
 [doc.documentElement, doc.body, media].forEach(function(node) {
 	var i = node.attributes.length;
 
@@ -80,6 +69,9 @@ var root, panning, winW, winH, sX, sY;
 	}
 });
 
+var root = doc.documentElement;
+var progress = null;
+var initPingsLeft = 600;
 var head = doc.querySelector('head');
 
 if ( head ) {
@@ -89,12 +81,12 @@ if ( head ) {
 head = doc.createElement('head');
 
 if ( cfg.favicon ) {
-	root = doc.createElement('link');
-	root.rel = 'shortcut icon';
-	root.href = cfg.favicon === '%url' && vAPI.mediaType === 'img'
+	var faviconLink = doc.createElement('link');
+	faviconLink.rel = 'shortcut icon';
+	faviconLink.href = cfg.favicon === '%url' && vAPI.mediaType === 'img'
 		? win.location.href
 		: cfg.favicon.replace('%url', encodeURIComponent(win.location.href));
-	head.appendChild(root);
+	head.appendChild(faviconLink);
 }
 
 head.appendChild(doc.createElement('style')).textContent = [
@@ -110,8 +102,10 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'-ms-user-select: none;',
 	'}',
 	'#media {',
-		'display: block',
+		'display: block;',
 		'box-sizing: border-box;',
+		'max-width: none;',
+		'max-height: none;',
 		'position: absolute;',
 		'margin: 0;',
 		'background-clip: padding-box;',
@@ -133,7 +127,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'background: transparent;',
 	'}',
 	'html.load-failed #media {',
-		'margin: auto',
+		'margin: auto;',
 		'box-shadow: 0 0 10px red;',
 	'}',
 	'html.fullscreen #media {',
@@ -141,20 +135,6 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'}',
 	'#media:-moz-full-screen {',
 		'background: black !important;',
-	'}',
-	'#media.m-1 {',
-		'width: auto;',
-		'height: auto;',
-		'max-width: 100%;',
-		'max-height: 100%;',
-	'}',
-	'#media.m-2 {',
-		'width: 100%;',
-		'height:auto;',
-	'}',
-	'#media.m-3 {',
-		'height: 100%;',
-		'width: auto;',
 	'}',
 	'a {',
 		'text-decoration: none;',
@@ -293,11 +273,12 @@ head.appendChild(doc.createElement('style')).textContent = [
 	// Custom CSS
 	cfg.css
 ].join('');
-doc.documentElement.insertBefore(head, doc.body);
+root.insertBefore(head, doc.body);
 
 init = function() {
 	if ( vAPI.mediaType === 'img' && !media.naturalWidth ) {
 		if ( progress && --initPingsLeft < 1 ) {
+			initPingsLeft = null;
 			clearInterval(progress);
 		}
 
@@ -316,7 +297,7 @@ init = function() {
 		doc.body.replaceChild(media, doc.body.firstElementChild);
 	}
 
-	while ( media.previousSibling || media.nextSibling) {
+	while ( media.previousSibling || media.nextSibling ) {
 		media.parentNode.removeChild(
 			media.previousSibling || media.nextSibling
 		);
@@ -326,34 +307,36 @@ init = function() {
 		return;
 	}
 
-	var mediaWidth, mediaHeight;
+	var winW, winH, panning, sX, sY, mediaWidth, mediaHeight, setTitleTimer;
+	var mediaOrigWidth, mediaOrigHeight, mediaFullWidth, mediaFullHeight;
+	var mediaCss = Object.create(null);
+	var noFit = {cur: null, real: null};
+	var lastEvent = {};
+	var dragSlide = [];
+	var freeZoom = null;
+	var cancelAction = false;
+	// var MAX_SIZE = 0x7fff;
+	var MODE_CUSTOM = 0;
+	var MODE_ORIG = 1;
+	var MODE_FIT = 2;
+	var MODE_WIDTH = 3;
+	var MODE_HEIGHT = 4;
 
 	if ( vAPI.mediaType === 'img' ) {
-		mediaWidth = media.naturalWidth;
-		mediaHeight = media.naturalHeight;
+		mediaOrigWidth = media.naturalWidth;
+		mediaOrigHeight = media.naturalHeight;
 
-		if ( mediaWidth !== mediaHeight ) {
+		if ( mediaOrigWidth !== mediaOrigHeight ) {
 			// image-orientation in Firefox doesn't flip natural sizes
-			if ( mediaWidth / mediaHeight === media.height / media.width ) {
-				mediaWidth = media.naturalHeight;
-				mediaHeight = media.naturalWidth;
+			if ( mediaOrigWidth / mediaOrigHeight === media.height / media.width ) {
+				mediaOrigWidth = media.naturalHeight;
+				mediaOrigHeight = media.naturalWidth;
 			}
 		}
 	} else {
-		mediaWidth = media.videoWidth;
-		mediaHeight = media.videoHeight;
+		mediaOrigWidth = media.videoWidth;
+		mediaOrigHeight = media.videoHeight;
 	}
-
-	doc.head.querySelector('style').sheet.insertRule(
-		'#media {max-width:' + Math.min(
-			MAXSIZE,
-			Math.floor(mediaWidth * MAXSIZE / mediaHeight)
-		) + 'px; max-height:' + Math.min(
-			MAXSIZE,
-			Math.floor(mediaHeight * MAXSIZE / mediaWidth)
-		) + 'px}',
-		0
-	);
 
 	if ( !cfg.mediaInfo ) {
 		cfg.mediaInfo = false;
@@ -369,37 +352,50 @@ init = function() {
 		doc.body.removeChild(menu);
 		menu = null;
 	} else {
-		var onMenuChange;
 		menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px)';
 
 		if ( menu.style.filter || menu.style.webkitFilter ) {
-			onMenuChange = function(e) {
-				var t = e.target;
-				var filterCSS = '';
-				var filterName;
+			vAPI.browser.filter = menu.style.webkitFilter
+				? '-webkit-filter'
+				: 'filter';
+		}
 
-				if ( !t.value ) {
-					media.style.filter = media.style.webkitFilter = filterCSS;
-					return;
-				}
+		var onMenuChange = function(e) {
+			var filterName;
+			var filterCSS = '';
+			var t = e.target;
 
-				if ( t.value === t.defaultValue ) {
-					delete media.filters[t.parentNode.textContent.trim()];
-				} else {
-					filterName = t.parentNode.textContent.trim();
-					media.filters[filterName] = t.value + t.getAttribute('unit');
-				}
+			if ( !t.value ) {
+				media.style[vAPI.browser.filter] = filterCSS;
+				return;
+			}
 
-				for ( filterName in media.filters ) {
-					filterCSS += filterName;
-					filterCSS += '(' + media.filters[filterName] + ') ';
-				}
+			if ( t.value === t.defaultValue ) {
+				delete media.filters[t.parentNode.textContent.trim()];
+			} else {
+				filterName = t.parentNode.textContent.trim();
+				media.filters[filterName] = t.value + t.getAttribute('unit');
+			}
 
-				media.style.filter = media.style.webkitFilter = filterCSS;
-			};
+			for ( filterName in media.filters ) {
+				filterCSS += filterName;
+				filterCSS += '(' + media.filters[filterName] + ') ';
+			}
 
+			if ( filterCSS ) {
+				mediaCss[vAPI.browser.filter] = filterCSS;
+			} else {
+				delete mediaCss[vAPI.browser.filter];
+			}
+
+			media.style[vAPI.browser.filter] = filterCSS;
+		};
+
+		if ( vAPI.browser.filter ) {
 			media.filters = Object.create(null);
 			menu.addEventListener('change', onMenuChange);
+		} else {
+			onMenuChange = null;
 		}
 
 		vAPI.buildNodes(menu.appendChild(doc.createElement('ul')), [
@@ -550,7 +546,7 @@ init = function() {
 		menu.addEventListener('mousedown', function(e) {
 			var t = e.target;
 
-			if ( t.href && t.href.indexOf('%', t.host.length) > -1 ) {
+			if ( t.href && t.href.indexOf('%', t.host.length) !== -1 ) {
 				t.href = t.href.replace(/%url/, encodeURIComponent(media.src));
 			}
 
@@ -598,8 +594,9 @@ init = function() {
 				}
 			} else if ( cmd === 'filters' ) {
 				if ( e.button === 2 ) {
-					media.style.filter = media.style.webkitFilter = '';
 					media.filters = {};
+					delete mediaCss[vAPI.browser.filter];
+					media.style[vAPI.browser.filter] = '';
 					doc.querySelector('#menu li.filters > form').reset();
 				}
 			} else if ( cmd === 'frames' ) {
@@ -777,75 +774,102 @@ init = function() {
 		}, 500);
 	}
 
+	var setMediaStyle = function() {
+		var css = '';
+
+		for ( var p in mediaCss ) {
+			css += p + ':' + mediaCss[p] + ';';
+		}
+
+		media.style.cssText = css;
+	};
+
+	var setCursor = function() {
+		var m = media;
+		var s = m.style;
+
+		if ( m.box.width > winW || m.box.height > winH ) {
+			s.cursor = 'move';
+		} else if ( mediaWidth < mediaOrigWidth
+			|| mediaHeight < mediaOrigHeight ) {
+			s.cursor = vAPI.browser.zoomIn;
+		} else {
+			s.cursor = '';
+		}
+	};
+
+	var calcViewportDimensions = function() {
+		winH = doc.compatMode === 'BackCompat' ? doc.body : root;
+		winW = winH.clientWidth;
+		winH = winH.clientHeight;
+	};
+
+	var calcFit = function() {
+		var m = media;
+		mediaWidth = m.clientWidth - (mediaFullWidth - mediaOrigWidth);
+		mediaHeight = m.clientHeight - (mediaFullHeight - mediaOrigHeight);
+		m.box = m.getBoundingClientRect();
+		noFit.cur = m.box.width <= winW && m.box.height <= winH;
+
+		var radians = m.angle * Math.PI / 180;
+		var sin = Math.abs(Math.sin(radians));
+		var cos = Math.abs(Math.cos(radians));
+		var boxW = mediaFullWidth * cos + mediaFullHeight * sin;
+		var boxH = mediaFullWidth * sin + mediaFullHeight * cos;
+		noFit.real = boxW <= winW && boxH <= winH;
+
+		setCursor();
+	};
+
+	var adjustPosition = function() {
+		var radians = media.angle * Math.PI / 180;
+		var sin = Math.abs(Math.sin(radians));
+		var cos = Math.abs(Math.cos(radians));
+		var w = parseFloat(mediaCss.width || mediaFullWidth);
+		var h = w * mediaFullHeight / mediaFullWidth;
+		var boxW = w * cos + h * sin;
+		var boxH = w * sin + h * cos;
+
+		if ( cfg.center ) {
+			mediaCss.left = Math.max(0, (winW - boxW) / 2);
+			mediaCss.top = Math.max(0, (winH - boxH) / 2);
+		} else {
+			mediaCss.left = 0;
+			mediaCss.top = 0;
+		}
+
+		if ( media.angle ) {
+			mediaCss.left += (boxW - w) / 2;
+			mediaCss.top += (boxH - h) / 2;
+		}
+
+		mediaCss.left += 'px';
+		mediaCss.top += 'px';
+		setMediaStyle();
+		calcFit();
+		setCursor();
+	};
+
 	var convertInfoParameter = function(a, param) {
 		var m = media;
 
 		switch ( param ) {
-			case 'w': return m.clientWidth;
-			case 'h': return m.clientHeight;
-			case 'ow': return mediaWidth;
-			case 'oh': return mediaHeight;
+			case 'w': return m.width;
+			case 'h': return m.height;
+			case 'ow': return mediaOrigWidth;
+			case 'oh': return mediaOrigHeight;
 			case 'url': return win.location.href;
 			case 'name': return m.alt;
 			case 'ratio':
-				return Math.round(m.clientWidth / m.clientHeight * 100) / 100;
-			case 'perc': return Math.round(m.clientWidth * 100 / mediaWidth);
+				return Math.round(m.width / m.height * 100) / 100;
+			case 'perc': return Math.round(m.width * 100 / mediaOrigWidth);
 		}
+
+		return '';
 	};
 
-	var adjustPosition = function() {
-		var s = media.style;
-
-		if ( cfg.center ) {
-			s.top = Math.max(0, (winH - media.offsetHeight) / 2) + 'px';
-			s.left = Math.max(0, (winW - media.offsetWidth) / 2) + 'px';
-		} else {
-			s.top = s.left = '0';
-		}
-
-		var box = media.getBoundingClientRect();
-		media.box = box;
-
-		if ( box.left < 0 ) {
-			s.left = parseInt(s.left, 10) - box.left - win.pageXOffset + 'px';
-		}
-
-		if ( box.top < 0 ) {
-			s.top = parseInt(s.top, 10) - box.top - win.pageYOffset + 'px';
-		}
-	};
-
-	var calcFit = function() {
-		winH = doc.compatMode[0] === 'B' ? doc.body : root;
-		winW = winH.clientWidth;
-		winH = winH.clientHeight;
-
-		var box = media.box || media.getBoundingClientRect();
-
-		noFit = {
-			cur: box.width <= winW && box.height <= winH,
-			real: mediaWidth <= winW && mediaHeight <= winH
-		};
-	};
-
-	var afterCalcCallback = function() {
-		var m = media;
-		calcFit();
-
-		// Change cursor according to sizing
-		if ( m.clientWidth > winW || m.clientHeight > winH ) {
-			m.style.cursor = 'move';
-		} else if ( winH >= m.clientHeight && winW >= m.clientWidth
-			&& winH < mediaHeight || winW < mediaWidth ) {
-			m.style.cursor = vAPI.browser.zoomIn;
-		} else if ( noFit.cur && noFit.real
-			&& (m.clientHeight < mediaHeight || m.clientWidth < mediaWidth) ) {
-			m.style.cursor = vAPI.browser.zoomIn;
-		} else {
-			m.style.cursor = 'default';
-		}
-
-		if ( !cfg.mediaInfo || !(mediaWidth && mediaHeight) ) {
+	var setTitle = function() {
+		if ( !cfg.mediaInfo ) {
 			return;
 		}
 
@@ -855,45 +879,73 @@ init = function() {
 		);
 	};
 
-	var afterCalc = function() {
-		if ( !calcFit ) {
-			return;
+	var resizeMedia = function(mode, w) {
+		var boxW;
+		var newMode = mode === void 0 ? MODE_FIT : mode;
+		var boxRatio = media.box.width / media.box.height;
+		media.mode = newMode;
+
+		calcViewportDimensions();
+
+		if ( !w && mode === MODE_FIT && !noFit.real ) {
+			newMode = boxRatio > winW / winH ? MODE_WIDTH : MODE_HEIGHT;
 		}
 
-		calcFit();
-		adjustPosition();
-		setTimeout(afterCalcCallback, 0xf);
-	};
+		if ( w ) {
+			boxW = w;
+		} else if ( newMode === MODE_WIDTH ) {
+			boxW = winW;
+		} else if ( newMode === MODE_HEIGHT ) {
+			boxW = boxRatio * winH;
+		} else if ( newMode === MODE_ORIG || newMode === MODE_FIT && noFit.real ) {
+			delete mediaCss.width;
+		}
 
-	var resizeMedia = function(m, w) {
-		var mode = m === void 0 ? 1 : m;
-
-		if ( mode === -1 ) {
-			if ( w ) {
-				media.style.width = w;
+		if ( boxW ) {
+			if ( media.angle ) {
+				var radians = Math.PI * media.angle / 180;
+				var sin = Math.abs(Math.sin(radians));
+				var cos = Math.abs(Math.cos(radians));
+				mediaCss.width = boxW * cos - boxW / boxRatio * sin;
+				mediaCss.width /= cos * cos - sin * sin;
+				boxW = mediaCss.width;
+			} else {
+				mediaCss.width = boxW;
 			}
-		} else if ( media.mode === -1 ) {
-			media.style.width = '';
-			media.style.height = '';
+
+			mediaCss.width += 'px';
 		}
 
-		media.mode = mode;
-		media.className = 'm-' + mode;
+		/*if ( mediaCss.width ) {
+			var offsetWidth = boxW || parseInt(mediaCss.width, 10);
 
-		if ( mediaWidth ) {
-			afterCalc();
-		}
+			if ( offsetWidth > MAX_SIZE ) {
+				offsetWidth = MAX_SIZE;
+				mediaCss.width = MAX_SIZE + 'px';
+			}
+
+			if ( offsetWidth * mediaFullHeight / mediaFullWidth > MAX_SIZE ) {
+				mediaCss.width = MAX_SIZE * mediaFullWidth / mediaFullHeight;
+				mediaCss.width += 'px';
+			}
+		}*/
+
+		adjustPosition();
+		clearTimeout(setTitleTimer);
+		setTitleTimer = setTimeout(setTitle, 50);
 	};
 
 	var cycleModes = function(back) {
-		var mode = (media.mode === 1 ? 0 : media.mode) - (back ? 1 : -1);
+		var mode = media.mode === MODE_FIT ? MODE_ORIG : media.mode;
+		var dir = back ? 1 : -1;
+		mode -= dir;
 
-		if ( mode === 1 ) {
-			mode -= back ? 1 : -1;
-		} else if ( mode < 0 ) {
-			mode = 3;
-		} else if ( mode > 3 ) {
-			mode = 0;
+		if ( mode === MODE_FIT ) {
+			mode -= dir;
+		} else if ( mode < MODE_ORIG ) {
+			mode = MODE_HEIGHT;
+		} else if ( mode > MODE_HEIGHT ) {
+			mode = MODE_ORIG;
 		}
 
 		resizeMedia(mode);
@@ -903,7 +955,6 @@ init = function() {
 		if ( freeZoom ) {
 			doc.removeEventListener('mousemove', drawMask);
 			doc.body.removeChild(media.mask);
-
 			freeZoom = null;
 			cancelAction = false;
 			return;
@@ -914,23 +965,20 @@ init = function() {
 		}
 
 		var filters = doc.querySelector('#menu li.filters > form');
-		var mediaStyle = media.style;
 
 		if ( filters ) {
-			mediaStyle.filter = mediaStyle.webkitFilter = '';
 			media.filters = {};
+			media.style[vAPI.browser.filter] = '';
 			filters.reset();
 		}
 
-		delete media.curdeg;
 		delete media.scale;
 		delete media.bgList;
 		delete media.bgListIndex;
-		mediaStyle[vAPI.browser.transform] = '';
-		mediaStyle.background = '';
-		mediaStyle.width = '';
-		mediaStyle.height = '';
-		resizeMedia(0);
+		mediaCss = {};
+		media.angle = 0;
+		resizeMedia(MODE_ORIG);
+		win.scrollTo(0, 0);
 	};
 
 	var flipMedia = function(el, horizontal) {
@@ -944,34 +992,36 @@ init = function() {
 			? 'scale(' + media.scale.h + ',' + media.scale.v + ')'
 			: '';
 
-		if ( media.curdeg ) {
-			transformCss += ' rotate(' + media.curdeg + 'deg)';
+		if ( media.angle ) {
+			transformCss += ' rotate(' + media.angle + 'deg)';
 		}
 
-		media.style[vAPI.browser.transform] = transformCss;
+		mediaCss[vAPI.browser.transform] = transformCss;
+		setMediaStyle();
+		setCursor();
 	};
 
 	var rotateMedia = function(deg, fine) {
-		var rot;
-
-		if ( !media.curdeg ) {
-			media.curdeg = 0;
-		}
+		var rot = '';
 
 		if ( deg ) {
-			media.curdeg += fine ? 10 : 90;
+			media.angle += fine ? 5 : 90;
 		} else {
-			media.curdeg -= fine ? 10 : 90;
+			media.angle -= fine ? 5 : 90;
 		}
 
-		win.status = media.curdeg + '°';
-		rot = 'rotate(' + media.curdeg + 'deg)';
+		media.angle %= 360;
+
+		if ( media.angle ) {
+			rot += 'rotate(' + media.angle + 'deg)';
+		}
 
 		if ( media.scale ) {
 			rot += ' scale(' + media.scale.h + ', ' + media.scale.v + ')';
 		}
 
-		media.style[vAPI.browser.transform] = rot;
+		win.status = media.angle + '°';
+		mediaCss[vAPI.browser.transform] = rot;
 		adjustPosition();
 	};
 
@@ -987,27 +1037,23 @@ init = function() {
 
 		pdsp(e);
 		stopScroll(); // eslint-disable-line
+		media.box = media.getBoundingClientRect();
 
-		var w = media.offsetWidth;
-		var h = media.offsetHeight;
+		var x = e.clientX - media.box.left;
+		var y = e.clientY - media.box.top;
+		var w = media.box.width;
+		var h = media.box.height;
 
 		if ( (e.deltaY || -e.wheelDelta) > 0 ) {
-			resizeMedia(-1, Math.max(1, w * 0.75) + 'px');
+			resizeMedia(MODE_CUSTOM, Math.max(1, w * 0.75));
 		} else {
-			var width = w * (4 / 3);
-			resizeMedia(-1, (width > 10 ? width : width + 3) + 'px');
+			var nW = w * (4 / 3);
+			resizeMedia(MODE_CUSTOM, nW > 10 ? nW : nW + 3);
 		}
-
-		if ( !e.keypress && e.target.localName !== 'img' ) {
-			return;
-		}
-
-		var layerX = e.offsetX || e.layerX || 0;
-		var layerY = e.offsetY || e.layerY || 0;
 
 		win.scrollTo(
-			layerX * media.offsetWidth / w - e.clientX + borderSize,
-			layerY * media.offsetHeight / h - e.clientY + borderSize
+			x * media.box.width / w - e.clientX,
+			y * media.box.height / h - e.clientY
 		);
 	};
 
@@ -1017,9 +1063,7 @@ init = function() {
 			keypress: true,
 			deltaY: e.deltaY || -e.wheelDelta,
 			clientX: winW / 2,
-			clientY: winH / 2,
-			offsetX: win.pageXOffset + media.offsetLeft + winW / 2,
-			offsetY: win.pageYOffset + media.offsetTop + winH / 2
+			clientY: winH / 2
 		});
 	};
 
@@ -1044,7 +1088,7 @@ init = function() {
 
 		pdsp(e);
 
-		if ( media.clientWidth <= winW && media.clientHeight <= winH ) {
+		if ( media.box.width <= winW && media.box.height <= winH ) {
 			return;
 		}
 
@@ -1053,11 +1097,11 @@ init = function() {
 		var x = 0;
 		var y = ((e.deltaX || e.deltaY || -e.wheelDelta) > 0 ? winH : -winH) / 5;
 
-		if ( media.clientWidth <= winW && media.clientHeight > winH ) {
+		if ( media.box.width <= winW && media.box.height > winH ) {
 			if ( !cfg.hiddenScrollbars ) {
 				return;
 			}
-		} else if ( media.clientHeight <= winH && media.clientWidth > winW
+		} else if ( media.box.height <= winH && media.box.width > winW
 			|| e.clientX < winW / 2 && e.clientY > winH - 100
 			|| e.deltaX && !e.deltaY ) {
 			x = (y < 0 ? -winW : winW) / 5;
@@ -1179,8 +1223,8 @@ init = function() {
 			dragSlide[1] /= 1.11;
 		}
 
-		var atRight = root.scrollWidth - win.pageXOffset === winW;
-		var atBottom = root.scrollHeight - win.pageYOffset === winH;
+		var atRight = Math.max(winW, media.box.width) - win.pageXOffset === winW;
+		var atBottom = Math.max(winH, media.box.height) - win.pageYOffset === winH;
 
 		if ( !(dragSlide[0] && dragSlide[1])
 			|| !win.pageYOffset && !win.pageXOffset
@@ -1211,18 +1255,22 @@ init = function() {
 
 			freeZoom.x += rx;
 			freeZoom.y += ry;
-			freeZoom.X += rx;
-			freeZoom.Y += ry;
+			freeZoom.startX += rx;
+			freeZoom.startY += ry;
 		} else {
-			if ( freeZoom.prevX ) {
+			if ( freeZoom.prevX !== void 0 ) {
 				delete freeZoom.prevX;
 				delete freeZoom.prevY;
 			}
 
-			freeZoom.w = Math.abs(freeZoom.X - x);
-			freeZoom.h = Math.abs(freeZoom.Y - y);
-			freeZoom.x = freeZoom.X < x ? freeZoom.X : freeZoom.X - freeZoom.w;
-			freeZoom.y = freeZoom.Y < y ? freeZoom.Y : freeZoom.Y - freeZoom.h;
+			freeZoom.w = Math.abs(freeZoom.startX - x);
+			freeZoom.h = Math.abs(freeZoom.startY - y);
+			freeZoom.x = freeZoom.startX < x
+				? freeZoom.startX
+				: freeZoom.startX - freeZoom.w;
+			freeZoom.y = freeZoom.startY < y
+				? freeZoom.startY
+				: freeZoom.startY - freeZoom.h;
 		}
 
 		media.mctx.clearRect(0, 0, media.mask.width, media.mask.height);
@@ -1232,25 +1280,35 @@ init = function() {
 	};
 
 	var longpressHandler = function() {
-		cancelAction = true;
 		progress = null;
+		cancelAction = true;
 
 		var action = cfg[lastEvent.button === 2 ? 'lpRight' : 'lpLeft'];
 
 		if ( action === 1 ) {
-			var x, y;
+			var m = media;
+			media.box = m.getBoundingClientRect();
+			var x = (lastEvent.clientX - m.box.left) / m.box.width;
+			var y = (lastEvent.clientY - m.box.top) / m.box.height;
 
-			if ( mediaWidth / mediaHeight > winW / winH && media.mode !== 3
-				|| media.mode === 2 ) {
-				x = media.clientWidth;
-				resizeMedia(3);
-				x = lastEvent.layerX * media.clientWidth / x - winW / 2;
-				y = 0;
+			if ( media.mode === MODE_WIDTH ) {
+				resizeMedia(MODE_HEIGHT);
+			} else if ( media.mode === MODE_HEIGHT ) {
+				resizeMedia(MODE_WIDTH);
 			} else {
-				y = media.clientHeight;
-				resizeMedia(2);
+				resizeMedia(
+					media.box.width / media.box.height < winW / winH
+						? MODE_WIDTH
+						: MODE_HEIGHT
+				);
+			}
+
+			if ( m.mode === MODE_WIDTH ) {
 				x = 0;
-				y = lastEvent.layerY * media.clientHeight / y - winH / 2;
+				y = y * m.box.height - winH / 2;
+			} else {
+				x = x * m.box.width - winW / 2;
+				y = 0;
 			}
 
 			win.scrollTo(x, y);
@@ -1283,12 +1341,12 @@ init = function() {
 			}
 		}
 
-		if ( e.button === 0 && this.mode < 4 || e.button === 2 ) {
+		if ( e.button === 0 && this.mode <= MODE_HEIGHT || e.button === 2 ) {
 			if ( e.button === 2 ) {
 				sX = true;
 			} else {
-				if ( !e.shiftKey && noFit.cur && this.clientWidth >= 60 ) {
-					if ( this.clientWidth - (e.offsetX || e.layerX || 0) <= 30 ) {
+				if ( !e.shiftKey && noFit.cur && this.box.width >= 60 ) {
+					if ( this.box.left + this.box.width - e.clientX <= 30 ) {
 						lastEvent.clientX = e.clientX;
 						lastEvent.clientY = e.clientY;
 						return;
@@ -1311,45 +1369,38 @@ init = function() {
 			cancelAction = true;
 
 			if ( e.button === 0 ) {
+				this.box = this.getBoundingClientRect();
 				freeZoom = {
 					counter: 0,
-					left: parseInt(this.style.left, 10),
-					top: parseInt(this.style.top, 10)
+					left: Math.max(0, this.box.left),
+					top: Math.max(0, this.box.top)
 				};
 
-				freeZoom.X = e.clientX - freeZoom.left;
-				freeZoom.Y = e.clientY - freeZoom.top;
+				freeZoom.startX = e.clientX - freeZoom.left;
+				freeZoom.startY = e.clientY - freeZoom.top;
 
 				if ( !this.mask ) {
 					this.mask = doc.createElement('canvas');
 					this.mask.className = 'mask';
 					this.mask.style.cssText = [
 						'display: block',
-						'position: fixed',
-						'left: 0',
-						'top: 0'
+						'position: fixed'
 					].join(';');
 					this.mctx = this.mask.getContext('2d');
 				}
 
 				doc.addEventListener('mousemove', drawMask);
+				this.mask.width = Math.min(winW, this.box.width);
+				this.mask.height = Math.min(winH, this.box.height);
+				this.mask.style.left = freeZoom.left + 'px';
+				this.mask.style.top = freeZoom.top + 'px';
 
-				var h = !!(this.curdeg && Math.sin(this.curdeg));
-				var w = h ? this.offsetHeight : this.offsetWidth;
-				h = h ? this.offsetWidth : this.offsetHeight;
-				this.mask.width = Math.min(winW, w);
-				this.mask.height = Math.min(winH, h);
-
-				this.mask.style.left = this.style.left;
-				this.mask.style.top = this.style.top;
-
-				this.mctx.clearRect(0, 0, this.mask.width, this.mask.height);
 				doc.body.appendChild(this.mask);
 
-				w = win.getComputedStyle(this.mask).color;
-				this.mctx.fillStyle = !w || w === 'rgb(0, 0, 0)'
-					? 'rgba(0,0,0,.4)'
-					: w;
+				var maskColor = win.getComputedStyle(this.mask).color;
+				this.mctx.fillStyle = !maskColor || maskColor === 'rgb(0, 0, 0)'
+					? 'rgba(0, 0, 0, .4)'
+					: maskColor;
 			}
 		}
 
@@ -1379,8 +1430,6 @@ init = function() {
 
 		lastEvent.clientX = e.clientX;
 		lastEvent.clientY = e.clientY;
-		lastEvent.layerX = e.offsetX || e.layerX || 0;
-		lastEvent.layerY = e.offsetY || e.layerY || 0;
 		lastEvent.button = e.button;
 		progress = setTimeout(longpressHandler, 300);
 	}, true);
@@ -1394,95 +1443,87 @@ init = function() {
 			return;
 		}
 
-		var x, y;
+		var x, y, w, h;
 
-		if ( media.mode < 4 ) {
-			doc.removeEventListener('mousemove', onMove, true);
+		doc.removeEventListener('mousemove', onMove, true);
 
-			if ( freeZoom ) {
-				doc.removeEventListener('mousemove', drawMask);
-				doc.body.removeChild(media.mask);
+		if ( freeZoom ) {
+			cancelAction = false;
+			doc.removeEventListener('mousemove', drawMask);
+			media.mctx.clearRect(0, 0, media.mask.width, media.mask.height);
+			doc.body.removeChild(media.mask);
 
-				var w = Math.min(
-					media.clientWidth,
-					freeZoom.w + Math.min(freeZoom.x, 0)
-						+ (freeZoom.x + freeZoom.w > media.mask.width
-							? media.mask.width - freeZoom.x - freeZoom.w
-							: 0)
-				);
-
-				var h = Math.min(
-					media.clientHeight,
-					freeZoom.h + Math.min(freeZoom.y, 0)
-						+ (freeZoom.y + freeZoom.h > media.mask.height
-							? media.mask.height - freeZoom.y - freeZoom.h
-							: 0)
-				);
-
-				x = Math.max(0, freeZoom.x);
-				y = Math.max(0, freeZoom.y);
-
+			if ( freeZoom.counter < 1 ) {
 				freeZoom = null;
-				cancelAction = false;
-
-				if ( !w || !h ) {
-					return;
-				}
-
-				if ( x >= media.clientWidth || y >= media.clientHeight ) {
-					return;
-				}
-
-				var nimgw, nimgh;
-				var scrollbars = win.innerWidth - winW || win.innerHeight - winH;
-				var fitW = winW < w * winH / h;
-
-				fitW = e.ctrlKey ? !fitW : fitW;
-
-				if ( fitW ) {
-					nimgw = media.clientWidth * winW / w;
-					nimgh = nimgw * media.clientHeight / media.clientWidth;
-				} else {
-					nimgh = media.clientHeight * winH / h;
-					nimgw = nimgh * media.clientWidth / media.clientHeight;
-				}
-
-				if ( nimgw > MAXSIZE ) {
-					nimgw = MAXSIZE;
-					nimgh = media.clientHeight * MAXSIZE / media.clientWidth;
-				}
-
-				if ( nimgh > MAXSIZE ) {
-					nimgw = media.clientWidth * MAXSIZE / media.clientHeight;
-					nimgh = MAXSIZE;
-				}
-
-				x = (win.pageXOffset + x + w / 2) * nimgw / media.clientWidth
-					- winW / 2 - scrollbars;
-				y = (win.pageYOffset + y + h / 2) * nimgh / media.clientHeight
-					- winH / 2 - scrollbars;
-
-				resizeMedia(-1, nimgw + 'px');
-				win.scrollTo(x, y);
 				return;
-			} else if ( dragSlide.length === 3 ) {
-				x = dragSlide[0][0] - dragSlide[2][0];
-				y = dragSlide[0][1] - dragSlide[2][1];
+			}
 
-				if ( Date.now() - media.dragSlideTime > 100 ) {
-					cancelAction = false;
-					dragSlide.length = 0;
-					return;
-				}
+			w = Math.min(
+				media.mask.width,
+				freeZoom.w + Math.min(freeZoom.x, 0)
+					+ (freeZoom.x + freeZoom.w > media.mask.width
+						? media.mask.width - freeZoom.x - freeZoom.w
+						: 0)
+			) || 1;
 
-				if ( x || y ) {
-					dragSlide.length = 2;
-					dragSlide[0] = x;
-					dragSlide[1] = y;
-					startScroll();
-					win.addEventListener(vAPI.browser.wheel, stopScroll, true);
-					return;
-				}
+			h = Math.min(
+				media.mask.height,
+				freeZoom.h + Math.min(freeZoom.y, 0)
+					+ (freeZoom.y + freeZoom.h > media.mask.height
+						? media.mask.height - freeZoom.y - freeZoom.h
+						: 0)
+			) || 1;
+
+			x = Math.max(0, freeZoom.x);
+			y = Math.max(0, freeZoom.y);
+
+			if ( x >= media.box.width || y >= media.box.height ) {
+				return;
+			}
+
+			var nimgw;
+			var fitW = winW < w * winH / h;
+			fitW = e.ctrlKey ? !fitW : fitW;
+
+			if ( fitW ) {
+				nimgw = media.box.width * winW / w;
+			} else {
+				nimgw = media.box.height * winH / h;
+				nimgw *= media.box.width / media.box.height;
+			}
+
+			x = freeZoom.left + x + w / 2 - media.box.left;
+			y = freeZoom.top + y + h / 2 - media.box.top;
+			w = media.box.width;
+			h = media.box.height;
+			freeZoom = null;
+
+			resizeMedia(MODE_CUSTOM, nimgw);
+
+			win.scrollTo(
+				x * media.box.width / w - winW / 2,
+				y * media.box.height / h - winH / 2
+			);
+			return;
+		}
+
+		if ( dragSlide.length === 3 ) {
+			x = dragSlide[0][0] - dragSlide[2][0];
+			y = dragSlide[0][1] - dragSlide[2][1];
+
+			if ( Date.now() - media.dragSlideTime > 100 ) {
+				cancelAction = false;
+				dragSlide.length = 0;
+				return;
+			}
+
+			if ( x || y ) {
+				dragSlide.length = 2;
+				dragSlide[0] = x;
+				dragSlide[1] = y;
+				startScroll();
+				win.addEventListener(vAPI.browser.wheel, stopScroll, true);
+				return;
 			}
 		}
 
@@ -1509,42 +1550,34 @@ init = function() {
 			return;
 		}
 
-		if ( media.mode < 2 && noFit.real ) {
-			if ( media.mode === -1 ) {
-				resizeMedia(0);
-			} else if ( winW / winH < mediaWidth / mediaHeight ) {
-				resizeMedia(2);
-			} else if ( winH === media.offsetHeight && winW > media.offsetWidth ) {
-				resizeMedia(2);
+		if ( media.mode < MODE_WIDTH && noFit.real ) {
+			if ( media.mode === MODE_CUSTOM && mediaWidth !== mediaOrigWidth ) {
+				resizeMedia(MODE_ORIG);
+			} else if ( (media.mode === MODE_FIT || media.mode === MODE_ORIG)
+				&& (media.box.width === winW || media.box.height === winH) ) {
+				resizeMedia(MODE_ORIG);
 			} else {
-				resizeMedia(3);
+				resizeMedia(
+					MODE_FIT,
+					mediaWidth === mediaOrigWidth
+						? media.box.width / media.box.height > winW / winH
+							? winW
+							: winH * media.box.width / media.box.height
+						: void 0
+				);
 			}
-		} else if ( media.mode === 1 || noFit.cur ) {
-			if ( mediaWidth === media.clientWidth
-				&& mediaHeight === media.clientHeight ) {
-				return;
-			}
-
-			x = e.offsetX || e.layerX || 0;
-			y = e.offsetY || e.layerY || 0;
-
-			if ( media.scale ) {
-				if ( media.scale.h === -1 ) {
-					x = media.clientWidth - x;
-				}
-
-				if ( media.scale.v === -1 ) {
-					y = media.clientHeight - y;
-				}
-			}
-
-			x = x * mediaWidth / media.clientWidth - winW / 2;
-			y = y * mediaHeight / media.clientHeight - winH / 2;
-
-			resizeMedia(0);
-			win.scrollTo(x, y);
+		} else if ( media.mode === MODE_FIT || noFit.cur ) {
+			x = e.clientX - media.box.left;
+			y = e.clientY - media.box.top;
+			w = media.box.width;
+			h = media.box.height;
+			resizeMedia(MODE_ORIG);
+			win.scrollTo(
+				x * media.box.width / w - winW / 2,
+				y * media.box.height / h - winH / 2
+			);
 		} else {
-			resizeMedia(1);
+			resizeMedia(MODE_FIT);
 		}
 	}, true);
 
@@ -1607,8 +1640,8 @@ init = function() {
 				break;
 
 			case 'End':
-				x = e.shiftKey ? root.scrollWidth : win.pageXOffset;
-				y = e.shiftKey ? win.pageYOffset : root.scrollHeight;
+				x = e.shiftKey ? Math.max(winW, media.box.width) : win.pageXOffset;
+				y = e.shiftKey ? win.pageYOffset : Math.max(winH, media.box.height);
 				z = true;
 				break;
 
@@ -1631,10 +1664,10 @@ init = function() {
 		}
 
 		switch ( key ) {
-			case cfg.key_mOrig: resizeMedia(0); break;
-			case cfg.key_mFit: resizeMedia(1); break;
-			case cfg.key_mFitW: resizeMedia(2); break;
-			case cfg.key_mFitH: resizeMedia(3); break;
+			case cfg.key_mOrig: resizeMedia(MODE_ORIG); break;
+			case cfg.key_mFit: resizeMedia(MODE_FIT); break;
+			case cfg.key_mFitW: resizeMedia(MODE_WIDTH); break;
+			case cfg.key_mFitH: resizeMedia(MODE_HEIGHT); break;
 			case cfg.key_cycle: cycleModes(e.shiftKey); break;
 			case cfg.key_rotL: rotateMedia(false, e.shiftKey); break;
 			case cfg.key_rotR: rotateMedia(true, e.shiftKey); break;
@@ -1646,9 +1679,13 @@ init = function() {
 					break;
 				}
 
-				media.style.imageRendering = media.style.imageRendering === ''
-					? vAPI.browser.irPixelated
-					: '';
+				if ( media.style.imageRendering === '' ) {
+					mediaCss['image-rendering'] = vAPI.browser.irPixelated;
+				} else {
+					delete mediaCss['image-rendering'];
+				}
+
+				setMediaStyle();
 				break;
 			case cfg.key_imgBg:
 				if ( vAPI.mediaType !== 'img' ) {
@@ -1665,14 +1702,15 @@ init = function() {
 				}
 
 				if ( bgValue !== false ) {
-					media.style.background = bgValue;
+					mediaCss.background = bgValue;
+					setMediaStyle();
 					break;
 				}
 
 				if ( !media.bgList ) {
-					media.bgList = {};
 					bgValue = win.getComputedStyle(media);
 					bgValue = bgValue.background || bgValue.backgroundColor;
+					media.bgList = {};
 					media.bgList[bgValue] = true;
 					media.bgList['rgb(0, 0, 0)'] = true;
 					media.bgList['rgb(255, 255, 255)'] = true;
@@ -1681,9 +1719,10 @@ init = function() {
 					media.bgListIndex = 0;
 				}
 
-				media.style.background = media.bgList[
+				mediaCss.background = media.bgList[
 					++media.bgListIndex % media.bgList.length
 				];
+				setMediaStyle();
 				break;
 			default: x = true;
 		}
@@ -1712,7 +1751,7 @@ init = function() {
 	win.addEventListener('resize', function() {
 		media.removeAttribute('width');
 		media.removeAttribute('height');
-		afterCalc();
+		resizeMedia(media.mode);
 	});
 	toggleWheelZoom();
 
@@ -1742,44 +1781,52 @@ init = function() {
 		});
 	}
 
-	calcFit();
 	progress = [];
+	media.angle = 0;
+	// Original dimensions with padding and border
+	mediaFullWidth = media.offsetWidth;
+	mediaFullHeight = media.offsetHeight;
+	calcViewportDimensions();
+	calcFit();
 
-	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
-		if ( mediaWidth >= winW * cfg.minUpscale / 100 ) {
+	if ( vAPI.mediaType === 'img' && cfg.minUpscale && noFit.real ) {
+		if ( mediaOrigWidth >= winW * cfg.minUpscale / 100 ) {
 			progress[0] = true;
 		}
 
-		if ( mediaHeight >= winH * cfg.minUpscale / 100 ) {
+		if ( mediaOrigHeight >= winH * cfg.minUpscale / 100 ) {
 			progress[1] = true;
 		}
 	}
 
+	// cfg.mode values: 0 - natural size; 1 - contain; 2 - best fit (fill)
 	if ( cfg.mode === 2 ) {
-		media.mode = mediaWidth / mediaHeight > winW / winH ? 3 : 2;
-	} else if ( cfg.mode > 2 ) {
-		media.mode = 0;
-	} else {
-		media.mode = cfg.mode;
-
-		if ( progress.length ) {
-			if ( media.mode === 1 || media.mode === 0 && noFit.real ) {
-				media.mode = mediaWidth / mediaHeight > winW / winH ? 2 : 3;
-			}
+		if ( noFit.real ) {
+			media.mode = MODE_FIT;
+		} else {
+			media.mode = mediaOrigWidth / mediaOrigHeight < winW / winH
+				? MODE_WIDTH
+				: MODE_HEIGHT;
 		}
+	} else {
+		media.mode = cfg.mode === 0 ? MODE_ORIG : MODE_FIT;
 	}
 
-	if ( media.mode === 2 && mediaWidth < winW && !progress[0] ) {
-		media.mode = 0;
-	} else if ( media.mode === 3 && mediaHeight < winH && !progress[1] ) {
-		media.mode = 0;
+	if ( media.mode === MODE_WIDTH && mediaOrigWidth < winW && !progress[0] ) {
+		media.mode = MODE_ORIG;
+	} else if ( media.mode === MODE_HEIGHT && mediaOrigHeight < winH && !progress[1] ) {
+		media.mode = MODE_ORIG;
 	}
 
+	resizeMedia(
+		media.mode,
+		media.mode <= MODE_FIT && progress.length
+			? mediaOrigWidth / mediaOrigHeight > winW / winH
+				? winW
+				: winH * mediaOrigWidth / mediaOrigHeight
+			: void 0
+	);
 	progress = null;
-	resizeMedia(media.mode);
-
-	// Some browsers (Safari, Firefox) won't position the media without this
-	setTimeout(adjustPosition, 30);
 };
 
 root = doc.documentElement;
@@ -1828,141 +1875,142 @@ if ( vAPI.mediaType === 'img' ) {
 	}
 
 	progress = setInterval(init, 100);
-} else {
-	var attributeValues = {};
-	var mediaAttributes = ['autoplay', 'controls', 'loop', 'muted', 'volume'];
+	return;
+}
 
-	cfg.mediaAttrs.split(/\s+/).forEach(function(attribute) {
-		var attr = attribute.split('=');
+var attributeValues = {};
+var mediaAttributes = ['autoplay', 'controls', 'loop', 'muted', 'volume'];
 
-		if ( attr[0] === 'volume' ) {
-			attributeValues[attr[0]] = Math.min(
-				100,
-				Math.max(0, parseInt(attr[1], 10) / 100)
-			);
-		} else {
-			attributeValues[attr[0]] = true;
-		}
-	});
+cfg.mediaAttrs.split(/\s+/).forEach(function(attribute) {
+	var attr = attribute.split('=');
 
-	mediaAttributes.forEach(function(attr) {
-		if ( attr === 'volume' ) {
-			media[attr] = attributeValues[attr] === void 0
-				? 1
-				: attributeValues[attr];
-		} else {
-			media[attr] = attributeValues[attr] || false;
-		}
-	});
+	if ( attr[0] === 'volume' ) {
+		attributeValues[attr[0]] = Math.min(
+			100,
+			Math.max(0, parseInt(attr[1], 10) / 100)
+		);
+	} else {
+		attributeValues[attr[0]] = true;
+	}
+});
 
-	media.togglePlay = function() {
-		if ( this.paused || Math.abs(this.duration - this.currentTime) < 0.01 ) {
-			this.play();
-		} else {
-			this.pause();
-		}
+mediaAttributes.forEach(function(attr) {
+	if ( attr === 'volume' ) {
+		media[attr] = attributeValues[attr] === void 0
+			? 1
+			: attributeValues[attr];
+	} else {
+		media[attr] = attributeValues[attr] || false;
+	}
+});
+
+media.togglePlay = function() {
+	if ( this.paused || Math.abs(this.duration - this.currentTime) < 0.01 ) {
+		this.play();
+	} else {
+		this.pause();
+	}
+};
+
+media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
+	this.removeEventListener(e.type, onLoadedMetadata);
+
+	if ( this.videoHeight && (vAPI.opera || vAPI.chrome) ) {
+		doc.addEventListener('fullscreenchange', function() {
+			root.classList.toggle('fullscreen');
+		});
+	}
+
+	var playerStateSaver;
+	var monitoredAttrs = mediaAttributes.slice(1, -2);
+
+	var savePlayerState = function() {
+		var mediaAttrs = [];
+
+		mediaAttributes.forEach(function(attr) {
+			if ( attr === 'volume' ) {
+				if ( media.volume < 1 ) {
+					mediaAttrs.push(attr + '=' + (100 * media.volume | 0));
+				}
+			} else if ( media[attr] ) {
+				mediaAttrs.push(attr);
+			}
+		});
+
+		vAPI.messaging.send({cmd: 'savePrefs', prefs: {
+			mediaAttrs: mediaAttrs.join(' ')
+		}});
 	};
 
-	media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
-		this.removeEventListener(e.type, onLoadedMetadata);
-
-		if ( this.videoHeight && (vAPI.opera || vAPI.chrome) ) {
-			doc.addEventListener('fullscreenchange', function() {
-				root.classList.toggle('fullscreen');
-			});
+	var onAttributeChange = function() {
+		if ( !media.controls && vAPI.mediaType === 'audio' ) {
+			media.controls = true;
 		}
 
-		var playerStateSaver;
-		var monitoredAttrs = mediaAttributes.slice(1, -2);
+		clearTimeout(playerStateSaver);
+		playerStateSaver = setTimeout(savePlayerState, 500);
+	};
 
-		var savePlayerState = function() {
-			var mediaAttrs = [];
-
-			mediaAttributes.forEach(function(attr) {
-				if ( attr === 'volume' ) {
-					if ( media.volume < 1 ) {
-						mediaAttrs.push(attr + '=' + (100 * media.volume | 0));
-					}
-				} else if ( media[attr] ) {
-					mediaAttrs.push(attr);
-				}
-			});
-
-			vAPI.messaging.send({cmd: 'savePrefs', prefs: {
-				mediaAttrs: mediaAttrs.join(' ')
-			}});
-		};
-
-		var onAttributeChange = function() {
-			if ( !media.controls && vAPI.mediaType === 'audio' ) {
-				media.controls = true;
+	if ( win.MutationObserver ) {
+		new MutationObserver(onAttributeChange).observe(media, {
+			attributes: true,
+			attributeFilter: monitoredAttrs
+		});
+	} else {
+		// Legacy
+		media.addEventListener('DOMAttrModified', function(ev) {
+			if ( monitoredAttrs.indexOf(ev.attrName) > -1 ) {
+				onAttributeChange();
 			}
+		});
+	}
 
-			clearTimeout(playerStateSaver);
-			playerStateSaver = setTimeout(savePlayerState, 500);
-		};
+	media.addEventListener('volumechange', onAttributeChange);
 
-		if ( win.MutationObserver ) {
-			new MutationObserver(onAttributeChange).observe(media, {
-				attributes: true,
-				attributeFilter: monitoredAttrs
-			});
-		} else {
-			// Legacy
-			media.addEventListener('DOMAttrModified', function(ev) {
-				if ( monitoredAttrs.indexOf(ev.attrName) > -1 ) {
-					onAttributeChange();
-				}
-			});
-		}
+	if ( media.autoplay ) {
+		setTimeout(media.play.bind(media), 50);
+	}
 
-		media.addEventListener('volumechange', onAttributeChange);
-
-		if ( media.autoplay ) {
-			setTimeout(media.play.bind(media), 50);
-		}
-
-		if ( this.videoHeight ) {
-			init();
-			return;
-		}
-
-		vAPI.mediaType = 'audio';
-		media.controls = true;
-		doc.title = media.alt;
+	if ( this.videoHeight ) {
 		init();
+		return;
+	}
 
-		doc.addEventListener('keydown', function(ev) {
-			var key = shortcut.key(ev);
+	vAPI.mediaType = 'audio';
+	media.controls = true;
+	doc.title = media.alt;
+	init();
 
-			if ( key === 'Space' ) {
-				media.togglePlay();
-			} else if ( key === 'Up' || key === 'Down' ) {
-				key = media.volume + (key === 'Up' ? 0.1 : -0.1);
-				media.volume = key < 0
-					? 0
-					: key > 1 ? 1 : key;
-			} else {
-				return;
-			}
+	doc.addEventListener('keydown', function(ev) {
+		var key = shortcut.key(ev);
 
-			pdsp(ev);
-		});
-
-		media.addEventListener('dblclick', function(ev) {
-			pdsp(ev);
-		});
-
-		if ( vAPI.opera || vAPI.firefox ) {
+		if ( key === 'Space' ) {
+			media.togglePlay();
+		} else if ( key === 'Up' || key === 'Down' ) {
+			key = media.volume + (key === 'Up' ? 0.1 : -0.1);
+			media.volume = key < 0
+				? 0
+				: key > 1 ? 1 : key;
+		} else {
 			return;
 		}
 
-		// To not show the black poster when audio restarts or if seek happens
-		media.addEventListener('playing', function() {
-			this.poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
-		});
+		pdsp(ev);
 	});
-}
+
+	media.addEventListener('dblclick', function(ev) {
+		pdsp(ev);
+	});
+
+	if ( vAPI.opera || vAPI.firefox ) {
+		return;
+	}
+
+	// To not show the black poster when audio restarts or if seek happens
+	media.addEventListener('playing', function() {
+		this.poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
+	});
+});
 
 };
 
