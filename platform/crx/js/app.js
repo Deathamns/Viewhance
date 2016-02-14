@@ -6,7 +6,7 @@ vAPI.chrome = true;
 
 vAPI.browser = {
 	irPixelated: 'pixelated',
-	transform: 'transform',
+	transformCSS: 'transform',
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',
 	wheel: 'wheel',

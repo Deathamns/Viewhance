@@ -352,12 +352,12 @@ init = function() {
 		doc.body.removeChild(menu);
 		menu = null;
 	} else {
-		menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px)';
+		menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px);';
 
 		if ( menu.style.filter || menu.style.webkitFilter ) {
-			vAPI.browser.filter = menu.style.webkitFilter
-				? '-webkit-filter'
-				: 'filter';
+			vAPI.browser.filter = menu.style.filter
+				? 'filter'
+				: '-webkit-filter';
 		}
 
 		var onMenuChange = function(e) {
@@ -996,7 +996,7 @@ init = function() {
 			transformCss += ' rotate(' + media.angle + 'deg)';
 		}
 
-		mediaCss[vAPI.browser.transform] = transformCss;
+		mediaCss[vAPI.browser.transformCSS] = transformCss;
 		setMediaStyle();
 		setCursor();
 	};
@@ -1021,7 +1021,7 @@ init = function() {
 		}
 
 		win.status = media.angle + '°';
-		mediaCss[vAPI.browser.transform] = rot;
+		mediaCss[vAPI.browser.transformCSS] = rot;
 		adjustPosition();
 	};
 

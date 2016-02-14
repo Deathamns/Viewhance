@@ -6,7 +6,7 @@ vAPI.opera = true;
 
 vAPI.browser = {
 	irPixelated: '-o-crisp-edges',
-	transform: 'transform',
+	transformCSS: 'transform',
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',
 	wheel: 'mousewheel',

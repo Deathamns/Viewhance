@@ -6,8 +6,8 @@ vAPI.safari = true;
 
 vAPI.browser = {
 	irPixelated: '-webkit-crisp-edges',
-	transform: 'webkitTransform' in document.documentElement.style
-		? 'webkitTransform'
+	transformCSS: 'webkitTransform' in document.documentElement.style
+		? '-webkit-transform'
 		: 'transform',
 	transitionCSS: 'webkitTransition' in document.documentElement.style
 		? '-webkit-transition'

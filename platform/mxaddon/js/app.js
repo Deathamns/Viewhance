@@ -7,7 +7,7 @@ vAPI._runtime = external.mxGetRuntime();
 
 vAPI.browser = {
 	irPixelated: '-webkit-optimize-contrast',
-	transform: 'webkitTransform',
+	transformCSS: '-webkit-transform',
 	transitionCSS: '-webkit-transition',
 	transitionend: 'webkitTransitionEnd',
 	wheel: 'mousewheel',

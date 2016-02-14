@@ -9,7 +9,7 @@ vAPI.firefox = true;
 vAPI.browser = {
 	wheel: 'wheel',
 	irPixelated: '-moz-crisp-edges',
-	transform: 'transform',
+	transformCSS: 'transform',
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',
 	zoomIn: 'zoom-in'
