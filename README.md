@@ -9,9 +9,9 @@ Visit one of the extension stores (below) to see the list of features.
 Only the latest browser versions are fully supported. It may work on older versions, but extra effort won't be made to stretch the compatibility for the sake of outdated platforms.
 
 - [Firefox](https://addons.mozilla.org/addon/viewhance/) ~24+ (or its relatives; SeaMonkey, Waterfox, Pale Moon...)
-- [Opera](http://tiny.cc/Viewhance-oex) 12
+- [Opera](https://tiny.cc/Viewhance-oex) 12
 - [Chromium](https://chrome.google.com/webstore/detail/ijabcgpjcbpphfagcaknnlcfeodbnkgp) ~22+ (or its relatives; Chrome, Opera 15+, YaBrowser...)
-- [Safari](http://tiny.cc/Viewhance-safariextz) ~5.1+
+- [Safari](https://tiny.cc/Viewhance-safariextz) ~5.1+
 - [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527) 4+
 
 ## Contribution ##
