@@ -66,13 +66,17 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 				return img.src;
 			}
 		} else if ( nname === 'video' ) {
-			var canvas = document.createElement('canvas');
-			canvas.width = node.clientWidth;
-			canvas.height = node.clientHeight;
-			canvas.getContext('2d').drawImage(
-				node, 0, 0, canvas.width, canvas.height
-			);
-			return canvas.toDataURL('image/jpeg');
+			try {
+				var canvas = document.createElement('canvas');
+				canvas.width = node.clientWidth;
+				canvas.height = node.clientHeight;
+				canvas.getContext('2d').drawImage(
+					node, 0, 0, canvas.width, canvas.height
+				);
+				return canvas.toDataURL('image/jpeg');
+			} catch ( ex ) {
+				return node.poster || null;
+			}
 		} else if ( /^\[object SVG/.test(node.toString()) ) {
 			var svgString = (new window.XMLSerializer).serializeToString(
 				node.ownerSVGElement === null
