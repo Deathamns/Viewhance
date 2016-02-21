@@ -1678,10 +1678,10 @@ init = function() {
 					break;
 				}
 
-				if ( media.style.imageRendering === '' ) {
+				if ( win.getComputedStyle(media).imageRendering !== vAPI.browser.irPixelated ) {
 					mediaCss['image-rendering'] = vAPI.browser.irPixelated;
 				} else {
-					delete mediaCss['image-rendering'];
+					mediaCss['image-rendering'] = 'auto';
 				}
 
 				setMediaStyle();
