@@ -1966,20 +1966,6 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 
 	media.addEventListener('volumechange', onAttributeChange);
 
-	if ( media.autoplay ) {
-		setTimeout(media.play.bind(media), 50);
-	}
-
-	if ( this.videoHeight ) {
-		init();
-		return;
-	}
-
-	vAPI.mediaType = 'audio';
-	media.controls = true;
-	doc.title = media.alt;
-	init();
-
 	doc.addEventListener('keydown', function(ev) {
 		var key = shortcut.key(ev);
 
@@ -2000,6 +1986,20 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 	media.addEventListener('dblclick', function(ev) {
 		pdsp(ev);
 	});
+
+	if ( media.autoplay ) {
+		setTimeout(media.play.bind(media), 50);
+	}
+
+	if ( this.videoHeight ) {
+		init();
+		return;
+	}
+
+	vAPI.mediaType = 'audio';
+	media.controls = true;
+	doc.title = media.alt;
+	init();
 
 	if ( vAPI.opera || vAPI.firefox ) {
 		return;
