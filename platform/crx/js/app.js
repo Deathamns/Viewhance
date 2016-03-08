@@ -59,7 +59,9 @@ vAPI.messaging = {
 if ( location.protocol === 'chrome-extension:' ) {
 	if ( location.hash === '#options_ui' ) {
 		vAPI.messaging.send({cmd: 'open', url: 'options.html'});
-		window.close();
+		// The message may not reach the background process
+		// if the window is closed synchronously
+		setTimeout(window.close.bind(window), 0);
 	}
 
 	vAPI.l10n = function(s) {
