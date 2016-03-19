@@ -113,6 +113,10 @@ if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 
 Object.defineProperty(vAPI, 'fullScreenElement', {
 	get: function() {
+		if ( 'fullscreenElement' in document ) {
+			return document.fullscreenElement;
+		}
+
 		return document.mozFullScreenElement || null;
 	}
 });
