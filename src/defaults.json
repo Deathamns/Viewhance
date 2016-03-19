@@ -11,7 +11,7 @@
 	"lpRight": 2,
 	"sendToHosts": [
 		"TinEye|https://www.tineye.com/search?sort=size&order=desc&url=%url",
-		"Google|https://images.google.com/searchbyimage?image_url=%url",
+		"Google|https://www.google.com/searchbyimage?image_url=%url",
 		"Bing|https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=%url",
 		"Yandex|https://images.yandex.ru/yandsearch?rpt=imagecbir&img_url=%url",
 		"KarmaDecay|http://karmadecay.com/%url",
