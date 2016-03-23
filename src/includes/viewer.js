@@ -605,7 +605,8 @@ init = function() {
 					var errorHandler = function(alertMessage) {
 						// Success
 						if ( alertMessage !== null ) {
-							alert(alertMessage); // eslint-disable-line
+							// eslint-disable-next-line no-alert
+							alert(alertMessage);
 							menu.querySelector('li[data-cmd="frames"]')
 								.removeAttribute('data-cmd');
 							return;
@@ -1036,7 +1037,7 @@ init = function() {
 		}
 
 		pdsp(e);
-		stopScroll(); // eslint-disable-line
+		stopScroll();
 		media.box = media.getBoundingClientRect();
 
 		var x = e.clientX - media.box.left;
@@ -1068,7 +1069,7 @@ init = function() {
 	};
 
 	var onContextMenu = function(e) {
-		doc.removeEventListener('mousemove', onMove, true); // eslint-disable-line
+		doc.removeEventListener('mousemove', onMove, true);
 
 		if ( progress ) {
 			clearTimeout(progress);
@@ -1090,7 +1091,7 @@ init = function() {
 			return;
 		}
 
-		stopScroll(); // eslint-disable-line
+		stopScroll();
 
 		var x = 0;
 		var y = ((e.deltaX || e.deltaY || -e.wheelDelta) > 0 ? winH : -winH) / 5;
@@ -1678,10 +1679,10 @@ init = function() {
 					break;
 				}
 
-				if ( win.getComputedStyle(media).imageRendering !== vAPI.browser.irPixelated ) {
-					mediaCss['image-rendering'] = vAPI.browser.irPixelated;
-				} else {
+				if ( win.getComputedStyle(media).imageRendering === vAPI.browser.irPixelated ) {
 					mediaCss['image-rendering'] = 'auto';
+				} else {
+					mediaCss['image-rendering'] = vAPI.browser.irPixelated;
 				}
 
 				setMediaStyle();
@@ -1691,7 +1692,8 @@ init = function() {
 					break;
 				}
 
-				var bgValue = e.shiftKey && prompt( // eslint-disable-line
+				// eslint-disable-next-line no-alert
+				var bgValue = e.shiftKey && prompt(
 					'background',
 					media.style.background
 				);

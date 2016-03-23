@@ -196,7 +196,8 @@ var save = function() {
 
 		if ( field.type === 'checkbox' ) {
 			prefs[pref] = field.checked;
-		} else if ( field.type === 'range' || field.type === 'number'
+		} else if ( field.type === 'range'
+			|| field.type === 'number'
 			|| field.classList.contains('number') ) {
 			prefs[pref] = parseFloat(field.value);
 
@@ -213,7 +214,8 @@ var save = function() {
 
 			field.value = prefs[pref];
 		} else {
-			if ( pref === 'sendToHosts' ) { // eslint-disable-line
+			// eslint-disable-next-line no-lonely-if
+			if ( pref === 'sendToHosts' ) {
 				prefs[pref] = field.value.trim().split(/[\r\n]+/).filter(Boolean);
 				field.rows = prefs[pref].length || 2;
 			} else {
@@ -388,8 +390,8 @@ window.addEventListener('load', function() {
 
 		if ( t.type === 'checkbox' && t[defval + 'Checked'] !== t.checked ) {
 			inputChanges[t.name] = true;
-		} else if ( t.type !== 'checkbox'
-			&& t[defval + 'Value'] != t.value ) { // eslint-disable-line
+		// eslint-disable-next-line eqeqeq
+		} else if ( t.type !== 'checkbox' && t[defval + 'Value'] != t.value ) {
 			inputChanges[t.name] = true;
 		} else {
 			delete inputChanges[t.name];

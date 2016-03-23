@@ -81,7 +81,7 @@ if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 
 		return function(s) {
 			try {
-				return stringBundle.GetStringFromName(s); // eslint-disable-line
+				return stringBundle.GetStringFromName(s);
 			} catch ( ex ) {
 				return s;
 			}

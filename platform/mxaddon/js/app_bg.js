@@ -34,7 +34,7 @@ vAPI.storage = {
 };
 
 vAPI.tabs = {
-	_mxTabs: new mx.browser.tabs, // eslint-disable-line
+	_mxTabs: new mx.browser.tabs,
 
 	getSelected: function(callback) {
 		callback(this._mxTabs.getCurrentTab());

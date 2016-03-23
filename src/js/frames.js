@@ -21,8 +21,8 @@ var crc32 = (function() {
 
 	return function(s) {
 		var i = 0;
-		var length = s.length;
 		var crc = -1;
+		var length = s.length;
 
 		while ( i < length ) {
 			crc = crcTable[(crc ^ s.charCodeAt(i++)) & 0xff] ^ crc >>> 8;
@@ -585,7 +585,8 @@ xhr.addEventListener('readystatechange', function() {
 			var frm = frames[frames.idx];
 
 			return 'data:image/webp;base64,' + win.btoa(
-				'RIFF' + bin.intToBytes(frm.data.length + 4) + 'WEBP' + frm.data
+				'RIFF' + bin.intToBytes(frm.data.length + 4)
+				+ 'WEBP' + frm.data
 			);
 		};
 	}
@@ -683,7 +684,10 @@ xhr.addEventListener('readystatechange', function() {
 
 			if ( this.classList.contains('showall') ) {
 				if ( e.target && e.target.parentNode === wrap ) {
-					currentFrame.value = [].indexOf.call(wrap.childNodes, e.target) + 1;
+					currentFrame.value = [].indexOf.call(
+						wrap.childNodes,
+						e.target
+					) + 1;
 					wrap.step(null);
 				}
 
