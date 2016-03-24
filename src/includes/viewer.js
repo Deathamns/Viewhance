@@ -650,7 +650,11 @@ init = function() {
 				return;
 			}
 
-			if ( e.clientX > 40 || e.clientY > win.innerHeight / 3 ) {
+			if ( e.clientX > 40 || e.clientX < 0 ) {
+				return;
+			}
+
+			if ( e.clientY > win.innerHeight / 3 || e.clientY < 0 ) {
 				return;
 			}
 
