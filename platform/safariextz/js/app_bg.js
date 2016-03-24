@@ -44,6 +44,10 @@ vAPI.tabs = {
 		}
 
 		newTab.url = params.url;
+
+		if ( params.active ) {
+			win.activate();
+		}
 	}
 };
 
