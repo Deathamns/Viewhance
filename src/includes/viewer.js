@@ -2044,7 +2044,7 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 
 (function() {
 
-if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
+if ( !vAPI || vAPI.safari && location.protocol === 'safari-extension:' ) {
 	init = null;
 	return;
 }

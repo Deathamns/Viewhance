@@ -1,6 +1,7 @@
 'use strict';
 
 var cachedPrefs;
+var onPrefsUpdatedCallbacks = [];
 
 var updatePrefs = function(newPrefs, storedPrefs) {
 	var xhr = new XMLHttpRequest;
@@ -36,6 +37,10 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			}
 
 			cachedPrefs[key] = newPrefs[key];
+		}
+
+		while ( onPrefsUpdatedCallbacks.length ) {
+			onPrefsUpdatedCallbacks.pop()();
 		}
 
 		// In order to initialize sooner on content side, Chrome reads the prefs
@@ -77,9 +82,9 @@ var onMessage = function(message, source, respond) {
 
 	if ( cmd === 'loadPrefs' ) {
 		if ( cachedPrefs === void 0 ) {
-			setTimeout(function() {
+			onPrefsUpdatedCallbacks.push(function() {
 				onMessage(message, source, respond);
-			}, 1000);
+			});
 			return;
 		}
 

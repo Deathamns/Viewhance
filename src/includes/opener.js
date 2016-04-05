@@ -3,6 +3,7 @@
 (function() {
 
 if ( document instanceof window.HTMLDocument === false ) {
+	vAPI = null;
 	return;
 }
 
@@ -12,6 +13,7 @@ if ( vAPI.mediaType ) {
 }
 
 if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
+	vAPI = null;
 	return;
 }
 
@@ -19,6 +21,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 	var opener = response && response.prefs;
 
 	if ( !opener ) {
+		vAPI = null;
 		return;
 	}
 
