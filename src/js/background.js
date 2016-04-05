@@ -72,6 +72,50 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 	xhr.send();
 };
 
+var onMessage = function(message, source, respond) {
+	var cmd = message.cmd;
+
+	if ( cmd === 'loadPrefs' ) {
+		var response = {
+			prefs: message.property
+				? cachedPrefs[message.property]
+				: cachedPrefs
+		};
+
+		if ( message.getAppInfo ) {
+			response.app = vAPI.app;
+		}
+
+		respond(response);
+	} else if ( cmd === 'savePrefs' ) {
+		vAPI.storage.get('cfg', function(cfg) {
+			updatePrefs(message.prefs, JSON.parse(cfg || '{}'));
+		});
+	} else if ( cmd === 'open' ) {
+		if ( !Array.isArray(message.url) ) {
+			message.url = [message.url];
+		}
+
+		vAPI.tabs.getSelected(function(tab) {
+			for ( var i = 0; i < message.url.length; ++i ) {
+				vAPI.tabs.create({
+					incognito: !!tab.incognito,
+					url: message.url[i],
+					active: !message.nf
+				});
+			}
+		});
+	} else if ( cmd === 'loadFile' ) {
+		var xhr = new XMLHttpRequest;
+		xhr.overrideMimeType('text/plain; charset=x-user-defined');
+		xhr.open('GET', message.path, true);
+		xhr.addEventListener('load', function() {
+			respond(this.responseText);
+		});
+		xhr.send();
+	}
+};
+
 vAPI.storage.get('cfg', function(cfg) {
 	var storedPrefs;
 
@@ -84,62 +128,6 @@ vAPI.storage.get('cfg', function(cfg) {
 	updatePrefs(storedPrefs, storedPrefs);
 });
 
-vAPI.messaging.listen(function(e, origin, postMessage) {
-	var channel = vAPI.messaging.parseMessage(e, origin, postMessage);
-	var message = channel.msg;
+vAPI.messaging.listen(onMessage);
 
-	if ( !message.cmd ) {
-		return;
-	}
-
-	switch ( message.cmd ) {
-		case 'loadPrefs':
-			var response = {
-				prefs: message.property
-					? cachedPrefs[message.property]
-					: cachedPrefs
-			};
-
-			if ( message.getAppInfo ) {
-				response.app = vAPI.app;
-			}
-
-			channel.postMessage(response);
-			break;
-
-		case 'savePrefs':
-			vAPI.storage.get('cfg', function(cfg) {
-				updatePrefs(message.prefs, JSON.parse(cfg || '{}'));
-			});
-			break;
-
-		case 'open':
-			if ( !Array.isArray(message.url) ) {
-				message.url = [message.url];
-			}
-
-			vAPI.tabs.getSelected(function(tab) {
-				for ( var i = 0; i < message.url.length; ++i ) {
-					vAPI.tabs.create({
-						incognito: !!tab.incognito,
-						url: message.url[i],
-						active: !message.nf
-					});
-				}
-			});
-			break;
-
-		case 'loadFile':
-			var xhr = new XMLHttpRequest;
-			xhr.overrideMimeType('text/plain; charset=x-user-defined');
-			xhr.open('GET', message.path, true);
-			xhr.addEventListener('load', function() {
-				channel.postMessage(this.responseText);
-			});
-			xhr.send();
-			break;
-	}
-
-	// Chrome
-	return true; // eslint-disable-line
-});
+document.title = ':: ' + vAPI.app.name + ' ::';

@@ -63,15 +63,10 @@ vAPI.tabs = {
 };
 
 vAPI.messaging = {
-	parseMessage: function(message, sender, sendResponse) {
-		return {
-			msg: message,
-			origin: sender.url,
-			postMessage: sendResponse
-		};
-	},
-
 	listen: function(callback) {
-		(chrome.runtime || chrome.extension).onMessage.addListener(callback);
+		chrome.runtime.onMessage.addListener(function(message, sender, respond) {
+			callback(message, {url: sender.url}, respond);
+			return true;
+		});
 	}
 };

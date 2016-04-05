@@ -48,7 +48,7 @@ vAPI.messaging = {
 		vAPI._runtime.post('service', {
 			message: JSON.stringify(message),
 			listenerId: this._listenerId,
-			origin: location.href
+			url: location.href
 		});
 	}
 };

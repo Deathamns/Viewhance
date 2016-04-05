@@ -53,19 +53,17 @@ vAPI.tabs = {
 };
 
 vAPI.messaging = {
-	parseMessage: function(request) {
-		var listenerId = request.listenerId;
-
-		return {
-			msg: JSON.parse(request.message),
-			origin: request.origin,
-			postMessage: function(message) {
-				vAPI._runtime.post(listenerId, JSON.stringify(message));
-			}
-		};
-	},
-
 	listen: function(callback, name) {
-		vAPI._runtime.listen(name || 'service', callback);
+		vAPI._runtime.listen(name || 'service', function(request) {
+			var listenerId = request.listenerId;
+
+			callback(
+				JSON.parse(request.message),
+				{url: request.url},
+				function(response) {
+					vAPI._runtime.post(listenerId, JSON.stringify(response));
+				}
+			);
+		});
 	}
 };

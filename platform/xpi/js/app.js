@@ -62,7 +62,7 @@ vAPI.messaging = {
 		sendAsyncMessage(_hostName_ + ':background', {
 			listenerId: _sandboxId_,
 			data: message,
-			origin: window.location.href
+			url: window.location.href
 		});
 	}
 };

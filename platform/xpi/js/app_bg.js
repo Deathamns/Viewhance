@@ -85,43 +85,33 @@ vAPI.tabs = {
 
 vAPI.messaging = {
 	_frameScript: vAPI._baseURI + 'js/frame_script.js',
+
 	get _globalMessageManager() {
 		return Components.classes['@mozilla.org/globalmessagemanager;1']
 			.getService(Components.interfaces.nsIMessageListenerManager);
 	},
 
-	parseMessage: function(request) {
-		var listenerId = request.data.listenerId;
-		var messager = request.target.messageManager;
-
-		return {
-			msg: request.data.data,
-			origin: request.data.origin,
-
-			postMessage: function(message) {
-				messager.sendAsyncMessage(
-					listenerId,
-					JSON.stringify(message)
-				);
-			}
-		};
-	},
-
 	listen: function(callback) {
-		if ( typeof callback !== 'function' ) {
-			this._globalMessageManager.removeMessageListener(
-				location.host + ':background',
-				this.postMessage
+		var listener = function(request) {
+			var listenerId = request.data.listenerId;
+			var messager = request.target.messageManager;
+
+			callback(
+				request.data.data,
+				{url: request.data.url},
+				function(response) {
+					messager.sendAsyncMessage(
+						listenerId,
+						JSON.stringify(response)
+					);
+				}
 			);
-			this.postMessage = null;
-			return;
-		}
+		};
 
 		this._globalMessageManager.addMessageListener(
 			location.host + ':background',
-			callback
+			listener
 		);
-		this.postMessage = callback;
 	}
 };
 
@@ -224,7 +214,7 @@ window.addEventListener('unload', function() {
 		while ( i-- ) {
 			URI = tabs[i].linkedBrowser.currentURI;
 
-			// close extension tabs
+			// Close extension tabs
 			if ( URI.schemeIs('chrome') && URI.host === location.host ) {
 				gBrowser.removeTab(tabs[i]);
 			}

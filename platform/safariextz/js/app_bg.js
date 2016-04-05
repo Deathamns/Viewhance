@@ -52,21 +52,19 @@ vAPI.tabs = {
 };
 
 vAPI.messaging = {
-	parseMessage: function(request) {
-		var sourcePage = request.target.page;
-		var listenerId = request.name;
-
-		return {
-			msg: request.message,
-			origin: request.target.url,
-			postMessage: function(message) {
-				sourcePage.dispatchMessage(listenerId, message);
-			}
-		};
-	},
-
 	listen: function(callback) {
-		safari.application.addEventListener('message', callback, false);
+		safari.application.addEventListener('message', function(request) {
+			var listenerId = request.name;
+			var sourcePage = request.target.page;
+
+			callback(
+				request.message,
+				{url: request.target.url},
+				function(response) {
+					sourcePage.dispatchMessage(listenerId, response);
+				}
+			);
+		}, false);
 	}
 };
 

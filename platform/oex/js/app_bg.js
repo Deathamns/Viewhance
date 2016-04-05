@@ -47,19 +47,17 @@ vAPI.tabs = {
 };
 
 vAPI.messaging = {
-	parseMessage: function(request) {
-		var messagePort = request.source;
-
-		return {
-			msg: request.data,
-			origin: request.origin,
-			postMessage: function(message) {
-				messagePort.postMessage(message);
-			}
-		};
-	},
-
 	listen: function(callback) {
-		opera.extension.addEventListener('message', callback);
+		opera.extension.addEventListener('message', function(request) {
+			var source = request.source;
+
+			callback(
+				request.data,
+				{url: request.origin},
+				function(response) {
+					source.postMessage(response);
+				}
+			);
+		});
 	}
 };
