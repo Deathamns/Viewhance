@@ -96,7 +96,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 		var media = document.querySelector(
 			'body[style="margin: 0px;"] > img[style^="-webkit-"]:first-child, '
 			// Chropera 29 changed the structure
-			+ (navigator.appVersion.indexOf('OPR/') === 1
+			+ (navigator.appVersion.indexOf('OPR/') === -1
 				? ''
 				: 'body[style="margin: 0px;"] > '
 					+ 'div[style^="display: table"]:only-child >'
