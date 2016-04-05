@@ -53,7 +53,8 @@ var shortcut = {
 	},
 
 	key: function(e) {
-		return this.specKeys[e.which] || String.fromCharCode(e.which).toUpperCase();
+		return this.specKeys[e.which]
+			|| String.fromCharCode(e.which).toUpperCase();
 	}
 };
 
@@ -1668,16 +1669,36 @@ init = function() {
 		}
 
 		switch ( key ) {
-			case cfg.key_mOrig: resizeMedia(MODE_ORIG); break;
-			case cfg.key_mFit: resizeMedia(MODE_FIT); break;
-			case cfg.key_mFitW: resizeMedia(MODE_WIDTH); break;
-			case cfg.key_mFitH: resizeMedia(MODE_HEIGHT); break;
-			case cfg.key_cycle: cycleModes(e.shiftKey); break;
-			case cfg.key_rotL: rotateMedia(false, e.shiftKey); break;
-			case cfg.key_rotR: rotateMedia(true, e.shiftKey); break;
-			case cfg.key_flipH: flipMedia(media, 0); break;
-			case cfg.key_flipV: flipMedia(media, 1); break;
-			case cfg.key_wheelZoom: toggleWheelZoom(); break;
+			case cfg.key_mOrig:
+				resizeMedia(MODE_ORIG);
+				break;
+			case cfg.key_mFit:
+				resizeMedia(MODE_FIT);
+				break;
+			case cfg.key_mFitW:
+				resizeMedia(MODE_WIDTH);
+				break;
+			case cfg.key_mFitH:
+				resizeMedia(MODE_HEIGHT);
+				break;
+			case cfg.key_cycle:
+				cycleModes(e.shiftKey);
+				break;
+			case cfg.key_rotL:
+				rotateMedia(false, e.shiftKey);
+				break;
+			case cfg.key_rotR:
+				rotateMedia(true, e.shiftKey);
+				break;
+			case cfg.key_flipH:
+				flipMedia(media, 0);
+				break;
+			case cfg.key_flipV:
+				flipMedia(media, 1);
+				break;
+			case cfg.key_wheelZoom:
+				toggleWheelZoom();
+				break;
 			case cfg.key_pixelate:
 				if ( vAPI.mediaType !== 'img' ) {
 					break;
@@ -1837,8 +1858,10 @@ init = function() {
 root = doc.documentElement;
 
 media.addEventListener('error', function() {
-	// Opera fires an error event on local video files when they're close to the end
-	// Firefox did it a few times too, even if there was nothing wrong with the video
+	// Opera fires an error event on local video files
+	// when they're close to the end
+	// Firefox did it a few times too,
+	// even if there was nothing wrong with the video
 	if ( media.currentTime > 0.1 && win.location.protocol === 'file:' ) {
 		return;
 	}

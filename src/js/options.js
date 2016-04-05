@@ -117,7 +117,11 @@ var load = function(prefs) {
 		var field = fields[i];
 		var pref = field.name;
 
-		if ( field.disabled || field.readOnly || defaultPrefs[pref] === void 0 ) {
+		if ( field.disabled || field.readOnly ) {
+			continue;
+		}
+
+		if ( defaultPrefs[pref] === void 0 ) {
 			continue;
 		}
 
@@ -352,7 +356,10 @@ window.addEventListener('load', function() {
 	if ( colorHelper ) {
 		colorHelper.addEventListener('input', colorOnInput);
 		colorOnInput(colorHelper);
-		colorHelper.previousElementSibling.addEventListener('change', colorOnChange);
+		colorHelper.previousElementSibling.addEventListener(
+			'change',
+			colorOnChange
+		);
 	}
 
 	localizeNodes([menu, $('right-panel').firstElementChild]);
@@ -409,7 +416,11 @@ window.addEventListener('load', function() {
 			e.target.formSaved = true;
 		}
 
-		if ( e.repeat || !e.target.name || e.target.name.indexOf('key_') !== 0 ) {
+		if ( e.repeat || !e.target.name ) {
+			return;
+		}
+
+		if ( e.target.name.indexOf('key_') !== 0 ) {
 			return;
 		}
 

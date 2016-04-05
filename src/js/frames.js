@@ -65,7 +65,10 @@ var BinaryTools = function(data) {
 		while ( i++ < length ) {
 			curbyte = this.readByte(pos).toString(2);
 			bitarray.push(
-				this.zeropad.substr(0, this.zeropad.length - curbyte.length) + curbyte
+				this.zeropad.substr(
+					0,
+					this.zeropad.length - curbyte.length
+				) + curbyte
 			);
 		}
 
