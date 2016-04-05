@@ -35,11 +35,13 @@ vAPI.messaging = {
 
 		// Reading prefs from content scripts seems noticeably faster
 		// (no flicker when loading) than getting them via messaging
-		if ( message.cmd === 'loadPrefs' && !message.property
-			&& !message.getAppInfo ) {
+		if ( message.cmd === 'loadPrefs' && !message.getAppInfo ) {
 			chrome.storage.sync.get('cfg', function(obj) {
 				if ( typeof listener === 'function' ) {
-					listener({prefs: JSON.parse(obj.cfg)});
+					var cfg = JSON.parse(obj.cfg);
+					listener({
+						prefs: message.property ? cfg[message.property] : cfg
+					});
 				}
 			});
 			return;
@@ -58,10 +60,9 @@ vAPI.messaging = {
 
 if ( location.protocol === 'chrome-extension:' ) {
 	if ( location.hash === '#options_ui' ) {
+		vAPI.messaging.listen(window.close);
 		vAPI.messaging.send({cmd: 'open', url: 'options.html'});
-		// The message may not reach the background process
-		// if the window is closed synchronously
-		setTimeout(window.close.bind(window), 0);
+		throw Error('Exiting embedded options page...');
 	}
 
 	vAPI.l10n = function(s) {

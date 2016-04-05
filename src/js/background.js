@@ -76,6 +76,13 @@ var onMessage = function(message, source, respond) {
 	var cmd = message.cmd;
 
 	if ( cmd === 'loadPrefs' ) {
+		if ( cachedPrefs === void 0 ) {
+			setTimeout(function() {
+				onMessage(message, source, respond);
+			}, 1000);
+			return;
+		}
+
 		var response = {
 			prefs: message.property
 				? cachedPrefs[message.property]
