@@ -38,7 +38,7 @@ vAPI.storage = {
 	},
 
 	remove: function(key) {
-		localStorage.removeItem(key);
+		chrome.storage.sync.remove(key);
 	}
 };
 
