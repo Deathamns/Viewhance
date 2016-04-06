@@ -583,9 +583,9 @@ init = function() {
 			if ( cmd === 'cycle' ) {
 				cycleModes(!p);
 			} else if ( cmd === 'flip' ) {
-				flipMedia(media, p);
+				flipMedia(media, p ? 'v' : 'h');
 			} else if ( cmd === 'rotate' ) {
-				rotateMedia(!p, e.ctrlKey);
+				rotateMedia(p ? 'right' : 'left', e.ctrlKey);
 			} else if ( cmd === 'zoom' ) {
 				pdsp(e);
 				zoomToCenter({deltaY: p ? 1 : -1});
@@ -987,12 +987,12 @@ init = function() {
 		win.scrollTo(0, 0);
 	};
 
-	var flipMedia = function(el, horizontal) {
+	var flipMedia = function(el, direction) {
 		if ( !media.scale ) {
 			media.scale = {h: 1, v: 1};
 		}
 
-		media.scale[horizontal ? 'h' : 'v'] *= -1;
+		media.scale[direction] *= -1;
 
 		var transformCss = media.scale.h !== 1 || media.scale.v !== 1
 			? 'scale(' + media.scale.h + ',' + media.scale.v + ')'
@@ -1007,10 +1007,10 @@ init = function() {
 		setCursor();
 	};
 
-	var rotateMedia = function(deg, fine) {
+	var rotateMedia = function(direction, fine) {
 		var rot = '';
 
-		if ( deg ) {
+		if ( direction === 'right' ) {
 			media.angle += fine ? 5 : 90;
 		} else {
 			media.angle -= fine ? 5 : 90;
@@ -1685,16 +1685,16 @@ init = function() {
 				cycleModes(e.shiftKey);
 				break;
 			case cfg.key_rotL:
-				rotateMedia(false, e.shiftKey);
+				rotateMedia('left', e.shiftKey);
 				break;
 			case cfg.key_rotR:
-				rotateMedia(true, e.shiftKey);
+				rotateMedia('right', e.shiftKey);
 				break;
 			case cfg.key_flipH:
-				flipMedia(media, 0);
+				flipMedia(media, 'h');
 				break;
 			case cfg.key_flipV:
-				flipMedia(media, 1);
+				flipMedia(media, 'v');
 				break;
 			case cfg.key_wheelZoom:
 				toggleWheelZoom();
