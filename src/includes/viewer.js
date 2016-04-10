@@ -585,7 +585,7 @@ init = function() {
 			} else if ( cmd === 'flip' ) {
 				flipMedia(media, p ? 'v' : 'h');
 			} else if ( cmd === 'rotate' ) {
-				rotateMedia(p ? 'right' : 'left', e.ctrlKey);
+				rotateMedia(p ? 'left' : 'right', e.ctrlKey);
 			} else if ( cmd === 'zoom' ) {
 				pdsp(e);
 				zoomToCenter({deltaY: p ? 1 : -1});
