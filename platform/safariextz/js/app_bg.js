@@ -22,6 +22,11 @@ vAPI.storage = {
 	},
 
 	set: function(key, value) {
+		if ( value === '' ) {
+			this.remove(key);
+			return;
+		}
+
 		safari.extension.settings.setItem(key, value);
 	},
 
@@ -31,10 +36,6 @@ vAPI.storage = {
 };
 
 vAPI.tabs = {
-	getSelected: function(callback) {
-		callback(safari.application.activeBrowserWindow.activeTab || {});
-	},
-
 	create: function(params) {
 		var win = safari.application.activeBrowserWindow;
 		var newTab = win.openTab(params.active ? 'foreground' : 'background');

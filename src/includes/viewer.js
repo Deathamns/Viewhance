@@ -626,7 +626,7 @@ init = function() {
 				});
 			} else if ( cmd === 'options' && e.button !== 1 ) {
 				vAPI.messaging.send({
-					cmd: 'open',
+					cmd: 'openURL',
 					url: 'options.html' + (e.button === 2 ? '#shortcuts' : '')
 				});
 			} else {

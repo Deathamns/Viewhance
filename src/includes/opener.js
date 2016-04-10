@@ -191,7 +191,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		}
 
 		vAPI.messaging.send({
-			cmd: 'open',
+			cmd: 'openURL',
 			url: Object.keys(filter).reverse()
 		});
 	}, true);

@@ -29,16 +29,12 @@ vAPI.storage = {
 	},
 
 	remove: function(key) {
-		this._mxStorage.setConfig(key, '');
+		this.set(key, '');
 	}
 };
 
 vAPI.tabs = {
 	_mxTabs: new mx.browser.tabs,
-
-	getSelected: function(callback) {
-		callback(this._mxTabs.getCurrentTab());
-	},
 
 	create: function(params) {
 		if ( /^[a-z-]{2,10}:/.test(params.url) === false ) {

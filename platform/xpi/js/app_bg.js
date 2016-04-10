@@ -1,5 +1,7 @@
 'use strict';
 
+const {interfaces: Ci, classes: Cc, utils: Cu} = Components;
+
 var vAPI = Object.create(null);
 
 vAPI.firefox = true;
@@ -7,9 +9,8 @@ vAPI._baseURI = 'chrome://' + location.host + '/content/';
 
 vAPI.app = (function() {
 	var extInfo = location.hash.slice(1).split(',');
-	var XULAppInfo = Components
-		.classes['@mozilla.org/xre/app-info;1']
-		.getService(Components.interfaces.nsIXULAppInfo);
+	var XULAppInfo = Cc['@mozilla.org/xre/app-info;1']
+		.getService(Ci.nsIXULAppInfo);
 
 	return {
 		name: extInfo[0],
@@ -20,21 +21,16 @@ vAPI.app = (function() {
 })();
 
 vAPI.storage = {
-	_pb: Components
-		.classes['@mozilla.org/preferences-service;1']
-		.getService(Components.interfaces.nsIPrefService)
+	_branch: Cc['@mozilla.org/preferences-service;1']
+		.getService(Ci.nsIPrefService)
 		.getBranch('extensions.' + vAPI.app.name + '.'),
-	_str: Components
-		.classes['@mozilla.org/supports-string;1']
-		.createInstance(Components.interfaces.nsISupportsString),
+	_str: Cc['@mozilla.org/supports-string;1']
+		.createInstance(Ci.nsISupportsString),
 
 	get: function(key, callback) {
 		try {
 			callback(
-				this._pb.getComplexValue(
-					key,
-					Components.interfaces.nsISupportsString
-				).data
+				this._branch.getComplexValue(key, Ci.nsISupportsString).data
 			);
 		} catch ( ex ) {
 			callback(null);
@@ -42,34 +38,25 @@ vAPI.storage = {
 	},
 
 	set: function(key, value) {
+		if ( value === '' ) {
+			this.remove(key);
+			return;
+		}
+
 		this._str.data = value;
-		this._pb.setComplexValue(
-			key,
-			Components.interfaces.nsISupportsString,
-			this._str
-		);
+		this._branch.setComplexValue(key, Ci.nsISupportsString, this._str);
 	},
 
 	remove: function(key) {
-		this._pb.clearUserPref(key);
+		this._branch.clearUserPref(key);
 	}
 };
 
 vAPI.tabs = {
-	_mostRecentWindow: function() {
-		return Components
-			.classes['@mozilla.org/appshell/window-mediator;1']
-			.getService(Components.interfaces.nsIWindowMediator)
-			.getMostRecentWindow('navigator:browser');
-	},
-
-	getSelected: function(callback) {
-		var win = this._mostRecentWindow();
-		callback(win && win.gBrowser ? win.gBrowser.selectedTab : {});
-	},
-
 	create: function(params) {
-		var win = this._mostRecentWindow();
+		var win = Cc['@mozilla.org/appshell/window-mediator;1']
+			.getService(Ci.nsIWindowMediator)
+			.getMostRecentWindow('navigator:browser');
 
 		if ( !win ) {
 			return;
@@ -87,8 +74,8 @@ vAPI.messaging = {
 	_frameScript: vAPI._baseURI + 'js/frame_script.js',
 
 	get _globalMessageManager() {
-		return Components.classes['@mozilla.org/globalmessagemanager;1']
-			.getService(Components.interfaces.nsIMessageListenerManager);
+		return Cc['@mozilla.org/globalmessagemanager;1']
+			.getService(Ci.nsIMessageListenerManager);
 	},
 
 	listen: function(callback) {
@@ -124,9 +111,8 @@ vAPI.messaging._globalMessageManager.loadFrameScript(
 // instead of handling the damage done by the default behavior
 vAPI._browserPrefs = {
 	get prefBranch() {
-		return Components
-			.classes['@mozilla.org/preferences-service;1']
-			.getService(Components.interfaces.nsIPrefService)
+		return Cc['@mozilla.org/preferences-service;1']
+			.getService(Ci.nsIPrefService)
 			.getBranch('browser.');
 	},
 	targetPrefs: [
@@ -197,13 +183,12 @@ window.addEventListener('unload', function() {
 
 	var URI = messaging._frameScript.replace('_script', '_module');
 	var frameModule = {};
-	Components.utils.import(URI, frameModule);
+	Cu.import(URI, frameModule);
 	frameModule.docObserver.unregister();
-	Components.utils.unload(URI);
+	Cu.unload(URI);
 
-	var winumerator = Components
-		.classes['@mozilla.org/appshell/window-mediator;1']
-		.getService(Components.interfaces.nsIWindowMediator)
+	var winumerator = Cc['@mozilla.org/appshell/window-mediator;1']
+		.getService(Ci.nsIWindowMediator)
 		.getEnumerator('navigator:browser');
 
 	while ( winumerator.hasMoreElements() ) {

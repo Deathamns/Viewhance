@@ -103,18 +103,14 @@ var onMessage = function(message, source, respond) {
 		vAPI.storage.get('cfg', function(cfg) {
 			updatePrefs(message.prefs, JSON.parse(cfg || '{}'));
 		});
-	} else if ( cmd === 'open' ) {
+	} else if ( cmd === 'openURL' ) {
 		if ( !Array.isArray(message.url) ) {
 			message.url = [message.url];
 		}
 
-		vAPI.tabs.getSelected(function(tab) {
-			for ( var i = 0; i < message.url.length; ++i ) {
-				vAPI.tabs.create({
-					incognito: !!tab.incognito,
-					url: message.url[i],
-					active: !message.nf
-				});
+		message.url.forEach(function(url) {
+			if ( url && typeof url === 'string' ) {
+				vAPI.tabs.create({url: url, active: !message.nf});
 			}
 		});
 	} else if ( cmd === 'loadFile' ) {

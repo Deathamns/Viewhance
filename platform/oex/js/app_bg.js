@@ -18,6 +18,11 @@ vAPI.storage = {
 	},
 
 	set: function(key, value) {
+		if ( value === '' ) {
+			this.remove(key);
+			return;
+		}
+
 		widget.preferences.setItem(key, value);
 	},
 
@@ -27,21 +32,11 @@ vAPI.storage = {
 };
 
 vAPI.tabs = {
-	getSelected: function(callback) {
-		var tab = opera.extension.tabs.getSelected();
-
-		if ( tab ) {
-			tab.incognito = tab.private;
-		}
-
-		callback(tab || {});
-	},
-
 	create: function(params) {
 		opera.extension.tabs.create({
 			url: params.url,
-			focused: params.active,
-			private: params.incognito
+			focused: !!params.active,
+			private: !!(opera.extension.tabs.getSelected() || {}).private
 		});
 	}
 };

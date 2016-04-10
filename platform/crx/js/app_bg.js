@@ -43,23 +43,7 @@ vAPI.storage = {
 };
 
 vAPI.tabs = {
-	getSelected: function(callback) {
-		chrome.tabs.query(
-			{active: true, currentWindow: true},
-			function(tabs) {
-				callback(tabs[0] || {});
-			}
-		);
-	},
-
-	create: function(params) {
-		delete params.incognito;
-
-		chrome.windows.getCurrent(function(win) {
-			params.windowId = win.windowId;
-			chrome.tabs.create(params);
-		});
-	}
+	create: chrome.tabs.create
 };
 
 vAPI.messaging = {

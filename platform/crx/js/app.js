@@ -61,7 +61,7 @@ vAPI.messaging = {
 if ( location.protocol === 'chrome-extension:' ) {
 	if ( location.hash === '#options_ui' ) {
 		vAPI.messaging.listen(window.close);
-		vAPI.messaging.send({cmd: 'open', url: 'options.html'});
+		vAPI.messaging.send({cmd: 'openURL', url: 'options.html'});
 		throw Error('Exiting embedded options page...');
 	}
 
