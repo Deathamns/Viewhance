@@ -225,6 +225,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'font-size: 15px;',
 	'}',
 	'.send-hosts li > a {',
+		'padding-bottom: 3px;',
 		'padding-left: 25px;',
 		'background-size: 16px 16px;',
 		'background-repeat: no-repeat;',
