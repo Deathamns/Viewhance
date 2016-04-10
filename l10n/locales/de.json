@@ -173,7 +173,7 @@
 		},
 		"scFreeZoom": {
 			"#": 0,
-			">": "<b>Umschalt + ziehen</b> des Bildes für Freihandzoom, <Strg> gedrückt halten um die Auswahl zu bewegen"
+			">": "<b>Umschalt + ziehen</b> des Bildes für Freihandzoom, <b>Strg</b> gedrückt halten um die Auswahl zu bewegen"
 		},
 		"scHorizontalScroll": {
 			"#": 1,
