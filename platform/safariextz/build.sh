@@ -20,6 +20,17 @@ fi
 
 key="$platform_dir/secret/key.pem"
 certs="$platform_dir/secret/certs"
+
+if [[ ! -f "$key" ]]; then
+	echo "secret/key.pem (private key) is missing"
+	return
+fi
+
+if [[ ! -f "$certs/safari_extension.cer" ]]; then
+	echo "certs/safari_extension.cer (Safari Developer Certificate) is missing"
+	return
+fi
+
 sig_size="$( openssl dgst -binary -sign "$key" < "$key" | wc -c )"
 tmp="$( realpath "build/tmp" )"
 
