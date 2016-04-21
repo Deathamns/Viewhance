@@ -1387,6 +1387,8 @@ init = function() {
 	progress = [];
 	media.angle = 0;
 	// Original dimensions with padding and border
+	media.removeAttribute('width');
+	media.removeAttribute('height');
 	mFullWidth = media.offsetWidth;
 	mFullHeight = media.offsetHeight;
 	calcViewportDimensions();
