@@ -695,16 +695,18 @@ init = function() {
 
 	var toggleWheelZoom = function() {
 		var evName = vAPI.browser.wheel;
-		var zoomMenuItemStyle = menu.querySelector('li[data-cmd=zoom]').style;
+		var zoomMenuItem = menu && menu.querySelector('li[data-cmd="zoom"]');
+
+		if ( zoomMenuItem ) {
+			zoomMenuItem.style.display = cfg.wheelZoom ? 'none' : '';
+		}
 
 		if ( cfg.wheelZoom ) {
 			doc.removeEventListener(evName, onWheel, true);
 			doc.addEventListener(evName, wheelZoom, true);
-			zoomMenuItemStyle.display = 'none';
 		} else {
 			doc.removeEventListener(evName, wheelZoom, true);
 			doc.addEventListener(evName, onWheel, true);
-			zoomMenuItemStyle.display = '';
 		}
 
 		cfg.wheelZoom = !cfg.wheelZoom;
@@ -1439,7 +1441,7 @@ init = function() {
 	menu.id = 'menu';
 
 	if ( win.getComputedStyle(menu).display === 'none' ) {
-		doc.body.removeChild(menu);
+		menu.parentNode.removeChild(menu);
 		menu = null;
 		return;
 	}
