@@ -1,4 +1,4 @@
-#### Safari ####
+## Safari ##
 
 In order to build Safari extensions, first you need to have a [Safari Extension Certificate](https://developer.apple.com/library/safari/documentation/Tools/Conceptual/SafariExtensionGuide/ExtensionsOverview/ExtensionsOverview.html#//apple_ref/doc/uid/TP40009977-CH15-SW26), developing in newer versions is possible without obtaining the certificate.
 

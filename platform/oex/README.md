@@ -1,4 +1,4 @@
-#### Opera 12 ####
+## Opera 12 ##
 
 This platform is for the Presto based Opera (until 12). For Opera 15+ see the Chromium platform.
 

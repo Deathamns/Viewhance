@@ -1,4 +1,4 @@
-#### Maxthon ####
+## Maxthon ##
 
 This browser is available only on Windows. Installation happens by copying the `build/mxaddon` (when built) directory into `Maxthon_install_path\UserData\Users\guest\Addons\Viewhance`, or creating a directory junction ("hard link" for a folder) to the same location.
 
