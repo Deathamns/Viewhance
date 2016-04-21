@@ -1,5 +1,7 @@
-'use strict';
+/* eslint indent:"off" */
 
+'use strict';
+// eslint-disable-next-line padded-blocks
 (function() {
 
 if ( document instanceof window.HTMLDocument === false ) {
@@ -31,6 +33,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		// ("...\"") - Gecko
 		// (...) or ('...)') - WebKit
 		// ("...&quot;") - Presto
+		// eslint-disable-next-line max-len
 		var rgxCssUrl = /\burl\(([^'"\)][^\)]*|"[^"\\]+(?:\\.[^"\\]*)*|'[^'\\]+(?:\\.[^'\\]*)*)(?=['"]?\))/g;
 		var imgs = cs.backgroundImage + cs.content + cs.listStyleImage;
 
@@ -196,5 +199,5 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		});
 	}, true);
 });
-
+// eslint-disable-next-line padded-blocks
 })();

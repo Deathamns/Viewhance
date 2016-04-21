@@ -1,7 +1,7 @@
-/* eslint indent:0 */
+/* eslint indent:"off" */
 
 'use strict';
-
+// eslint-disable-next-line padded-blocks
 var init = function(win, doc, response) {
 
 if ( !doc || !doc.body || !response || !response.prefs ) {
@@ -309,8 +309,8 @@ init = function() {
 		return;
 	}
 
-	var winW, winH, panning, sX, sY, mediaWidth, mediaHeight, setTitleTimer;
-	var mediaOrigWidth, mediaOrigHeight, mediaFullWidth, mediaFullHeight;
+	var winW, winH, panning, sX, sY, mWidth, mHeight, setTitleTimer, menu;
+	var mOrigWidth, mOrigHeight, mFullWidth, mFullHeight, lastMoveX, lastMoveY;
 	var mediaCss = Object.create(null);
 	var noFit = {cur: null, real: null};
 	var lastEvent = {};
@@ -325,19 +325,19 @@ init = function() {
 	var MODE_HEIGHT = 4;
 
 	if ( vAPI.mediaType === 'img' ) {
-		mediaOrigWidth = media.naturalWidth;
-		mediaOrigHeight = media.naturalHeight;
+		mOrigWidth = media.naturalWidth;
+		mOrigHeight = media.naturalHeight;
 
-		if ( mediaOrigWidth !== mediaOrigHeight ) {
+		if ( mOrigWidth !== mOrigHeight ) {
 			// image-orientation in Firefox doesn't flip natural sizes
-			if ( mediaOrigWidth / mediaOrigHeight === media.height / media.width ) {
-				mediaOrigWidth = media.naturalHeight;
-				mediaOrigHeight = media.naturalWidth;
+			if ( mOrigWidth / mOrigHeight === media.height / media.width ) {
+				mOrigWidth = media.naturalHeight;
+				mOrigHeight = media.naturalWidth;
 			}
 		}
 	} else {
-		mediaOrigWidth = media.videoWidth;
-		mediaOrigHeight = media.videoHeight;
+		mOrigWidth = media.videoWidth;
+		mOrigHeight = media.videoHeight;
 	}
 
 	if ( !cfg.mediaInfo ) {
@@ -346,440 +346,6 @@ init = function() {
 
 	cfg.hiddenScrollbars = win.getComputedStyle(root).overflow === 'hidden'
 		|| win.getComputedStyle(doc.body).overflow === 'hidden';
-
-	var menu = root.appendChild(doc.createElement('div'));
-	menu.id = 'menu';
-
-	if ( win.getComputedStyle(menu).display === 'none' ) {
-		doc.body.removeChild(menu);
-		menu = null;
-	} else {
-		menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px);';
-
-		if ( menu.style.filter || menu.style.webkitFilter ) {
-			vAPI.browser.filter = menu.style.filter
-				? 'filter'
-				: '-webkit-filter';
-		}
-
-		var onMenuChange = function(e) {
-			var filterName;
-			var filterCSS = '';
-			var t = e.target;
-
-			if ( !t.value ) {
-				media.style[vAPI.browser.filter] = filterCSS;
-				return;
-			}
-
-			if ( t.value === t.defaultValue ) {
-				delete media.filters[t.parentNode.textContent.trim()];
-			} else {
-				filterName = t.parentNode.textContent.trim();
-				media.filters[filterName] = t.value + t.getAttribute('unit');
-			}
-
-			for ( filterName in media.filters ) {
-				filterCSS += filterName;
-				filterCSS += '(' + media.filters[filterName] + ') ';
-			}
-
-			if ( filterCSS ) {
-				mediaCss[vAPI.browser.filter] = filterCSS;
-			} else {
-				delete mediaCss[vAPI.browser.filter];
-			}
-
-			media.style[vAPI.browser.filter] = filterCSS;
-		};
-
-		if ( vAPI.browser.filter ) {
-			media.filters = Object.create(null);
-			menu.addEventListener('change', onMenuChange);
-		} else {
-			onMenuChange = null;
-		}
-
-		vAPI.buildNodes(menu.appendChild(doc.createElement('ul')), [
-			{tag: 'li', attrs: {'data-cmd': 'cycle'}, nodes: [{tag: 'div'}]},
-			{tag: 'li', attrs: {'data-cmd': 'zoom'}, nodes: [{tag: 'div'}]},
-			{tag: 'li', attrs: {'data-cmd': 'flip'}, nodes: [{tag: 'div'}]},
-			{tag: 'li', attrs: {'data-cmd': 'rotate'}, nodes: [{tag: 'div'}]},
-			media.filters ? {tag: 'li', attrs: {class: 'filters', 'data-cmd': 'filters'}, nodes: [
-				{tag: 'div'},
-				{tag: 'form', nodes: [{tag: 'ul', nodes: [
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 250,
-								step: 10,
-								value: 100,
-								unit: '%'
-							}
-						},
-						' brightness'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 300,
-								step: 25,
-								value: 100,
-								unit: '%'
-							}
-						},
-						' contrast'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 1000,
-								step: 50,
-								value: 100,
-								unit: '%'
-							}
-						},
-						' saturate'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 100,
-								step: 25,
-								value: 0,
-								unit: '%'
-							}
-						},
-						' grayscale'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 100,
-								step: 100,
-								value: 0,
-								unit: '%'
-							}
-						},
-						' invert'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 100,
-								step: 20,
-								value: 0,
-								unit: '%'
-							}
-						},
-						' sepia'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 360,
-								step: 36,
-								value: 0,
-								unit: 'deg'
-							}
-						},
-						' hue-rotate'
-					]},
-					{tag: 'li', nodes: [
-						{
-							tag: 'input',
-							attrs: {
-								type: 'range',
-								min: 0,
-								max: 20,
-								step: 1,
-								value: 0,
-								unit: 'px'
-							}
-						},
-						' blur'
-					]}
-				]}]}
-			]} : '',
-			{tag: 'li', attrs: {'data-cmd': 'reset'}, nodes: [{tag: 'div'}]},
-			/^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length
-				? {tag: 'li', attrs: {class: 'send-hosts', 'data-cmd': ''}, nodes: [
-					{tag: 'div'},
-					{tag: 'ul', nodes: cfg.sendToHosts.map(function(item) {
-						var host = item.split('|');
-						return {tag: 'li', nodes: [{
-							tag: 'a', attrs: {
-								href: host.slice(1).join('|')
-							},
-							text: host[0]
-						}]};
-					})}
-				]}
-				: null,
-			vAPI.mediaType === 'img'
-				? {tag: 'li', attrs: {'data-cmd': 'frames'}, nodes: [{tag: 'div'}]}
-				: '',
-			{tag: 'li', attrs: {'data-cmd': 'options'}, nodes: [{tag: 'div'}]}
-		]);
-
-		menu.style.cssText = 'display: none; left: -' + menu.offsetWidth + 'px';
-
-		menu.addEventListener('mousedown', function(e) {
-			var t = e.target;
-
-			if ( t.href && t.href.indexOf('%', t.host.length) !== -1 ) {
-				t.href = t.href.replace(/%url/, encodeURIComponent(media.src));
-			}
-
-			pdsp(e, !!t.textContent);
-		});
-
-		// Load favicons only when the menu item is hovered the first time
-		if ( /^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length ) {
-			menu.onHostsHover = function(e) {
-				this.removeEventListener(e.type, menu.onHostsHover);
-				delete menu.onHostsHover;
-				var links = this.querySelectorAll('.send-hosts > ul > li > a');
-				[].forEach.call(links, function(a) {
-					a.style.backgroundImage = 'url(//' + a.host + '/favicon.ico)';
-				});
-			};
-
-			menu.querySelector('.send-hosts > ul').addEventListener(
-				vAPI.browser.transitionend,
-				menu.onHostsHover
-			);
-		}
-
-		var handleCommand = function(cmd, e) {
-			if ( e.button === 1 ) {
-				return;
-			}
-
-			var p = e.button === 2
-				|| e.type === vAPI.browser.wheel
-					&& (e.deltaY || -e.wheelDelta) > 0;
-
-			if ( cmd === 'cycle' ) {
-				cycleModes(!p);
-			} else if ( cmd === 'flip' ) {
-				flipMedia(media, p ? 'v' : 'h');
-			} else if ( cmd === 'rotate' ) {
-				rotateMedia(p ? 'left' : 'right', e.ctrlKey);
-			} else if ( cmd === 'zoom' ) {
-				pdsp(e);
-				zoomToCenter({deltaY: p ? 1 : -1});
-			} else if ( cmd === 'reset' ) {
-				if ( e.button === 0 ) {
-					resetMedia();
-				}
-			} else if ( cmd === 'filters' ) {
-				if ( e.button === 2 ) {
-					media.filters = {};
-					delete mediaCss[vAPI.browser.filter];
-					media.style[vAPI.browser.filter] = '';
-					doc.querySelector('#menu li.filters > form').reset();
-				}
-			} else if ( cmd === 'frames' ) {
-				var message = {cmd: 'loadFile', path: 'js/frames.js'};
-				vAPI.messaging.send(message, function(data) {
-					var errorHandler = function(alertMessage) {
-						// Success
-						if ( alertMessage !== null ) {
-							// eslint-disable-next-line no-alert
-							alert(alertMessage);
-							menu.querySelector('li[data-cmd="frames"]')
-								.removeAttribute('data-cmd');
-							return;
-						}
-
-						if ( menu ) {
-							menu.parentNode.removeChild(menu);
-						}
-					};
-
-					Function('win', 'drawFullFrame', 'errorHandler', data)(
-						win,
-						e.button === 0,
-						errorHandler
-					);
-				});
-			} else if ( cmd === 'options' && e.button !== 1 ) {
-				vAPI.messaging.send({
-					cmd: 'openURL',
-					url: 'options.html' + (e.button === 2 ? '#shortcuts' : '')
-				});
-			} else {
-				p = null;
-			}
-
-			if ( p !== null ) {
-				pdsp(e);
-			}
-		};
-
-		var onMenuClick = function(e) {
-			var cmd = e.target.parentNode.getAttribute('data-cmd');
-
-			if ( cmd ) {
-				handleCommand(cmd, e);
-			}
-		};
-
-		var menuTrigger = function(e) {
-			if ( panning || freeZoom || e.shiftKey ) {
-				return;
-			}
-
-			if ( e.clientX > 40 || e.clientX < 0 ) {
-				return;
-			}
-
-			if ( e.clientY > win.innerHeight / 3 || e.clientY < 0 ) {
-				return;
-			}
-
-			if ( menu.style.display === 'block' ) {
-				return;
-			}
-
-			if ( !menu.iconsLoaded ) {
-				var bgImage = win.getComputedStyle(menu).backgroundImage;
-
-				if ( bgImage && bgImage !== 'none' ) {
-					menu.iconsLoaded = true;
-				}
-			}
-
-			if ( !menu.iconsLoaded ) {
-				var message = {cmd: 'loadFile', path: 'css/menu_icons.b64png'};
-
-				vAPI.messaging.send(message, function(img) {
-					var sheet = doc.head.querySelector('style').sheet;
-					sheet.insertRule(
-						'li[data-cmd] > div { background-image: url(' + img + '); }',
-						sheet.cssRules.length
-					);
-					menu.iconsLoaded = true;
-				});
-			}
-
-			menu.style.display = 'block';
-
-			setTimeout(function() {
-				menu.style.left = '0';
-				menu.style.opacity = '1';
-			}, 50);
-
-			doc.removeEventListener('mousemove', menuTrigger);
-		};
-
-		if ( win.Node.prototype && !win.Node.prototype.contains ) {
-			win.Node.prototype.contains = function(n) {
-				if ( n instanceof Node === false ) {
-					return false;
-				}
-
-				return this === n || !!(this.compareDocumentPosition(n) & 16);
-			};
-		}
-
-		menu.addEventListener(vAPI.browser.wheel, function(e) {
-			pdsp(e);
-
-			var t = e.target;
-
-			if ( t.nodeType === 3 ) {
-				t = t.parentNode;
-			}
-
-			if ( t.type === 'range' ) {
-				var delta = (e.deltaY || -e.wheelDelta) > 0 ? -1 : 1;
-				t.value = Math.max(
-					t.getAttribute('min'),
-					Math.min(
-						parseInt(t.value, 10) + t.getAttribute('step') * delta,
-						t.getAttribute('max')
-					)
-				);
-				onMenuChange(e);
-			} else if ( !/reset|frames|options/.test(t.getAttribute('data-cmd')
-				|| (t = t.parentNode) && t.getAttribute('data-cmd')) ) {
-				handleCommand(t.getAttribute('data-cmd'), e);
-			}
-		});
-
-		menu.addEventListener('click', onMenuClick);
-
-		menu.addEventListener('contextmenu', function(e) {
-			var target = e.target;
-
-			if ( target.type === 'range' ) {
-				target.value = target.defaultValue;
-				onMenuChange(e);
-				pdsp(e);
-				return;
-			}
-
-			onMenuClick(e);
-		});
-
-		menu.addEventListener(vAPI.browser.transitionend, function(e) {
-			if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
-				menu.style.display = 'none';
-			}
-		});
-
-		menu.addEventListener('mouseover', function() {
-			if ( !menu.mtimer ) {
-				return;
-			}
-
-			clearTimeout(menu.mtimer);
-			menu.mtimer = null;
-			menu.style.left = '0';
-			menu.style.opacity = '1';
-		});
-
-		menu.addEventListener('mouseout', function(e) {
-			if ( this.contains(e.relatedTarget) ) {
-				return;
-			}
-
-			doc.addEventListener('mousemove', menuTrigger);
-			menu.mtimer = setTimeout(function() {
-				menu.style.left = '-' + menu.offsetWidth + 'px';
-				menu.style.opacity = '0';
-				menu.mtimer = null;
-			}, 800);
-		});
-
-		// Safari showed the menu even if the cursor wasn't at the edge
-		setTimeout(function() {
-			doc.addEventListener('mousemove', menuTrigger);
-		}, 500);
-	}
 
 	var setMediaStyle = function() {
 		var css = '';
@@ -797,8 +363,8 @@ init = function() {
 
 		if ( m.box.width > winW || m.box.height > winH ) {
 			s.cursor = 'move';
-		} else if ( mediaWidth < mediaOrigWidth
-			|| mediaHeight < mediaOrigHeight ) {
+		} else if ( mWidth < mOrigWidth
+			|| mHeight < mOrigHeight ) {
 			s.cursor = vAPI.browser.zoomIn;
 		} else {
 			s.cursor = '';
@@ -813,16 +379,16 @@ init = function() {
 
 	var calcFit = function() {
 		var m = media;
-		mediaWidth = m.clientWidth - (mediaFullWidth - mediaOrigWidth);
-		mediaHeight = m.clientHeight - (mediaFullHeight - mediaOrigHeight);
+		mWidth = m.clientWidth - (mFullWidth - mOrigWidth);
+		mHeight = m.clientHeight - (mFullHeight - mOrigHeight);
 		m.box = m.getBoundingClientRect();
 		noFit.cur = m.box.width <= winW && m.box.height <= winH;
 
 		var radians = m.angle * Math.PI / 180;
 		var sin = Math.abs(Math.sin(radians));
 		var cos = Math.abs(Math.cos(radians));
-		var boxW = mediaFullWidth * cos + mediaFullHeight * sin;
-		var boxH = mediaFullWidth * sin + mediaFullHeight * cos;
+		var boxW = mFullWidth * cos + mFullHeight * sin;
+		var boxH = mFullWidth * sin + mFullHeight * cos;
 		noFit.real = boxW <= winW && boxH <= winH;
 
 		setCursor();
@@ -832,8 +398,8 @@ init = function() {
 		var radians = media.angle * Math.PI / 180;
 		var sin = Math.abs(Math.sin(radians));
 		var cos = Math.abs(Math.cos(radians));
-		var w = parseFloat(mediaCss.width || mediaFullWidth);
-		var h = w * mediaFullHeight / mediaFullWidth;
+		var w = parseFloat(mediaCss.width || mFullWidth);
+		var h = w * mFullHeight / mFullWidth;
 		var boxW = w * cos + h * sin;
 		var boxH = w * sin + h * cos;
 
@@ -863,13 +429,13 @@ init = function() {
 		switch ( param ) {
 			case 'w': return m.width;
 			case 'h': return m.height;
-			case 'ow': return mediaOrigWidth;
-			case 'oh': return mediaOrigHeight;
+			case 'ow': return mOrigWidth;
+			case 'oh': return mOrigHeight;
 			case 'url': return win.location.href;
 			case 'name': return m.alt;
 			case 'ratio':
 				return Math.round(m.width / m.height * 100) / 100;
-			case 'perc': return Math.round(m.width * 100 / mediaOrigWidth);
+			case 'perc': return Math.round(m.width * 100 / mOrigWidth);
 		}
 
 		return '';
@@ -904,7 +470,8 @@ init = function() {
 			boxW = winW;
 		} else if ( newMode === MODE_HEIGHT ) {
 			boxW = boxRatio * winH;
-		} else if ( newMode === MODE_ORIG || newMode === MODE_FIT && noFit.real ) {
+		} else if ( newMode === MODE_ORIG
+			|| newMode === MODE_FIT && noFit.real ) {
 			delete mediaCss.width;
 		}
 
@@ -931,8 +498,8 @@ init = function() {
 				mediaCss.width = MAX_SIZE + 'px';
 			}
 
-			if ( offsetWidth * mediaFullHeight / mediaFullWidth > MAX_SIZE ) {
-				mediaCss.width = MAX_SIZE * mediaFullWidth / mediaFullHeight;
+			if ( offsetWidth * mFullHeight / mFullWidth > MAX_SIZE ) {
+				mediaCss.width = MAX_SIZE * mFullWidth / mFullHeight;
 				mediaCss.width += 'px';
 			}
 		}*/
@@ -956,36 +523,6 @@ init = function() {
 		}
 
 		resizeMedia(mode);
-	};
-
-	var resetMedia = function() {
-		if ( freeZoom ) {
-			doc.removeEventListener('mousemove', drawMask);
-			doc.body.removeChild(media.mask);
-			freeZoom = null;
-			cancelAction = false;
-			return;
-		}
-
-		if ( vAPI.mediaType === 'img' && doc.readyState !== 'complete' ) {
-			return;
-		}
-
-		var filters = doc.querySelector('#menu li.filters > form');
-
-		if ( filters ) {
-			media.filters = {};
-			media.style[vAPI.browser.filter] = '';
-			filters.reset();
-		}
-
-		delete media.scale;
-		delete media.bgList;
-		delete media.bgListIndex;
-		mediaCss = {};
-		media.angle = 0;
-		resizeMedia(MODE_ORIG);
-		win.scrollTo(0, 0);
 	};
 
 	var flipMedia = function(el, direction) {
@@ -1032,6 +569,57 @@ init = function() {
 		adjustPosition();
 	};
 
+	var stopScroll = function(e) {
+		if ( e ) {
+			this.removeEventListener(e.type, stopScroll);
+		}
+
+		if ( !dragSlide.length ) {
+			return;
+		}
+
+		clearInterval(progress);
+		progress = null;
+		cancelAction = false;
+		dragSlide.length = 0;
+		media.dragSlideTime = false;
+	};
+
+	var startScroll = function() {
+		win.scrollBy(dragSlide[0], dragSlide[1]);
+
+		if ( dragSlide[0] ) {
+			if ( Math.abs(dragSlide[0]) < 1 ) {
+				dragSlide[0] = 0;
+			}
+
+			dragSlide[0] /= 1.11;
+		}
+
+		if ( dragSlide[1] ) {
+			if ( Math.abs(dragSlide[1]) < 1 ) {
+				dragSlide[1] = 0;
+			}
+
+			dragSlide[1] /= 1.11;
+		}
+
+		var box = media.box;
+		var atRight = Math.max(winW, box.width) - win.pageXOffset === winW;
+		var atBottom = Math.max(winH, box.height) - win.pageYOffset === winH;
+
+		if ( !(dragSlide[0] && dragSlide[1])
+			|| !win.pageYOffset && !win.pageXOffset
+			|| !win.pageYOffset && atRight
+			|| atBottom && !win.pageXOffset
+			|| atBottom && atRight ) {
+			stopScroll();
+			return;
+		}
+
+		progress = setTimeout(startScroll, 25);
+	};
+
 	var isValidWheelTarget = function(t) {
 		var d = doc;
 		return t === media || t === d.body || t === d.documentElement;
@@ -1072,20 +660,6 @@ init = function() {
 			clientX: winW / 2,
 			clientY: winH / 2
 		});
-	};
-
-	var onContextMenu = function(e) {
-		doc.removeEventListener('mousemove', onMove, true);
-
-		if ( progress ) {
-			clearTimeout(progress);
-			progress = null;
-		}
-
-		if ( cancelAction ) {
-			cancelAction = false;
-			pdsp(e, true, false);
-		}
 	};
 
 	var onWheel = function(e) {
@@ -1136,8 +710,6 @@ init = function() {
 		cfg.wheelZoom = !cfg.wheelZoom;
 	};
 
-	var lastMoveX, lastMoveY;
-
 	var onMoveFrame = function() {
 		win.scrollBy(sX - lastMoveX, sY - lastMoveY);
 		sX = lastMoveX;
@@ -1149,7 +721,8 @@ init = function() {
 		lastMoveX = e.clientX;
 		lastMoveY = e.clientY;
 
-		if ( lastMoveX === lastEvent.clientX && lastMoveY === lastEvent.clientY ) {
+		if ( lastMoveX === lastEvent.clientX
+			&& lastMoveY === lastEvent.clientY ) {
 			return;
 		}
 
@@ -1194,54 +767,18 @@ init = function() {
 		pdsp(e);
 	};
 
-	var stopScroll = function(e) {
-		if ( e ) {
-			this.removeEventListener(e.type, stopScroll);
+	var onContextMenu = function(e) {
+		doc.removeEventListener('mousemove', onMove, true);
+
+		if ( progress ) {
+			clearTimeout(progress);
+			progress = null;
 		}
 
-		if ( !dragSlide.length ) {
-			return;
+		if ( cancelAction ) {
+			cancelAction = false;
+			pdsp(e, true, false);
 		}
-
-		clearInterval(progress);
-		progress = null;
-		cancelAction = false;
-		dragSlide.length = 0;
-		media.dragSlideTime = false;
-	};
-
-	var startScroll = function() {
-		win.scrollBy(dragSlide[0], dragSlide[1]);
-
-		if ( dragSlide[0] ) {
-			if ( Math.abs(dragSlide[0]) < 1 ) {
-				dragSlide[0] = 0;
-			}
-
-			dragSlide[0] /= 1.11;
-		}
-
-		if ( dragSlide[1] ) {
-			if ( Math.abs(dragSlide[1]) < 1 ) {
-				dragSlide[1] = 0;
-			}
-
-			dragSlide[1] /= 1.11;
-		}
-
-		var atRight = Math.max(winW, media.box.width) - win.pageXOffset === winW;
-		var atBottom = Math.max(winH, media.box.height) - win.pageYOffset === winH;
-
-		if ( !(dragSlide[0] && dragSlide[1])
-			|| !win.pageYOffset && !win.pageXOffset
-			|| !win.pageYOffset && atRight
-			|| atBottom && !win.pageXOffset
-			|| atBottom && atRight ) {
-			stopScroll();
-			return;
-		}
-
-		progress = setTimeout(startScroll, 25);
 	};
 
 	var drawMask = function(e) {
@@ -1321,6 +858,36 @@ init = function() {
 		} else if ( action === 2 ) {
 			toggleWheelZoom();
 		}
+	};
+
+	var resetMedia = function() {
+		if ( freeZoom ) {
+			doc.removeEventListener('mousemove', drawMask);
+			doc.body.removeChild(media.mask);
+			freeZoom = null;
+			cancelAction = false;
+			return;
+		}
+
+		if ( vAPI.mediaType === 'img' && doc.readyState !== 'complete' ) {
+			return;
+		}
+
+		var filters = doc.querySelector('#menu li.filters > form');
+
+		if ( filters ) {
+			media.filters = {};
+			media.style[vAPI.browser.filter] = '';
+			filters.reset();
+		}
+
+		delete media.scale;
+		delete media.bgList;
+		delete media.bgListIndex;
+		mediaCss = {};
+		media.angle = 0;
+		resizeMedia(MODE_ORIG);
+		win.scrollTo(0, 0);
 	};
 
 	media.addEventListener('mousedown', function(e) {
@@ -1557,7 +1124,7 @@ init = function() {
 		}
 
 		if ( media.mode < MODE_WIDTH && noFit.real ) {
-			if ( media.mode === MODE_CUSTOM && mediaWidth !== mediaOrigWidth ) {
+			if ( media.mode === MODE_CUSTOM && mWidth !== mOrigWidth ) {
 				resizeMedia(MODE_ORIG);
 			} else if ( (media.mode === MODE_FIT || media.mode === MODE_ORIG)
 				&& (media.box.width === winW || media.box.height === winH) ) {
@@ -1565,7 +1132,7 @@ init = function() {
 			} else {
 				resizeMedia(
 					MODE_FIT,
-					mediaWidth === mediaOrigWidth
+					mWidth === mOrigWidth
 						? media.box.width / media.box.height > winW / winH
 							? winW
 							: winH * media.box.width / media.box.height
@@ -1646,8 +1213,12 @@ init = function() {
 				break;
 
 			case 'End':
-				x = e.shiftKey ? Math.max(winW, media.box.width) : win.pageXOffset;
-				y = e.shiftKey ? win.pageYOffset : Math.max(winH, media.box.height);
+				x = e.shiftKey
+					? Math.max(winW, media.box.width)
+					: win.pageXOffset;
+				y = e.shiftKey
+					? win.pageYOffset
+					: Math.max(winH, media.box.height);
 				z = true;
 				break;
 
@@ -1705,7 +1276,9 @@ init = function() {
 					break;
 				}
 
-				if ( win.getComputedStyle(media).imageRendering === vAPI.browser.irPixelated ) {
+				var ir = win.getComputedStyle(media).imageRendering;
+
+				if ( ir === vAPI.browser.irPixelated ) {
 					mediaCss['image-rendering'] = 'auto';
 				} else {
 					mediaCss['image-rendering'] = vAPI.browser.irPixelated;
@@ -1741,7 +1314,9 @@ init = function() {
 					media.bgList[bgValue] = true;
 					media.bgList['rgb(0, 0, 0)'] = true;
 					media.bgList['rgb(255, 255, 255)'] = true;
-					media.bgList['url(data:image/gif;base64,R0lGODlhFAAUAPABAOjo6P///yH5BAAKAAAALAAAAAAUABQAAAIohI+hy+jAYnhJLnrsxVBP7n1YyHVaSYKhh7Lq+VotPLo1TaW3HEtlAQA7)'] = true;
+					media.bgList['url(data:image/gif;base64,R0lGODlhFAAUAPABAO'
+						+ 'jo6P///yH5BAAKAAAALAAAAAAUABQAAAIohI+hy+jAYnhJLnrsx'
+						+ 'VBP7n1YyHVaSYKhh7Lq+VotPLo1TaW3HEtlAQA7)'] = true;
 					media.bgList = Object.keys(media.bgList).filter(Boolean);
 					media.bgListIndex = 0;
 				}
@@ -1794,7 +1369,8 @@ init = function() {
 				return;
 			}
 
-			if ( vAPI.fullScreenElement === this || y > media.clientHeight / 2 ) {
+			if ( vAPI.fullScreenElement === this
+				|| y > media.clientHeight / 2 ) {
 				media.togglePlay();
 			}
 
@@ -1811,17 +1387,17 @@ init = function() {
 	progress = [];
 	media.angle = 0;
 	// Original dimensions with padding and border
-	mediaFullWidth = media.offsetWidth;
-	mediaFullHeight = media.offsetHeight;
+	mFullWidth = media.offsetWidth;
+	mFullHeight = media.offsetHeight;
 	calcViewportDimensions();
 	calcFit();
 
 	if ( vAPI.mediaType === 'img' && cfg.minUpscale && noFit.real ) {
-		if ( mediaOrigWidth >= winW * cfg.minUpscale / 100 ) {
+		if ( mOrigWidth >= winW * cfg.minUpscale / 100 ) {
 			progress[0] = true;
 		}
 
-		if ( mediaOrigHeight >= winH * cfg.minUpscale / 100 ) {
+		if ( mOrigHeight >= winH * cfg.minUpscale / 100 ) {
 			progress[1] = true;
 		}
 	}
@@ -1831,7 +1407,7 @@ init = function() {
 		if ( noFit.real ) {
 			media.mode = MODE_FIT;
 		} else {
-			media.mode = mediaOrigWidth / mediaOrigHeight < winW / winH
+			media.mode = mOrigWidth / mOrigHeight < winW / winH
 				? MODE_WIDTH
 				: MODE_HEIGHT;
 		}
@@ -1839,21 +1415,472 @@ init = function() {
 		media.mode = cfg.mode === 0 ? MODE_ORIG : MODE_FIT;
 	}
 
-	if ( media.mode === MODE_WIDTH && mediaOrigWidth < winW && !progress[0] ) {
+	if ( media.mode === MODE_WIDTH && mOrigWidth < winW && !progress[0] ) {
 		media.mode = MODE_ORIG;
-	} else if ( media.mode === MODE_HEIGHT && mediaOrigHeight < winH && !progress[1] ) {
-		media.mode = MODE_ORIG;
+	} else if ( !progress[1] ) {
+		if ( media.mode === MODE_HEIGHT && mOrigHeight < winH ) {
+			media.mode = MODE_ORIG;
+		}
 	}
 
 	resizeMedia(
 		media.mode,
 		media.mode <= MODE_FIT && progress.length
-			? mediaOrigWidth / mediaOrigHeight > winW / winH
+			? mOrigWidth / mOrigHeight > winW / winH
 				? winW
-				: winH * mediaOrigWidth / mediaOrigHeight
+				: winH * mOrigWidth / mOrigHeight
 			: void 0
 	);
 	progress = null;
+
+	menu = root.appendChild(doc.createElement('div'));
+	menu.id = 'menu';
+
+	if ( win.getComputedStyle(menu).display === 'none' ) {
+		doc.body.removeChild(menu);
+		menu = null;
+		return;
+	}
+
+	menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px);';
+
+	if ( menu.style.filter || menu.style.webkitFilter ) {
+		vAPI.browser.filter = menu.style.filter
+			? 'filter'
+			: '-webkit-filter';
+	}
+
+	var onMenuChange = function(e) {
+		var filterName;
+		var filterCSS = '';
+		var t = e.target;
+
+		if ( !t.value ) {
+			media.style[vAPI.browser.filter] = filterCSS;
+			return;
+		}
+
+		if ( t.value === t.defaultValue ) {
+			delete media.filters[t.parentNode.textContent.trim()];
+		} else {
+			filterName = t.parentNode.textContent.trim();
+			media.filters[filterName] = t.value + t.getAttribute('unit');
+		}
+
+		for ( filterName in media.filters ) {
+			filterCSS += filterName;
+			filterCSS += '(' + media.filters[filterName] + ') ';
+		}
+
+		if ( filterCSS ) {
+			mediaCss[vAPI.browser.filter] = filterCSS;
+		} else {
+			delete mediaCss[vAPI.browser.filter];
+		}
+
+		media.style[vAPI.browser.filter] = filterCSS;
+	};
+
+	if ( vAPI.browser.filter ) {
+		media.filters = Object.create(null);
+		menu.addEventListener('change', onMenuChange);
+	} else {
+		onMenuChange = null;
+	}
+
+	vAPI.buildNodes(menu.appendChild(doc.createElement('ul')), [
+		{tag: 'li', attrs: {'data-cmd': 'cycle'}, nodes: [{tag: 'div'}]},
+		{tag: 'li', attrs: {'data-cmd': 'zoom'}, nodes: [{tag: 'div'}]},
+		{tag: 'li', attrs: {'data-cmd': 'flip'}, nodes: [{tag: 'div'}]},
+		{tag: 'li', attrs: {'data-cmd': 'rotate'}, nodes: [{tag: 'div'}]},
+		media.filters ? {tag: 'li', attrs: {class: 'filters', 'data-cmd': 'filters'}, nodes: [
+			{tag: 'div'},
+			{tag: 'form', nodes: [{tag: 'ul', nodes: [
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 250,
+							step: 10,
+							value: 100,
+							unit: '%'
+						}
+					},
+					' brightness'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 300,
+							step: 25,
+							value: 100,
+							unit: '%'
+						}
+					},
+					' contrast'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 1000,
+							step: 50,
+							value: 100,
+							unit: '%'
+						}
+					},
+					' saturate'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 100,
+							step: 25,
+							value: 0,
+							unit: '%'
+						}
+					},
+					' grayscale'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 100,
+							step: 100,
+							value: 0,
+							unit: '%'
+						}
+					},
+					' invert'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 100,
+							step: 20,
+							value: 0,
+							unit: '%'
+						}
+					},
+					' sepia'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 360,
+							step: 36,
+							value: 0,
+							unit: 'deg'
+						}
+					},
+					' hue-rotate'
+				]},
+				{tag: 'li', nodes: [
+					{
+						tag: 'input',
+						attrs: {
+							type: 'range',
+							min: 0,
+							max: 20,
+							step: 1,
+							value: 0,
+							unit: 'px'
+						}
+					},
+					' blur'
+				]}
+			]}]}
+		]} : '',
+		{tag: 'li', attrs: {'data-cmd': 'reset'}, nodes: [{tag: 'div'}]},
+		/^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length
+			? {
+				tag: 'li',
+				attrs: {class: 'send-hosts', 'data-cmd': ''},
+				nodes: [{tag: 'div'}, {
+					tag: 'ul',
+					nodes: cfg.sendToHosts.map(function(item) {
+						var host = item.split('|');
+						return {
+							tag: 'li',
+							nodes: [{
+								tag: 'a',
+								attrs: {href: host.slice(1).join('|')},
+								text: host[0]
+							}]
+						};
+					})
+				}]
+			}
+			: null,
+		vAPI.mediaType === 'img'
+			? {
+				tag: 'li',
+				attrs: {'data-cmd': 'frames'},
+				nodes: [{tag: 'div'}]
+			}
+			: '',
+		{tag: 'li', attrs: {'data-cmd': 'options'}, nodes: [{tag: 'div'}]}
+	]);
+
+	menu.style.cssText = 'display: none; left: -' + menu.offsetWidth + 'px';
+
+	menu.addEventListener('mousedown', function(e) {
+		var t = e.target;
+
+		if ( t.href && t.href.indexOf('%', t.host.length) !== -1 ) {
+			t.href = t.href.replace(/%url/, encodeURIComponent(media.src));
+		}
+
+		pdsp(e, !!t.textContent);
+	});
+
+	// Load favicons only when the menu item is hovered the first time
+	if ( /^https?:$/.test(win.location.protocol)
+		&& cfg.sendToHosts.length ) {
+		menu.onHostsHover = function(e) {
+			this.removeEventListener(e.type, menu.onHostsHover);
+			delete menu.onHostsHover;
+			var links = this.querySelectorAll('.send-hosts > ul > li > a');
+			[].forEach.call(links, function(a) {
+				a.style.backgroundImage = 'url(//'
+					+ a.host
+					+ '/favicon.ico)';
+			});
+		};
+
+		menu.querySelector('.send-hosts > ul').addEventListener(
+			vAPI.browser.transitionend,
+			menu.onHostsHover
+		);
+	}
+
+	var handleCommand = function(cmd, e) {
+		if ( e.button === 1 ) {
+			return;
+		}
+
+		var p = e.button === 2
+			|| e.type === vAPI.browser.wheel
+				&& (e.deltaY || -e.wheelDelta) > 0;
+
+		if ( cmd === 'cycle' ) {
+			cycleModes(!p);
+		} else if ( cmd === 'flip' ) {
+			flipMedia(media, p ? 'v' : 'h');
+		} else if ( cmd === 'rotate' ) {
+			rotateMedia(p ? 'left' : 'right', e.ctrlKey);
+		} else if ( cmd === 'zoom' ) {
+			pdsp(e);
+			zoomToCenter({deltaY: p ? 1 : -1});
+		} else if ( cmd === 'reset' ) {
+			if ( e.button === 0 ) {
+				resetMedia();
+			}
+		} else if ( cmd === 'filters' ) {
+			if ( e.button === 2 ) {
+				media.filters = {};
+				delete mediaCss[vAPI.browser.filter];
+				media.style[vAPI.browser.filter] = '';
+				doc.querySelector('#menu li.filters > form').reset();
+			}
+		} else if ( cmd === 'frames' ) {
+			var message = {cmd: 'loadFile', path: 'js/frames.js'};
+			vAPI.messaging.send(message, function(data) {
+				var errorHandler = function(alertMessage) {
+					// Success
+					if ( alertMessage !== null ) {
+						// eslint-disable-next-line no-alert
+						alert(alertMessage);
+						menu.querySelector('li[data-cmd="frames"]')
+							.removeAttribute('data-cmd');
+						return;
+					}
+
+					if ( menu ) {
+						menu.parentNode.removeChild(menu);
+					}
+				};
+
+				// eslint-disable-next-line no-new-func
+				Function('win', 'drawFullFrame', 'errorHandler', data)(
+					win,
+					e.button === 0,
+					errorHandler
+				);
+			});
+		} else if ( cmd === 'options' && e.button !== 1 ) {
+			vAPI.messaging.send({
+				cmd: 'openURL',
+				url: 'options.html' + (e.button === 2 ? '#shortcuts' : '')
+			});
+		} else {
+			p = null;
+		}
+
+		if ( p !== null ) {
+			pdsp(e);
+		}
+	};
+
+	var onMenuClick = function(e) {
+		var cmd = e.target.parentNode.getAttribute('data-cmd');
+
+		if ( cmd ) {
+			handleCommand(cmd, e);
+		}
+	};
+
+	var menuTrigger = function(e) {
+		if ( panning || freeZoom || e.shiftKey ) {
+			return;
+		}
+
+		if ( e.clientX > 40 || e.clientX < 0 ) {
+			return;
+		}
+
+		if ( e.clientY > win.innerHeight / 3 || e.clientY < 0 ) {
+			return;
+		}
+
+		if ( menu.style.display === 'block' ) {
+			return;
+		}
+
+		if ( !menu.iconsLoaded ) {
+			var bgImage = win.getComputedStyle(menu).backgroundImage;
+
+			if ( bgImage && bgImage !== 'none' ) {
+				menu.iconsLoaded = true;
+			}
+		}
+
+		if ( !menu.iconsLoaded ) {
+			var message = {cmd: 'loadFile', path: 'css/menu_icons.b64png'};
+
+			vAPI.messaging.send(message, function(img) {
+				var sheet = doc.head.querySelector('style').sheet;
+				sheet.insertRule(
+					'li[data-cmd]>div{background-image: url(' + img + ');}',
+					sheet.cssRules.length
+				);
+				menu.iconsLoaded = true;
+			});
+		}
+
+		menu.style.display = 'block';
+
+		setTimeout(function() {
+			menu.style.left = '0';
+			menu.style.opacity = '1';
+		}, 50);
+
+		doc.removeEventListener('mousemove', menuTrigger);
+	};
+
+	if ( win.Node.prototype && !win.Node.prototype.contains ) {
+		win.Node.prototype.contains = function(n) {
+			if ( n instanceof Node === false ) {
+				return false;
+			}
+
+			return this === n || !!(this.compareDocumentPosition(n) & 16);
+		};
+	}
+
+	menu.addEventListener(vAPI.browser.wheel, function(e) {
+		pdsp(e);
+
+		var t = e.target;
+
+		if ( t.nodeType === 3 ) {
+			t = t.parentNode;
+		}
+
+		if ( t.type === 'range' ) {
+			var delta = (e.deltaY || -e.wheelDelta) > 0 ? -1 : 1;
+			t.value = Math.max(
+				t.getAttribute('min'),
+				Math.min(
+					parseInt(t.value, 10) + t.getAttribute('step') * delta,
+					t.getAttribute('max')
+				)
+			);
+			onMenuChange(e);
+		} else if ( !/reset|frames|options/.test(t.getAttribute('data-cmd')
+			|| (t = t.parentNode) && t.getAttribute('data-cmd')) ) {
+			handleCommand(t.getAttribute('data-cmd'), e);
+		}
+	});
+
+	menu.addEventListener('click', onMenuClick);
+
+	menu.addEventListener('contextmenu', function(e) {
+		var target = e.target;
+
+		if ( target.type === 'range' ) {
+			target.value = target.defaultValue;
+			onMenuChange(e);
+			pdsp(e);
+			return;
+		}
+
+		onMenuClick(e);
+	});
+
+	menu.addEventListener(vAPI.browser.transitionend, function(e) {
+		if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
+			menu.style.display = 'none';
+		}
+	});
+
+	menu.addEventListener('mouseover', function() {
+		if ( !menu.mtimer ) {
+			return;
+		}
+
+		clearTimeout(menu.mtimer);
+		menu.mtimer = null;
+		menu.style.left = '0';
+		menu.style.opacity = '1';
+	});
+
+	menu.addEventListener('mouseout', function(e) {
+		if ( this.contains(e.relatedTarget) ) {
+			return;
+		}
+
+		doc.addEventListener('mousemove', menuTrigger);
+		menu.mtimer = setTimeout(function() {
+			menu.style.left = '-' + menu.offsetWidth + 'px';
+			menu.style.opacity = '0';
+			menu.mtimer = null;
+		}, 800);
+	});
+
+	// Safari showed the menu even if the cursor wasn't at the edge
+	setTimeout(function() {
+		doc.addEventListener('mousemove', menuTrigger);
+	}, 500);
 };
 
 root = doc.documentElement;
@@ -2040,9 +2067,9 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 		this.poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
 	});
 });
-
+// eslint-disable-next-line padded-blocks
 };
-
+// eslint-disable-next-line padded-blocks
 (function() {
 
 if ( !vAPI || vAPI.safari && location.protocol === 'safari-extension:' ) {
@@ -2087,5 +2114,5 @@ var pingBackground = setInterval(function() {
 
 	firstContact();
 }, 3000);
-
+// eslint-disable-next-line padded-blocks
 })();
