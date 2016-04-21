@@ -33,7 +33,7 @@
 		"no-empty": "warn",
 		"no-ex-assign": "error",
 		"no-extra-boolean-cast": "error",
-		"no-extra-parens": "error",
+		"no-extra-parens": "warn",
 		"no-extra-semi": "error",
 		"no-func-assign": "error",
 		"no-inner-declarations": ["error", "functions"],
@@ -163,7 +163,7 @@
 		"max-depth": ["error", {"max": 5}],
 		"max-len": ["warn", {"code": 80, "tabWidth": 4, "ignoreUrls": true}],
 		"max-nested-callbacks": ["error", {"max": 3}],
-		"max-params": ["error", {"max": 3}],
+		"max-params": ["error", {"max": 5}],
 		"max-statements": "off",
 		"max-statements-per-line": ["error", {"max": 1}],
 		"new-cap": ["error", {"properties": false}],
@@ -209,7 +209,7 @@
 		"space-in-parens": "off",
 		"space-infix-ops": "error",
 		"space-unary-ops": "error",
-		"spaced-comment": ["error", "always", {"exceptions": ["*", "+", "-"]}],
+		"spaced-comment": ["warn", "always", {"exceptions": ["*", "+", "-"]}],
 		"wrap-regex": "off"
 
 		// Category "ECMAScript 6" is not configured
