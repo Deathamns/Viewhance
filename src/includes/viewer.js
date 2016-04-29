@@ -2076,8 +2076,9 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 // eslint-disable-next-line padded-blocks
 (function() {
 
-if ( !vAPI || vAPI.safari && location.protocol === 'safari-extension:' ) {
+if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
 	init = null;
+	vAPI.suicideAttempt();
 	return;
 }
 
@@ -2085,6 +2086,7 @@ var firstContact = function() {
 	if ( vAPI.opera || vAPI.firefox ) {
 		if ( !vAPI.mediaType ) {
 			init = null;
+			vAPI.suicideAttempt();
 			return;
 		}
 
@@ -2100,6 +2102,7 @@ var firstContact = function() {
 
 		if ( !vAPI.mediaType ) {
 			init = null;
+			vAPI.suicideAttempt();
 			return;
 		}
 

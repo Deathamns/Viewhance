@@ -5,7 +5,7 @@
 (function() {
 
 if ( document instanceof window.HTMLDocument === false ) {
-	vAPI = null;
+	vAPI.suicideAttempt();
 	return;
 }
 
@@ -15,7 +15,7 @@ if ( vAPI.mediaType ) {
 }
 
 if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
-	vAPI = null;
+	vAPI.suicideAttempt();
 	return;
 }
 
@@ -23,7 +23,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 	var opener = response && response.prefs;
 
 	if ( !opener ) {
-		vAPI = null;
+		vAPI.suicideAttempt();
 		return;
 	}
 

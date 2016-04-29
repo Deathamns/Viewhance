@@ -1,4 +1,12 @@
 
+vAPI.contentScriptCount = 2;
+
+vAPI.suicideAttempt = function() {
+	if ( --vAPI.contentScriptCount === 0 ) {
+		vAPI = null;
+	}
+};
+
 vAPI.buildNodes = function(host, items) {
 	if ( !host || !Array.isArray(items) ) {
 		return null;
