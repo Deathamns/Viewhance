@@ -1,5 +1,17 @@
 'use strict';
 
+/******************************************************************************/
+
+if ( typeof browser === 'object' && this.browser.extension ) {
+	this.chrome = this.browser;
+
+	if ( !chrome.storage.sync ) {
+		chrome.storage.sync = chrome.storage.local;
+	}
+}
+
+/******************************************************************************/
+
 var vAPI = Object.create(null);
 
 vAPI.chrome = true;
@@ -10,7 +22,7 @@ vAPI.browser = {
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',
 	wheel: 'wheel',
-	zoomIn: '-webkit-zoom-in'
+	zoomIn: (typeof browser === 'object' ? '' : '-webkit-') + 'zoom-in'
 };
 
 vAPI.messaging = {
@@ -34,7 +46,7 @@ vAPI.messaging = {
 		var listener = callback || this.listener;
 
 		// Reading prefs from content scripts seems noticeably faster
-		// (no flicker when loading) than getting them via messaging
+		// than getting them via messaging
 		if ( message.cmd === 'loadPrefs' && !message.getAppInfo ) {
 			chrome.storage.sync.get('cfg', function(obj) {
 				if ( typeof listener === 'function' ) {
@@ -58,7 +70,7 @@ vAPI.messaging = {
 	}
 };
 
-if ( location.protocol === 'chrome-extension:' ) {
+if ( /^(chrome|ms-browser)-extension:/.test(location.protocol) ) {
 	if ( location.hash === '#options_ui' ) {
 		vAPI.messaging.listen(window.close);
 		vAPI.messaging.send({cmd: 'openURL', url: 'options.html'});
@@ -66,7 +78,11 @@ if ( location.protocol === 'chrome-extension:' ) {
 	}
 
 	vAPI.l10n = function(s) {
-		return chrome.i18n.getMessage(s) || s;
+		try {
+			return chrome.i18n.getMessage(s) || s;
+		} catch ( ex ) {
+			return s;
+		}
 	};
 
 	vAPI.insertHTML = function(n, html) {
@@ -77,7 +93,7 @@ if ( location.protocol === 'chrome-extension:' ) {
 
 Object.defineProperty(vAPI, 'fullScreenElement', {
 	get: function() {
-		return document.webkitFullscreenElement;
+		return document.fullscreenElement || document.webkitFullscreenElement;
 	}
 });
 
@@ -94,17 +110,31 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}
 
-		var media = document.querySelector(
-			'body[style="margin: 0px;"] > img[style^="-webkit-"]:first-child, '
+		// Since Edge isn't actually a Chromium platform
+		if ( typeof browser === 'object' ) {
+			selector = 'body >'
+				+ 'input#zoom[type="checkbox"] + label#imgContainer > '
+					+ 'img[src]:only-child, '
+				+ 'body[style^="background-color: rgb(41,41,41)"] > '
+					+ 'video[style][autoplay][controls][src]:empty, '
+				+ 'body[style^="background-color: rgb(41,41,41)"] > '
+					+ 'audio[style][autoplay][controls][src]:empty';
+		} else {
+			selector = 'body[style="margin: 0px;"] > ';
+
 			// Chropera 29 changed the structure
-			+ (navigator.appVersion.indexOf('OPR/') === -1
-				? ''
-				: 'body[style="margin: 0px;"] > '
-					+ 'div[style^="display: table"]:only-child >'
-					+ 'div[style^="display: table-cell"] > img:only-child, '
-			)
-			+ 'body > video[name=media][controls][autoplay]:first-child:not([src])'
-		);
+			selector = navigator.appVersion.indexOf('OPR/') === -1
+				? 'img[style^="-webkit-"]:first-child'
+				: 'div[style^="display: table"] > '
+					+ 'div[style^="display: table-cell"]:only-child >'
+					+ 'img:only-child';
+
+			selector += ', body >'
+				+ 'video[name=media][controls][autoplay]'
+				+ ':first-child:not([src])';
+		}
+
+		var media = document.querySelector(selector);
 
 		if ( !media ) {
 			return this._mediaType;

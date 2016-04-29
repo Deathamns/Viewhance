@@ -1,5 +1,17 @@
 'use strict';
 
+/******************************************************************************/
+
+if ( typeof browser === 'object' && this.browser.extension ) {
+	this.chrome = this.browser;
+
+	if ( !chrome.storage.sync ) {
+		chrome.storage.sync = chrome.storage.local;
+	}
+}
+
+/******************************************************************************/
+
 var vAPI = Object.create(null);
 
 vAPI.chrome = true;
@@ -10,7 +22,7 @@ vAPI.app = {
 	version: vAPI.app.version,
 	platform: (function() {
 		var vendor = navigator.appVersion.match(
-			/(Chromium|OPR|RockMelt|Comodo_Dragon|CoolNovo|Iron)\/(\S+)/
+			/(Chromium|OPR|RockMelt|Comodo_Dragon|CoolNovo|Iron|Edge)\/(\S+)/
 		);
 
 		if ( vendor ) {

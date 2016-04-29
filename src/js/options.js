@@ -238,7 +238,7 @@ var save = function() {
 var onHashChange = function() {
 	var args = [];
 	var menu = $('nav-menu');
-	var prevHash = menu.activeLink && menu.activeLink.hash.slice(1) || 'general';
+	var prevHash = menu.activeLink ? menu.activeLink.hash.slice(1) : 'general';
 	var hash = location.hash.slice(1) || 'general';
 
 	if ( hash.indexOf('/') > -1 ) {
@@ -246,83 +246,8 @@ var onHashChange = function() {
 		hash = args.shift();
 	}
 
-	var section = $(hash + '-sec') || $((hash = 'general') + '-sec');
-
-	if ( !section._nodeLocalized ) {
-		if ( hash === 'info' ) {
-			var xhr = new XMLHttpRequest;
-			xhr.overrideMimeType('application/json;charset=utf-8');
-			xhr.open('GET', 'locales.json', true);
-			xhr.addEventListener('load', function() {
-				var translators;
-				var rows = [];
-				var locales = JSON.parse(this.responseText);
-				var lngMap = function(el, idx) {
-					el.name = [
-						el.name || el.realname || '',
-						el.realname && el.name ? ' (' + el.realname + ')' : ''
-					].join('');
-
-					if ( el.email ) {
-						el.email = el.email
-							.replace(/\(dot\)/g, '.')
-							.replace('(at)', '@');
-					}
-
-					if ( !el.name ) {
-						el.name = el.email || el.web;
-					}
-
-					if ( idx ) {
-						translators.nodes.push(', ');
-					}
-
-					translators.nodes.push(el.email || el.web
-						? {
-							tag: 'a',
-							attrs: {href: el.email
-								? 'mailto:' + el.email
-								: el.web
-							},
-							text: el.name
-						}
-						: el.name
-					);
-				};
-
-				// _ is the default language
-				delete locales._;
-
-				for ( var alpha2 in locales ) {
-					var locale = locales[alpha2];
-					translators = {tag: 'span'};
-
-					if ( locale.translators ) {
-						translators.nodes = [];
-						locale.translators.forEach(lngMap);
-					} else {
-						translators.text = 'anonymous';
-					}
-
-					rows.push({tag: 'div', nodes: [
-						alpha2 + ', ' + locale.name,
-						translators
-					]});
-				}
-
-				vAPI.buildNodes($('locales-table'), rows);
-			});
-			xhr.send();
-		}
-	}
-
 	if ( prevHash !== hash && (prevHash = $(prevHash + '-sec')) ) {
 		prevHash.style.display = 'none';
-	}
-
-	if ( section ) {
-		localizeNodes([section]);
-		section.style.display = 'block';
 	}
 
 	if ( menu.activeLink ) {
@@ -333,6 +258,79 @@ var onHashChange = function() {
 
 	if ( menu.activeLink ) {
 		menu.activeLink.classList.add('active');
+	}
+
+	var section = $(hash + '-sec') || $((hash = 'general') + '-sec');
+
+	if ( section._nodeLocalized ) {
+		section.style.display = 'block';
+		return;
+	}
+
+	localizeNodes([section]);
+	section.style.display = 'block';
+
+	if ( hash === 'info' ) {
+		vAPI.messaging.send({cmd: 'loadFile', path: 'locales.json'}, function(response) {
+			var translators;
+			var rows = [];
+			var locales = JSON.parse(response);
+			var lngMap = function(el, idx) {
+				el.name = [
+					el.name || el.realname || '',
+					el.realname && el.name ? ' (' + el.realname + ')' : ''
+				].join('');
+
+				if ( el.email ) {
+					el.email = el.email
+						.replace(/\(dot\)/g, '.')
+						.replace('(at)', '@');
+				}
+
+				if ( !el.name ) {
+					el.name = el.email || el.web;
+				}
+
+				if ( idx ) {
+					translators.nodes.push(', ');
+				}
+
+				translators.nodes.push(el.email || el.web
+					? {
+						tag: 'a',
+						attrs: {
+							href: el.email
+								? 'mailto:' + el.email
+								: el.web
+						},
+						text: el.name
+					}
+					: el.name
+				);
+			};
+
+			// _ is the default language
+			delete locales._;
+
+			for ( var alpha2 in locales ) {
+				var locale = locales[alpha2];
+				translators = {tag: 'span'};
+
+				if ( locale.translators ) {
+					translators.nodes = [];
+					locale.translators.forEach(lngMap);
+				} else {
+					translators.text = 'anonymous';
+				}
+
+				rows.push({tag: 'div', nodes: [
+					alpha2 + ', ' + locale.name,
+					translators
+				]});
+			}
+
+			vAPI.buildNodes($('locales-table'), rows);
+		});
 	}
 };
 
@@ -370,8 +368,6 @@ window.addEventListener('load', function() {
 			location.hash = e.target.hash;
 		}
 	});
-
-	onHashChange();
 
 	var form = document.forms[0];
 	var onFormChange = function(e) {
@@ -533,19 +529,13 @@ window.addEventListener('load', function() {
 	});
 
 	vAPI.messaging.send({cmd: 'loadPrefs', getAppInfo: true}, function(data) {
-		$('app-name').textContent = data.app.name;
-		$('app-version').textContent = data.app.version;
-		$('platform-info').textContent = data.app.platform;
-		document.title = ':: ' + data.app.name + ' ::';
-
-		var xhr = new XMLHttpRequest;
-		xhr.overrideMimeType('application/json;charset=utf-8');
-		xhr.open('GET', 'defaults.json', true);
-		xhr.addEventListener('load', function() {
-			defaultPrefs = JSON.parse(this.responseText);
-			load(data.prefs);
-			document.body.style.display = 'block';
-		});
-		xhr.send();
+		$('app-name').textContent = data._app.name;
+		$('app-version').textContent = data._app.version;
+		$('platform-info').textContent = data._app.platform;
+		document.title = ':: ' + data._app.name + ' ::';
+		defaultPrefs = JSON.parse(data._defaultPrefs);
+		load(data.prefs);
+		onHashChange();
+		document.body.style.display = 'block';
 	});
 });

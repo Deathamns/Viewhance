@@ -3,11 +3,16 @@
 var cachedPrefs;
 var onPrefsUpdatedCallbacks = [];
 
+var xhr = function(url, onLoad) {
+	var req = new XMLHttpRequest;
+	req.overrideMimeType('application/json;charset=utf-8');
+	req.open('GET', url, true);
+	req.addEventListener('load', onLoad);
+	req.send();
+};
+
 var updatePrefs = function(newPrefs, storedPrefs) {
-	var xhr = new XMLHttpRequest;
-	xhr.overrideMimeType('application/json;charset=utf-8');
-	xhr.open('GET', 'defaults.json', true);
-	xhr.addEventListener('load', function() {
+	xhr('defaults.json', function() {
 		var key;
 		var defPrefs = JSON.parse(this.responseText);
 		cachedPrefs = {};
@@ -74,7 +79,6 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			vAPI.storage.set('cfg', prefsToStore);
 		}
 	});
-	xhr.send();
 };
 
 var onMessage = function(message, source, respond) {
@@ -94,11 +98,16 @@ var onMessage = function(message, source, respond) {
 				: cachedPrefs
 		};
 
-		if ( message.getAppInfo ) {
-			response.app = vAPI.app;
+		if ( !message.getAppInfo ) {
+			respond(response);
+			return;
 		}
 
-		respond(response);
+		xhr('defaults.json', function() {
+			response._app = vAPI.app;
+			response._defaultPrefs = this.responseText;
+			respond(response);
+		});
 	} else if ( cmd === 'savePrefs' ) {
 		vAPI.storage.get('cfg', function(cfg) {
 			updatePrefs(message.prefs, JSON.parse(cfg || '{}'));
@@ -109,18 +118,16 @@ var onMessage = function(message, source, respond) {
 		}
 
 		message.url.forEach(function(url) {
-			if ( url && typeof url === 'string' ) {
-				vAPI.tabs.create({url: url, active: !message.nf});
+			if ( !url || typeof url !== 'string' ) {
+				return;
 			}
+
+			vAPI.tabs.create({url: url, active: !message.nf});
 		});
 	} else if ( cmd === 'loadFile' ) {
-		var xhr = new XMLHttpRequest;
-		xhr.overrideMimeType('text/plain; charset=x-user-defined');
-		xhr.open('GET', message.path, true);
-		xhr.addEventListener('load', function() {
+		xhr(message.path, function() {
 			respond(this.responseText);
 		});
-		xhr.send();
 	}
 };
 
