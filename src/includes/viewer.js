@@ -6,6 +6,7 @@ var init = function(win, doc, response) {
 
 if ( !doc || !doc.body || !response || !response.prefs ) {
 	init = null;
+	vAPI.suicideAttempt();
 	return;
 }
 
@@ -14,6 +15,7 @@ var media = doc.body.querySelector('img, video, audio');
 
 if ( !media ) {
 	init = null;
+	vAPI.suicideAttempt();
 	return;
 }
 
@@ -2086,6 +2088,7 @@ var firstContact = function() {
 	if ( vAPI.opera || vAPI.firefox ) {
 		if ( !vAPI.mediaType ) {
 			init = null;
+			firstContact = null;
 			vAPI.suicideAttempt();
 			return;
 		}
