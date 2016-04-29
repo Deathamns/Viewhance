@@ -27,7 +27,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		return;
 	}
 
-	var lastMouseDownTime, lastMouseDownX, lastMouseDownY;
+	var elementsFromPoint, lastMouseDownTime, lastMouseDownX, lastMouseDownY;
 
 	var checkBG = function(cs) {
 		// ("...\"") - Gecko
@@ -102,6 +102,84 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		return null;
 	};
 
+	if ( typeof document.elementsFromPoint === 'function' ) {
+		elementsFromPoint = function(x, y, target) {
+			var urls = [];
+			var rgxIgnore = /^(html|body)$/;
+			var elements = document.elementsFromPoint(x, y);
+
+			for ( var i = 0; i < elements.length; ++i ) {
+				var node = elements[i];
+
+				if ( rgxIgnore.test(node.localName) ) {
+					if ( !rgxIgnore.test(target.localName) ) {
+						continue;
+					}
+				}
+
+				var url = checkIMG(node);
+
+				if ( url ) {
+					urls.push(url);
+				}
+
+				if ( url = checkBG(window.getComputedStyle(node)) ) {
+					urls = urls.concat(url);
+				}
+			}
+
+			return urls;
+		};
+	} else {
+		// Not exactly what we want
+		elementsFromPoint = function(x, y, target) {
+			var node;
+			var urls = [];
+			var rgxIgnore = /^(html|body)$/;
+			var xpath = document.evaluate(
+				[
+					'.',
+					'./ancestor::*[position()<30]',
+					'./preceding::*[position()<30]'
+						+ '[not(head) and not(ancestor::head)]',
+					'./descendant::*[position()<30]',
+					'./following::*[position()<30]'
+				].join(' | '),
+				target,
+				null,
+				4,
+				null
+			);
+
+			while ( node = xpath.iterateNext() ) {
+				if ( rgxIgnore.test(node.localName) ) {
+					if ( !rgxIgnore.test(target.localName) ) {
+						continue;
+					}
+				}
+
+				var rect = node.getBoundingClientRect();
+
+				if ( !rect || x < rect.left || x > rect.left + rect.width
+					|| y < rect.top || y > rect.top + rect.height ) {
+					continue;
+				}
+
+				var url = checkIMG(node);
+
+				if ( url ) {
+					urls.push(url);
+				}
+
+				if ( url = checkBG(window.getComputedStyle(node)) ) {
+					urls = urls.concat(url);
+				}
+			}
+
+			return urls;
+		};
+	}
+
 	window.addEventListener('mousedown', function(e) {
 		if ( e.button !== 2 ) {
 			return;
@@ -130,51 +208,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			return;
 		}
 
-		var url, r;
-		var urls = [];
-		var el = 30;
-		var rgxIgnore = /^(html|body)$/;
-		// not exactly what we want
-		var xpath = document.evaluate(
-			[
-				'.',
-				'./ancestor::*[position()<' + el + ']',
-				'./preceding::*[position()<' + el + '][not(head) and not(ancestor::head)]',
-				'./descendant::*[position()<' + el + ']',
-				'./following::*[position()<' + el + ']'
-			].join(' | '),
-			e.target,
-			null,
-			4,
-			null
-		);
-
-		while ( el = xpath.iterateNext() ) {
-			if ( rgxIgnore.test(el.localName) ) {
-				if ( !rgxIgnore.test(e.target.localName) ) {
-					continue;
-				}
-			}
-
-			r = el.getBoundingClientRect();
-
-			if ( !r ) {
-				continue;
-			}
-
-			if ( e.clientX < r.left || e.clientX > r.left + r.width
-				|| e.clientY < r.top || e.clientY > r.top + r.height ) {
-				continue;
-			}
-
-			if ( url = checkIMG(el) ) {
-				urls.push(url);
-			}
-
-			if ( url = checkBG(window.getComputedStyle(el)) ) {
-				urls = urls.concat(url);
-			}
-		}
+		var urls = elementsFromPoint(e.clientX, e.clientY, e.target);
 
 		if ( !urls || !urls.length ) {
 			return;
