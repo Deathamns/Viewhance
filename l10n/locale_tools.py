@@ -176,11 +176,6 @@ def sync_with_default_locale(alpha2, locale, def_locale):
     for grp, string in strings_to_be_removed:
         del locale[grp][string]
 
-    if len(groups_to_be_removed) or len(strings_to_be_removed):
-        return True
-    else:
-        return False
-
 
 def rename_entry(alpha2, locale, params):
     from_grp, from_str, to_grp, to_str = params
@@ -281,9 +276,14 @@ for alpha2 in languages:
                 glob(os.path.join('..', 'src', '*.html')) +
                 glob(os.path.join('..', 'src', 'js', '*.js'))
             )
-    else:
-        if 'sync' in actions:
-            changed = sync_with_default_locale(alpha2, locale, def_locale)
+
+    if 'sync' in actions:
+        # In order to sort keys
+        changed = True
+
+        if alpha2 != def_lang:
+            sync_with_default_locale(alpha2, locale, def_locale)
+
 
     if changed == True:
         locale_file_path = languages[alpha2]['path']
