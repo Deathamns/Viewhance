@@ -70,7 +70,7 @@ vAPI.messaging = {
 	}
 };
 
-if ( /^(chrome|ms-browser)-extension:/.test(location.protocol) ) {
+if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 	if ( location.hash === '#options_ui' ) {
 		vAPI.messaging.listen(window.close);
 		vAPI.messaging.send({cmd: 'openURL', url: 'options.html'});
