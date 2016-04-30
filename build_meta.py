@@ -116,6 +116,9 @@ def read_locales(locale_glob, exclude=None):
             for string in locale[grp]:
                 # Ignore redundant strings
                 if not is_def:
+                    if string not in def_strings:
+                        continue
+
                     if locale[grp][string]['>'] == def_strings[string]:
                         continue
 
