@@ -233,6 +233,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'background-repeat: no-repeat;',
 		'background-position: 0 3px;',
 		'color: #fff;',
+		'cursor: pointer;',
 	'}',
 	'#menu > ul > li:hover, .send-hosts li > a:hover {',
 		'color: silver;',
@@ -1651,25 +1652,30 @@ init = function() {
 
 	menu.addEventListener('mousedown', function(e) {
 		var t = e.target;
+		var href = t.getAttribute('href');
 
-		if ( t.href && t.href.indexOf('%', t.host.length) !== -1 ) {
-			t.href = t.href.replace(/%url/, encodeURIComponent(media.src));
+		if ( href && href.indexOf('%') !== -1 ) {
+			t.href = href.replace('%url', encodeURIComponent(media.src));
 		}
 
 		pdsp(e, !!t.textContent);
 	});
 
-	// Load favicons only when the menu item is hovered the first time
-	if ( /^https?:$/.test(win.location.protocol)
-		&& cfg.sendToHosts.length ) {
+	// Load favicons only when the menu item is hovered for the first time
+	if ( cfg.sendToHosts.length && /^https?:$/.test(win.location.protocol) ) {
 		menu.onHostsHover = function(e) {
 			this.removeEventListener(e.type, menu.onHostsHover);
 			delete menu.onHostsHover;
 			var links = this.querySelectorAll('.send-hosts > ul > li > a');
 			[].forEach.call(links, function(a) {
-				a.style.backgroundImage = 'url(//'
-					+ a.host
-					+ '/favicon.ico)';
+				var host = a.getAttribute('href');
+				host = host && host.match(/^[^\/]*(\/\/[^\/]+)/);
+
+				if ( !host ) {
+					return;
+				}
+
+				a.style.backgroundImage = 'url(' + host[1] + '/favicon.ico)';
 			});
 		};
 

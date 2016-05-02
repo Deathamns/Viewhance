@@ -45,7 +45,7 @@ if len(platforms) == 0:
             add_platform(f)
 
 if len(platforms) == 0:
-    raise SystemExit('No platforms were given.')
+    raise SystemExit('No platforms were found.')
 
 
 with open(os.path.abspath('config.json'), encoding='utf-8') as f:

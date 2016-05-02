@@ -14,7 +14,6 @@
 		"Google|https://www.google.com/searchbyimage?image_url=%url",
 		"Bing|https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=%url",
 		"Yandex|https://yandex.ru/images/search?rpt=imageview&img_url=%url",
-		"KarmaDecay|http://karmadecay.com/%url",
 		"ZXing QRCode|https://zxing.org/w/decode?full=true&u=%url",
 		"ImgOps|https://imgops.com/%url",
 		"Pixlr|https://apps.pixlr.com/editor/?image=%url",
