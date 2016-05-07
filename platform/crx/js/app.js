@@ -59,14 +59,11 @@ vAPI.messaging = {
 			return;
 		}
 
-		// Message cannot be sent from a listener function, setTimout solves it
-		setTimeout(function() {
-			if ( typeof	listener === 'function' ) {
-				chrome.runtime.sendMessage(message, listener);
-			} else {
-				chrome.runtime.sendMessage(message);
-			}
-		}, 0);
+		if ( typeof listener === 'function' ) {
+			chrome.runtime.sendMessage(message, listener);
+		} else {
+			chrome.runtime.sendMessage(message);
+		}
 	}
 };
 
