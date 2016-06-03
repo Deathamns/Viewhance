@@ -364,7 +364,8 @@ init = function() {
 		var m = media;
 		var s = m.style;
 
-		if ( m.box.width > winW || m.box.height > winH ) {
+		if ( m.mode !== MODE_FIT
+			&& (m.box.width > winW || m.box.height > winH) ) {
 			s.cursor = 'move';
 		} else if ( mWidth < mOrigWidth
 			|| mHeight < mOrigHeight ) {
@@ -423,7 +424,6 @@ init = function() {
 		mediaCss.top += 'px';
 		setMediaStyle();
 		calcFit();
-		setCursor();
 	};
 
 	var convertInfoParameter = function(a, param) {
@@ -1391,13 +1391,15 @@ init = function() {
 
 	progress = [];
 	media.angle = 0;
+	media.setAttribute('width', mOrigWidth);
+	media.setAttribute('height', mOrigHeight);
 	// Original dimensions with padding and border
-	media.removeAttribute('width');
-	media.removeAttribute('height');
 	mFullWidth = media.offsetWidth;
 	mFullHeight = media.offsetHeight;
 	calcViewportDimensions();
 	calcFit();
+	media.removeAttribute('width');
+	media.removeAttribute('height');
 
 	if ( vAPI.mediaType === 'img' && cfg.minUpscale && noFit.real ) {
 		if ( mOrigWidth >= winW * cfg.minUpscale / 100 ) {
