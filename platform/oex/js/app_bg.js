@@ -7,9 +7,7 @@ vAPI.opera = true;
 vAPI.app = {
 	name: widget.name,
 	version: widget.version,
-	platform: 'Opera '
-		+ window.opera.version()
-		+ ' (' + navigator.platform + ')'
+	platform: 'Opera ' + window.opera.version()
 };
 
 vAPI.storage = {

@@ -16,7 +16,6 @@ vAPI.app = (function() {
 		name: extInfo[0],
 		version: extInfo[1],
 		platform: XULAppInfo.name + ' ' + XULAppInfo.version
-			+ ' (' + navigator.platform + ')'
 	};
 })();
 

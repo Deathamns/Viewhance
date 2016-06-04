@@ -31,8 +31,7 @@ vAPI.app = {
 			vendor = navigator.appVersion.match(/(Chrome)\/(\S+)/);
 		}
 
-		return (vendor ? vendor.slice(1).join(' ') : 'Chromium')
-			+ ' (' + navigator.platform + ')';
+		return vendor ? vendor.slice(1).join(' ') : 'Chromium';
 	})()
 };
 

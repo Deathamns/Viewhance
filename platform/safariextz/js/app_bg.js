@@ -12,7 +12,6 @@ vAPI.app = (function() {
 		name: extInfo[0],
 		version: extInfo[1],
 		platform: 'Safari' + (vendorVersion ? ' ' + vendorVersion[1] : '')
-			+ ' (' + navigator.platform + ')'
 	};
 })();
 

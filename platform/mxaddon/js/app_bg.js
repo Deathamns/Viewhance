@@ -12,7 +12,6 @@ vAPI.app = (function() {
 		name: extInfo[0],
 		version: extInfo[1],
 		platform: 'Maxthon ' + external.mxVersion
-			+ ' (' + navigator.platform + ')'
 	};
 })();
 
