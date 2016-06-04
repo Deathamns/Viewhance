@@ -33,14 +33,15 @@
 		"no-empty": "warn",
 		"no-ex-assign": "error",
 		"no-extra-boolean-cast": "error",
-		"no-extra-parens": "warn",
+		"no-extra-parens": ["warn", "all", {"nestedBinaryExpressions": false}],
 		"no-extra-semi": "error",
 		"no-func-assign": "error",
 		"no-inner-declarations": ["error", "functions"],
 		"no-invalid-regexp": "error",
-		"no-irregular-whitespace": "error",
+		"no-irregular-whitespace": ["error", {"skipStrings": false}],
 		"no-negated-in-lhs": "error",
 		"no-obj-calls": "error",
+		"no-prototype-builtins": "error",
 		"no-regex-spaces": "warn",
 		"no-sparse-arrays": "error",
 		"no-unreachable": "error",
@@ -192,6 +193,7 @@
 		"no-underscore-dangle": "off",
 		"no-unneeded-ternary": "error",
 		"object-curly-spacing": "error",
+		"object-property-newline": "off",
 		"one-var": "off",
 		"one-var-declaration-per-line": ["error", "initializations"],
 		"operator-assignment": ["error", "always"],
@@ -210,6 +212,7 @@
 		"space-infix-ops": "error",
 		"space-unary-ops": "error",
 		"spaced-comment": ["warn", "always", {"exceptions": ["*", "+", "-"]}],
+		"unicode-bom": "error",
 		"wrap-regex": "off"
 
 		// Category "ECMAScript 6" is not configured
