@@ -364,7 +364,7 @@ init = function() {
 		var m = media;
 		var s = m.style;
 
-		if ( m.mode !== MODE_FIT
+		if ( (m.mode !== MODE_FIT || m.angle )
 			&& (m.box.width > winW || m.box.height > winH) ) {
 			s.cursor = 'move';
 		} else if ( mWidth < mOrigWidth
