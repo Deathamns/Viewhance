@@ -1794,7 +1794,7 @@ init = function() {
 			vAPI.messaging.send(message, function(img) {
 				var sheet = doc.head.querySelector('style').sheet;
 				sheet.insertRule(
-					'li[data-cmd]>div{background-image: url(' + img + ');}',
+					'li[data-cmd] > div {background-image: url(' + img + ');}',
 					sheet.cssRules.length
 				);
 				menu.iconsLoaded = true;
@@ -1810,16 +1810,6 @@ init = function() {
 
 		doc.removeEventListener('mousemove', menuTrigger);
 	};
-
-	if ( win.Node.prototype && !win.Node.prototype.contains ) {
-		win.Node.prototype.contains = function(n) {
-			if ( n instanceof Node === false ) {
-				return false;
-			}
-
-			return this === n || !!(this.compareDocumentPosition(n) & 16);
-		};
-	}
 
 	menu.addEventListener(vAPI.browser.wheel, function(e) {
 		pdsp(e);
@@ -1863,31 +1853,27 @@ init = function() {
 
 	menu.addEventListener(vAPI.browser.transitionend, function(e) {
 		if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
-			menu.style.display = 'none';
+			this.style.display = 'none';
 		}
 	});
 
-	menu.addEventListener('mouseover', function() {
-		if ( !menu.mtimer ) {
+	menu.addEventListener('mouseenter', function() {
+		if ( !this.hideTimer ) {
 			return;
 		}
 
-		clearTimeout(menu.mtimer);
-		menu.mtimer = null;
-		menu.style.left = '0';
-		menu.style.opacity = '1';
+		clearTimeout(this.hideTimer);
+		this.hideTimer = null;
+		this.style.left = '0';
+		this.style.opacity = '1';
 	});
 
-	menu.addEventListener('mouseout', function(e) {
-		if ( this.contains(e.relatedTarget) ) {
-			return;
-		}
-
-		doc.addEventListener('mousemove', menuTrigger);
-		menu.mtimer = setTimeout(function() {
+	menu.addEventListener('mouseleave', function() {
+		this.hideTimer = setTimeout(function() {
+			doc.addEventListener('mousemove', menuTrigger);
+			menu.hideTimer = null;
 			menu.style.left = '-' + menu.offsetWidth + 'px';
 			menu.style.opacity = '0';
-			menu.mtimer = null;
 		}, 800);
 	});
 
