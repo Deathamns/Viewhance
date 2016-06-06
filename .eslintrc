@@ -41,7 +41,7 @@
 		"no-irregular-whitespace": ["error", {"skipStrings": false}],
 		"no-negated-in-lhs": "error",
 		"no-obj-calls": "error",
-		"no-prototype-builtins": "error",
+		"no-prototype-builtins": "off",
 		"no-regex-spaces": "warn",
 		"no-sparse-arrays": "error",
 		"no-unreachable": "error",

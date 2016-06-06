@@ -1,5 +1,19 @@
 'use strict';
 
+/******************************************************************************/
+
+if ( !this.requestAnimationFrame ) {
+	this.requestAnimationFrame = function(callback) {
+		return setTimeout(callback, 0xf);
+	};
+
+	this.cancelAnimationFrame = function(timerId) {
+		return clearTimeout(timerId);
+	};
+}
+
+/******************************************************************************/
+
 var vAPI = Object.create(null);
 
 vAPI.opera = true;

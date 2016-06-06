@@ -581,7 +581,7 @@ init = function() {
 			return;
 		}
 
-		clearInterval(progress);
+		cancelAnimationFrame(progress);
 		progress = null;
 		cancelAction = false;
 		dragSlide.length = 0;
@@ -620,7 +620,7 @@ init = function() {
 			return;
 		}
 
-		progress = setTimeout(startScroll, 25);
+		progress = requestAnimationFrame(startScroll);
 	};
 
 	var isValidWheelTarget = function(t) {
@@ -746,7 +746,7 @@ init = function() {
 			if ( vAPI.opera ) {
 				onMoveFrame();
 			} else {
-				panning = win.requestAnimationFrame(onMoveFrame);
+				panning = requestAnimationFrame(onMoveFrame);
 			}
 		}
 
@@ -768,7 +768,7 @@ init = function() {
 		dragSlide[1] = [dragSlide[2][0], dragSlide[2][1]];
 		dragSlide[2] = [lastMoveX, lastMoveY];
 
-		media.dragSlideTime = Date.now();
+		media.dragSlideTime = e.timeStamp;
 		pdsp(e);
 	};
 
@@ -1089,7 +1089,7 @@ init = function() {
 			x = dragSlide[0][0] - dragSlide[2][0];
 			y = dragSlide[0][1] - dragSlide[2][1];
 
-			if ( Date.now() - media.dragSlideTime > 100 ) {
+			if ( e.timeStamp - media.dragSlideTime > 100 ) {
 				cancelAction = false;
 				dragSlide.length = 0;
 				return;
@@ -1097,8 +1097,8 @@ init = function() {
 
 			if ( x || y ) {
 				dragSlide.length = 2;
-				dragSlide[0] = x;
-				dragSlide[1] = y;
+				dragSlide[0] = x * 1.5;
+				dragSlide[1] = y * 1.5;
 				startScroll();
 				win.addEventListener(vAPI.browser.wheel, stopScroll, true);
 				return;
