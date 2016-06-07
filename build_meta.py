@@ -88,7 +88,7 @@ def read_locales(locale_glob, exclude=None):
 
         locale_name = locale_list[alpha2]
         languages[alpha2] = {
-            'name': ('{} ({})' if 'native' in locale_name else '{}').format(
+            'name': ('{} [{}]' if 'native' in locale_name else '{}').format(
                 locale_name['english'],
                 locale_name['native'] if 'native' in locale_name else ''
             ),
