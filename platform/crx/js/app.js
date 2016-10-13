@@ -120,8 +120,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 			selector = 'body[style="margin: 0px;"] > ';
 
 			// Chropera 29 changed the structure
-			selector = navigator.appVersion.indexOf('OPR/') === -1
-				? 'img[style^="-webkit-"]:first-child'
+			selector += navigator.appVersion.indexOf('OPR/') === -1
+				? 'img[style*="user-select: none"]:first-child'
 				: 'div[style^="display: table"] > '
 					+ 'div[style^="display: table-cell"]:only-child >'
 					+ 'img:only-child';
