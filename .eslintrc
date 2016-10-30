@@ -210,7 +210,7 @@
 		"no-underscore-dangle": "off",
 		"no-unneeded-ternary": "error",
 		"no-whitespace-before-property": "error",
-		"object-curly-newline": "error",
+		"object-curly-newline": "off",
 		"object-curly-spacing": "error",
 		"object-property-newline": "off",
 		"one-var-declaration-per-line": ["error", "initializations"],
