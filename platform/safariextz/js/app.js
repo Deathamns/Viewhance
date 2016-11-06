@@ -120,14 +120,17 @@ Object.defineProperty(vAPI, 'mediaType', {
 
 		var media = document.querySelector(
 			'body[style^="margin: 0px"] > img[style^="-webkit-user"]:first-child, '
-			+ 'body > video[name=media][controls][autoplay]'
+			+ 'body > video[name=media][controls][autoplay]:first-child'
 		);
 
 		if ( !media ) {
 			return this._mediaType;
 		}
 
-		if ( media.src !== location.href && media.currentSrc !== location.href ) {
+		if ( media.src !== location.href
+			&& media.currentSrc !== location.href
+			&& (media.childElementCount !== 1
+				|| media.firstElementChild.src !== location.href) ) {
 			return this._mediaType;
 		}
 

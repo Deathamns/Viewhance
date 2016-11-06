@@ -1,6 +1,7 @@
 /* eslint indent:"off" */
 
 'use strict';
+
 // eslint-disable-next-line padded-blocks
 var init = function(win, doc, response) {
 
@@ -480,7 +481,7 @@ init = function() {
 
 		if ( boxW ) {
 			if ( media.angle ) {
-				var radians = Math.PI * media.angle / 180;
+				var radians = media.angle * Math.PI / 180;
 				var sin = Math.abs(Math.sin(radians));
 				var cos = Math.abs(Math.cos(radians));
 				mediaCss.width = boxW * cos - boxW / boxRatio * sin;
