@@ -22,40 +22,37 @@ The code must work on all supported platforms, except if the browser's extension
 
 ## Build ##
 ```
-sh build.sh [platform(s)] [meta] [useln] [pack]
+python build.py [platform(s)] [-meta] [-pack] [-useln]
 ```
 
-Windows users need [Cygwin](https://cygwin.com/install.html) to run the script.
+The script prepares installable directories for each platform, and if the `-pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes into the `build` directory.
 
-The script prepares installable directories for each platform, and if the `pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes into the `build` directory.
+Optionally, it accepts platform names (any directory name under the `platform` directory) in case if the build should happen only for the desired platforms, since all of them will be processed by default.
 
-Optionally, it accepts platform names (any directory name under the `platform` directory) in case if the build should happen only for the desired platforms, since all platforms will be processed by default.
-
-For generating only meta-data (manifest and locale files, and/or update-files when the `pack` argument is set), the `build_meta.py` script can be used (requires Python3). Similarly, it accepts the *platform name*, and the `pack` argument.
-The same effect is achieved by running `sh build.sh meta [platform(s)]` command.
+For generating only meta-data (manifest and locale files, and/or update-files when the `-pack` argument is set) use the `-meta` argument.
 
 Examples:
 ```
 # Prepare directories for every available platform
-sh build.sh
+./build.py
 
 # Prepare directories and package them for every available platform
-sh build.sh pack
+./build.py -pack
 
 # Prepare directories for Firefox and Opera
-sh build.sh xpi oex
+./build.py xpi oex
 
 # Prepare and package for Chromium
-sh build.sh crx pack
+./build.py crx -pack
 
 # Generate meta-data for Maxthon and Safari
-sh build.sh meta mxaddon safariextz
+./build.py -meta mxaddon safariextz
 ```
 
 ## Development ##
 For testing, you can build (described above) the extension for a selected platform, and install it from the `build/_platform_` directory for your browser.
 
-Some browsers (on some platforms) support reading the files through symbolic links, and for them there is a `useln` argument for the `build.sh` script to create symbolic links instead of copying the project files. `useln` is ignored when `pack` is used.
+Some browsers (on some platforms) support reading the files through symbolic links, and for them there is a `-useln` argument for the `build.py` script to create symbolic links instead of copying the files. `-useln` is ignored when `-pack` is used.
 
 Alternatively, the extension can be built into a packaged file, which can be installed as well.
 

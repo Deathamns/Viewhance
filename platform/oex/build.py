@@ -1,36 +1,35 @@
 from __future__ import unicode_literals
+import sys
 import os
 import json
+import subprocess
 from io import open
 
 os.chdir(os.path.split(os.path.abspath(__file__))[0])
-
-
-def mkdirs(path):
-    try:
-        os.makedirs(path)
-    finally:
-        return os.path.exists(path)
+pj = os.path.join
 
 
 class Platform(object):
+    ext = os.path.basename(os.path.dirname(__file__))
+    update_file = 'update_{}.xml'.format(ext)
     requires_all_strings = True
-    update_file = 'update_oex.xml'
     l10n_dir = 'locales'
 
-    def __init__(self, build_dir, config, languages, desc_string):
-        self.build_dir = os.path.join(build_dir, 'oex')
+    def __init__(self, build_dir, config, languages, desc_string, package_name):
+        self.build_dir = pj(build_dir, self.ext)
         self.config = config
         self.languages = languages
         self.desc_string = desc_string
+        self.package_name = package_name
 
     def __del__(self):
-        del self.config['locale_info']
-        del self.config['update_file']
+        for param in ['locale_info', 'update_file']:
+            if param in self.config:
+                del self.config[param]
 
     def write_manifest(self):
         manifest_name = 'config.xml'
-        config_xml_path = os.path.join(self.build_dir, manifest_name)
+        config_xml_path = pj(self.build_dir, manifest_name)
 
         with open(config_xml_path, 'wt', encoding='utf-8', newline='\n') as f:
             tmp = []
@@ -53,14 +52,17 @@ class Platform(object):
             self.config['locale_info'] = '\n'.join(tmp) + '\n'
             self.config['update_file'] = self.update_file
 
-            with open(os.path.join('meta', manifest_name), 'r') as tmpl:
+            with open(pj('meta', manifest_name), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_update_file(self):
-        update_file = os.path.join(self.build_dir, '..', self.update_file)
+        if not self.config['update_url']:
+            return
+
+        update_file = pj(self.build_dir, '..', self.update_file)
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(os.path.join('meta', self.update_file), 'r') as tmpl:
+            with open(pj('meta', self.update_file), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):
@@ -69,10 +71,17 @@ class Platform(object):
         }
 
         for alpha2 in lng_strings:
-            locale_dir = os.path.join(self.build_dir, 'locales', alpha2)
+            locale_dir = pj(self.build_dir, 'locales', alpha2)
 
-            if not mkdirs(locale_dir):
-                print('Falied to create locale directory:\n' + locale_dir)
+            try:
+                os.makedirs(locale_dir)
+            except:
+                pass
+
+            if not os.path.exists(locale_dir):
+                sys.stderr.write(
+                    'Falied to create locale directory:\n' + locale_dir + '\n'
+                )
                 continue
 
             lang = lng_strings[alpha2]
@@ -82,7 +91,7 @@ class Platform(object):
                     continue
 
                 locale = open(
-                    os.path.join(locale_dir, locale_files[grp]),
+                    pj(locale_dir, locale_files[grp]),
                     'wt', encoding='utf-8', newline='\n'
                 )
 
@@ -96,3 +105,13 @@ class Platform(object):
                         )
                     )
                     f.write(';\n')
+
+    def write_files(self, use_symlinks=False):
+        pass
+
+    def write_package(self):
+        package = self.package_name + '.' + self.ext;
+        subprocess.call(
+            ['7z', 'a', '-r', '-tzip', package, pj(self.build_dir, '*')],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )

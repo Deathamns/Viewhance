@@ -1,48 +1,76 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from __future__ import unicode_literals
+import sys
 import os
 import json
-import sys
 from io import open
 from sys import argv
 from glob import glob
 from copy import deepcopy
+from datetime import datetime
 from collections import OrderedDict
 from shutil import rmtree, copy
+from distutils.dir_util import copy_tree
 
 sys.dont_write_bytecode = True
+# Makes it runnable from any directory
 os.chdir(os.path.split(os.path.abspath(__file__))[0])
 
+pj = os.path.join
 
+src_dir = os.path.abspath('src')
 build_dir = os.path.abspath('build')
 platform_dir = os.path.abspath('platform')
 l10n_dir = os.path.abspath('l10n')
+
+
+if not os.path.isdir(src_dir) or not os.path.isdir(platform_dir):
+    raise SystemExit('src or platform directory not found')
+
+if not os.path.isdir(build_dir):
+    os.makedirs(build_dir)
+
+
 locale_list = None
 languages = OrderedDict({})
-lng_strings_sparse = OrderedDict({})
-lng_strings_full = OrderedDict({})
+l10n_strings_sparse = OrderedDict({})
+l10n_strings_full = OrderedDict({})
 app_desc_string = 'appDescriptionShort'
-platforms = []
-pack = False
 
+common_app_code = None
+platforms = []
+params = {
+    '-meta': False,
+    '-pack': False,
+    '-useln': False
+}
 
 def add_platform(platform):
-    if os.path.exists(os.path.join(platform_dir, platform, 'build_meta.py')):
+    if os.path.exists(pj(platform_dir, platform, 'build.py')):
         platforms.append(platform)
+        return True
+
+    return False
 
 
 for i in range(1, len(argv)):
-    if argv[i] == 'pack':
-        pack = True
-        continue
+    arg = argv[i];
 
-    add_platform(argv[i])
+    if arg in params:
+        params[arg] = True
+    elif not add_platform(arg):
+        sys.stderr.write('Invalid argument: ' + arg + '\n')
+
+if params['-useln'] and params['-pack']:
+    params['-useln'] = False
+
 
 if len(platforms) == 0:
     for f in os.listdir(platform_dir):
-        if os.path.isdir(os.path.join(platform_dir, f)):
+        if os.path.isdir(pj(platform_dir, f)):
             add_platform(f)
+
 
 if len(platforms) == 0:
     raise SystemExit('No platforms were found.')
@@ -50,23 +78,26 @@ if len(platforms) == 0:
 
 with open(os.path.abspath('config.json'), encoding='utf-8') as f:
     config = json.load(f)
-    def_lang = config['def_lang']
 
 if not config:
     raise SystemExit('Config file failed to load!')
 
 
+def_lang = config['def_lang']
+config['version'] = datetime.utcnow().strftime("%Y.%m%d.%H%M")
+
+
 def read_locales(locale_glob, exclude=None):
-    global locale_list, languages, lng_strings_sparse
+    global locale_list, languages, l10n_strings_sparse
     mandatory_locale_groups = ['options']
 
     if locale_list is None:
-        locale_names_path = os.path.join(l10n_dir, 'locale_names.json')
+        locale_names_path = pj(l10n_dir, 'locale_names.json')
 
         with open(locale_names_path, encoding='utf-8') as f:
             locale_list = json.load(f)
 
-    locale_glob = os.path.join(l10n_dir, 'locales', locale_glob + '.json')
+    locale_glob = pj(l10n_dir, 'locales', locale_glob + '.json')
 
     for locale_file_name in glob(locale_glob):
         alpha2 = os.path.basename(locale_file_name).replace('.json', '')
@@ -96,12 +127,12 @@ def read_locales(locale_glob, exclude=None):
         }
 
         groups = OrderedDict({})
-        lng_strings_sparse[alpha2] = groups
+        l10n_strings_sparse[alpha2] = groups
 
         for grp in locale:
             is_def = alpha2 == def_lang
 
-            if not is_def and grp not in lng_strings_sparse[def_lang]:
+            if not is_def and grp not in l10n_strings_sparse[def_lang]:
                 continue
 
             # Ignore group description
@@ -111,7 +142,7 @@ def read_locales(locale_glob, exclude=None):
             groups[grp] = OrderedDict({})
 
             if not is_def:
-                def_strings = lng_strings_sparse[def_lang][grp]
+                def_strings = l10n_strings_sparse[def_lang][grp]
 
             for string in locale[grp]:
                 # Ignore redundant strings
@@ -129,7 +160,7 @@ def read_locales(locale_glob, exclude=None):
 
         if len(groups) == 0:
             del languages[alpha2]
-            del lng_strings_sparse[alpha2]
+            del l10n_strings_sparse[alpha2]
             continue
 
         # Add groups if they're missing
@@ -156,16 +187,16 @@ def read_locales(locale_glob, exclude=None):
 # Some platforms are able to use strings from the default locale.
 # Some not, and this fills their missing strings from the default language.
 def add_missing_strings():
-    def_strings = lng_strings_sparse[def_lang]
+    def_strings = l10n_strings_sparse[def_lang]
 
-    for alpha2 in lng_strings_sparse:
-        lng_strings_full[alpha2] = OrderedDict({})
+    for alpha2 in l10n_strings_sparse:
+        l10n_strings_full[alpha2] = OrderedDict({})
 
         if alpha2 == def_lang:
-            lng_strings_full[alpha2] = def_strings
+            l10n_strings_full[alpha2] = def_strings
             continue
 
-        locale_strings = lng_strings_sparse[alpha2]
+        locale_strings = l10n_strings_sparse[alpha2]
 
         for grp in def_strings:
             filled_grp = OrderedDict({})
@@ -179,24 +210,27 @@ def add_missing_strings():
                     filled_grp[string] = def_strings[grp][string]
 
             if defaults_used:
-                lng_strings_full[alpha2][grp] = filled_grp
+                l10n_strings_full[alpha2][grp] = filled_grp
             else:
-                lng_strings_full[alpha2][grp] = locale_strings[grp]
+                l10n_strings_full[alpha2][grp] = locale_strings[grp]
 
 
 read_locales(def_lang)
 
+
 if def_lang not in languages:
     raise SystemExit('Default language not found!')
 
+
 read_locales('*', [def_lang])
 
-for alpha2 in lng_strings_sparse:
-    if 'groupless' in lng_strings_sparse[alpha2]:
-        del lng_strings_sparse[alpha2]['groupless']
+
+for alpha2 in l10n_strings_sparse:
+    if 'groupless' in l10n_strings_sparse[alpha2]:
+        del l10n_strings_sparse[alpha2]['groupless']
 
 
-locales_json = os.path.abspath(os.path.join('build', 'locales.json'))
+locales_json = os.path.abspath(pj('build', 'locales.json'))
 
 with open(locales_json, 'wt', encoding='utf-8', newline='\n') as f:
     locales = {}
@@ -239,18 +273,36 @@ with open(locales_json, 'wt', encoding='utf-8', newline='\n') as f:
     )
 
 
-for platform in platforms:
-    module = __import__(
-        'platform.' + platform + '.build_meta',
-        fromlist=['build_meta']
-    )
+for platform_name in platforms:
+    try:
+        open(pj(platform_dir, '__init__.py'), 'a').close()
+        open(pj(platform_dir, platform_name, '__init__.py'), 'a').close()
+        platform = __import__(
+            'platform.' + platform_name + '.build',
+            fromlist=['build']
+        )
+    finally:
+        os.remove(pj(platform_dir, '__init__.py'))
+        os.remove(pj(platform_dir, platform_name, '__init__.py'))
 
-    platform = getattr(module, 'Platform')(
+
+    platform = platform.Platform(
         build_dir,
         config,
         languages,
         app_desc_string,
+        os.path.abspath(pj(
+            build_dir,
+            config['name'].lower() + '-' + config['version']
+        ))
     )
+
+
+    if not params['-meta']:
+        try:
+            rmtree(platform.build_dir)
+        except:
+            pass
 
     try:
         os.makedirs(platform.build_dir)
@@ -258,39 +310,82 @@ for platform in platforms:
         pass
 
     if not os.path.exists(platform.build_dir):
-        print('Failed to create platform directory')
+        sys.stderr.write(
+            'Failed to create platform directory for ' + platform_name + '\n'
+        )
+        del platform
         continue
 
     platform.write_manifest()
 
-    locale_path = os.path.join(platform.build_dir, platform.l10n_dir)
+    locale_dir = pj(platform.build_dir, platform.l10n_dir)
 
-    if os.path.exists(locale_path):
+    if os.path.exists(locale_dir):
         try:
-            rmtree(locale_path)
+            rmtree(locale_dir)
         except:
             pass
 
     try:
-        os.makedirs(locale_path)
+        os.makedirs(locale_dir)
     except:
-        print('Failed to create platform locales directory')
+        sys.stderr.write(
+            'Failed to create locales directory for ' + platform_name + '\n'
+        )
+        del platform
         continue
 
     if platform.requires_all_strings:
-        if len(lng_strings_full) == 0:
+        if len(l10n_strings_full) == 0:
             add_missing_strings()
 
-        platform.write_locales(lng_strings_full)
+        platform.write_locales(l10n_strings_full)
     else:
-        platform.write_locales(lng_strings_sparse)
+        platform.write_locales(l10n_strings_sparse)
 
     copy(locales_json, platform.build_dir)
 
-    if pack:
-        platform.write_update_file()
+    if not params['-meta']:
+        copy_tree(
+            src_dir,
+            platform.build_dir,
+            preserve_times=False
+        )
+
+        platform_js_dir = pj(platform_dir, platform_name, 'js')
+        copy(pj(platform_js_dir, 'app.js'), pj(platform.build_dir, 'includes'))
+        copy(pj(platform_js_dir, 'app_bg.js'), pj(platform.build_dir, 'js'))
+
+        if common_app_code is None:
+            f_path = pj(platform_dir, 'app_common.js')
+
+            with open(f_path, 'rt', encoding='utf-8', newline='\n') as f:
+                common_app_code = f.read()
+
+        f_path = pj(platform.build_dir, 'includes', 'app.js')
+
+        with open(f_path, 'at', encoding='utf-8', newline='\n') as f:
+            f.write(common_app_code)
+
+        platform.write_files(params['-useln'])
+
+        if params['-pack']:
+            platform.write_package()
+            platform.write_update_file()
+            print('Package is ready for ' + platform_name +
+                ' @ ' + platform.build_dir)
+        else:
+            print('Files are ready for ' + platform_name +
+                ' @ ' + platform.build_dir)
+    else:
+        if params['-pack']:
+            platform.write_update_file()
+
+        print('Meta-data has been generated for ' + platform_name)
 
     del platform
 
-if len(platforms):
+
+if os.path.isfile(locales_json):
     os.remove(locales_json)
+

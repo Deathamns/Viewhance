@@ -1,21 +1,30 @@
 from __future__ import unicode_literals
 import os
+import sys
 import re
 import json
 from io import open
+from distutils.dir_util import copy_tree
 
 os.chdir(os.path.split(os.path.abspath(__file__))[0])
+pj = os.path.join
 
 
 class Platform(object):
+    ext = os.path.basename(os.path.dirname(__file__))
+    update_file = None
     requires_all_strings = False
     l10n_dir = 'locale'
 
-    def __init__(self, build_dir, config, languages, desc_string):
-        self.build_dir = os.path.join(build_dir, 'mxaddon')
+    def __init__(self, build_dir, config, languages, desc_string, package_name):
+        self.build_dir = pj(build_dir, self.ext)
         self.config = config
         self.languages = languages
         self.desc_string = desc_string
+        self.package_name = os.path.abspath(pj(
+            build_dir,
+            config['name'].lower() + '-' + config['version']
+        ))
 
     def write_manifest(self):
         with open(os.path.join('meta', 'def.json'), 'r') as tmpl:
@@ -110,3 +119,15 @@ class Platform(object):
 
                         f.write(string)
                         f.write('\n')
+
+    def write_files(self, use_symlinks=False):
+        copy_tree('icons', pj(self.build_dir, 'icons'), preserve_times=False)
+
+    def write_package(self):
+        mxpack = __import__(
+            'platform.' + self.ext + '.mxpack',
+            fromlist=['mxpack']
+        )
+
+        with open(self.package_name + '.' + self.ext, 'wb') as f:
+            f.write(mxpack.createMxPak1(self.build_dir))

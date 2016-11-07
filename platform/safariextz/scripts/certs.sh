@@ -5,12 +5,12 @@
 # Makes it runnable from any directory
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-if [[ -f "secret/key.pem" ]]; then
+if [[ -f "../secret/key.pem" ]]; then
 	echo "key.pem file already exists!"
 	exit
 fi
 
-certs_dir="secret/certs"
+certs_dir="../secret/certs"
 mkdir -p "$certs_dir"
 
 case $1 in
@@ -38,7 +38,7 @@ export)
 
 	rm -f "$pem"
 
-	openssl pkcs12 -nodes -in "$pfx" | openssl rsa -out "secret/key.pem"
+	openssl pkcs12 -nodes -in "$pfx" | openssl rsa -out "../secret/key.pem"
 
 	echo "Now you can install the following two:"
 	echo "$( realpath "$der")"
