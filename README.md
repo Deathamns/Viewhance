@@ -11,7 +11,7 @@ Only the latest browser versions are fully supported. It may work on older versi
 
 - [Firefox](https://addons.mozilla.org/addon/viewhance/) (or its relatives; SeaMonkey, Pale Moon...)
 - [Opera](https://tiny.cc/Viewhance-oex) 12
-- [Chrome](https://chrome.google.com/webstore/detail/ijabcgpjcbpphfagcaknnlcfeodbnkgp) (other Chromium clones; Vivaldi, Opera 15+...)
+- [Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac) (other Chromium clones; Vivaldi, Opera 15+...)
 - [Safari](https://tiny.cc/Viewhance-safariextz)
 - [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527) 4+
 
