@@ -671,7 +671,10 @@ init = function() {
 			return;
 		}
 
-		if ( media.box.width <= winW && media.box.height <= winH ) {
+		var w = Math.round(media.box.width);
+		var h = Math.round(media.box.height);
+
+		if ( w <= winW && h <= winH ) {
 			return;
 		}
 
@@ -680,11 +683,11 @@ init = function() {
 		var x = 0;
 		var y = ((e.deltaX || e.deltaY || -e.wheelDelta) > 0 ? winH : -winH) / 5;
 
-		if ( media.box.width <= winW && media.box.height > winH ) {
+		if ( w <= winW && h > winH ) {
 			if ( !cfg.hiddenScrollbars ) {
 				return;
 			}
-		} else if ( media.box.height <= winH && media.box.width > winW
+		} else if ( h <= winH && w > winW
 			|| e.clientX < winW / 2 && e.clientY > winH - 100
 			|| e.deltaX && !e.deltaY ) {
 			x = (y < 0 ? -winW : winW) / 5;
