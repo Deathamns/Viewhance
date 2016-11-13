@@ -117,7 +117,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 				+ 'body[style^="background-color: rgb(41,41,41)"] > '
 					+ 'audio[style][autoplay][controls][src]:empty';
 		} else {
-			selector = 'body[style="margin: 0px;"] > ';
+			selector = 'body[style^="margin: 0px;"] > ';
 
 			// Chropera 29 changed the structure
 			selector += navigator.appVersion.indexOf('OPR/') === -1
