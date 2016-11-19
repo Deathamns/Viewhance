@@ -11,7 +11,6 @@ from copy import deepcopy
 from datetime import datetime
 from collections import OrderedDict
 from shutil import rmtree, copy
-from distutils.dir_util import copy_tree
 
 sys.dont_write_bytecode = True
 # Makes it runnable from any directory
@@ -273,6 +272,24 @@ with open(locales_json, 'wt', encoding='utf-8', newline='\n') as f:
     )
 
 
+def copytree(src, dst, symlinks=False):
+    try:
+        os.makedirs(dst)
+    except:
+        pass
+
+    for name in os.listdir(src):
+        srcname = os.path.join(src, name)
+        dstname = os.path.join(dst, name)
+
+        if os.path.isdir(srcname):
+            copytree(srcname, dstname, symlinks)
+        elif symlinks:
+            os.symlink(srcname, dstname)
+        else:
+            copy(srcname, dstname)
+
+
 for platform_name in platforms:
     try:
         open(pj(platform_dir, '__init__.py'), 'a').close()
@@ -346,15 +363,28 @@ for platform_name in platforms:
     copy(locales_json, platform.build_dir)
 
     if not params['-meta']:
-        copy_tree(
+        copytree(
             src_dir,
             platform.build_dir,
-            preserve_times=False
+            params['-useln']
         )
 
         platform_js_dir = pj(platform_dir, platform_name, 'js')
+
+        if params['-useln']:
+            os.symlink(
+                pj(platform_js_dir, 'app_bg.js'),
+                pj(platform.build_dir, 'js', 'app_bg.js')
+            )
+        else:
+            copy(
+                pj(platform_js_dir, 'app_bg.js'),
+                pj(platform.build_dir, 'js')
+            )
+
+        # app.js is extended with app_common.js, so symlink is not applicable
         copy(pj(platform_js_dir, 'app.js'), pj(platform.build_dir, 'includes'))
-        copy(pj(platform_js_dir, 'app_bg.js'), pj(platform.build_dir, 'js'))
+
 
         if common_app_code is None:
             f_path = pj(platform_dir, 'app_common.js')
