@@ -214,9 +214,6 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			return;
 		}
 
-		e.stopImmediatePropagation();
-		e.preventDefault();
-
 		var filter = {};
 
 		for ( var i = 0; i < urls.length; ++i ) {
@@ -224,12 +221,25 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 				continue;
 			}
 
+			if ( /^data:[^,]*,\s*$/.test(urls[i]) ) {
+				continue;
+			}
+
 			filter[urls[i]] = true;
 		}
 
+		filter = Object.keys(filter);
+
+		if ( !filter.length ) {
+			return;
+		}
+
+		e.stopImmediatePropagation();
+		e.preventDefault();
+
 		vAPI.messaging.send({
 			cmd: 'openURL',
-			url: Object.keys(filter).reverse()
+			url: filter.reverse()
 		});
 	}, true);
 });
