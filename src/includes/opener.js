@@ -56,7 +56,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		var nname = node.localName;
 
 		if ( nname === 'img' || nname === 'embed' || node.type === 'image' ) {
-			return node.src || node.currentSrc;
+			return node.currentSrc || node.src;
 		} else if ( nname === 'canvas' ) {
 			return node.toDataURL();
 		} else if ( nname === 'object' ) {
