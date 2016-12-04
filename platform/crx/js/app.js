@@ -117,18 +117,10 @@ Object.defineProperty(vAPI, 'mediaType', {
 				+ 'body[style^="background-color: rgb(41,41,41)"] > '
 					+ 'audio[style][autoplay][controls][src]:empty';
 		} else {
-			selector = 'body[style^="margin: 0px;"] > ';
-
-			// Chropera 29 changed the structure
-			selector += navigator.appVersion.indexOf('OPR/') === -1
-				? 'img[style*="user-select: none"]:first-child'
-				: 'div[style^="display: table"] > '
-					+ 'div[style^="display: table-cell"]:only-child >'
-					+ 'img:only-child';
-
-			selector += ', body >'
-				+ 'video[name=media][controls][autoplay]'
-				+ ':first-child:not([src])';
+			selector = 'body[style^="margin: 0px;"] > '
+				+ 'img[style*="user-select: none"]:first-child, '
+				+ 'body > video[name=media][controls][autoplay]'
+					+ ':first-child:not([src])';
 		}
 
 		var media = document.querySelector(selector);
