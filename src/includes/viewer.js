@@ -1449,6 +1449,33 @@ init = function() {
 	menu = root.appendChild(doc.createElement('div'));
 	menu.id = 'menu';
 
+	// Chrome 56+ overwrites the style attribute on image load
+	if ( vAPI.chrome && document.readyState === 'loading' ) {
+		(function() {
+			var scrollX = 0;
+			var scrollY = 0;
+			var tmpStyle = doc.head.appendChild(doc.createElement('style'));
+
+			var rememberScrollPosition = function() {
+				scrollX = win.pageXOffset;
+				scrollY = win.pageYOffset;
+			};
+
+			var onDOMLoad = function(e) {
+				doc.removeEventListener(e.type, onDOMLoad);
+				win.removeEventListener('scroll', rememberScrollPosition);
+				resizeMedia(media.mode);
+				doc.head.removeChild(tmpStyle);
+				setTimeout(function() {
+					win.scrollTo(scrollX, scrollY);
+				}, 0xf);
+			};
+
+			doc.addEventListener('DOMContentLoaded', onDOMLoad);
+			win.addEventListener('scroll', rememberScrollPosition);
+		})();
+	}
+
 	if ( win.getComputedStyle(menu).display === 'none' ) {
 		menu.parentNode.removeChild(menu);
 		menu = null;
