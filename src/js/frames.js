@@ -536,6 +536,18 @@ xhr.addEventListener('readystatechange', function() {
 		return;
 	}
 
+	if ( animation.width * animation.height * 4 * frames.length > 3e8 ) {
+		var memoryWarning = [
+			'Extracting frames from this file may consume a lot of memory!',
+			'Continue anyway?'
+		];
+
+		// eslint-disable-next-line no-alert
+		if ( !confirm(memoryWarning.join('\n')) ) {
+			return;
+		}
+	}
+
 	var generateImageSRC, wrap, speed, currentFrame;
 	var canvas = document.createElement('canvas');
 	var ctx = canvas.getContext('2d');

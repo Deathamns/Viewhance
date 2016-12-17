@@ -264,7 +264,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'}',
 	'#current-frame + output {',
 		'display: inline-block;',
-		'width: 65px;',
+		'width: 77px;',
 		'font-family: Conoslas, monospace;',
 		'text-align: right;',
 	'}',
