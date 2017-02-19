@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 import sys
 import os
+import re
 import json
 from io import open
 from sys import argv
@@ -83,8 +84,11 @@ if not config:
 
 
 def_lang = config['def_lang']
-config['version'] = datetime.utcnow().strftime("%Y.%m%d.%H%M")
-
+config['version'] = re.sub(
+    '(?<=\.)0+',
+    '',
+    datetime.utcnow().strftime("%Y.%m%d.%H%M")
+)
 
 def read_locales(locale_glob, exclude=None):
     global locale_list, languages, l10n_strings_sparse
