@@ -384,8 +384,8 @@ init = function() {
 
 	var calcFit = function() {
 		var m = media;
-		mWidth = m.clientWidth - (mFullWidth - mOrigWidth);
-		mHeight = m.clientHeight - (mFullHeight - mOrigHeight);
+		mWidth = m.offsetWidth - (mFullWidth - mOrigWidth);
+		mHeight = m.offsetHeight - (mFullHeight - mOrigHeight);
 		m.box = m.getBoundingClientRect();
 		noFit.cur = m.box.width <= winW && m.box.height <= winH;
 
@@ -439,10 +439,12 @@ init = function() {
 			case 'name': return m.alt;
 			case 'ratio':
 				return Math.round(m.width / m.height * 100) / 100;
-			case 'perc': return Math.round(m.width * 100 / mOrigWidth);
+			case 'perc':
+				m = m.width * 100 / mOrigWidth;
+				return m < 2 ? m.toFixed(1) : Math.round(m);
 		}
 
-		return '';
+		return a;
 	};
 
 	var setTitle = function() {
@@ -459,7 +461,9 @@ init = function() {
 	var resizeMedia = function(mode, w) {
 		var boxW;
 		var newMode = mode === void 0 ? MODE_FIT : mode;
-		var boxRatio = media.box.width / media.box.height;
+		var boxRatio = media.angle
+			? media.box.width / media.box.height
+			: mOrigWidth / mOrigHeight;
 		media.mode = newMode;
 
 		calcViewportDimensions();
@@ -629,6 +633,15 @@ init = function() {
 		return t === media || t === d.body || t === d.documentElement;
 	};
 
+	cfg.zoomParams = (cfg.zoomParams || '').split(/\s*;+\s*/);
+	cfg.zoomParams = {
+		step: 1 + Math.max(0.1, cfg.zoomParams[0].trim() || (1 / 3)),
+		snaps: (cfg.zoomParams[1] || '').trim().split(/\s+/)
+			.map(parseFloat).filter(function(el, idx, list) {
+				return el && list.indexOf(el, idx + 1) === -1;
+			}).sort()
+	};
+
 	var wheelZoom = function(e) {
 		if ( !isValidWheelTarget(e.target) ) {
 			return;
@@ -636,20 +649,115 @@ init = function() {
 
 		pdsp(e);
 		stopScroll();
-		media.box = media.getBoundingClientRect();
 
-		var x = e.clientX - media.box.left;
-		var y = e.clientY - media.box.top;
-		var w = media.box.width;
-		var h = media.box.height;
+		var boxW, zoomIn;
+		var zp = cfg.zoomParams;
 
 		if ( (e.deltaY || -e.wheelDelta) > 0 ) {
-			resizeMedia(MODE_CUSTOM, Math.max(1, w * 0.75));
+			zoomIn = false;
+			boxW = Math.max(1, mWidth / zp.step);
 		} else {
-			var nW = w * (4 / 3);
-			resizeMedia(MODE_CUSTOM, nW > 10 ? nW : nW + 3);
+			zoomIn = true;
+			boxW = mWidth * zp.step;
+			boxW = boxW > 10 ? boxW : boxW + 3;
 		}
 
+		snap:
+		if ( !(e.shiftKey || e.altKey) && zp.snaps.length > 1 ) {
+			var newScale = boxW / mOrigWidth;
+			var curScale = mWidth / mOrigWidth;
+			var i = zp.snaps.length - 1;
+
+			if ( zoomIn ) {
+				if ( curScale >= zp.snaps[i] ) {
+					break snap;
+				}
+
+				if ( curScale < zp.snaps[0] ) {
+					if ( newScale > zp.snaps[0]
+						|| Math.abs(newScale - zp.snaps[0]) < zp.step - 1 ) {
+						newScale = zp.snaps[0] * mOrigWidth;
+
+						if ( Math.abs(mWidth - Math.round(newScale)) > 2 ) {
+							boxW = newScale;
+							break snap;
+						}
+					}
+				}
+			} else {
+				if ( curScale <= zp.snaps[0] ) {
+					break snap;
+				}
+
+				if ( curScale > zp.snaps[i] && mWidth !== boxW ) {
+					if ( newScale < zp.snaps[i]
+						|| Math.abs(newScale - zp.snaps[i]) < zp.step - 1 ) {
+						newScale = zp.snaps[i] * mOrigWidth;
+
+						if ( Math.abs(mWidth - Math.round(newScale)) > 2 ) {
+							boxW = newScale;
+							break snap;
+						}
+					}
+				}
+			}
+
+			while ( i-- ) {
+				var lowScale = zp.snaps[i];
+				var highScale = zp.snaps[i + 1];
+
+				if ( lowScale > curScale || curScale > highScale ) {
+					continue;
+				}
+
+				var lowDiff = Math.abs(curScale - lowScale);
+				var highDiff = Math.abs(curScale - highScale);
+
+				if ( lowDiff > highDiff ) {
+					++i;
+				}
+
+				if ( zoomIn ) {
+					++i;
+
+					if ( zp.snaps[i] === void 0 ) {
+						newScale = zp.snaps[zp.snaps.length - 1] + zp.step - 1;
+					} else {
+						newScale = zp.snaps[i];
+					}
+				} else {
+					--i;
+
+					if ( zp.snaps[i] === void 0 ) {
+						newScale = zp.snaps[0] - zp.step + 1;
+					} else {
+						newScale = zp.snaps[i];
+					}
+				}
+
+				if ( newScale > 0.05) {
+					boxW = newScale * mOrigWidth;
+				}
+
+				break;
+			}
+		}
+
+		if ( media.angle ) {
+			var radians = media.angle * Math.PI / 180;
+			var sin = Math.abs(Math.sin(radians));
+			var cos = Math.abs(Math.cos(radians));
+			boxW = boxW * cos + mFullHeight * sin;
+		}
+
+		media.box = media.getBoundingClientRect();
+
+		var w = media.box.width;
+		var h = media.box.height;
+		var x = e.clientX - media.box.left;
+		var y = e.clientY - media.box.top;
+
+		resizeMedia(MODE_CUSTOM, boxW);
 		win.scrollTo(
 			x * media.box.width / w - e.clientX,
 			y * media.box.height / h - e.clientY
@@ -662,7 +770,9 @@ init = function() {
 			keypress: true,
 			deltaY: e.deltaY || -e.wheelDelta,
 			clientX: winW / 2,
-			clientY: winH / 2
+			clientY: winH / 2,
+			altKey: e.altKey,
+			shiftKey: e.shiftKey
 		});
 	};
 
@@ -681,7 +791,8 @@ init = function() {
 		stopScroll();
 
 		var x = 0;
-		var y = ((e.deltaX || e.deltaY || -e.wheelDelta) > 0 ? winH : -winH) / 5;
+		var y = (e.deltaX || e.deltaY || -e.wheelDelta) > 0 ? winH : -winH;
+		y /= 5;
 
 		if ( w <= winW && h > winH ) {
 			if ( !cfg.hiddenScrollbars ) {
@@ -737,7 +848,8 @@ init = function() {
 
 		if ( progress ) {
 			clearTimeout(progress);
-			progress = lastEvent.button = null;
+			lastEvent.button = null;
+			progress = null;
 		}
 
 		if ( sX === true || noFit.cur ) {
@@ -831,11 +943,16 @@ init = function() {
 		pdsp(e);
 	};
 
-	var longpressHandler = function() {
+	var longpressHandler = function(forcedAction) {
+		var action;
 		progress = null;
-		cancelAction = true;
 
-		var action = cfg[lastEvent.button === 2 ? 'lpRight' : 'lpLeft'];
+		if ( forcedAction ) {
+			action = forcedAction;
+		} else {
+			cancelAction = true;
+			action = cfg[lastEvent.button === 2 ? 'lpRight' : 'lpLeft'];
+		}
 
 		if ( action === 1 ) {
 			var m = media;
@@ -1137,7 +1254,13 @@ init = function() {
 				resizeMedia(MODE_ORIG);
 			} else if ( (media.mode === MODE_FIT || media.mode === MODE_ORIG)
 				&& (media.box.width === winW || media.box.height === winH) ) {
-				resizeMedia(MODE_ORIG);
+				if ( mFullWidth === winW || mFullHeight === winH ) {
+					lastEvent.clientX = e.clientX;
+					lastEvent.clientY = e.clientY;
+					longpressHandler(1);
+				} else {
+					resizeMedia(MODE_ORIG);
+				}
 			} else {
 				resizeMedia(
 					MODE_FIT,
@@ -1180,7 +1303,11 @@ init = function() {
 
 		if ( key === '+' || key === '-' ) {
 			pdsp(e);
-			zoomToCenter({deltaY: key === '+' ? -1 : 1});
+			zoomToCenter({
+				deltaY: key === '+' ? -1 : 1,
+				altKey: e.altKey,
+				shiftKey: e.shiftKey
+			});
 			return;
 		}
 
@@ -1393,13 +1520,20 @@ init = function() {
 		});
 	}
 
-	progress = [];
-	media.angle = 0;
-	media.setAttribute('width', mOrigWidth);
-	media.setAttribute('height', mOrigHeight);
+	progress = win.getComputedStyle(media);
 	// Original dimensions with padding and border
-	mFullWidth = media.offsetWidth;
-	mFullHeight = media.offsetHeight;
+	mFullWidth = mOrigWidth
+		+ parseInt(progress.paddingLeft, 10)
+		+ parseInt(progress.paddingRight, 10)
+		+ parseInt(progress.borderLeftWidth, 10)
+		+ parseInt(progress.borderRightWidth, 10);
+	mFullHeight = mOrigHeight
+		+ parseInt(progress.paddingTop, 10)
+		+ parseInt(progress.paddingBottom, 10)
+		+ parseInt(progress.borderTopWidth, 10)
+		+ parseInt(progress.borderBottomWidth, 10);
+	media.angle = 0;
+	progress = [];
 	calcViewportDimensions();
 	calcFit();
 	media.removeAttribute('width');
@@ -1702,7 +1836,7 @@ init = function() {
 			var links = this.querySelectorAll('.send-hosts > ul > li > a');
 			[].forEach.call(links, function(a) {
 				var host = a.getAttribute('href');
-				host = host && host.match(/^[^\/]*(\/\/[^\/]+)/);
+				host = host && host.match(/^[^/]*(\/\/[^/]+)/);
 
 				if ( !host ) {
 					return;
@@ -1735,7 +1869,11 @@ init = function() {
 			rotateMedia(p ? 'left' : 'right', e.ctrlKey);
 		} else if ( cmd === 'zoom' ) {
 			pdsp(e);
-			zoomToCenter({deltaY: p ? 1 : -1});
+			zoomToCenter({
+				deltaY: p ? 1 : -1,
+				altKey: e.altKey,
+				shiftKey: e.shiftKey
+			});
 		} else if ( cmd === 'reset' ) {
 			if ( e.button === 0 ) {
 				resetMedia();
@@ -1938,7 +2076,7 @@ if ( win.location.protocol === 'data:' ) {
 } else {
 	media.alt = (win.location.href
 		.replace(/#.*/, '')
-		.match(/(?:[^\/]+)?$/)[0] || vAPI.mediaType
+		.match(/(?:[^/]+)?$/)[0] || vAPI.mediaType
 	).split('?')[0];
 
 	try {

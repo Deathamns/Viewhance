@@ -128,7 +128,8 @@ var load = function(prefs) {
 		if ( field.type === 'checkbox' ) {
 			field.defaultChecked = defaultPrefs[pref];
 			pref = !!(prefs[pref] === void 0 ? defaultPrefs : prefs)[pref];
-			field.checked = field.defChecked = pref;
+			field.checked = pref;
+			field.defChecked = pref;
 			continue;
 		}
 
@@ -154,34 +155,35 @@ var load = function(prefs) {
 		}
 
 		pref = (prefs[pref] === void 0 ? defaultPrefs : prefs)[pref];
-		field.value = field.defValue = pref;
+		field.value = pref;
+		field.defValue = pref;
+
+		var prevSib = field.previousElementSibling;
 
 		if ( field.type === 'range' ) {
-			var m = field.previousElementSibling;
-
-			if ( m && m.localName === 'output' ) {
+			if ( prevSib && prevSib.localName === 'output' ) {
 				fillOutput(field);
 			}
 
-			m = m.previousElementSibling;
+			prevSib = prevSib.previousElementSibling;
 
-			if ( m && m.getAttribute('type') === 'color' ) {
-				m.style.opacity = field.value;
+			if ( prevSib && prevSib.getAttribute('type') === 'color' ) {
+				prevSib.style.opacity = field.value;
 			}
 
 			field.addEventListener('change', fillOutput);
 		} else if ( field.type === 'text' ) {
-			if ( !field.previousElementSibling ) {
+			if ( !prevSib ) {
 				continue;
 			}
 
-			if ( field.previousElementSibling.getAttribute('type') === 'color' ) {
+			if ( prevSib.getAttribute('type') === 'color' ) {
 				continue;
 			}
 
 			field.addEventListener('input', colorOnInput);
+			prevSib.addEventListener('change', colorOnChange);
 			colorOnInput(field);
-			field.previousElementSibling.addEventListener('change', colorOnChange);
 		}
 	}
 };
@@ -194,7 +196,11 @@ var save = function() {
 		var field = fields[i];
 		var pref = field.name;
 
-		if ( field.disabled || field.readOnly || defaultPrefs[pref] === void 0 ) {
+		if ( field.disabled || field.readOnly ) {
+			continue;
+		}
+
+		if ( defaultPrefs[pref] === void 0 ) {
 			continue;
 		}
 
@@ -220,9 +226,15 @@ var save = function() {
 		} else {
 			// eslint-disable-next-line no-lonely-if
 			if ( pref === 'sendToHosts' ) {
-				prefs[pref] = field.value.trim().split(/[\r\n]+/).filter(Boolean);
+				prefs[pref] = field.value.trim()
+					.split(/[\r\n]+/).filter(Boolean);
+				field.value = prefs[pref].join('\n');
 				field.rows = prefs[pref].length || 2;
 			} else {
+				if ( field.type.lastIndexOf('text', 0) === 0 ) {
+					field.value = field.value.trim();
+				}
+
 				prefs[pref] = field.value;
 			}
 		}

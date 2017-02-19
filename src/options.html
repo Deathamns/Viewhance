@@ -60,7 +60,7 @@
 				<span>
 					<datalist id="info-xmpls">
 						<option value="%name (%perc% | %ow&#215;%oh : %ratio)">
-						<option value="%w&#215;%h - %perc">
+						<option value="%w&#215;%h - %perc%">
 						<option value="%name | %ow&#215;%oh | %w&#215;%h / %perc%">
 						<option value="%perc%, %ow&#215;%oh">
 					</datalist>
@@ -108,6 +108,15 @@
 				<span>
 					<input id="wheel-zoom" name="wheelZoom" type="checkbox">
 					<label for="wheel-zoom" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow tiptop">
+				<div class="tip" data-l10n="zoomParamsTip"></div>
+
+				<label for="zoom-params" data-l10n="zoomParams"></label>
+				<span>
+					<input id="zoom-params" name="zoomParams" type="text" maxlength="512">
 				</span>
 			</div>
 
