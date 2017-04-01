@@ -6,8 +6,7 @@ let bgProcess;
 const addonName = 'Viewhance';
 
 this.startup = function(data) {
-	let appShell = Components
-		.classes['@mozilla.org/appshell/appShellService;1']
+	let appShell = Components.classes['@mozilla.org/appshell/appShellService;1']
 		.getService(Components.interfaces.nsIAppShellService);
 
 	let onReady = function(e) {
@@ -15,12 +14,20 @@ this.startup = function(data) {
 			this.removeEventListener(e.type, onReady);
 		}
 
+		// Sending data synchronously to the background page with the fragment
+		let bgURI = 'chrome://' + addonName + '/content/background.html#'
+			+ [addonName, data.version];
+
+		if ( appShell.createWindowlessBrowser ) {
+			bgProcess = appShell.createWindowlessBrowser(false);
+			bgProcess.loadURI(bgURI, 0, null, null, null);
+			return;
+		}
+
 		let hDoc = appShell.hiddenDOMWindow.document;
-		let bgURI = 'chrome://' + addonName + '/content/background.html';
 		bgProcess = hDoc.documentElement.appendChild(
 			hDoc.createElementNS('http://www.w3.org/1999/xhtml', 'iframe')
 		);
-		// Sending addon data synchronously to the background page
 		bgProcess.src = bgURI + '#' + [addonName, data.version];
 	};
 
@@ -32,8 +39,7 @@ this.startup = function(data) {
 		//
 	}
 
-	let ww = Components
-		.classes['@mozilla.org/embedcomp/window-watcher;1']
+	let ww = Components.classes['@mozilla.org/embedcomp/window-watcher;1']
 		.getService(Components.interfaces.nsIWindowWatcher);
 
 	ww.registerNotification({
@@ -55,9 +61,17 @@ this.startup = function(data) {
 };
 
 this.shutdown = function(data, reason) {
-	if ( reason !== APP_SHUTDOWN ) {
-		bgProcess.parentNode.removeChild(bgProcess);
+	if ( reason === APP_SHUTDOWN ) {
+		return;
 	}
+
+	if ( bgProcess.parentNode ) {
+		bgProcess.parentNode.removeChild(bgProcess);
+	} else if ( typeof bgProcess.close === 'function' ) {
+		bgProcess.close();
+	}
+
+	bgProcess = null;
 };
 
 this.install = function() {
