@@ -78,7 +78,7 @@ vAPI.messaging = {
 	},
 
 	listen: function(callback) {
-		var listener = function(request) {
+		this._listener = function(request) {
 			var listenerId = request.data.listenerId;
 			var messager = request.target.messageManager;
 
@@ -96,7 +96,7 @@ vAPI.messaging = {
 
 		this._globalMessageManager.addMessageListener(
 			location.host + ':background',
-			listener
+			this._listener
 		);
 	}
 };
@@ -166,18 +166,15 @@ vAPI._browserPrefs = {
 
 vAPI._browserPrefs.suppress();
 
-// This function will run even when the browser is closing
 window.addEventListener('unload', function() {
 	vAPI._browserPrefs.restore();
-
-	// TODO: return here when the browser is exiting
 
 	var messaging = vAPI.messaging;
 	var gmm = messaging._globalMessageManager;
 	gmm.removeDelayedFrameScript(messaging._frameScript);
 	gmm.removeMessageListener(
 		location.host + ':background',
-		messaging.postMessage
+		messaging._listener
 	);
 
 	var URI = messaging._frameScript.replace('_script', '_module');
