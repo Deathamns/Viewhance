@@ -22,6 +22,7 @@
 		// Possible Errors
 		"no-cond-assign": "off",
 		"no-console": "off",
+		"no-compare-neg-zero": "error",
 		"no-constant-condition": "error",
 		"no-control-regex": "warn",
 		"no-debugger": "warn",
@@ -212,6 +213,7 @@
 		"no-underscore-dangle": "off",
 		"no-unneeded-ternary": "error",
 		"no-whitespace-before-property": "error",
+		"nonblock-statement-body-position": "off",
 		"object-curly-newline": "off",
 		"object-curly-spacing": "error",
 		"object-property-newline": "off",
