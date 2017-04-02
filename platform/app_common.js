@@ -2,9 +2,15 @@
 vAPI.contentScriptCount = 2;
 
 vAPI.suicideAttempt = function() {
-	if ( --vAPI.contentScriptCount === 0 ) {
-		vAPI = null;
+	if ( --vAPI.contentScriptCount > 0 ) {
+		return;
 	}
+
+	if ( typeof vAPI.releaseVendorListeners === 'function' ) {
+		vAPI.releaseVendorListeners();
+	}
+
+	vAPI = null;
 };
 
 vAPI.buildNodes = function(host, items) {

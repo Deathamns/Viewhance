@@ -67,6 +67,20 @@ vAPI.messaging = {
 	}
 };
 
+vAPI.releaseVendorListeners = function() {
+	window.removeEventListener(
+		'pagehide',
+		vAPI.messaging._toggleListener,
+		true
+	);
+	window.removeEventListener(
+		'pageshow',
+		vAPI.messaging._toggleListener,
+		true
+	);
+	vAPI.messaging._toggleListener({type: 'pagehide'});
+};
+
 window.addEventListener('pagehide', vAPI.messaging._toggleListener, true);
 window.addEventListener('pageshow', vAPI.messaging._toggleListener, true);
 
