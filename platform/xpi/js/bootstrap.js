@@ -6,7 +6,8 @@ let bgProcess;
 const addonName = 'Viewhance';
 
 this.startup = function(data) {
-	let appShell = Components.classes['@mozilla.org/appshell/appShellService;1']
+	let appShell = Components
+		.classes['@mozilla.org/appshell/appShellService;1']
 		.getService(Components.interfaces.nsIAppShellService);
 
 	let onReady = function(e) {
@@ -39,7 +40,8 @@ this.startup = function(data) {
 		//
 	}
 
-	let ww = Components.classes['@mozilla.org/embedcomp/window-watcher;1']
+	let ww = Components
+		.classes['@mozilla.org/embedcomp/window-watcher;1']
 		.getService(Components.interfaces.nsIWindowWatcher);
 
 	ww.registerNotification({
@@ -61,7 +63,7 @@ this.startup = function(data) {
 };
 
 this.shutdown = function(data, reason) {
-	if ( reason === APP_SHUTDOWN ) {
+	if ( reason === APP_SHUTDOWN || !bgProcess ) {
 		return;
 	}
 
