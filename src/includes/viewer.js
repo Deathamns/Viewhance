@@ -361,25 +361,15 @@ init = function() {
 		media.style.cssText = css;
 	};
 
-	var setCursor = function() {
-		var m = media;
-		var s = m.style;
-
-		if ( (m.mode !== MODE_FIT || m.angle )
-			&& (m.box.width > winW || m.box.height > winH) ) {
-			s.cursor = 'move';
-		} else if ( mWidth < mOrigWidth
-			|| mHeight < mOrigHeight ) {
-			s.cursor = vAPI.browser.zoomIn;
-		} else {
-			s.cursor = '';
-		}
-	};
-
 	var calcViewportDimensions = function() {
 		winH = doc.compatMode === 'BackCompat' ? doc.body : root;
 		winW = winH.clientWidth;
 		winH = winH.clientHeight;
+	};
+
+	var toggleDraggable = function() {
+		// draggable attribute is not respected in Firefox
+		media.ondragstart = media.style.cursor === 'move' ? pdsp : null;
 	};
 
 	var calcFit = function() {
@@ -396,7 +386,19 @@ init = function() {
 		var boxH = mFullWidth * sin + mFullHeight * cos;
 		noFit.real = boxW <= winW && boxH <= winH;
 
-		setCursor();
+		var s = m.style;
+
+		if ( (m.mode !== MODE_FIT || m.angle )
+			&& (m.box.width > winW || m.box.height > winH) ) {
+			s.cursor = 'move';
+		} else if ( mWidth < mOrigWidth
+			|| mHeight < mOrigHeight ) {
+			s.cursor = vAPI.browser.zoomIn;
+		} else {
+			s.cursor = '';
+		}
+
+		toggleDraggable();
 	};
 
 	var adjustPosition = function() {
@@ -540,17 +542,20 @@ init = function() {
 
 		media.scale[direction] *= -1;
 
-		var transformCss = media.scale.h !== 1 || media.scale.v !== 1
-			? 'scale(' + media.scale.h + ',' + media.scale.v + ')'
-			: '';
+		var transformCss = '';
 
 		if ( media.angle ) {
-			transformCss += ' rotate(' + media.angle + 'deg)';
+			transformCss += 'rotate(' + media.angle + 'deg)';
+		}
+
+		if ( media.scale.h !== 1 || media.scale.v !== 1 ) {
+			transformCss += ' scale('
+				+ media.scale.h + ',' + media.scale.v
+				+ ')';
 		}
 
 		mediaCss[vAPI.browser.transformCSS] = transformCss;
 		setMediaStyle();
-		setCursor();
 	};
 
 	var rotateMedia = function(direction, fine) {
@@ -1017,10 +1022,17 @@ init = function() {
 		win.scrollTo(0, 0);
 	};
 
+	media.addEventListener('dragend', toggleDraggable);
+
 	media.addEventListener('mousedown', function(e) {
 		pdsp(e, false);
 
-		if ( e.button === 1 || e.ctrlKey || e.altKey ) {
+		if ( e.button === 1 ) {
+			return;
+		}
+
+		if ( e.ctrlKey || e.altKey ) {
+			media.ondragstart = null;
 			return;
 		}
 
@@ -1045,15 +1057,6 @@ init = function() {
 			if ( e.button === 2 ) {
 				sX = true;
 			} else {
-				if ( !e.shiftKey && noFit.cur && this.box.width >= 60 ) {
-					if ( this.box.left + this.box.width - e.clientX <= 30 ) {
-						lastEvent.clientX = e.clientX;
-						lastEvent.clientY = e.clientY;
-						return;
-					}
-				}
-
-				pdsp(e, true, false);
 				win.focus();
 				sX = e.clientX;
 				sY = e.clientY;

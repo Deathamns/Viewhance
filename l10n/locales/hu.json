@@ -150,7 +150,7 @@
 		},
 		"scDragndrop": {
 			"#": 2,
-			">": "<b>Ctrl vagy Alt nyomva-tartásával</b> vonszolható a kép, vagy ha belefér a nézetablakba, akkor a jobb szélénél fogva"
+			">": "<b>Ctrl</b> vagy <b>Alt</b> nyomva-tartásával vonszolható a kép, ha az nem fér bele a nézetablakba"
 		},
 		"scFitToHeight": {
 			"#": 0,

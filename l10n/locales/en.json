@@ -153,8 +153,8 @@
 			">": "Cycle through sizing modes: natural, fit to width, fit to height"
 		},
 		"scDragndrop": {
-			"#": 2,
-			">": "<b>Hold Ctrl or Alt</b> to allow drag-and-drop, or drag from the right edge of the image, if that fits into the window"
+			"#": 3,
+			">": "Hold <b>Ctrl</b> or <b>Alt</b> to drag the image if that doesn't fit the view-port"
 		},
 		"scFitToHeight": {
 			"#": 0,
