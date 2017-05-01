@@ -967,6 +967,7 @@ init = function() {
 			} else {
 				resizeMedia(
 					media.box.width / media.box.height < winW / winH
+					&& media.box.width !== winW
 						? MODE_WIDTH
 						: MODE_HEIGHT
 				);
@@ -1539,7 +1540,7 @@ init = function() {
 	media.removeAttribute('width');
 	media.removeAttribute('height');
 
-	if ( vAPI.mediaType === 'img' && cfg.minUpscale && noFit.real ) {
+	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
 		if ( mOrigWidth >= winW * cfg.minUpscale / 100 ) {
 			progress[0] = true;
 		}
@@ -1551,28 +1552,27 @@ init = function() {
 
 	// cfg.mode values: 0 - natural size; 1 - contain; 2 - best fit (fill)
 	if ( cfg.mode === 2 ) {
-		if ( noFit.real ) {
-			media.mode = MODE_FIT;
+		if ( mOrigWidth / mOrigHeight < winW / winH ) {
+			media.mode = MODE_WIDTH;
+
+			if ( mOrigWidth < winW && !progress[0] ) {
+				media.mode = noFit.real && progress[1] ? MODE_FIT : MODE_ORIG;
+			}
 		} else {
-			media.mode = mOrigWidth / mOrigHeight < winW / winH
-				? MODE_WIDTH
-				: MODE_HEIGHT;
+			media.mode = MODE_HEIGHT;
+
+			if ( mOrigHeight < winH && !progress[1] ) {
+				media.mode = noFit.real && progress[0] ? MODE_FIT : MODE_ORIG;
+			}
 		}
 	} else {
 		media.mode = cfg.mode === 0 ? MODE_ORIG : MODE_FIT;
 	}
 
-	if ( media.mode === MODE_WIDTH && mOrigWidth < winW && !progress[0] ) {
-		media.mode = MODE_ORIG;
-	} else if ( !progress[1] ) {
-		if ( media.mode === MODE_HEIGHT && mOrigHeight < winH ) {
-			media.mode = MODE_ORIG;
-		}
-	}
-
 	resizeMedia(
 		media.mode,
-		media.mode <= MODE_FIT && progress.length
+		(media.mode === MODE_FIT || media.mode === MODE_ORIG && noFit.real)
+			&& progress.length
 			? mOrigWidth / mOrigHeight > winW / winH
 				? winW
 				: winH * mOrigWidth / mOrigHeight
@@ -1580,15 +1580,11 @@ init = function() {
 	);
 	progress = null;
 
-	menu = root.appendChild(doc.createElement('div'));
-	menu.id = 'menu';
-
 	// Chrome 56+ overwrites the style attribute on image load
 	if ( vAPI.chrome && document.readyState === 'loading' ) {
 		(function() {
 			var scrollX = 0;
 			var scrollY = 0;
-			var tmpStyle = doc.head.appendChild(doc.createElement('style'));
 
 			var rememberScrollPosition = function() {
 				scrollX = win.pageXOffset;
@@ -1599,7 +1595,6 @@ init = function() {
 				doc.removeEventListener(e.type, onDOMLoad);
 				win.removeEventListener('scroll', rememberScrollPosition);
 				resizeMedia(media.mode);
-				doc.head.removeChild(tmpStyle);
 				setTimeout(function() {
 					win.scrollTo(scrollX, scrollY);
 				}, 0xf);
@@ -1609,6 +1604,9 @@ init = function() {
 			win.addEventListener('scroll', rememberScrollPosition);
 		})();
 	}
+
+	menu = root.appendChild(doc.createElement('div'));
+	menu.id = 'menu';
 
 	if ( win.getComputedStyle(menu).display === 'none' ) {
 		menu.parentNode.removeChild(menu);

@@ -22,7 +22,7 @@ vAPI.app = {
 	version: vAPI.app.version,
 	platform: (function() {
 		var vendor = navigator.appVersion.match(
-			/(Chromium|OPR|RockMelt|Comodo_Dragon|CoolNovo|Iron|Edge)\/(\S+)/
+			/(Chromium|OPR|RockMelt|Comodo_Dragon|CoolNovo|Iron|Edge|Firefox)\/(\S+)/
 		);
 
 		if ( vendor ) {
