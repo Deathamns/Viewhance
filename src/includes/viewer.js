@@ -433,16 +433,16 @@ init = function() {
 		var m = media;
 
 		switch ( param ) {
-			case 'w': return m.width;
-			case 'h': return m.height;
+			case 'w': return m.width || m.videoWidth;
+			case 'h': return m.height || m.videoHeight;
 			case 'ow': return mOrigWidth;
 			case 'oh': return mOrigHeight;
 			case 'url': return win.location.href;
 			case 'name': return m.alt;
 			case 'ratio':
-				return Math.round(m.width / m.height * 100) / 100;
+				return Math.round(mOrigWidth / mOrigHeight * 100) / 100;
 			case 'perc':
-				m = m.width * 100 / mOrigWidth;
+				m = (m.width || m.videoWidth) * 100 / mOrigWidth;
 				return m < 2 ? m.toFixed(1) : Math.round(m);
 		}
 
