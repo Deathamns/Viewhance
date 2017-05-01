@@ -1,6 +1,7 @@
 /* eslint indent:"off" */
 
 'use strict';
+
 // eslint-disable-next-line padded-blocks
 (function() {
 
@@ -34,7 +35,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		// (...) or ('...)') - WebKit
 		// ("...&quot;") - Presto
 		// eslint-disable-next-line max-len
-		var rgxCssUrl = /\burl\(([^'"\)][^\)]*|"[^"\\]+(?:\\.[^"\\]*)*|'[^'\\]+(?:\\.[^'\\]*)*)(?=['"]?\))/g;
+		var rgxCssUrl = /\burl\(([^'")][^)]*|"[^"\\]+(?:\\.[^"\\]*)*|'[^'\\]+(?:\\.[^'\\]*)*)(?=['"]?\))/g;
 		var imgs = cs.backgroundImage + cs.content + cs.listStyleImage;
 
 		imgs = imgs.match(rgxCssUrl);
