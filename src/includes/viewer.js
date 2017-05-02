@@ -1600,7 +1600,7 @@ init = function() {
 			var onDOMLoad = function(e) {
 				doc.removeEventListener(e.type, onDOMLoad);
 				win.removeEventListener('scroll', rememberScrollPosition);
-				resizeMedia(media.mode);
+				resizeMedia(media.mode, parseFloat(mediaCss.width));
 				setTimeout(function() {
 					win.scrollTo(scrollX, scrollY);
 				}, 0xf);
