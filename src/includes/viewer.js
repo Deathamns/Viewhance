@@ -752,7 +752,7 @@ init = function() {
 			var radians = media.angle * Math.PI / 180;
 			var sin = Math.abs(Math.sin(radians));
 			var cos = Math.abs(Math.cos(radians));
-			boxW = boxW * cos + mFullHeight * sin;
+			boxW = boxW * cos + (mOrigHeight * boxW / mOrigWidth) * sin;
 		}
 
 		media.box = media.getBoundingClientRect();
