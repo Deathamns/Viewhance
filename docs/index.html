@@ -1,0 +1,458 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<meta name="robots" content="nofollow,noindex,noarchive,nocache">
+	<link rel="shortcut icon" href="img/viewhance_18.png">
+	<style>
+		html {
+			cursor: default;
+		}
+
+		body {
+			font: 12px verdana;
+			/*width: 120%;*/
+		}
+
+		a {
+			color: #0062ff;
+			text-decoration: none;
+		}
+
+		a:hover {
+			color: blue !important;
+		}
+
+		.FAQ {
+			float: right;
+			margin: 0 0 10px;
+			max-width: 40%;
+			border-bottom: 1px solid #e5e5e5;
+			border-left: 1px solid #e5e5e5;
+			border-radius: 10px;
+			padding: 0 5px 0 10px;
+		}
+
+		.FAQ > ul {
+			list-style-type: square;
+			font-size: 10px;
+			padding: 0 0 0 10px;
+		}
+
+		.FAQ > ul > li > em {
+			font-weight: bold;
+			margin: 10px 0 3px;
+			display: block;
+		}
+
+		.FAQ li {
+			clear: both;
+		}
+
+		pre, code {
+			-moz-tab-size: 4;
+			-o-tab-size: 2;
+			tab-size: 2;
+			white-space: pre-wrap;
+			font: normal normal 400 12px/normal Consolas, Menlo, monospace;
+			color: black;
+		}
+
+		code {
+			padding: 4px;
+			display: block;
+			border: 1px solid #ddd;
+		}
+
+		.versions > li:target {
+			background-color: #effbff;
+		}
+
+		.versions > li > b:hover {
+			color: #484848;
+		}
+
+		.zoom-in {
+			cursor: zoom-in;
+			cursor: -moz-zoom-in;
+			cursor: -webkit-zoom-in;
+			cursor: -ms-zoom-in;
+		}
+
+		.versions > li > pre {
+			margin: 5px 0 0;
+			overflow: hidden;
+			-webkit-transition: max-height .3s;
+			-moz-transition: max-height .3s;
+			transition: max-height .3s;
+		}
+
+
+		#install {
+			max-width: 1000px;
+			text-align: center;
+		}
+		#install > span {
+			display: block;
+			margin: 20px 0 15px;
+			font-size: small;
+			font-weight: bold;
+			letter-spacing: 1px;
+		}
+		#install > div {
+			position: relative;
+			display: inline-block;
+			font-family: "trebuchet ms", "lucida grande", "lucida sans unicode", "arial", "helvetica", sans-serif;
+			margin: 0 20px;
+		}
+		#install > div > div {
+			font: 11px Tahoma, Consolas;
+			width: 1000%;
+			left: -450%;
+			top: 80%;
+			text-align: left;
+			position: absolute;
+			display: inline-block;
+			padding: 5px;
+			background-color: #fff;
+			background: -moz-linear-gradient(top, #fff, rgba(245, 245, 255, .9));
+			background: -o-linear-gradient(top, #fff, rgba(245, 245, 255, .9));
+			background: linear-gradient(to bottom, #fff, rgba(245, 245, 255, .9));
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			box-shadow: 0 0 10px #666;
+			opacity: 0;
+			visibility: hidden;
+			-webkit-transition: visibility 0s .2s, opacity .3s, top .2s;
+			transition: visibility 0s .2s, opacity .3s, top .2s;
+		}
+		#install > div:hover > div {
+			-webkit-transition-delay: .1s;
+			transition-delay: .1s;
+			top: 100%;
+			visibility: visible;
+			opacity: 1;
+		}
+		#install > a {
+			text-decoration: none;
+		}
+	</style>
+	<title>Viewhance :: Archive</title>
+</head>
+<body>
+	<div class="FAQ">
+		<h3>FAQ</h3>
+		<ul>
+			<li>
+				<em>What the buttons do on the floating menu?</em>
+				<div style="clear: both; margin-bottom: 5px">* - the wheel, and both left and right mouse buttons can be used on it</div>
+				<img src="img/menu_items.png" style="float: left; margin-right: 10px">
+				<div style="padding-top: 20px">- cycle through sizing modes *</div>
+				<div style="padding-top: 20px">- flip *</div>
+				<div style="padding-top: 23px">- rotate *</div>
+				<div style="padding-top: 23px">- zoom *</div>
+				<div style="padding-top: 15px">- filters - available only if the browser supports them. Each of them can be changed with mouse wheel and be reset with right click</div>
+				<div style="padding-top: 17px">- reset image (same as pressing Escape)</div>
+				<div style="padding-top: 17px">- send the image to different services (like reverse image search)</div>
+				<div style="padding-top: 17px">- extract frames from animated images (GIF, APNG, WEBP) - left click for drawing full frames, right click for frames as they are in the file</div>
+				<div style="padding-top: 13px">- open preferences</div>
+			</li>
+			<li>
+				<em>Where can I report issues?</em>
+				<a href="https://github.com/Deathamns/Viewhance/issues">Here</a>.
+			</li>
+		</ul>
+	</div>
+
+	<small>Viewhance is a browser extension that adds extra functionality to the browser's default image/media viewer.</small><br>
+
+	<div id="install">
+		<span>Install the latest version for</span>
+		<div>
+			<img src="img/browser_icons/icon32_opera.png" alt="Opera">
+			<div>
+					To install on Opera 12, download the extension file and drop it into the browser window.
+				<br><br>
+					In Opera 15+, the extension must be manually enabled in the Extension manager (Ctrl+Shift+E) after install.
+				<br><br>
+				<div style="float: left; width: 50%; text-align: center">
+					<a href="https://tiny.cc/Viewhance-oex" rel="nofollow" title="Install for Opera 12">
+						<img src="img/browser_icons/icon32_opera.png" alt="Opera 12" style="vertical-align: middle"> <b>12</b>
+					</a>
+				</div>
+				<div style="float: left; width: 50%; text-align: center">
+					<a href="https://tiny.cc/Viewhance-crx" rel="nofollow" title="Install for Opera 15+">
+						<img src="img/browser_icons/icon32_operc.png" alt="Opera 15+" style="vertical-align: middle"> <b>15+</b>
+					</a>
+				</div>
+				<br>
+				<br>
+			</div>
+		</div>
+		<div>
+			<a href="https://addons.mozilla.org/addon/viewhance/" rel="nofollow">
+				<img src="img/browser_icons/icon32_firefox.png" alt="Firefox">
+			</a>
+		</div>
+		<div>
+			<a href="https://chrome.google.com/webstore/detail/viewhance/impppjchnpfgknmbaaghfeopcgfoilac" rel="nofollow">
+				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome" title="Install from Chrome Web Store">
+			</a>
+		</div>
+		<div>
+			<a href="https://tiny.cc/Viewhance-safariextz" rel="nofollow">
+				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+">
+			</a>
+		</div>
+		<div>
+			<a href="http://extension.maxthon.com/detail/index.php?view_id=2527" rel="nofollow">
+				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon" title="Install from Maxthon Extension Center">
+			</a>
+		</div>
+		<!-- <div>
+			<a href="viewhance-edge.zip" rel="nofollow">
+				<img src="img/browser_icons/icon32_msedge.png" alt="MS Edge" title="Install from Microsoft Edge">
+			</a>
+			<div><a href="https://www.youtube.com/watch?v=hKAywBrQeAw#t=54">This video</a> will show you how to install it on MS Edge (versions available only on <a href="https://insider.windows.com/">Windows Insider</a>).</div>
+		</div> -->
+	</div>
+
+	<pre>
+	+ Added feature
+	* Improved/changed feature
+	# Bug fixed
+
+	<b>Browsers</b> (only the latest versions of each browser are fully supported)
+		opr: <a href="https://www.opera.com/download/guide/?custom=yes">Opera</a> 12
+		ffx: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, <a href="http://www.seamonkey-project.org/">SeaMonkey</a> (possibly other Gecko based browsers)
+		chr: <a href="https://www.google.com/chrome/">Chrome</a> (or other <a href="https://en.wikipedia.org/wiki/Chromium_(web_browser)#Other_browsers_based_on_Chromium">clones</a> of <a href="https://www.chromium.org/getting-involved/download-chromium">Chromium</a>, like <a href="https://vivaldi.com/download/">Vivaldi</a>, <a href="https://www.opera.com/computer/">Opera 15+</a>, <a href="https://browser.yandex.com/">Yandex Browser</a>...)
+		sfr: <a href="https://www.apple.com/safari/">Safari</a>
+		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
+	<ul class="versions">
+		<li id="v2017.502.1705"><b>2017.502.1705</b>
+		<pre>
+* Make upscaling more consitent across sizing modes
+* Allow dragging the image if that fits the view-port
+* Replace fit to width/height shortcuts with a simple fill
+# Fix zooming for rotated media
+# Flipping should flip only the content, not the whole bounding box
+# Fix video dimensions in title
+		</pre>
+		</li>
+
+		<li id="v2017.402.1400"><b>2017.402.1400</b>
+		<pre>
+* (ffx) Compatibility with latest Nightly builds
+# (ffx) Background page wasn't freed up when the extension got disabled
+		</pre>
+		</li>
+
+		<li id="v2017.219.2144"><b>2017.219.2144</b>
+		<pre>
++ Custom scale factor and snap points for zooming
+# (chr) In recent Chrome versions initial size couldn't be applied for images larger than the viewport
+* Default value for "Enlarge small images" has been changed to <b>50%</b>
+* Single click behaves as best fit (long-press function) on images that have the same width or height as their viewport, and they are in their original size or fit to the window
+* Opener now ignores empty data: URIs, also it will get the image source from <i>currentSrc</i> instead of <i>src</i>
+* Warning pop-up for frame extractor on possible high memory usage
+		</pre>
+		</li>
+
+		<li id="v2016.1113.1700"><b>2016.1113.1700</b>
+		<pre>
+# (chr) Make it compatible with Chrome 56+
+# Horizontal scrolling didn't activate in some cases
+		</pre>
+		</li>
+
+		<li id="v2016.1108.1758"><b>2016.1108.1758</b>
+		<pre>
+# (chr) Make it work on newer versions
+* (sfr) Improve video/audio detection
+* New versioning style (current UTC date)
+		</pre>
+		</li>
+
+		<li id="v1.0.9"><b>1.0.9 - June 10, 2016</b>
+		<pre>
+# (chr) Fix resizing for large images in recent Chromium based browsers
+* Improved panning
+		</pre>
+		</li>
+
+		<li id="v1.0.8"><b>1.0.8 - May 26, 2016</b>
+		<pre>
++ Made the "crx" platform compatible with Microsoft Edge
+# (chr) Sometimes the media couldn't be resized on first open
+# Floating menu wasn't removed from the DOM when it was disabled
+* Allow scripts to be removed from memory if they're not used anymore
+* Make use of <b>document.elementsFromPoint</b> in browsers that support it for image opening
+		</pre>
+		</li>
+
+		<li id="v1.0.7"><b>1.0.7 - April 10, 2016</b>
+		<pre>
+# Changing volume using shortcuts didn't work
+# (opr) Menu could stuck after panning
+# Flip shortucts were flipped
+* Updated URLs for search by image providers
+* (chr) Make use of <a href="https://developer.chrome.com/extensions/event_pages">Event Pages</a>
+* Other minor fixes
+		</pre>
+		</li>
+
+		<li id="v1.0.6"><b>1.0.6 - February 14, 2016</b>
+		<pre>
++ German translation by <a href="https://github.com/sioh">sioh</a>
+# Fix long-standing issues with rotated content (sizing, positioning, zooming...)
+# Scrolling didn't work with <i>overflow: auto</i>
+		</pre>
+		</li>
+
+		<li id="v1.0.5"><b>1.0.5 - November 01, 2015</b>
+		<pre>
++ Swedish translation by <a href="https://github.com/Najoj">Jojan (Johan Öhlin)</a>
+		</pre>
+		</li>
+
+		<li id="v1.0.4"><b>1.0.4 - October 07, 2015</b>
+		<pre>
+# Dynamically generated images (on the server) couldn't be loaded if the request was a POST request
+# The menu shouldn't be shown while Shift is being held
+* Default action for left long-press changed to best fit (instead of fit to width/height)
+* Drop fit to width/height as default modes
+* Drop option for long-press delay (300ms will be used)
+* Load host favicons when the list appears instead on mouse over
+* Add "loop" to default media attributes
+* Use upscaling for images only
+* (ffx) Disable browser functions for image while the extension is active (less conflict with the default viewer)
+		</pre>
+		</li>
+
+		<li id="v1.0.3"><b>1.0.3 - September 18, 2015</b>
+		<pre>
++ Orient images according to EXIF data (image-orientation: from-image, which is support only by Firefox at the moment)
++ Support horizontal wheeling to pan the image horizontally
+# (mxt) Fix frame extraction
+# Enlarging small images didn't work
+* Prevent the menu from appearing when the left mouse button is pressed
+		</pre>
+		</li>
+
+		<li id="v1.0.2"><b>1.0.2 - August 25, 2015</b>
+		<pre>
++ Shortcut (<b>Z</b>) and/or long-press to toggle wheel zooming
++ Shortcut (<b>B</b>) to switch between backgrounds
++ Shortcut (<b>P</b>) to pixelate the image (if the browser supports it)
+* New menu-icons
+* Use cursor keys to pan the image
+* Some preferences were renamed, so they'll lose their current values (custom CSS, list of "send to" hosts)
+# (mxt) Fix missing icon, and broken encoding
+* Various other changes/fixes
+		</pre>
+		</li>
+
+		<li id="v1.0.1"><b>1.0.1 - June 14, 2015</b>
+		<pre>
+# Fix flickering when opening media
+# (mxt) Locales were missing from the previous release
+# (chr) Fix black square beneath the audio player
+* Always show controls over audio player
+* Always enabled on media files (option was removed as well)
+* "Media attributes" option were renamed (so it needs to be reconfigured if someone used it)
+* The following altered media attributes/values will be saved: loop, controls, mute, volume
+* Minor visual changes
+		</pre>
+		</li>
+
+		<li id="v1.0.0"><b>1.0.0 - May 06, 2015</b>
+		<pre>
+# Use black background for videos in full-screen
+# Minor fixes with frame extraction
+* Update support for Opera 29+
+* Use more strict rules for detecting single tab images
+* Moving to <a href="https://github.com/Deathamns/Viewhance">GitHub</a>...
+		</pre>
+		</li>
+
+		<li id="v0.9.9"><b>0.9.9 - February 05, 2015</b>
+		<pre>
+# Fix image opening (in some cases invalid links were opened)
+* (ffx) Occasionally the extension couldn't initialize in time at browser start
+* (ffx) Minor optimizations/fixes
+		</pre>
+		</li>
+
+		<li id="v0.9.8"><b>0.9.8 - January 25, 2015</b>
+		<pre>
++ Korean translation by QbsidianH20 (유태종)
+# (ffx) Fix memory leak with content scripts
+# (ffx) Compatibility with StartupMaster add-on
+* Under the hood changes (should not affect functionality)
+		</pre>
+		</li>
+
+		<li id="v0.9.7"><b>0.9.7 - December 12, 2014</b>
+		<pre>
+# Audio player didn't load because of the extension
+# (ffx) Extension didn't work for redirected media
+* (ffx) If possible, load extension scripts only when mouse enters the page (with other internal changes)
+		</pre>
+		</li>
+
+		<li id="v0.9.6"><b>0.9.6 - November 17, 2014</b>
+		<pre>
+# (ffx) Improper clean-up when disabling the extension, and other insignificant changes for <a href="https://addons.mozilla.org/"><abbr title="addons.mozilla.org">AMO</abbr></a>
+* Minor styling changes
+		</pre>
+		</li>
+
+		<li id="v0.9.5"><b>0.9.5 - November 03, 2014</b>
+		<pre>
+# Zooming didn't work with mousewheel over the button in the floating menu
+* Some code polishing...
+		</pre>
+		</li>
+
+		<li id="v0.9.4"><b>0.9.4 - September 07, 2014</b>
+		<pre>
+* Configurable "Send to" hosts (plus a new default: Bing Image Match)
+* (mxt) Sliders for filters couldn't be changed by clicking on them (conflict with the default viewer)
+# (ffx) Right long-press conflict with Imagus
+		</pre>
+		</li>
+
+		<li id="v0.9.3"><b>0.9.3 - August 27, 2014</b>
+		<pre>
+* Video volume fixes/changes: should be defaulted to 1, not 0; use 0-100 instead of 0-1 scale, typo mute -> muted, Up/Down shortcuts for volume level
+# (chr) Styling not applied for some menu buttons (<abbr title="Content Security Policy">CSP</abbr> issue)
+# (ffx,mxt) Image became hidden when site used CSP (on these sites styling still won't work)
+# (ffx) Reset/Esc didn't work for videos
+--- <b>v0.9.2</b> --- (August 23, 2014)
++ Video support (modifiable parameters: autoplay, loop, mute, controls, volume) - click on the upper half of the video behaves same as with images, click over the lower half will pause/play the video
+* (ffx) e10s support, complying with <a href="https://addons.mozilla.org/"><abbr title="addons.mozilla.org">AMO</abbr></a> requirements
+# (mxt) Drag from right edge didn't work (conflict with the default viewer)
+		</pre>
+		</li>
+
+		<li id="v0.9.1"><b>0.9.1 - July 08, 2014</b>
+		<pre>
+# Filters couldn't be reset with right click
+# (ffx) The extension wasn't able to load/save preferences
+* New default style
+* Revert some shortcut changes
+* Added more buttons for the floating menu
+* Prevent showing the floating menu while panning
+* Borrowed opener (all methods combined into one shortcut) and frame extraction from Imagus
+		</pre>
+		</li>
+
+		<li id="v0.9"><b>0.9 - June 28, 2014</b>
+		<pre>
+* Separated from Imagus
++ Added custom CSS for styling, instead of giving individual settings for each option (background color, border...)
++ Floating menu (optional, enabled by default, it can be disabled via CSS, to bring up: move the cursor to the upper left edge of the page) (right click menu is no more)
+* Dropped some unnecessary options and shortcuts
+		</pre>
+		</li>
+	</ul>
+</body>
