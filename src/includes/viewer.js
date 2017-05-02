@@ -1031,26 +1031,28 @@ init = function() {
 			return;
 		}
 
+		if ( vAPI.mediaType === 'video' ) {
+			if ( vAPI.fullScreenElement === media ) {
+				return;
+			}
+
+			if ( !e.shiftKey ) {
+				var topPart = this.clientHeight;
+				topPart = Math.min(topPart - 40, topPart / 2);
+
+				if ( (e.offsetY || e.layerY || 0) > topPart ) {
+					return;
+				}
+			}
+		}
+
 		if ( e.ctrlKey || e.altKey ) {
 			media.ondragstart = null;
 			return;
 		}
 
-		if ( vAPI.fullScreenElement === media && vAPI.mediaType === 'video' ) {
-			return;
-		}
-
 		if ( menu && menu.style.display === 'block' ) {
 			menu.style.display = 'none';
-		}
-
-		if ( !e.shiftKey && vAPI.mediaType === 'video' ) {
-			var topPart = this.clientHeight;
-			topPart = Math.min(topPart - 40, topPart / 2);
-
-			if ( (e.offsetY || e.layerY || 0) > topPart ) {
-				return;
-			}
 		}
 
 		if ( e.button === 0 && this.mode <= MODE_HEIGHT || e.button === 2 ) {
