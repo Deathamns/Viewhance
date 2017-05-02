@@ -74,14 +74,6 @@
 			"#": 0,
 			">": "Siirry suurennustilojen välillä: luonnollinen koko, sovita leveyteen, sovita korkeuteen"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Sovita korkeuteen"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Sovita leveyteen"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Käännä pystysuunnassa"

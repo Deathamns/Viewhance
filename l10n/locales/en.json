@@ -156,14 +156,6 @@
 			"#": 3,
 			">": "Hold <b>Ctrl</b> or <b>Alt</b> to drag the image if that doesn't fit the view-port"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Fit to height"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Fit to width"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Flip horizontal"
@@ -190,7 +182,11 @@
 		},
 		"scModeContain": {
 			"#": 0,
-			">": "Auto fit"
+			">": "Fit"
+		},
+		"scModeFill": {
+			"#": 0,
+			">": "Fill"
 		},
 		"scModeNatural": {
 			"#": 0,

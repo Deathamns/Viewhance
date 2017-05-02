@@ -46,14 +46,6 @@
 			"#": 1,
 			">": "örnekler için tıkla..."
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Yüksekliğe sığdır"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Genişliğe sığdır"
-		},
 		"scFlipVertical": {
 			"#": 0,
 			">": "Dikey çevir"

@@ -137,14 +137,6 @@
 			"#": 2,
 			">": "<b>Držte Ctrl nebo Alt</b> nebo začněte v pravé části obrázku, chcete-li obrázek přetáhnout jinam (např. mimo okno prohlížeče)"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Roztáhnout na výšku"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Roztáhnout na šířku"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Překlopit vodorovně"

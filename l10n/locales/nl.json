@@ -86,14 +86,6 @@
 			"#": 0,
 			">": "Door sizing modi wisselen: normaal, breedte passend maken, hoogte passend maken"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Hoogte passend maken"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Breedte passend maken"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Horizontaal omdraaien"

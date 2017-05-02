@@ -1387,11 +1387,12 @@ init = function() {
 			case cfg.key_mFit:
 				resizeMedia(MODE_FIT);
 				break;
-			case cfg.key_mFitW:
-				resizeMedia(MODE_WIDTH);
-				break;
-			case cfg.key_mFitH:
-				resizeMedia(MODE_HEIGHT);
+			case cfg.key_mFill:
+				resizeMedia(
+					media.box.width / media.box.height < winW / winH
+						? MODE_WIDTH
+						: MODE_HEIGHT
+				);
 				break;
 			case cfg.key_cycle:
 				cycleModes(e.shiftKey);

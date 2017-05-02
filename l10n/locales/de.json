@@ -151,14 +151,6 @@
 			"#": 2,
 			">": "<b>Strg / Alt</b> gedrückt halten für Drag 'n' Drop oder von der rechten Ecke des Bildes ziehen sollte es auf diese Weise ins Fenster passen"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "An Höhe anpassen"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "An Breite anpassen"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Horizontales Spiegeln"

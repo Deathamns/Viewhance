@@ -152,14 +152,6 @@
 			"#": 2,
 			">": "<b>Ctrl</b> vagy <b>Alt</b> nyomva-tartásával vonszolható a kép, ha az nem fér bele a nézetablakba"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Magassághoz méretez"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Szélességhez méretez"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Vízszintes tükrözés"
@@ -187,6 +179,10 @@
 		"scModeContain": {
 			"#": 0,
 			">": "Ablakhoz méretez"
+		},
+		"scModeFill": {
+			"#": 0,
+			">": "Ablakot kitölt"
 		},
 		"scModeNatural": {
 			"#": 0,

@@ -86,14 +86,6 @@
 			"#": 0,
 			">": "Trocar entre os modos: tamanho original, caber na altura, caber na largura"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Dimensionar à altura"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Dimensionar à largura"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Virar à horizontal"

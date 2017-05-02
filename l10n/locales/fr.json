@@ -116,14 +116,6 @@
 			"#": 0,
 			">": "Faire défiler les différents modes : taille initiale, adapter à la largeur, adapter à la hauteur"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Adapter à la hauteur"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Adapter à la largeur"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Inverser horizontalement"

@@ -20,10 +20,9 @@
 		"Pixlr|https://apps.pixlr.com/editor/?image=%url",
 		"PicMonkey|https://www.picmonkey.com/service?_import=%url"
 	],
-	"key_mOrig": "0",
-	"key_mFit": "1",
-	"key_mFitW": "2",
-	"key_mFitH": "3",
+	"key_mOrig": "1",
+	"key_mFit": "2",
+	"key_mFill": "3",
 	"key_rotL": "E",
 	"key_rotR": "R",
 	"key_flipH": "W",

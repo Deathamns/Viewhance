@@ -153,14 +153,6 @@
 			"#": 2,
 			">": "<b>Håll Ctrl eller Alt</b< för att dra och släppa bilder, eller dra från bildens högra kant om det passar fönstret"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Passa till höjd"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Passa till bredd"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Spegla horisontellt"

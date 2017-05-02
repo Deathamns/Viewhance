@@ -137,14 +137,6 @@
 			"#": 2,
 			">": "<b>Przytrzymaj Ctrl lub Alt</b> by włączyć tryb przeciągania i upuszczania, lub przeciągnij z prawej strony obrazka, jeśli mieści się w oknie przeglądarki"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Dopasuj do wysokości"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Dopasuj do szerokości"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Odbij w poziomie"

@@ -153,14 +153,6 @@
 			"#": 2,
 			">": "<b>Mantén presionado Ctrl o Alt</b> para permitir arrastrar y soltar, o arrastra desde el borde derecho de la imagen (si cabe en la ventana)"
 		},
-		"scFitToHeight": {
-			"#": 0,
-			">": "Ajustar a lo alto"
-		},
-		"scFitToWidth": {
-			"#": 0,
-			">": "Ajustar a lo ancho"
-		},
 		"scFlipHorizontal": {
 			"#": 0,
 			">": "Voltear horizontalmente"
