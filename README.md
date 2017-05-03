@@ -2,7 +2,7 @@
 
 A browser extension to enhance the browser's default media viewer.
 
-To try it out (when installed), open a media file ([image](http://upload.wikimedia.org/wikipedia/commons/e/ec/StLouisArchMultExpToneMapped.jpg) / [video](http://upload.wikimedia.org/wikipedia/commons/5/5f/Hdr_time_lapse_montage.ogg) / [audio](http://upload.wikimedia.org/wikipedia/en/3/3d/Sample_of_Daft_Punk's_Da_Funk.ogg)) in a new tab.
+To try it out (when installed), open a media file ([image](https://upload.wikimedia.org/wikipedia/commons/e/ec/StLouisArchMultExpToneMapped.jpg) / [video](https://upload.wikimedia.org/wikipedia/commons/d/de/Hdr_time_lapse_montage.ogv) / [audio](https://upload.wikimedia.org/wikipedia/en/3/3d/Sample_of_Daft_Punk's_Da_Funk.ogg)) in a new tab.
 
 Visit one of the extension stores (below) to see the list of features.
 
@@ -13,7 +13,7 @@ Only the latest browser versions are fully supported. It may work on older versi
 - [Opera](https://tiny.cc/Viewhance-oex) 12
 - [Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac) (other Chromium clones; Vivaldi, Opera 15+...)
 - [Safari](https://tiny.cc/Viewhance-safariextz)
-- [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527) 4+
+- [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527)
 
 ## Contribution ##
 - **Localization** You can use [this helper tool](https://rawgit.com/Deathamns/Viewhance/master/l10n/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
