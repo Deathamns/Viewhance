@@ -316,9 +316,10 @@ input[type="checkbox"] {
 
 .checkbox::after {
 	position: absolute;
-	top: 0;
 	left: 3px;
+	top: 0;
 	font-weight: 700;
+	font-family: "Segoe UI Symbol", sans-serif;
 	content: "✔";
 }
 
