@@ -20,9 +20,11 @@
 	},
 	"rules": {
 		// Possible Errors
+		"for-direction": "error",
+		"getter-return": "error",
+		"no-compare-neg-zero": "error",
 		"no-cond-assign": "off",
 		"no-console": "off",
-		"no-compare-neg-zero": "error",
 		"no-constant-condition": "error",
 		"no-control-regex": "warn",
 		"no-debugger": "warn",
@@ -181,6 +183,7 @@
 		}],
 		"max-nested-callbacks": ["error", {"max": 3}],
 		"max-params": ["error", {"max": 5}],
+		"multiline-ternary": "off",
 		"max-statements-per-line": ["error", {"max": 1}],
 		"max-statements": "off",
 		"multiline-ternary": "off",
