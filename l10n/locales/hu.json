@@ -89,8 +89,8 @@
 			">": "Képinformációk"
 		},
 		"mediaInfoTip": {
-			"#": 2,
-			">": "Egyéni adatok megjelenítése a fül címében, a következő változók felhaszanálásával:\n<b>%ow</b> - eredeti szélesség\n<b>%oh</b> - eredeti magasság\n<b>%ratio</b> - jelenlegi szélesség és magasság aránya\n<b>%w</b> - jelenlegi szélesség\n<b>%h</b> - jelenlegi magasság\n<b>%perc</b> - átméretezés százalékban\n<b>%url</b> - teljes cím\n<b>%name</b> - fájl neve"
+			"#": 3,
+			">": "Egyéni adatok megjelenítése a fül címében, a következő változók felhaszanálásával:\n<b>%ow</b> - eredeti szélesség\n<b>%oh</b> - eredeti magasság\n<b>%ratio</b> - jelenlegi szélesség és magasság aránya\n<b>%w</b> - jelenlegi szélesség\n<b>%h</b> - jelenlegi magasság\n<b>%perc</b> - átméretezés százalékban\n<b>%url</b> - teljes cím\n<b>%name</b> - fájl neve\n<b>%size</b> - fájl mérete (nem minding működik)"
 		},
 		"minUpscale": {
 			"#": 0,

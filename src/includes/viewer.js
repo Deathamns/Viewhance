@@ -423,6 +423,46 @@ init = function() {
 			case 'perc':
 				m = (m.width || m.videoWidth) * 100 / mOrigWidth;
 				return m < 2 ? m.toFixed(1) : Math.round(m);
+			case 'size':
+				if ( m._size !== void 0 ) {
+					return m._size;
+				}
+
+				// x.open('HEAD', win.location.href, true);
+				// var size = this.getResponseHeader('content-length') | 0;
+
+				var xhr = new win.XMLHttpRequest;
+				xhr.open('GET', win.location.href, true);
+				xhr.overrideMimeType('text/plain; charset=x-user-defined');
+				xhr.onload = function() {
+					this.onload = null;
+					var size = this.responseText.length;
+
+					if ( !size ) {
+						m._size = '?B';
+						setTitle();
+						return;
+					}
+
+					var units = {
+						MiB: 1024 * 1024,
+						KiB: 1024,
+						B: 1
+					};
+
+					for ( var unit in units ) {
+						if ( size >= units[unit] ) {
+							m._size = (
+								size / units[unit]
+							).toFixed(2) + ' ' + unit;
+							break;
+						}
+					}
+
+					setTitle();
+				};
+				xhr.send();
+				return '?B';
 		}
 
 		return a;
@@ -434,7 +474,7 @@ init = function() {
 		}
 
 		doc.title = cfg.mediaInfo.replace(
-			/%(o?[wh]|url|name|ratio|perc)/g,
+			/%(o?[wh]|url|name|ratio|perc|size)/g,
 			convertInfoParameter
 		);
 	};
