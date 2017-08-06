@@ -181,7 +181,6 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'cursor: pointer;',
 		'fill: rgba(0,0,0,0);',
 		'stroke: #fff;',
-		'stroke-width: 7px;',
 		'color: #fff;',
 		'transition: opacity .2s;',
 	'}',
