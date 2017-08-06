@@ -90,7 +90,9 @@ if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 
 Object.defineProperty(vAPI, 'fullScreenElement', {
 	get: function() {
-		return document.fullscreenElement || document.webkitFullscreenElement;
+		return document.fullscreenElement
+			|| document.webkitFullscreenElement
+			|| null;
 	}
 });
 

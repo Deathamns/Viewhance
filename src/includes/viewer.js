@@ -151,7 +151,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'}',
 	'#menu {',
 		'width: 50px;',
-		'height: 33.33%;',
+		'height: 33%;',
 		'position: fixed;',
 		'top: 0;',
 		'opacity: 0;',
@@ -160,7 +160,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'ul {',
 		'display: inline-block;',
 		'margin: 0;',
-		'padding: 5px 15px;',
+		'padding: 8px 0;',
 		'background: rgba(0, 0, 0, .6); color: #fff;',
 		'font-size: 25px; font-weight: 700;',
 		'text-align: center;',
@@ -169,44 +169,24 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'li {',
 		'position: relative;',
 		'display: block;',
+		'padding: 4px 15px;',
+		'height: 24px;',
 	'}',
-	'li[data-cmd] > div {',
+	'li > svg > use {',
+		'pointer-events: none;',
+	'}',
+	'li > svg {',
 		'width: 25px;',
 		'height: 25px;',
-		'margin: 8px 0;',
-		'background-repeat: no-repeat;',
-		'background-size: 100%;',
 		'cursor: pointer;',
+		'fill: rgba(0,0,0,0);',
+		'stroke: #fff;',
+		'stroke-width: 7px;',
+		'color: #fff;',
+		'transition: opacity .2s;',
 	'}',
-	'li[data-cmd] > div:hover {',
+	'li > svg:hover {',
 		'opacity: .6;',
-	'}',
-	'li[data-cmd="cycle"] > div {',
-		'background-position: 0 0;',
-	'}',
-	'li[data-cmd="zoom"] > div {',
-		'background-position: 0 -125px;',
-	'}',
-	'li[data-cmd="flip"] > div {',
-		'background-position: 0 -50px;',
-	'}',
-	'li[data-cmd="rotate"] > div {',
-		'background-position: 0 -175px;',
-	'}',
-	'li[data-cmd].filters > div {',
-		'background-position: 0 -25px;',
-	'}',
-	'li[data-cmd="reset"] > div {',
-		'background-position: 0 -150px;',
-	'}',
-	'li[data-cmd].send-hosts > div {',
-		'background-position: 0 -200px;',
-	'}',
-	'li[data-cmd="frames"] > div {',
-		'background-position: 0 -75px;',
-	'}',
-	'li[data-cmd="options"] > div {',
-		'background-position: 0 -100px;',
 	'}',
 	'li ul {',
 		'visibility: hidden;',
@@ -224,7 +204,6 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'}',
 	'li ul > li {',
 		'display: block !important;',
-		'padding: 3px 0;',
 		'font-size: 15px;',
 	'}',
 	'.send-hosts li > a {',
@@ -1642,7 +1621,7 @@ init = function() {
 			delete media.filters[t.parentNode.textContent.trim()];
 		} else {
 			filterName = t.parentNode.textContent.trim();
-			media.filters[filterName] = t.value + t.getAttribute('unit');
+			media.filters[filterName] = t.value + (t.getAttribute('unit') || '%');
 		}
 
 		for ( filterName in media.filters ) {
@@ -1667,12 +1646,11 @@ init = function() {
 	}
 
 	vAPI.buildNodes(menu.appendChild(doc.createElement('ul')), [
-		{tag: 'li', attrs: {'data-cmd': 'cycle'}, nodes: [{tag: 'div'}]},
-		{tag: 'li', attrs: {'data-cmd': 'zoom'}, nodes: [{tag: 'div'}]},
-		{tag: 'li', attrs: {'data-cmd': 'flip'}, nodes: [{tag: 'div'}]},
-		{tag: 'li', attrs: {'data-cmd': 'rotate'}, nodes: [{tag: 'div'}]},
+		{tag: 'li', attrs: {'data-cmd': 'cycle'}},
+		{tag: 'li', attrs: {'data-cmd': 'zoom'}},
+		{tag: 'li', attrs: {'data-cmd': 'flip'}},
+		{tag: 'li', attrs: {'data-cmd': 'rotate'}},
 		media.filters ? {tag: 'li', attrs: {class: 'filters', 'data-cmd': 'filters'}, nodes: [
-			{tag: 'div'},
 			{tag: 'form', nodes: [{tag: 'ul', nodes: [
 				{tag: 'li', nodes: [
 					{
@@ -1682,8 +1660,7 @@ init = function() {
 							min: 0,
 							max: 250,
 							step: 10,
-							value: 100,
-							unit: '%'
+							value: 100
 						}
 					},
 					' brightness'
@@ -1696,8 +1673,7 @@ init = function() {
 							min: 0,
 							max: 300,
 							step: 25,
-							value: 100,
-							unit: '%'
+							value: 100
 						}
 					},
 					' contrast'
@@ -1710,8 +1686,7 @@ init = function() {
 							min: 0,
 							max: 1000,
 							step: 50,
-							value: 100,
-							unit: '%'
+							value: 100
 						}
 					},
 					' saturate'
@@ -1724,8 +1699,7 @@ init = function() {
 							min: 0,
 							max: 100,
 							step: 25,
-							value: 0,
-							unit: '%'
+							value: 0
 						}
 					},
 					' grayscale'
@@ -1738,8 +1712,7 @@ init = function() {
 							min: 0,
 							max: 100,
 							step: 100,
-							value: 0,
-							unit: '%'
+							value: 0
 						}
 					},
 					' invert'
@@ -1752,8 +1725,7 @@ init = function() {
 							min: 0,
 							max: 100,
 							step: 20,
-							value: 0,
-							unit: '%'
+							value: 0
 						}
 					},
 					' sepia'
@@ -1788,12 +1760,12 @@ init = function() {
 				]}
 			]}]}
 		]} : '',
-		{tag: 'li', attrs: {'data-cmd': 'reset'}, nodes: [{tag: 'div'}]},
+		{tag: 'li', attrs: {'data-cmd': 'reset'}},
 		/^https?:$/.test(win.location.protocol) && cfg.sendToHosts.length
 			? {
 				tag: 'li',
-				attrs: {class: 'send-hosts', 'data-cmd': ''},
-				nodes: [{tag: 'div'}, {
+				attrs: {class: 'send-hosts', 'data-cmd': 'send-hosts'},
+				nodes: [{
 					tag: 'ul',
 					nodes: cfg.sendToHosts.map(function(item) {
 						var host = item.split('|');
@@ -1810,20 +1782,16 @@ init = function() {
 			}
 			: null,
 		vAPI.mediaType === 'img'
-			? {
-				tag: 'li',
-				attrs: {'data-cmd': 'frames'},
-				nodes: [{tag: 'div'}]
-			}
+			? {tag: 'li', attrs: {'data-cmd': 'frames'}}
 			: '',
-		{tag: 'li', attrs: {'data-cmd': 'options'}, nodes: [{tag: 'div'}]}
+		{tag: 'li', attrs: {'data-cmd': 'options'}}
 	]);
 
 	menu.style.cssText = 'display: none; left: -' + menu.offsetWidth + 'px';
 
 	menu.addEventListener('mousedown', function(e) {
 		var t = e.target;
-		var href = t.getAttribute('href');
+		var href = t.href;
 
 		if ( href && href.indexOf('%') !== -1 ) {
 			t.href = href.replace('%url', encodeURIComponent(media.src));
@@ -1897,8 +1865,8 @@ init = function() {
 					if ( alertMessage !== null ) {
 						// eslint-disable-next-line no-alert
 						alert(alertMessage);
-						menu.querySelector('li[data-cmd="frames"]')
-							.removeAttribute('data-cmd');
+						var item = menu.querySelector('li[data-cmd="frames"]');
+						item.parentNode.removeChild(item);
 						return;
 					}
 
@@ -1929,7 +1897,7 @@ init = function() {
 	};
 
 	var onMenuClick = function(e) {
-		var cmd = e.target.parentNode.getAttribute('data-cmd');
+		var cmd = e.target.parentNode.dataset.cmd;
 
 		if ( cmd ) {
 			handleCommand(cmd, e);
@@ -1953,24 +1921,30 @@ init = function() {
 			return;
 		}
 
-		if ( !menu.iconsLoaded ) {
-			var bgImage = win.getComputedStyle(menu).backgroundImage;
+		if ( menu.firstElementChild.localName !== 'svg' ) {
+			var message = {cmd: 'loadFile', path: 'css/menu_icons.svg'};
 
-			if ( bgImage && bgImage !== 'none' ) {
+			vAPI.messaging.send(message, function(svg) {
 				menu.iconsLoaded = true;
-			}
-		}
+				menu.insertAdjacentHTML('afterbegin', svg);
 
-		if ( !menu.iconsLoaded ) {
-			var message = {cmd: 'loadFile', path: 'css/menu_icons.b64png'};
+				var item;
+				var items = menu.querySelectorAll('#menu > ul > li');
+				var i = items.length;
+				var ns = 'http://www.w3.org/2000/svg';
+				var svgIcon = doc.createElementNS(ns, 'svg');
+				svgIcon.appendChild(doc.createElementNS(ns, 'use'));
 
-			vAPI.messaging.send(message, function(img) {
-				var sheet = doc.head.querySelector('style').sheet;
-				sheet.insertRule(
-					'li[data-cmd] > div {background-image: url(' + img + ');}',
-					sheet.cssRules.length
-				);
-				menu.iconsLoaded = true;
+				while ( item = items[--i] ) {
+					item.insertBefore(
+						svgIcon.cloneNode(true),
+						item.firstChild
+					).firstChild.setAttributeNS(
+						'http://www.w3.org/1999/xlink',
+						'href',
+						'#icon-' + item.dataset.cmd
+					);
+				}
 			});
 		}
 

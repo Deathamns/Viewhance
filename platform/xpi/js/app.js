@@ -7,11 +7,11 @@ var vAPI = Object.create(null);
 vAPI.firefox = true;
 
 vAPI.browser = {
-	wheel: 'wheel',
 	irPixelated: '-moz-crisp-edges',
 	transformCSS: 'transform',
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',
+	wheel: 'wheel',
 	zoomIn: 'zoom-in'
 };
 
