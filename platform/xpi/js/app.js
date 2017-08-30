@@ -127,11 +127,9 @@ if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 
 Object.defineProperty(vAPI, 'fullScreenElement', {
 	get: function() {
-		if ( 'fullscreenElement' in document ) {
-			return document.fullscreenElement;
-		}
-
-		return document.mozFullScreenElement || null;
+		return document.mozFullScreenElement
+			|| document.fullscreenElement
+			|| null;
 	}
 });
 
@@ -145,6 +143,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 		var selector
 			= 'meta[content="width=device-width; height=device-height;"],'
 			+ 'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],'
+			+ 'link[rel=stylesheet][href^="resource://content-accessible/TopLevel"],'
 			+ 'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
 		this._mediaType = '';
 
