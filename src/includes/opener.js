@@ -107,7 +107,11 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		elementsFromPoint = function(x, y, target) {
 			var urls = [];
 			var rgxIgnore = /^(html|body)$/;
+			var tmpStyle = document.createElement('style');
+			document.head.appendChild(tmpStyle).textContent
+				= '* { pointer-events: auto !important; }';
 			var elements = document.elementsFromPoint(x, y);
+			document.head.removeChild(tmpStyle);
 
 			for ( var i = 0; i < elements.length; ++i ) {
 				var node = elements[i];
