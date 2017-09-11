@@ -3,9 +3,9 @@
 'use strict';
 
 // eslint-disable-next-line padded-blocks
-(function() {
+(function(win) {
 
-if ( document instanceof window.HTMLDocument === false ) {
+if ( document instanceof win.HTMLDocument === false ) {
 	vAPI.suicideAttempt();
 	return;
 }
@@ -15,7 +15,7 @@ if ( vAPI.mediaType ) {
 	return;
 }
 
-if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
+if ( win.location.protocol === 'safari-extension:' ) {
 	vAPI.suicideAttempt();
 	return;
 }
@@ -85,7 +85,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 				return node.poster || null;
 			}
 		} else if ( /^\[object SVG/.test(node.toString()) ) {
-			var svgString = (new window.XMLSerializer).serializeToString(
+			var svgString = (new win.XMLSerializer).serializeToString(
 				node.ownerSVGElement === null
 					? node
 					: node.ownerSVGElement
@@ -128,7 +128,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 					urls.push(url);
 				}
 
-				if ( url = checkBG(window.getComputedStyle(node)) ) {
+				if ( url = checkBG(win.getComputedStyle(node)) ) {
 					urls = urls.concat(url);
 				}
 			}
@@ -176,7 +176,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 					urls.push(url);
 				}
 
-				if ( url = checkBG(window.getComputedStyle(node)) ) {
+				if ( url = checkBG(win.getComputedStyle(node)) ) {
 					urls = urls.concat(url);
 				}
 			}
@@ -185,7 +185,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		};
 	}
 
-	window.addEventListener('mousedown', function(e) {
+	win.addEventListener('mousedown', function(e) {
 		if ( e.button !== 2 ) {
 			return;
 		}
@@ -249,4 +249,4 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 	}, true);
 });
 // eslint-disable-next-line padded-blocks
-})();
+})(window);

@@ -88,8 +88,8 @@ if ( location.protocol === 'safari-extension:' ) {
 		return this.l10nData[s];
 	};
 
-	vAPI.insertHTML = function(n, html) {
-		n.innerHTML = html;
+	vAPI.insertHTML = function(node, str) {
+		node.innerHTML = str;
 	};
 }
 

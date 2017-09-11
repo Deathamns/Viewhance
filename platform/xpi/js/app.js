@@ -108,13 +108,18 @@ if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 		var parser = Components.classes['@mozilla.org/parserutils;1']
 			.getService(Components.interfaces.nsIParserUtils);
 
-		return function(node, html) {
+		return function(node, str) {
+			if ( str.indexOf('<') === -1 ) {
+				node.textContent = str;
+				return;
+			}
+
 			while ( node.firstChild ) {
 				node.removeChild(node.firstChild);
 			}
 
 			node.appendChild(parser.parseFragment(
-				html,
+				str,
 				parser.SanitizerAllowStyle,
 				false,
 				io.newURI('about:blank', null, null),
@@ -153,7 +158,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 
 		var media = document.querySelector(
 			'body > img:first-child, '
-			+ 'body > video[controls][autoplay]:not([src]):empty'
+				+ 'body > video[controls][autoplay]:not([src]):empty'
 		);
 
 		if ( !media ) {
@@ -170,7 +175,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 			return this._mediaType;
 		}*/
 
-		this._mediaType = 'video';
+		this._mediaType = media.localName;
 		return this._mediaType;
 	},
 

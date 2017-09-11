@@ -2258,7 +2258,7 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 // eslint-disable-next-line padded-blocks
 (function() {
 
-if ( vAPI.safari && location.protocol === 'safari-extension:' ) {
+if ( window.location.protocol === 'safari-extension:' ) {
 	init = null;
 	vAPI.suicideAttempt();
 	return;

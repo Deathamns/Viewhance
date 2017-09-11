@@ -59,8 +59,8 @@ if ( location.protocol === 'mxaddon-pkg:' ) {
 		return t[0] === '"' ? JSON.parse(t) : t || s;
 	};
 
-	vAPI.insertHTML = function(n, html) {
-		n.innerHTML = html;
+	vAPI.insertHTML = function(node, str) {
+		node.innerHTML = str;
 	};
 }
 

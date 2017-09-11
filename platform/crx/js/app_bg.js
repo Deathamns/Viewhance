@@ -14,30 +14,34 @@ if ( typeof browser === 'object' && this.browser.extension ) {
 
 var vAPI = Object.create(null);
 
-vAPI.chrome = true;
-
 vAPI.app = chrome.runtime.getManifest();
 vAPI.app = {
 	name: vAPI.app.name,
 	version: vAPI.app.version,
 	platform: (function() {
-		var vendor = navigator.appVersion.match(
-			/(Chromium|OPR|RockMelt|Comodo_Dragon|CoolNovo|Iron|Edge|Firefox)\/(\S+)/
-		);
-
-		if ( vendor ) {
-			vendor[1] = vendor[1].replace('OPR', 'Opera').replace('_', ' ');
-		} else {
-			vendor = navigator.appVersion.match(/(Chrome)\/(\S+)/);
-		}
-
-		return vendor ? vendor.slice(1).join(' ') : 'Chromium';
+		var vendor = navigator.userAgent.match(/(\S+)\/(\S+)$/);
+		return vendor
+			? vendor.slice(1).join(' ')
+				.replace('_', ' ')
+				.replace('OPR', 'Opera')
+			: 'Chromium';
 	})()
 };
 
+switch ( vAPI.app.platform.split(' ')[0].toLowerCase() ) {
+	case 'firefox':
+		vAPI.firefox = true;
+		break;
+	case 'edge':
+		vAPI.edge = true;
+		break;
+	default:
+		vAPI.chrome = true;
+}
+
 vAPI.storage = {
 	get: function(key, callback) {
-		chrome.storage.sync.get(key, function(obj) {
+		chrome.storage.local.get(key, function(obj) {
 			callback(obj[key] === void 0 ? null : obj[key]);
 		});
 	},
@@ -45,11 +49,11 @@ vAPI.storage = {
 	set: function(key, value) {
 		var data = {};
 		data[key] = value;
-		chrome.storage.sync.set(data);
+		chrome.storage.local.set(data);
 	},
 
 	remove: function(key) {
-		chrome.storage.sync.remove(key);
+		chrome.storage.local.remove(key);
 	}
 };
 

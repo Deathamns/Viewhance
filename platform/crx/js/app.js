@@ -14,15 +14,16 @@ if ( typeof browser === 'object' && this.browser.extension ) {
 
 var vAPI = Object.create(null);
 
-vAPI.chrome = true;
+vAPI.browser = navigator.userAgent.match(/(Edge|Firefox)\/\S/);
+vAPI[vAPI.browser ? vAPI.browser[1].toLowerCase() : 'chrome'] = true;
 
 vAPI.browser = {
-	irPixelated: 'pixelated',
+	irPixelated: vAPI.firefox ? '-moz-crisp-edges' : 'pixelated',
 	transformCSS: 'transform',
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',
 	wheel: 'wheel',
-	zoomIn: (typeof browser === 'object' ? '' : '-webkit-') + 'zoom-in'
+	zoomIn: (vAPI.chrome ? '-webkit-' : '') + 'zoom-in'
 };
 
 vAPI.messaging = {
@@ -47,14 +48,17 @@ vAPI.messaging = {
 
 		// Reading prefs from content scripts seems noticeably faster
 		// than getting them via messaging
-		if ( message.cmd === 'loadPrefs' && !message.getAppInfo ) {
+		if ( vAPI.chrome
+			&& message.cmd === 'loadPrefs' && !message.getAppInfo ) {
 			chrome.storage.sync.get('cfg', function(obj) {
-				if ( typeof listener === 'function' ) {
-					var cfg = JSON.parse(obj.cfg);
-					listener({
-						prefs: message.property ? cfg[message.property] : cfg
-					});
+				if ( typeof listener !== 'function' ) {
+					return;
 				}
+
+				var cfg = JSON.parse(obj.cfg);
+				listener({
+					prefs: message.property ? cfg[message.property] : cfg
+				});
 			});
 			return;
 		}
@@ -82,8 +86,8 @@ if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 		}
 	};
 
-	vAPI.insertHTML = function(n, html) {
-		n.innerHTML = html;
+	vAPI.insertHTML = function(node, str) {
+		node.innerHTML = str;
 	};
 }
 
@@ -91,6 +95,7 @@ if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 Object.defineProperty(vAPI, 'fullScreenElement', {
 	get: function() {
 		return document.fullscreenElement
+			|| document.mozFullScreenElement
 			|| document.webkitFullscreenElement
 			|| null;
 	}
@@ -98,49 +103,84 @@ Object.defineProperty(vAPI, 'fullScreenElement', {
 
 Object.defineProperty(vAPI, 'mediaType', {
 	get: function() {
-		if ( this._mediaType !== void 0 ) {
+		if ( typeof this._mediaType !== 'undefined' ) {
 			return this._mediaType;
 		}
 
-		var selector = 'meta[name=viewport][content^="width=device-width"]';
-		this._mediaType = '';
+		var selector, media;
 
-		if ( !document.head || !document.head.querySelector(selector) ) {
-			return this._mediaType;
-		}
+		if ( vAPI.firefox ) {
+			var head = document.head;
+			selector
+				= 'meta[content="width=device-width; height=device-height;"],'
+				+ 'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],'
+				+ 'link[rel=stylesheet][href^="resource://content-accessible/TopLevel"],'
+				+ 'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
+			this._mediaType = '';
 
-		// Since Edge isn't actually a Chromium platform
-		if ( typeof browser === 'object' ) {
-			selector = 'body >'
-				+ 'input#zoom[type="checkbox"] + label#imgContainer > '
-					+ 'img[src]:only-child, '
-				+ 'body[style^="background-color: rgb(41,41,41)"] > '
-					+ 'video[style][autoplay][controls][src]:empty, '
-				+ 'body[style^="background-color: rgb(41,41,41)"] > '
-					+ 'audio[style][autoplay][controls][src]:empty';
-		} else {
-			selector = 'body[style^="margin: 0px;"] > '
-				+ 'img[style*="user-select: none"]:first-child, '
-				+ 'body > video[name=media][controls][autoplay]'
-					+ ':first-child:not([src])';
-		}
-
-		var media = document.querySelector(selector);
-
-		if ( !media ) {
-			return this._mediaType;
-		}
-
-		var source = media.querySelector('source');
-
-		// Latest Chromium versions use <source>
-		if ( source ) {
-			if ( source.src !== location.href ) {
+			if ( !head || head.querySelectorAll(selector).length !== 3 ) {
 				return this._mediaType;
 			}
-		} else if ( media.src !== location.href ) {
-			if ( media.currentSrc !== location.href ) {
+
+			media = document.querySelector(
+				'body > img:first-child, '
+					+ 'body > video[controls][autoplay]:not([src]):empty'
+			);
+
+			if ( !media ) {
 				return this._mediaType;
+			}
+
+			if ( media.src && media.src === window.location.href ) {
+				this._mediaType = 'img';
+				return this._mediaType;
+			}
+
+			// When media is redirected the currentSrc doesn't change
+			/*if ( media.parentNode.currentSrc !== location.href ) {
+				return this._mediaType;
+			}*/
+		} else {
+			selector = 'meta[name=viewport][content^="width=device-width"]';
+			this._mediaType = '';
+
+			if ( !document.head || !document.head.querySelector(selector) ) {
+				return this._mediaType;
+			}
+
+			// Since Edge isn't actually a Chromium platform
+			if ( typeof browser === 'object' ) {
+				selector = 'body >'
+					+ 'input#zoom[type="checkbox"] + label#imgContainer > '
+						+ 'img[src]:only-child, '
+					+ 'body[style^="background-color: rgb(41,41,41)"] > '
+						+ 'video[style][autoplay][controls][src]:empty, '
+					+ 'body[style^="background-color: rgb(41,41,41)"] > '
+						+ 'audio[style][autoplay][controls][src]:empty';
+			} else {
+				selector = 'body[style^="margin: 0px;"] > '
+					+ 'img[style*="user-select: none"]:first-child, '
+					+ 'body > video[name=media][controls][autoplay]'
+						+ ':first-child:not([src])';
+			}
+
+			media = document.querySelector(selector);
+
+			if ( !media ) {
+				return this._mediaType;
+			}
+
+			var source = media.querySelector('source');
+
+			// Latest Chromium versions use <source>
+			if ( source ) {
+				if ( source.src !== location.href ) {
+					return this._mediaType;
+				}
+			} else if ( media.src !== location.href ) {
+				if ( media.currentSrc !== location.href ) {
+					return this._mediaType;
+				}
 			}
 		}
 
