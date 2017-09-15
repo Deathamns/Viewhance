@@ -247,7 +247,7 @@ nav > .active {
 	padding-left: 20px;
 }
 
-input, textarea, select, code, .checkbox, .pager > a {
+input, textarea, select, code, .checkbox {
 	box-sizing: border-box;
 	margin: 2px;
 	border: 1px solid #ddd;
@@ -256,6 +256,7 @@ input, textarea, select, code, .checkbox, .pager > a {
 	background-color: rgba(242, 242, 242, 0);
 	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
 	font: 13px Verdana, sans-serif;
+	color: #000;
 	-webkit-transition: color .2s, border-color .2s;
 	transition: color .2s, border-color .2s;
 }
@@ -290,7 +291,7 @@ select:focus, textarea:focus,
 input[type="text"]:focus,
 input:hover, select:hover, textarea:hover,
 .prow:hover input, .prow:hover select,
-label:hover input, .pager > a:hover,
+label:hover input,
 .prow:hover .checkbox, label:hover > .checkbox, .checkbox:hover,
 .sub-shortcuts > li:hover > input:first-child {
 	border: 1px solid #888;
