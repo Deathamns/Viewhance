@@ -26,32 +26,34 @@ vAPI.buildNodes = function(host, items) {
 	var fragment = doc.createDocumentFragment();
 
 	for ( var i = 0, l = items.length; i < l; ++i ) {
-		if ( !items[i] ) {
+		var item = items[i];
+
+		if ( !item ) {
 			continue;
 		}
 
-		if ( typeof items[i] === 'string' ) {
-			fragment.appendChild(doc.createTextNode(items[i]));
+		if ( typeof item === 'string' ) {
+			fragment.appendChild(doc.createTextNode(item));
 			continue;
 		}
 
-		var element = doc.createElement(items[i].tag);
+		var element = doc.createElement(item.tag);
 
-		if ( items[i].attrs ) {
-			for ( var attr in items[i].attrs ) {
+		if ( item.attrs ) {
+			for ( var attr in item.attrs ) {
 				// bypass CSP
 				if ( attr === 'style' ) {
-					element.style.cssText = items[i].attrs[attr];
+					element.style.cssText = item.attrs[attr];
 				} else {
-					element.setAttribute(attr, items[i].attrs[attr]);
+					element.setAttribute(attr, item.attrs[attr]);
 				}
 			}
 		}
 
-		if ( items[i].nodes ) {
-			this.buildNodes(element, items[i].nodes);
-		} else if ( items[i].text ) {
-			element.textContent = items[i].text;
+		if ( item.nodes ) {
+			this.buildNodes(element, item.nodes);
+		} else if ( item.text ) {
+			element.textContent = item.text;
 		}
 
 		fragment.appendChild(element);
