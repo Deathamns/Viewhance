@@ -114,10 +114,6 @@ Object.defineProperty(vAPI, 'mediaType', {
 
 		this._mediaType = '';
 
-		if ( document.head ) {
-			return this._mediaType;
-		}
-
 		var media = document.querySelector(
 			'body[style^="margin: 0px"] > img[style^="-webkit-user"]:first-child, '
 			+ 'body > video[name=media][controls][autoplay]:first-child'
