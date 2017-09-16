@@ -42,23 +42,6 @@ vAPI.messaging = {
 	send: function(message, callback) {
 		var listener = callback || this.listener;
 
-		// Reading prefs from content scripts seems noticeably faster
-		// than getting them via messaging
-		if ( vAPI.chrome
-			&& message.cmd === 'loadPrefs' && !message.getAppInfo ) {
-			chrome.storage.local.get('cfg', function(obj) {
-				if ( typeof listener !== 'function' ) {
-					return;
-				}
-
-				var cfg = JSON.parse(obj.cfg);
-				listener({
-					prefs: message.property ? cfg[message.property] : cfg
-				});
-			});
-			return;
-		}
-
 		if ( typeof listener === 'function' ) {
 			chrome.runtime.sendMessage(message, listener);
 		} else {
