@@ -4,10 +4,6 @@
 
 if ( typeof browser === 'object' && this.browser.extension ) {
 	this.chrome = this.browser;
-
-	if ( !chrome.storage.sync ) {
-		chrome.storage.sync = chrome.storage.local;
-	}
 }
 
 /******************************************************************************/
@@ -50,7 +46,7 @@ vAPI.messaging = {
 		// than getting them via messaging
 		if ( vAPI.chrome
 			&& message.cmd === 'loadPrefs' && !message.getAppInfo ) {
-			chrome.storage.sync.get('cfg', function(obj) {
+			chrome.storage.local.get('cfg', function(obj) {
 				if ( typeof listener !== 'function' ) {
 					return;
 				}

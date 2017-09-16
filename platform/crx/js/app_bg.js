@@ -1,16 +1,8 @@
 'use strict';
 
-/******************************************************************************/
-
 if ( typeof browser === 'object' && this.browser.extension ) {
 	this.chrome = this.browser;
-
-	if ( !chrome.storage.sync ) {
-		chrome.storage.sync = chrome.storage.local;
-	}
 }
-
-/******************************************************************************/
 
 var vAPI = Object.create(null);
 
