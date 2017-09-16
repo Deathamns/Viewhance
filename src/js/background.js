@@ -118,9 +118,15 @@ var onMessage = function(message, source, respond) {
 			vAPI.tabs.create({url: url, active: !message.nf});
 		});
 	} else if ( cmd === 'loadFile' ) {
-		xhr(message.path, function() {
-			respond(this.responseText);
-		});
+		xhr(
+			location.protocol + '//'
+				+ location.host
+				+ location.pathname.replace(/[^/]*$/, '')
+				+ message.path,
+			function() {
+				respond(this.responseText);
+			}
+		);
 	}
 };
 
