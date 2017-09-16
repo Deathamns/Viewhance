@@ -1,8 +1,12 @@
 'use strict';
 
+/******************************************************************************/
+
 if ( typeof browser === 'object' && this.browser.extension ) {
 	this.chrome = this.browser;
 }
+
+/******************************************************************************/
 
 var vAPI = Object.create(null);
 
@@ -11,25 +15,29 @@ vAPI.app = {
 	name: vAPI.app.name,
 	version: vAPI.app.version,
 	platform: (function() {
-		var vendor = navigator.userAgent.match(/(\S+)\/(\S+)$/);
-		return vendor
-			? vendor.slice(1).join(' ')
-				.replace('_', ' ')
-				.replace('OPR', 'Opera')
-			: 'Chromium';
+		var vendor = navigator.userAgent.match(/((Edge|Firefox)|\S+)\/(\S+)$/);
+
+		if ( !vendor ) {
+			vAPI.chrome = true;
+			return 'Chrome';
+		}
+
+		if ( vendor[2] ) {
+			vAPI[vendor[2].toLowerCase()] = true;
+			vendor.splice(2, 1);
+		} else {
+			if ( vendor[1] === 'Safari' ) {
+				vendor = navigator.userAgent.match(/(Chrome)\/(\S+)/);
+			}
+
+			vAPI.chrome = true;
+		}
+
+		return vendor.slice(1).join(' ')
+			.replace('_', ' ')
+			.replace('OPR', 'Opera');
 	})()
 };
-
-switch ( vAPI.app.platform.split(' ')[0].toLowerCase() ) {
-	case 'firefox':
-		vAPI.firefox = true;
-		break;
-	case 'edge':
-		vAPI.edge = true;
-		break;
-	default:
-		vAPI.chrome = true;
-}
 
 vAPI.storage = {
 	get: function(key, callback) {
