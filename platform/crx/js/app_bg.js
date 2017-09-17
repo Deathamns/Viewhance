@@ -15,7 +15,9 @@ vAPI.app = {
 	name: vAPI.app.name,
 	version: vAPI.app.version,
 	platform: (function() {
-		var vendor = navigator.userAgent.match(/((Edge|Firefox)|\S+)\/(\S+)$/);
+		var vendor = navigator.userAgent.match(
+			/((Edge|Firefox)|\S+)\/(\S+)(?: \([^/]+)?$/
+		);
 
 		if ( !vendor ) {
 			vAPI.chrome = true;
