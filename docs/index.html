@@ -135,6 +135,43 @@
 		#install > a {
 			text-decoration: none;
 		}
+
+		.menu-icons {
+			border-collapse: collapse;
+		}
+
+		.menu-icons td:first-child {
+			padding: 5px 15px;
+			background: #4d4d4d;
+		}
+
+		.menu-icons tr:first-child > td:first-child {
+			padding-top: 15px;
+		}
+
+		.menu-icons tr:last-child > td:first-child {
+			padding-bottom: 15px;
+		}
+
+		.menu-icons td:first-child > svg {
+			width: 25px;
+			height: 25px;
+			cursor: pointer;
+			fill: rgba(0,0,0,0);
+			stroke: #fff;
+			stroke-width: 7px;
+			color: #fff;
+			transition: opacity .2s;
+		}
+
+		.menu-icons td:first-child > svg:hover {
+			opacity: .6;
+		}
+
+		.menu-icons td:last-child {
+			padding-left: 10px;
+			vertical-align: middle;
+		}
 	</style>
 	<title>Viewhance :: Archive</title>
 </head>
@@ -144,17 +181,45 @@
 		<ul>
 			<li>
 				<em>What the buttons do on the floating menu?</em>
-				<div style="clear: both; margin-bottom: 5px">* - the wheel, and both left and right mouse buttons can be used on it</div>
-				<img src="img/menu_items.png" style="float: left; margin-right: 10px">
-				<div style="padding-top: 20px">- cycle through sizing modes *</div>
-				<div style="padding-top: 20px">- zoom *</div>
-				<div style="padding-top: 23px">- flip *</div>
-				<div style="padding-top: 23px">- rotate *</div>
-				<div style="padding-top: 15px">- filters - available only if the browser supports them. Each of them can be changed with mouse wheel and be reset with right click</div>
-				<div style="padding-top: 17px">- reset image (same as pressing Escape)</div>
-				<div style="padding-top: 17px">- send the image to different services (like reverse image search)</div>
-				<div style="padding-top: 17px">- extract frames from animated images (GIF, APNG, WEBP) - left click for drawing full frames, right click for frames as they are in the file</div>
-				<div style="padding-top: 13px">- open preferences</div>
+				* - the wheel, and both left and right mouse buttons can be used on it
+				<table class="menu-icons">
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-cycle"/></svg></td>
+						<td>cycle through sizing modes *</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-zoom"/></svg></td>
+						<td>zoom *</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-flip"/></svg></td>
+						<td>flip *</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-rotate"/></svg></td>
+						<td>rotate *</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-filters"/></svg></td>
+						<td>filters - available only if the browser supports them. Each of them can be changed with mouse wheel and be reset with right click</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-reset"/></svg></td>
+						<td>reset image (same as pressing Escape)</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-send-hosts"/></svg></td>
+						<td>send the image to different services (like reverse image search)</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-frames"/></svg></td>
+						<td>extract frames from animated images (GIF, APNG, WEBP) - left click for drawing full frames, right click for frames as they are in the file</td>
+					</tr>
+					<tr>
+						<td><svg><use xlink:href="https://rawgit.com/Deathamns/Viewhance/master/src/css/menu_icons.svg#icon-options"/></svg></td>
+						<td>open preferences</td>
+					</tr>
+				</table>
 			</li>
 			<li>
 				<em>Where can I report issues?</em>
@@ -231,6 +296,16 @@
 		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
 
 	<ul class="versions">
+		<li id="v2017.917.1405"><b>2017.917.1405</b>
+		<pre>
+# (chr) Fix upscaling for newer versions of Chrome
+# (ffx,sfr) Fix image tab detection for latest versions of Firefox/Safari
+* Use SVG icons for the floating menu
+* Opener: try to catch elements with <i>pointer-events: none</i>
++ Add %size variable for the title text to show the media filesize (won't work in every case)
+		</pre>
+		</li>
+
 		<li id="v2017.502.1705"><b>2017.502.1705</b>
 		<pre>
 * Make upscaling more consitent across sizing modes
