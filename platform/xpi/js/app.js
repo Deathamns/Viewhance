@@ -1,4 +1,4 @@
-/* global addMessageListener, removeMessageListener, sendAsyncMessage, _hostName_, _sandboxId_ */
+/* global addMessageListener, removeMessageListener, sendAsyncMessage, _hostName_, _sandboxId_, _safeHTML_ */
 
 'use strict';
 
@@ -84,8 +84,10 @@ vAPI.releaseVendorListeners = function() {
 window.addEventListener('pagehide', vAPI.messaging._toggleListener, true);
 window.addEventListener('pageshow', vAPI.messaging._toggleListener, true);
 
+vAPI.insertHTML = _safeHTML_;
+
 if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
-	vAPI.l10n = (function() {
+	vAPI.l10n = function(s) {
 		var stringBundle = Components
 			.classes['@mozilla.org/intl/stringbundle;1']
 			.getService(Components.interfaces.nsIStringBundleService)
@@ -93,40 +95,16 @@ if ( location.protocol === 'chrome:' && location.hostname === _hostName_ ) {
 				'chrome://' + location.host + '/locale/strings.properties'
 			);
 
-		return function(s) {
+		vAPI.l10n = function(s) {
 			try {
 				return stringBundle.GetStringFromName(s);
 			} catch ( ex ) {
 				return s;
 			}
 		};
-	})();
 
-	vAPI.insertHTML = (function() {
-		var io = Components.classes['@mozilla.org/network/io-service;1']
-			.getService(Components.interfaces.nsIIOService);
-		var parser = Components.classes['@mozilla.org/parserutils;1']
-			.getService(Components.interfaces.nsIParserUtils);
-
-		return function(node, str) {
-			if ( str.indexOf('<') === -1 ) {
-				node.textContent = str;
-				return;
-			}
-
-			while ( node.firstChild ) {
-				node.removeChild(node.firstChild);
-			}
-
-			node.appendChild(parser.parseFragment(
-				str,
-				parser.SanitizerAllowStyle,
-				false,
-				io.newURI('about:blank', null, null),
-				document.documentElement
-			));
-		};
-	})();
+		return vAPI.l10n(s);
+	};
 }
 
 

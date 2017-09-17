@@ -53,14 +53,14 @@ vAPI.messaging = {
 	}
 };
 
+vAPI.insertHTML = function(node, str) {
+	node.insertAdjacentHTML('beforeend', str);
+};
+
 if ( location.protocol === 'mxaddon-pkg:' ) {
 	vAPI.l10n = function(s) {
 		var t = this._runtime.locale.t(s);
 		return t[0] === '"' ? JSON.parse(t) : t || s;
-	};
-
-	vAPI.insertHTML = function(node, str) {
-		node.innerHTML = str;
 	};
 }
 

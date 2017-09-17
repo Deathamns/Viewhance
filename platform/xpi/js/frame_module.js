@@ -14,6 +14,10 @@ const {Services} = Components.utils.import(
 const docObserver = {
 	contentBaseURI: 'chrome://' + hostName + '/content/includes/',
 	uniqueSandboxId: 1,
+	io: Components.classes['@mozilla.org/network/io-service;1']
+		.getService(Components.interfaces.nsIIOService),
+	parser: Components.classes['@mozilla.org/parserutils;1']
+		.getService(Components.interfaces.nsIParserUtils),
 
 	QueryInterface: (function() {
 		let {XPCOMUtils} = Components.utils.import(
@@ -100,6 +104,21 @@ const docObserver = {
 			}
 
 			sandbox._messageListener_ = null;
+		};
+
+		sandbox._safeHTML_ = function(node, str) {
+			if ( str.indexOf('<') === -1 ) {
+				node.insertAdjacentText('beforeend', str);
+				return;
+			}
+
+			node.appendChild(docObserver.parser.parseFragment(
+				str,
+				docObserver.parser.SanitizerAllowStyle,
+				false,
+				docObserver.io.newURI('about:blank', null, null),
+				sandbox.document.documentElement
+			));
 		};
 
 		if ( js ) {

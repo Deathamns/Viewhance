@@ -1,5 +1,19 @@
 'use strict';
 
+/******************************************************************************/
+
+if ( !this.requestAnimationFrame ) {
+	this.requestAnimationFrame = function(callback) {
+		return setTimeout(callback, 0xf);
+	};
+
+	this.cancelAnimationFrame = function(timerId) {
+		return clearTimeout(timerId);
+	};
+}
+
+/******************************************************************************/
+
 var vAPI = Object.create(null);
 
 vAPI.safari = true;
@@ -57,6 +71,10 @@ vAPI.messaging = {
 	}
 };
 
+vAPI.insertHTML = function(node, str) {
+	node.insertAdjacentHTML('beforeend', str);
+};
+
 if ( location.protocol === 'safari-extension:' ) {
 	(function() {
 		var xhr = new XMLHttpRequest;
@@ -86,16 +104,6 @@ if ( location.protocol === 'safari-extension:' ) {
 		}
 
 		return this.l10nData[s];
-	};
-
-	vAPI.insertHTML = function(node, str) {
-		node.innerHTML = str;
-	};
-}
-
-if ( !window.requestAnimationFrame ) {
-	window.requestAnimationFrame = function(cb) {
-		return window.setTimeout(cb, 0xf);
 	};
 }
 

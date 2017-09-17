@@ -60,6 +60,10 @@ vAPI.messaging = {
 	}
 };
 
+vAPI.insertHTML = function(node, str) {
+	node.insertAdjacentHTML('beforeend', str);
+};
+
 if ( window.location.protocol === 'widget:' ) {
 	document.head.appendChild(
 		document.createElement('script')
@@ -71,16 +75,6 @@ if ( window.location.protocol === 'widget:' ) {
 		}
 
 		return this.l10nData[s];
-	};
-
-	vAPI.insertHTML = function(node, str) {
-		node.innerHTML = str;
-	};
-}
-
-if ( this.requestAnimationFrame === void 0 ) {
-	this.requestAnimationFrame = function(callback) {
-		return window.setTimeout(callback, 25);
 	};
 }
 

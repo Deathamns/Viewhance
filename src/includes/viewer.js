@@ -1960,12 +1960,12 @@ init = function() {
 			return;
 		}
 
-		if ( menu.firstElementChild.localName !== 'svg' ) {
+		if ( !menu.iconsLoaded ) {
 			var message = {cmd: 'loadFile', path: 'css/menu_icons.svg'};
+			menu.iconsLoaded = true;
 
 			vAPI.messaging.send(message, function(svg) {
-				menu.iconsLoaded = true;
-				menu.insertAdjacentHTML('afterbegin', svg);
+				vAPI.insertHTML(menu, svg);
 
 				var item;
 				var items = menu.querySelectorAll('#menu > ul > li');

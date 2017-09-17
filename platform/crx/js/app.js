@@ -50,11 +50,71 @@ vAPI.messaging = {
 	}
 };
 
+vAPI.insertHTML = function(node, str) {
+	var allowedTags = /^([apbiusq]|d(iv|el)|em|h[1-6]|i(mg|ns)|s((pan|mall)|u[bp])|[bh]r|pre|code|blockquote|[ou]l|li|d[ltd]|t([rhd]|able|head|body|foot)|svg|symbol|line|path)$/i;
+	var allowedAttrs = /^(data-|stroke-|(class|style|xmlns|viewBox|i?d|fill|line(cap|join)|transform|[xy][12])$)/i;
+	var safeContainer = document.implementation.createHTMLDocument('').body;
+
+	var cleanContainer = function(container) {
+		var i = container.children.length;
+
+		while ( i-- ) {
+			var n = container.children[i];
+
+			if ( !allowedTags.test(n.nodeName) ) {
+				n.parentNode.removeChild(n);
+				continue;
+			}
+
+			var j = n.attributes.length;
+
+			while ( j-- ) {
+				if ( !allowedAttrs.test(n.attributes[j].name) ) {
+					n.removeAttribute(n.attributes[j].name);
+				}
+			}
+
+			if ( n.children.length ) {
+				cleanContainer(n);
+			}
+		}
+	};
+
+	vAPI.insertHTML = function(node, str) {
+		if ( !node || typeof str !== 'string' ) {
+			return;
+		}
+
+		if ( str.indexOf('<') === -1 ) {
+			node.insertAdjacentText('beforeend', str);
+			return;
+		}
+
+		safeContainer.innerHTML = str;
+		cleanContainer(safeContainer);
+
+		var nodeDoc = node.ownerDocument;
+		var frag = nodeDoc.createDocumentFragment();
+
+		while ( safeContainer.firstChild ) {
+			frag.appendChild(nodeDoc.adoptNode(safeContainer.firstChild));
+		}
+
+		node.appendChild(frag);
+	};
+
+	vAPI.insertHTML(node, str);
+};
+
 if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 	if ( location.hash === '#options_ui' ) {
-		vAPI.messaging.listen(window.close);
-		vAPI.messaging.send({cmd: 'openURL', url: 'options.html'});
-		throw Error('Exiting embedded options page...');
+		if ( vAPI.firefox ) {
+			location.replace('options.html');
+		} else {
+			vAPI.messaging.listen(window.close);
+			vAPI.messaging.send({cmd: 'openURL', url: 'options.html'});
+			throw Error('Exiting embedded options page...');
+		}
 	}
 
 	vAPI.l10n = function(s) {
@@ -63,10 +123,6 @@ if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 		} catch ( ex ) {
 			return s;
 		}
-	};
-
-	vAPI.insertHTML = function(node, str) {
-		node.innerHTML = str;
 	};
 }
 
