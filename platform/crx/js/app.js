@@ -2,7 +2,7 @@
 
 /******************************************************************************/
 
-if ( typeof browser === 'object' && this.browser.extension ) {
+if ( !this.chrome && typeof browser === 'object' && this.browser.extension ) {
 	this.chrome = this.browser;
 }
 
