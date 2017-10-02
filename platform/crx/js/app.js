@@ -25,6 +25,19 @@ vAPI.browser = {
 vAPI.messaging = {
 	listener: null,
 
+	_createListener: function(listener) {
+		if ( !vAPI.l10n ) {
+			return listener;
+		}
+
+		// Skip messages in extension pages from content scripts (Firefox, Edge)
+		return function(message, sender) {
+			if ( !sender ) {
+				listener(message);
+			}
+		};
+	},
+
 	listen: function(listener) {
 		if ( this.listener ) {
 			chrome.runtime.onMessage.removeListener(this.listener);
@@ -35,12 +48,14 @@ vAPI.messaging = {
 			return;
 		}
 
-		this.listener = listener;
+		this.listener = this._createListener(listener);
 		chrome.runtime.onMessage.addListener(this.listener);
 	},
 
 	send: function(message, callback) {
-		var listener = callback || this.listener;
+		var listener = callback
+			? this._createListener(callback)
+			: this.listener;
 
 		if ( typeof listener === 'function' ) {
 			chrome.runtime.sendMessage(message, listener);
@@ -56,10 +71,16 @@ vAPI.insertHTML = function(node, str) {
 	var safeContainer = document.implementation.createHTMLDocument('').body;
 
 	var cleanContainer = function(container) {
-		var i = container.children.length;
+		var i = container.childElementCount;
+		// Edge doesn't have children on SVG elements
+		var children = container.children || container.childNodes;
 
 		while ( i-- ) {
-			var n = container.children[i];
+			var n = children[i];
+
+			if ( n.nodeType === Node.TEXT_NODE ) {
+				continue;
+			}
 
 			if ( !allowedTags.test(n.nodeName) ) {
 				n.parentNode.removeChild(n);
@@ -74,7 +95,7 @@ vAPI.insertHTML = function(node, str) {
 				}
 			}
 
-			if ( n.children.length ) {
+			if ( n.childElementCount ) {
 				cleanContainer(n);
 			}
 		}
