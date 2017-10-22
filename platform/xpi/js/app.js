@@ -48,7 +48,7 @@ vAPI.messaging = {
 				vAPI.messaging.listen(null);
 			}
 
-			listener(JSON.parse(response));
+			listener(response);
 		};
 
 		addMessageListener(this.listener);

@@ -84,7 +84,7 @@ const docObserver = {
 			}
 
 			sandbox._messageListener_ = function(message) {
-				callback(message.data);
+				callback(Components.utils.cloneInto(message.data, callback));
 			};
 
 			messager.addMessageListener(

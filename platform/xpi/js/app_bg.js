@@ -86,10 +86,7 @@ vAPI.messaging = {
 				request.data.data,
 				{url: request.data.url},
 				function(response) {
-					messager.sendAsyncMessage(
-						listenerId,
-						JSON.stringify(response)
-					);
+					messager.sendAsyncMessage(listenerId, response);
 				}
 			);
 		};
