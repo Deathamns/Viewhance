@@ -26,7 +26,12 @@ vAPI.storage = {
 
 	get: function(key, callback) {
 		try {
-			callback(this._branch.getStringPref(key));
+			callback(this._branch.getStringPref
+				? this._branch.getStringPref(key)
+				: this._branch.getComplexValue(
+					key,
+					Ci.nsISupportsString
+				).data);
 		} catch ( ex ) {
 			callback(null);
 		}
@@ -38,6 +43,14 @@ vAPI.storage = {
 			return;
 		}
 
+		if ( this._branch.setStringPref ) {
+			this._branch.setStringPref(key, value);
+		} else {
+			var str = Cc['@mozilla.org/supports-string;1']
+				.createInstance(Ci.nsISupportsString);
+			str.data = value;
+			this._branch.setComplexValue(key, Ci.nsISupportsString, str);
+		}
 		this._branch.setStringPref(key, value);
 	},
 
