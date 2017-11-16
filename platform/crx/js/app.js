@@ -2,9 +2,12 @@
 
 /******************************************************************************/
 
-if ( !this.chrome && typeof browser === 'object' && this.browser.extension ) {
+try {
+	void chrome.storage.local;
+} catch ( ex ) {
 	this.chrome = this.browser;
 }
+
 
 /******************************************************************************/
 
