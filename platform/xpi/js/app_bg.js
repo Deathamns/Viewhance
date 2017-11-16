@@ -23,14 +23,10 @@ vAPI.storage = {
 	_branch: Cc['@mozilla.org/preferences-service;1']
 		.getService(Ci.nsIPrefService)
 		.getBranch('extensions.' + vAPI.app.name + '.'),
-	_str: Cc['@mozilla.org/supports-string;1']
-		.createInstance(Ci.nsISupportsString),
 
 	get: function(key, callback) {
 		try {
-			callback(
-				this._branch.getComplexValue(key, Ci.nsISupportsString).data
-			);
+			callback(this._branch.getStringPref(key));
 		} catch ( ex ) {
 			callback(null);
 		}
@@ -42,8 +38,7 @@ vAPI.storage = {
 			return;
 		}
 
-		this._str.data = value;
-		this._branch.setComplexValue(key, Ci.nsISupportsString, this._str);
+		this._branch.setStringPref(key, value);
 	},
 
 	remove: function(key) {
