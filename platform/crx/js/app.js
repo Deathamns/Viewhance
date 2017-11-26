@@ -1,20 +1,16 @@
 'use strict';
 
-/******************************************************************************/
+var vAPI = Object.create(null);
 
 try {
 	void chrome.storage.local;
+	vAPI[this.browser ? 'firefox' : 'chrome'] = true;
 } catch ( ex ) {
+	vAPI.edge = true;
 	this.chrome = this.browser;
 }
 
-
-/******************************************************************************/
-
-var vAPI = Object.create(null);
-
-vAPI.browser = navigator.userAgent.match(/(Edge|Firefox)\/\S/);
-vAPI[vAPI.browser ? vAPI.browser[1].toLowerCase() : 'chrome'] = true;
+vAPI.crx = true;
 
 vAPI.browser = {
 	irPixelated: vAPI.firefox ? '-moz-crisp-edges' : 'pixelated',

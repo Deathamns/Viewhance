@@ -1,16 +1,16 @@
 'use strict';
 
-/******************************************************************************/
+var vAPI = Object.create(null);
 
 try {
 	void chrome.storage.local;
+	vAPI[this.browser ? 'firefox' : 'chrome'] = true;
 } catch ( ex ) {
+	vAPI.edge = true;
 	this.chrome = this.browser;
 }
 
-/******************************************************************************/
-
-var vAPI = Object.create(null);
+vAPI.crx = true;
 
 vAPI.app = chrome.runtime.getManifest();
 vAPI.app = {
@@ -22,19 +22,13 @@ vAPI.app = {
 		);
 
 		if ( !vendor ) {
-			vAPI.chrome = true;
 			return 'Chrome';
 		}
 
 		if ( vendor[2] ) {
-			vAPI[vendor[2].toLowerCase()] = true;
 			vendor.splice(2, 1);
-		} else {
-			if ( vendor[1] === 'Safari' ) {
-				vendor = navigator.userAgent.match(/(Chrome)\/(\S+)/);
-			}
-
-			vAPI.chrome = true;
+		} else if ( vendor[1] === 'Safari' ) {
+			vendor = navigator.userAgent.match(/(Chrome)\/(\S+)/);
 		}
 
 		return vendor.slice(1).join(' ')
