@@ -1512,6 +1512,7 @@ init = function() {
 
 	doc.addEventListener('contextmenu', onContextMenu, true);
 	win.addEventListener('resize', function() {
+		media.removeAttribute('class');
 		media.removeAttribute('width');
 		media.removeAttribute('height');
 		resizeMedia(media.mode);
@@ -1604,19 +1605,27 @@ init = function() {
 	);
 	progress = null;
 
-	// Chrome 56+ overwrites the style attribute on image load
-	if ( vAPI.chrome && document.readyState === 'loading' ) {
+	if ( doc.readyState === 'loading' ) {
 		(function() {
 			var scrollX = 0;
 			var scrollY = 0;
 
+			// Chrome 56+ overwrites the style attribute on image load
 			var rememberScrollPosition = function() {
 				scrollX = win.pageXOffset;
 				scrollY = win.pageYOffset;
 			};
 
-			var onDOMLoad = function(e) {
-				doc.removeEventListener(e.type, onDOMLoad);
+			var onLoad = function(ev) {
+				this.removeEventListener(ev.type, onLoad);
+				media.removeAttribute('class');
+				media.removeAttribute('width');
+				media.removeAttribute('height');
+
+				if ( !vAPI.chrome ) {
+					return;
+				}
+
 				win.removeEventListener('scroll', rememberScrollPosition);
 				resizeMedia(media.mode, parseFloat(mediaCss.width));
 				setTimeout(function() {
@@ -1624,8 +1633,11 @@ init = function() {
 				}, 0xf);
 			};
 
-			doc.addEventListener('DOMContentLoaded', onDOMLoad);
-			win.addEventListener('scroll', rememberScrollPosition);
+			doc.addEventListener('DOMContentLoaded', onLoad);
+
+			if ( vAPI.chrome ) {
+				win.addEventListener('scroll', rememberScrollPosition);
+			}
 		})();
 	}
 
