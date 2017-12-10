@@ -352,6 +352,13 @@ init = function() {
 
 	var calcFit = function() {
 		var m = media;
+
+		if ( m.hasAttribute('height') ) {
+			m.removeAttribute('width');
+			m.removeAttribute('height');
+			m.removeAttribute('class');
+		}
+
 		mWidth = m.offsetWidth - (mFullWidth - mOrigWidth);
 		mHeight = m.offsetHeight - (mFullHeight - mOrigHeight);
 		m.box = m.getBoundingClientRect();
@@ -1562,8 +1569,6 @@ init = function() {
 	progress = [];
 	calcViewportDimensions();
 	calcFit();
-	media.removeAttribute('width');
-	media.removeAttribute('height');
 
 	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
 		if ( mOrigWidth >= winW * cfg.minUpscale / 100 ) {
