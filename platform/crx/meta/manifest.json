@@ -21,9 +21,8 @@
 		"page": "background.html",
 		"persistent": false
 	},
-	"options_page": "options.html",
 	"options_ui": {
-		"page": "options.html#options_ui",
+		"page": "options.html",
 		"open_in_tab": true
 	},
 	"content_scripts": [

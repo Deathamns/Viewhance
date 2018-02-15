@@ -127,16 +127,6 @@ vAPI.insertHTML = function(node, str) {
 };
 
 if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
-	if ( location.hash === '#options_ui' ) {
-		if ( vAPI.firefox ) {
-			location.replace('options.html');
-		} else {
-			vAPI.messaging.listen(window.close);
-			vAPI.messaging.send({cmd: 'openURL', url: 'options.html'});
-			throw Error('Exiting embedded options page...');
-		}
-	}
-
 	vAPI.l10n = function(s) {
 		try {
 			return chrome.i18n.getMessage(s) || s;
