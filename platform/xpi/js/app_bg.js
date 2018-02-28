@@ -1,6 +1,7 @@
 'use strict';
 
 const {interfaces: Ci, classes: Cc, utils: Cu} = Components;
+const {Services} = Cu.import('resource://gre/modules/Services.jsm');
 
 var vAPI = Object.create(null);
 
@@ -9,20 +10,16 @@ vAPI._baseURI = 'chrome://' + location.host + '/content/';
 
 vAPI.app = (function() {
 	var extInfo = location.hash.slice(1).split(',');
-	var XULAppInfo = Cc['@mozilla.org/xre/app-info;1']
-		.getService(Ci.nsIXULAppInfo);
 
 	return {
 		name: extInfo[0],
 		version: extInfo[1],
-		platform: XULAppInfo.name + ' ' + XULAppInfo.version
+		platform: Services.appinfo.name + ' ' + Services.appinfo.version
 	};
 })();
 
 vAPI.storage = {
-	_branch: Cc['@mozilla.org/preferences-service;1']
-		.getService(Ci.nsIPrefService)
-		.getBranch('extensions.' + vAPI.app.name + '.'),
+	_branch: Services.prefs.getBranch('extensions.' + vAPI.app.name + '.'),
 
 	get: function(key, callback) {
 		try {
@@ -61,11 +58,9 @@ vAPI.storage = {
 
 vAPI.tabs = {
 	create: function(params) {
-		var win = Cc['@mozilla.org/appshell/window-mediator;1']
-			.getService(Ci.nsIWindowMediator)
-			.getMostRecentWindow('navigator:browser');
+		var win = Services.wm.getMostRecentWindow('navigator:browser');
 
-		if ( !win ) {
+		if ( !win || !win.gBrowser ) {
 			return;
 		}
 
@@ -79,11 +74,6 @@ vAPI.tabs = {
 
 vAPI.messaging = {
 	_frameScript: vAPI._baseURI + 'js/frame_script.js',
-
-	get _globalMessageManager() {
-		return Cc['@mozilla.org/globalmessagemanager;1']
-			.getService(Ci.nsIMessageListenerManager);
-	},
 
 	listen: function(callback) {
 		this._listener = function(request) {
@@ -99,14 +89,14 @@ vAPI.messaging = {
 			);
 		};
 
-		this._globalMessageManager.addMessageListener(
+		Services.mm.addMessageListener(
 			location.host + ':background',
 			this._listener
 		);
 	}
 };
 
-vAPI.messaging._globalMessageManager.loadFrameScript(
+Services.mm.loadFrameScript(
 	vAPI.messaging._frameScript,
 	true
 );
@@ -115,9 +105,7 @@ vAPI.messaging._globalMessageManager.loadFrameScript(
 // instead of handling the damage done by the default behavior
 vAPI._browserPrefs = {
 	get prefBranch() {
-		return Cc['@mozilla.org/preferences-service;1']
-			.getService(Ci.nsIPrefService)
-			.getBranch('browser.');
+		return Services.prefs.getBranch('browser.');
 	},
 	targetPrefs: [
 		'enable_automatic_image_resizing',
@@ -175,9 +163,8 @@ window.addEventListener('unload', function() {
 	vAPI._browserPrefs.restore();
 
 	var messaging = vAPI.messaging;
-	var gmm = messaging._globalMessageManager;
-	gmm.removeDelayedFrameScript(messaging._frameScript);
-	gmm.removeMessageListener(
+	Services.mm.removeDelayedFrameScript(messaging._frameScript);
+	Services.mm.removeMessageListener(
 		location.host + ':background',
 		messaging._listener
 	);
@@ -188,9 +175,7 @@ window.addEventListener('unload', function() {
 	frameModule.docObserver.unregister();
 	Cu.unload(URI);
 
-	var winumerator = Cc['@mozilla.org/appshell/window-mediator;1']
-		.getService(Ci.nsIWindowMediator)
-		.getEnumerator('navigator:browser');
+	var winumerator = Services.wm.getEnumerator('navigator:browser');
 
 	while ( winumerator.hasMoreElements() ) {
 		var gBrowser = winumerator.getNext().gBrowser;
