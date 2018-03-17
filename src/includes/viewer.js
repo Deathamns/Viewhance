@@ -1065,7 +1065,7 @@ init = function() {
 				var topPart = this.clientHeight;
 				topPart = Math.min(topPart - 40, topPart / 2);
 
-				if ( (e.offsetY || e.layerY || 0) > topPart ) {
+				if ( e.offsetY > topPart ) {
 					return;
 				}
 			}
@@ -1532,14 +1532,12 @@ init = function() {
 				return;
 			}
 
-			var y = e.offsetY || e.layerY || 0;
-
-			if ( y > media.clientHeight - 40 ) {
+			if ( e.offsetY > media.clientHeight - 40 ) {
 				return;
 			}
 
 			if ( vAPI.fullScreenElement === this
-				|| y > media.clientHeight / 2 ) {
+				|| e.offsetY > media.clientHeight / 2 ) {
 				media.togglePlay();
 			}
 
@@ -1547,7 +1545,7 @@ init = function() {
 		});
 
 		media.addEventListener('dblclick', function(e) {
-			if ( (e.offsetY || e.layerY || 0) < media.clientHeight / 2 ) {
+			if ( e.offsetY < media.clientHeight / 2 ) {
 				pdsp(e);
 			}
 		});
