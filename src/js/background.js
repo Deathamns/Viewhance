@@ -1,5 +1,7 @@
 'use strict';
 
+document.title = ':: ' + vAPI.app.name + ' :: v' + vAPI.app.version;
+
 var cachedPrefs;
 var onPrefsUpdatedCallbacks = [];
 
@@ -143,5 +145,3 @@ vAPI.storage.get('cfg', function(cfg) {
 });
 
 vAPI.messaging.listen(onMessage);
-
-document.title = ':: ' + vAPI.app.name + ' ::';
