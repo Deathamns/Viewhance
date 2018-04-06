@@ -1,18 +1,35 @@
 /* global APP_SHUTDOWN, ADDON_UNINSTALL */
+/* exported startup, shutdown, install, uninstall */
+/* eslint func-style:off */
 
 'use strict';
 
 let bgProcess;
 const addonName = 'Viewhance';
 
-this.startup = function(data) {
+// Components.utils.import('resource://gre/modules/Console.jsm');
+
+function startup(data) {
 	let appShell = Components
 		.classes['@mozilla.org/appshell/appShellService;1']
 		.getService(Components.interfaces.nsIAppShellService);
 
-	let onReady = function(e) {
-		if ( e ) {
-			this.removeEventListener(e.type, onReady);
+	let timer = Components.classes['@mozilla.org/timer;1']
+		.createInstance(Components.interfaces.nsITimer);
+
+	let isReady = function() {
+		let hDoc;
+		timer.cancel();
+
+		try {
+			hDoc = appShell.hiddenDOMWindow.document;
+
+			if ( !hDoc || hDoc.readyState !== 'complete' ) {
+				throw Error('Not ready');
+			}
+		} catch ( ex ) {
+			timer.init({observe: isReady}, 300, timer.TYPE_ONE_SHOT);
+			return false;
 		}
 
 		// Sending data synchronously to the background page with the fragment
@@ -22,47 +39,21 @@ this.startup = function(data) {
 		if ( appShell.createWindowlessBrowser ) {
 			bgProcess = appShell.createWindowlessBrowser(false);
 			bgProcess.loadURI(bgURI, 0, null, null, null);
-			return;
+		} else {
+			bgProcess = hDoc.documentElement.appendChild(
+				hDoc.createElementNS('http://www.w3.org/1999/xhtml', 'iframe')
+			);
+			bgProcess.src = bgURI + '#' + [addonName, data.version];
 		}
 
-		let hDoc = appShell.hiddenDOMWindow.document;
-		bgProcess = hDoc.documentElement.appendChild(
-			hDoc.createElementNS('http://www.w3.org/1999/xhtml', 'iframe')
-		);
-		bgProcess.src = bgURI + '#' + [addonName, data.version];
+		timer = null;
+		return true;
 	};
 
-	try {
-		void appShell.hiddenDOMWindow.document;
-		onReady();
-		return;
-	} catch ( ex ) {
-		//
-	}
+	isReady();
+}
 
-	let ww = Components
-		.classes['@mozilla.org/embedcomp/window-watcher;1']
-		.getService(Components.interfaces.nsIWindowWatcher);
-
-	ww.registerNotification({
-		observe: function(win, topic) {
-			if ( topic !== 'domwindowopened' ) {
-				return;
-			}
-
-			try {
-				void appShell.hiddenDOMWindow;
-			} catch ( ex ) {
-				return;
-			}
-
-			ww.unregisterNotification(this);
-			win.addEventListener('DOMContentLoaded', onReady);
-		}
-	});
-};
-
-this.shutdown = function(data, reason) {
+function shutdown(data, reason) {
 	if ( reason === APP_SHUTDOWN || !bgProcess ) {
 		return;
 	}
@@ -74,16 +65,16 @@ this.shutdown = function(data, reason) {
 	}
 
 	bgProcess = null;
-};
+}
 
-this.install = function() {
+function install() {
 	// https://bugzil.la/719376
 	Components.classes['@mozilla.org/intl/stringbundle;1']
 		.getService(Components.interfaces.nsIStringBundleService)
 		.flushBundles();
-};
+}
 
-this.uninstall = function(data, reason) {
+function uninstall(data, reason) {
 	if ( reason !== ADDON_UNINSTALL ) {
 		return;
 	}
@@ -92,4 +83,4 @@ this.uninstall = function(data, reason) {
 		.getService(Components.interfaces.nsIPrefService)
 		.getBranch('extensions.' + addonName + '.')
 		.deleteBranch('');
-};
+}
