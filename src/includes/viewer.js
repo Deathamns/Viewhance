@@ -254,6 +254,9 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'#frames.showall > img, #frames.showall > canvas {',
 		'display: inline-block !important;',
 	'}',
+	'.partial-frame:hover {',
+		'outline: 1px dotted gray;',
+	'}',
 	// Custom CSS
 	cfg.css
 ].join('');
@@ -1914,11 +1917,11 @@ init = function() {
 		} else if ( cmd === 'frames' ) {
 			var message = {cmd: 'loadFile', path: 'js/frames.js'};
 			vAPI.messaging.send(message, function(data) {
-				var errorHandler = function(alertMessage) {
+				doc.addEventListener('extractor-error', function(ev) {
 					// Success
-					if ( alertMessage !== null ) {
+					if ( ev.detail !== null ) {
 						// eslint-disable-next-line no-alert
-						alert(alertMessage);
+						alert(ev.detail);
 						var item = menu.querySelector('li[data-cmd="frames"]');
 						item.parentNode.removeChild(item);
 						return;
@@ -1927,14 +1930,14 @@ init = function() {
 					if ( menu ) {
 						menu.parentNode.removeChild(menu);
 					}
-				};
+				});
 
-				// eslint-disable-next-line no-new-func
-				Function('win', 'drawFullFrame', 'errorHandler', data)(
-					win,
-					e.button === 0,
-					errorHandler
-				);
+				doc.body.dataset.wheelEventName = vAPI.browser.wheel;
+				doc.body.dataset.fullFrames = e.button === 0;
+
+				var frames = doc.createElement('script');
+				frames.textContent = data;
+				doc.body.removeChild(doc.body.appendChild(frames));
 			});
 		} else if ( cmd === 'options' && e.button !== 1 ) {
 			vAPI.messaging.send({
