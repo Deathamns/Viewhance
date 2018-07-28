@@ -150,8 +150,6 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'box-shadow: none;',
 	'}',
 	'#menu {',
-		'width: 50px;',
-		'height: 33%;',
 		'position: fixed;',
 		'top: 0;',
 		'opacity: 0;',
@@ -170,7 +168,9 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'position: relative;',
 		'display: block;',
 		'padding: 4px 15px;',
-		'height: 24px;',
+		'min-width: 25px;',
+		'min-height: 25px;',
+		'line-height: 100%;',
 	'}',
 	'li > svg > use {',
 		'pointer-events: none;',
@@ -1844,7 +1844,9 @@ init = function() {
 		{tag: 'li', attrs: {'data-cmd': 'options'}}
 	]);
 
-	menu.style.cssText = 'display: none; left: -' + menu.offsetWidth + 'px';
+	menu.width = menu.offsetWidth;
+	menu.height = menu.offsetHeight;
+	menu.style.cssText = 'display: none; left: -' + menu.width + 'px';
 
 	menu.addEventListener('mousedown', function(e) {
 		var t = e.target;
@@ -1966,11 +1968,8 @@ init = function() {
 			return;
 		}
 
-		if ( e.clientX > 40 || e.clientX < 0 ) {
-			return;
-		}
-
-		if ( e.clientY > win.innerHeight / 3 || e.clientY < 0 ) {
+		if ( e.clientX > menu.width || e.clientX < 0
+			|| e.clientY > menu.height || e.clientY < 0 ) {
 			return;
 		}
 
@@ -1978,41 +1977,46 @@ init = function() {
 			return;
 		}
 
-		if ( !menu.iconsLoaded ) {
-			var message = {cmd: 'loadFile', path: 'css/menu_icons.svg'};
-			menu.iconsLoaded = true;
-
-			vAPI.messaging.send(message, function(svg) {
-				vAPI.insertHTML(menu, svg);
-
-				var item;
-				var items = menu.querySelectorAll('#menu > ul > li');
-				var i = items.length;
-				var ns = 'http://www.w3.org/2000/svg';
-				var svgIcon = doc.createElementNS(ns, 'svg');
-				svgIcon.appendChild(doc.createElementNS(ns, 'use'));
-
-				while ( item = items[--i] ) {
-					item.insertBefore(
-						svgIcon.cloneNode(true),
-						item.firstChild
-					).firstChild.setAttributeNS(
-						'http://www.w3.org/1999/xlink',
-						'href',
-						'#icon-' + item.dataset.cmd
-					);
-				}
-			});
-		}
-
 		menu.style.display = 'block';
+
+		doc.removeEventListener('mousemove', menuTrigger);
+		onMouseLeaveMenu.call(menu);
 
 		setTimeout(function() {
 			menu.style.left = '0';
 			menu.style.opacity = '1';
 		}, 50);
 
-		doc.removeEventListener('mousemove', menuTrigger);
+		if ( menu.iconsLoaded ) {
+			return;
+		}
+
+		menu.iconsLoaded = true;
+
+		vAPI.messaging.send({
+			cmd: 'loadFile',
+			path: 'css/menu_icons.svg'
+		}, function(svg) {
+			var item;
+			var items = menu.querySelectorAll('#menu > ul > li');
+			var i = items.length;
+			var ns = 'http://www.w3.org/2000/svg';
+			var svgIcon = doc.createElementNS(ns, 'svg');
+			svgIcon.appendChild(doc.createElementNS(ns, 'use'));
+
+			while ( item = items[--i] ) {
+				item.insertBefore(
+					svgIcon.cloneNode(true),
+					item.firstChild
+				).firstChild.setAttributeNS(
+					'http://www.w3.org/1999/xlink',
+					'href',
+					'#icon-' + item.dataset.cmd
+				);
+			}
+
+			vAPI.insertHTML(root, svg);
+		});
 	};
 
 	menu.addEventListener(vAPI.browser.wheel, function(e) {
@@ -2072,14 +2076,16 @@ init = function() {
 		this.style.opacity = '1';
 	});
 
-	menu.addEventListener('mouseleave', function() {
+	var onMouseLeaveMenu = function() {
 		this.hideTimer = setTimeout(function() {
 			doc.addEventListener('mousemove', menuTrigger);
 			menu.hideTimer = null;
 			menu.style.left = '-' + menu.offsetWidth + 'px';
 			menu.style.opacity = '0';
 		}, 800);
-	});
+	};
+
+	menu.addEventListener('mouseleave', onMouseLeaveMenu);
 
 	// Safari showed the menu even if the cursor wasn't at the edge
 	setTimeout(function() {
