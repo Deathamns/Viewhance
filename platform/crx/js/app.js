@@ -193,8 +193,7 @@ Object.defineProperty(vAPI, 'mediaType', {
 				return this._mediaType;
 			}
 
-			// Since Edge isn't actually a Chromium platform
-			if ( typeof browser === 'object' ) {
+			if ( vAPI.edge ) {
 				selector = 'body >'
 					+ 'input#zoom[type="checkbox"] + label#imgContainer > '
 						+ 'img[src]:only-child, '
