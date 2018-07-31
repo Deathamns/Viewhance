@@ -1053,10 +1053,13 @@ init = function() {
 	media.addEventListener('dragend', toggleDraggable);
 
 	media.addEventListener('mousedown', function(e) {
-		pdsp(e, false);
-
 		if ( e.button === 1 ) {
 			return;
+		}
+
+		// Try not to interfere with mouse gesture scripts
+		if ( e.button !== 2 ) {
+			pdsp(e, false);
 		}
 
 		if ( vAPI.mediaType === 'video' ) {
