@@ -40,15 +40,20 @@ const docObserver = {
 	},
 
 	initContentScripts: function(win, js) {
-		let sandbox;
+		let messager, sandbox;
 		let sandboxId = hostName + ':sb:' + this.uniqueSandboxId++;
-		let messager = win
-			.QueryInterface(Ci.nsIInterfaceRequestor)
-			.getInterface(Ci.nsIDocShell)
-			.sameTypeRootTreeItem
-			.QueryInterface(Ci.nsIDocShell)
-			.QueryInterface(Ci.nsIInterfaceRequestor)
-			.getInterface(Ci.nsIContentFrameMessageManager);
+
+		try {
+			messager = win.docShell.messageManager;
+		} catch	( ex ) {
+			messager = win
+				.QueryInterface(Ci.nsIInterfaceRequestor)
+				.getInterface(Ci.nsIDocShell)
+				.sameTypeRootTreeItem
+				.QueryInterface(Ci.nsIDocShell)
+				.QueryInterface(Ci.nsIInterfaceRequestor)
+				.getInterface(Ci.nsIContentFrameMessageManager);
+		}
 
 		if ( js ) {
 			let sandboxName = [
