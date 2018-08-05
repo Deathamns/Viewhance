@@ -1105,6 +1105,7 @@ init = function() {
 			cancelAction = true;
 
 			if ( e.button === 0 ) {
+				pdsp(e);
 				this.box = this.getBoundingClientRect();
 				freeZoom = {
 					counter: 0,
