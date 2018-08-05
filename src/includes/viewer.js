@@ -1981,9 +1981,7 @@ init = function() {
 		}
 
 		menu.style.display = 'block';
-
 		doc.removeEventListener('mousemove', menuTrigger);
-		onMouseLeaveMenu.call(menu);
 
 		setTimeout(function() {
 			menu.style.left = '0';
@@ -2079,16 +2077,14 @@ init = function() {
 		this.style.opacity = '1';
 	});
 
-	var onMouseLeaveMenu = function() {
+	menu.addEventListener('mouseleave', function() {
 		this.hideTimer = setTimeout(function() {
 			doc.addEventListener('mousemove', menuTrigger);
 			menu.hideTimer = null;
 			menu.style.left = '-' + menu.offsetWidth + 'px';
 			menu.style.opacity = '0';
 		}, 800);
-	};
-
-	menu.addEventListener('mouseleave', onMouseLeaveMenu);
+	});
 
 	// Safari showed the menu even if the cursor wasn't at the edge
 	setTimeout(function() {
