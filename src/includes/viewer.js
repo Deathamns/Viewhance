@@ -1999,6 +1999,8 @@ init = function() {
 			cmd: 'loadFile',
 			path: 'css/menu_icons.svg'
 		}, function(svg) {
+			vAPI.insertHTML(menu, svg);
+
 			var item;
 			var items = menu.querySelectorAll('#menu > ul > li');
 			var i = items.length;
@@ -2016,8 +2018,6 @@ init = function() {
 					'#icon-' + item.dataset.cmd
 				);
 			}
-
-			vAPI.insertHTML(root, svg);
 		});
 	};
 
