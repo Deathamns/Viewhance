@@ -668,7 +668,7 @@ init = function() {
 
 	cfg.zoomParams = (cfg.zoomParams || '').split(/\s*;+\s*/);
 	cfg.zoomParams = {
-		step: 1 + Math.max(0.1, cfg.zoomParams[0].trim() || (1 / 3)),
+		step: 1 + Math.max(0.01, cfg.zoomParams[0].trim() || (1 / 3)),
 		snaps: (cfg.zoomParams[1] || '').trim().split(/\s+/)
 			.map(parseFloat).filter(function(el, idx, list) {
 				return el && list.indexOf(el, idx + 1) === -1;
