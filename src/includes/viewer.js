@@ -131,8 +131,13 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'background: transparent;',
 	'}',
 	'html.load-failed #media {',
-		'margin: auto;',
-		'box-shadow: 0 0 10px red;',
+		'left: 50%;',
+		'margin: 10% auto 0 -25%;',
+		'padding: 10px;',
+		'max-width: 50%;',
+		'box-shadow: 0 0 5px red;',
+		'text-align: center;',
+		'font-size: 20px;',
 	'}',
 	'html.fullscreen #media {',
 		'background: black !important;',
@@ -2106,6 +2111,7 @@ media.addEventListener('error', function() {
 
 	clearInterval(progress);
 	root.classList.add('load-failed');
+	media.id = 'media';
 });
 
 if ( win.location.protocol === 'data:' ) {
