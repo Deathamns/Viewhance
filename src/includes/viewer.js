@@ -1354,6 +1354,10 @@ init = function() {
 			return;
 		}
 
+		if ( e.altKey ) {
+			return;
+		}
+
 		var x, y, z;
 
 		switch ( key ) {
