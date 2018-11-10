@@ -28,6 +28,10 @@
 			"#": 0,
 			">": "Tartalom középre helyezése"
 		},
+		"clickOverDoc": {
+			"#": 0,
+			">": "Kattintások engedélyezése az egész oldalon"
+		},
 		"customCss": {
 			"#": 0,
 			">": "Egyedi stílus (CSS)"

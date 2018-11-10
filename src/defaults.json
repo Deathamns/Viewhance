@@ -5,6 +5,7 @@
 	"favicon": "",
 	"css": "body { background: silver; overflow: hidden; }\n#media { background: #fafafa; box-shadow: 0 0 5px grey; }",
 	"center": true,
+	"clickOverDoc": false,
 	"wheelZoom": false,
 	"zoomParams": "",
 	"mediaAttrs": "autoplay controls loop",
@@ -20,6 +21,7 @@
 		"Pixlr|https://apps.pixlr.com/editor/?image=%url",
 		"PicMonkey|https://www.picmonkey.com/service?_import=%url"
 	],
+	"menuTriggerArea": null,
 	"key_mOrig": "1",
 	"key_mFit": "2",
 	"key_mFill": "3",
@@ -31,6 +33,5 @@
 	"key_wheelZoom": "Z",
 	"key_imgBg": "B",
 	"key_pixelate": "P",
-	"opener": 0,
-	"menuTriggerArea": null
+	"opener": 0
 }

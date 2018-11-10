@@ -1057,7 +1057,7 @@ init = function() {
 
 	media.addEventListener('dragend', toggleDraggable);
 
-	media.addEventListener('mousedown', function(e) {
+	(cfg.clickOverDoc ? doc : media).addEventListener('mousedown', function(e) {
 		if ( e.button === 1 ) {
 			return;
 		}
@@ -1073,7 +1073,7 @@ init = function() {
 			}
 
 			if ( !e.shiftKey ) {
-				var topPart = this.clientHeight;
+				var topPart = media.clientHeight;
 				topPart = Math.min(topPart - 40, topPart / 2);
 
 				if ( e.offsetY > topPart ) {
@@ -1087,11 +1087,7 @@ init = function() {
 			return;
 		}
 
-		if ( menu && menu.style.display === 'block' ) {
-			menu.style.display = 'none';
-		}
-
-		if ( e.button === 0 && this.mode <= MODE_HEIGHT || e.button === 2 ) {
+		if ( e.button === 0 && media.mode <= MODE_HEIGHT || e.button === 2 ) {
 			if ( e.button === 2 ) {
 				sX = true;
 			} else {
@@ -1111,36 +1107,36 @@ init = function() {
 
 			if ( e.button === 0 ) {
 				pdsp(e);
-				this.box = this.getBoundingClientRect();
+				media.box = media.getBoundingClientRect();
 				freeZoom = {
 					counter: 0,
-					left: Math.max(0, this.box.left),
-					top: Math.max(0, this.box.top)
+					left: Math.max(0, media.box.left),
+					top: Math.max(0, media.box.top)
 				};
 
 				freeZoom.startX = e.clientX - freeZoom.left;
 				freeZoom.startY = e.clientY - freeZoom.top;
 
-				if ( !this.mask ) {
-					this.mask = doc.createElement('canvas');
-					this.mask.className = 'mask';
-					this.mask.style.cssText = [
+				if ( !media.mask ) {
+					media.mask = doc.createElement('canvas');
+					media.mask.className = 'mask';
+					media.mask.style.cssText = [
 						'display: block',
 						'position: fixed'
 					].join(';');
-					this.mctx = this.mask.getContext('2d');
+					media.mctx = media.mask.getContext('2d');
 				}
 
 				doc.addEventListener('mousemove', drawMask);
-				this.mask.width = Math.min(winW, this.box.width);
-				this.mask.height = Math.min(winH, this.box.height);
-				this.mask.style.left = freeZoom.left + 'px';
-				this.mask.style.top = freeZoom.top + 'px';
+				media.mask.width = Math.min(winW, media.box.width);
+				media.mask.height = Math.min(winH, media.box.height);
+				media.mask.style.left = freeZoom.left + 'px';
+				media.mask.style.top = freeZoom.top + 'px';
 
-				doc.body.appendChild(this.mask);
+				doc.body.appendChild(media.mask);
 
-				var maskColor = win.getComputedStyle(this.mask).color;
-				this.mctx.fillStyle = !maskColor || maskColor === 'rgb(0, 0, 0)'
+				var maskColor = win.getComputedStyle(media.mask).color;
+				media.mctx.fillStyle = !maskColor || maskColor === 'rgb(0, 0, 0)'
 					? 'rgba(0, 0, 0, .4)'
 					: maskColor;
 			}
@@ -1283,7 +1279,8 @@ init = function() {
 			return;
 		}
 
-		if ( e.target !== media || lastEvent.button === null ) {
+		if ( !cfg.clickOverDoc && e.target !== media
+			|| lastEvent.button === null ) {
 			return;
 		}
 

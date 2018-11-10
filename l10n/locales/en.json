@@ -32,6 +32,10 @@
 			"#": 0,
 			">": "Center content"
 		},
+		"clickOverDoc": {
+			"#": 0,
+			">": "Allow mouse-clicks over the whole page"
+		},
 		"customCss": {
 			"#": 0,
 			">": "Custom style (CSS)"
