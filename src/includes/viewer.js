@@ -1283,6 +1283,10 @@ init = function() {
 			return;
 		}
 
+		if ( cfg.clickOverDoc && menu && menu.contains(e.target) ) {
+			return;
+		}
+
 		if ( !cfg.clickOverDoc && e.target !== media
 			|| lastEvent.button === null ) {
 			return;
