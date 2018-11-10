@@ -31,5 +31,6 @@
 	"key_wheelZoom": "Z",
 	"key_imgBg": "B",
 	"key_pixelate": "P",
-	"opener": 0
+	"opener": 0,
+	"menuTriggerArea": null
 }

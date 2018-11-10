@@ -1981,8 +1981,24 @@ init = function() {
 			return;
 		}
 
-		if ( e.clientX > menu.width || e.clientX < 0
-			|| e.clientY > menu.height || e.clientY < 0 ) {
+		var triggerArea = [menu.width, menu.height];
+		var mta = cfg.menuTriggerArea;
+
+		if ( Array.isArray(mta) ) {
+			triggerArea[0] = parseFloat(mta[0]) || triggerArea[0];
+			triggerArea[1] = parseFloat(mta[1]) || triggerArea[1];
+
+			if ( mta[0] && typeof mta[0] === 'string' ) {
+				triggerArea[0] *= winW / 100;
+			}
+
+			if ( mta[1] && typeof mta[1] === 'string' ) {
+				triggerArea[1] *= winH / 100;
+			}
+		}
+
+		if ( e.clientX > triggerArea[0] || e.clientX < 0
+			|| e.clientY > triggerArea[1] || e.clientY < 0 ) {
 			return;
 		}
 
