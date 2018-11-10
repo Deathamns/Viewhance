@@ -20,10 +20,16 @@ const docObserver = {
 		.getService(Components.interfaces.nsIParserUtils),
 
 	QueryInterface: (function() {
-		let {XPCOMUtils} = Components.utils.import(
-			'resource://gre/modules/XPCOMUtils.jsm',
-			null
-		);
+		let XPCOMUtils;
+
+		if ( typeof ChromeUtils === 'object' ) {
+			XPCOMUtils = ChromeUtils;
+		} else {
+			XPCOMUtils = Components.utils.import(
+				'resource://gre/modules/XPCOMUtils.jsm',
+				null
+			).XPCOMUtils;
+		}
 
 		return XPCOMUtils.generateQI([
 			Ci.nsIObserver,
@@ -81,7 +87,7 @@ const docObserver = {
 
 		sandbox._sandboxId_ = sandboxId;
 		sandbox._hostName_ = hostName;
-		sandbox.sendAsyncMessage = messager.sendAsyncMessage;
+		sandbox.sendAsyncMessage = messager.sendAsyncMessage.bind(messager);
 
 		sandbox.addMessageListener = function(callback) {
 			if ( sandbox._messageListener_ ) {

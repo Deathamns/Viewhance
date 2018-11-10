@@ -37,8 +37,11 @@ function startup(data) {
 			+ [addonName, data.version];
 
 		if ( appShell.createWindowlessBrowser ) {
+			let sp = Components.classes['@mozilla.org/scriptsecuritymanager;1']
+				.getService(Components.interfaces.nsIScriptSecurityManager)
+				.getSystemPrincipal();
 			bgProcess = appShell.createWindowlessBrowser(false);
-			bgProcess.loadURI(bgURI, 0, null, null, null);
+			bgProcess.loadURI(bgURI, 0, null, null, null, sp);
 		} else {
 			bgProcess = hDoc.documentElement.appendChild(
 				hDoc.createElementNS('http://www.w3.org/1999/xhtml', 'iframe')
