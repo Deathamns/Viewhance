@@ -34,7 +34,7 @@
 		},
 		"clickOverDoc": {
 			"#": 0,
-			">": "Allow mouse-clicks over the whole page"
+			">": "Allow clicks over the whole page"
 		},
 		"customCss": {
 			"#": 0,
