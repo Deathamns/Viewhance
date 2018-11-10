@@ -103,6 +103,10 @@ var onMessage = function(message, source, respond) {
 			response._defaultPrefs = this.responseText;
 			respond(response);
 		});
+	} else if ( cmd === 'loadStoredPrefs' ) {
+		vAPI.storage.get('cfg', function(cfg) {
+			respond({prefs: JSON.parse(cfg || '{}')});
+		});
 	} else if ( cmd === 'savePrefs' ) {
 		vAPI.storage.get('cfg', function(cfg) {
 			updatePrefs(message.prefs, JSON.parse(cfg || '{}'));

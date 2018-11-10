@@ -3,8 +3,8 @@
 var defaultPrefs;
 var inputChanges = Object.create(null);
 
-var $ = function(id) {
-	return document.getElementById(id);
+var $ = function(selector, n) {
+	return (n || document).querySelector(selector);
 };
 
 var localizeNodes = function(nodes) {
@@ -249,7 +249,7 @@ var save = function() {
 
 var onHashChange = function() {
 	var args = [];
-	var menu = $('nav-menu');
+	var menu = $('#nav-menu');
 	var prevHash = menu.activeLink ? menu.activeLink.hash.slice(1) : 'general';
 	var hash = location.hash.slice(1) || 'general';
 
@@ -258,7 +258,7 @@ var onHashChange = function() {
 		hash = args.shift();
 	}
 
-	if ( prevHash !== hash && (prevHash = $(prevHash + '-sec')) ) {
+	if ( prevHash !== hash && (prevHash = $('#' + prevHash + '-sec')) ) {
 		prevHash.style.display = 'none';
 	}
 
@@ -272,7 +272,7 @@ var onHashChange = function() {
 		menu.activeLink.classList.add('active');
 	}
 
-	var section = $(hash + '-sec') || $((hash = 'general') + '-sec');
+	var section = $('#' + hash + '-sec') || $('#' + (hash = 'general') + '-sec');
 
 	if ( section._nodeLocalized ) {
 		section.style.display = 'block';
@@ -341,7 +341,7 @@ var onHashChange = function() {
 				]});
 			}
 
-			vAPI.buildNodes($('locales-table'), rows);
+			vAPI.buildNodes($('#locales-table'), rows);
 		});
 	}
 };
@@ -358,7 +358,7 @@ window.addEventListener('load', function() {
 		return false;
 	});
 
-	var menu = $('nav-menu');
+	var menu = $('#nav-menu');
 	var colorHelper = document.body.querySelector(
 		'.color-helper > input[type=text]'
 	);
@@ -372,7 +372,7 @@ window.addEventListener('load', function() {
 		);
 	}
 
-	localizeNodes([menu, $('right-panel').firstElementChild]);
+	localizeNodes([menu, $('#right-panel').firstElementChild]);
 
 	menu.addEventListener('click', function(e) {
 		if ( e.button === 0 && e.target.hash ) {
@@ -412,7 +412,7 @@ window.addEventListener('load', function() {
 			delete inputChanges[t.name];
 		}
 
-		$('button-save').style.color = Object.keys(inputChanges).length
+		$('#button-save').style.color = Object.keys(inputChanges).length
 			? '#e03c00'
 			: '';
 	};
@@ -489,7 +489,7 @@ window.addEventListener('load', function() {
 
 	form.addEventListener('change', onFormChange);
 
-	var resetButton = $('button-reset');
+	var resetButton = $('#button-reset');
 
 	resetButton.reset = function() {
 		delete resetButton.pending;
@@ -524,7 +524,7 @@ window.addEventListener('load', function() {
 		e.preventDefault();
 	});
 
-	$('button-save').addEventListener('click', function(e) {
+	$('#button-save').addEventListener('click', function(e) {
 		e.preventDefault();
 
 		if ( e.button !== 0 ) {
@@ -536,14 +536,50 @@ window.addEventListener('load', function() {
 		changeColor(this, 'green');
 	});
 
+	$('#eximport').addEventListener('click', function(e) {
+		var trg = e.target;
+
+		if ( trg.localName !== 'button' ) {
+			return;
+		}
+
+		if ( trg.id === 'exprt-btn' ) {
+			vAPI.messaging.send({cmd: e.ctrlKey
+				? 'loadPrefs'
+				: 'loadStoredPrefs'}, function(data) {
+				var txtArea = $('#eximport > textarea');
+				txtArea.value = JSON.stringify(
+					data.prefs,
+					null,
+					e.shiftKey ? '\t' : null
+				);
+				txtArea.selectionStart = 0;
+				txtArea.selectionEnd = txtArea.value.length;
+				txtArea.focus();
+			});
+		} else if ( trg.id === 'imprt-btn' ) {
+			var prefs;
+
+			try {
+				var prefs = JSON.parse($('#eximport > textarea').value);
+			} catch ( ex ) {
+				changeColor(e.target, 'red', 2000);
+				return;
+			}
+
+			vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+			location.reload(true);
+		}
+	});
+
 	form.querySelector('.op-buttons').addEventListener('mousedown', function(e) {
 		e.preventDefault();
 	});
 
 	vAPI.messaging.send({cmd: 'loadPrefs', getAppInfo: true}, function(data) {
-		$('app-name').textContent = data._app.name;
-		$('app-version').textContent = data._app.version;
-		$('platform-info').textContent = data._app.platform;
+		$('#app-name').textContent = data._app.name;
+		$('#app-version').textContent = data._app.version;
+		$('#platform-info').textContent = data._app.platform;
 		document.title = ':: ' + data._app.name + ' ::';
 		defaultPrefs = JSON.parse(data._defaultPrefs);
 		load(data.prefs);
