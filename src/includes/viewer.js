@@ -1212,6 +1212,10 @@ init = function() {
 						: 0)
 			) || 1;
 
+			if ( w <= 0 || h <= 0 ) {
+				return;
+			}
+
 			x = Math.max(0, freeZoom.x);
 			y = Math.max(0, freeZoom.y);
 
