@@ -707,6 +707,24 @@ $('#export-button').onclick = function(e) {
 		delete data[group.name];
 	}
 
+	emptyGroup = true;
+
+	for ( var group in data ) {
+		if ( group[0] === '_' ) {
+			continue;
+		}
+
+		if ( Object.keys(data[group]).length ) {
+			emptyGroup = false;
+			break;
+		}
+	}
+
+	if ( emptyGroup ) {
+		alert('There are no translations to export...');
+		return;
+	}
+
 	var translatorIndex = $('#translators').selectedIndex;
 	var translator;
 
@@ -776,16 +794,14 @@ $('#export-button').onclick = function(e) {
 	exporter.style.display = 'block';
 	exporter.lastElementChild.select();
 
-	if ( exporter.onclick ) {
-		return;
+	if ( !exporter.onclick ) {
+		exporter.onclick = function(ev) {
+			if ( ev.target === this ) {
+				exporter.style.display = 'none';
+				exporter.lastElementChild.value = '';
+			}
+		};
 	}
-
-	exporter.onclick = function(ev) {
-		if ( ev.target === this ) {
-			exporter.style.display = 'none';
-			exporter.lastElementChild.value = '';
-		}
-	};
 };
 
 localeNames = localStorage.getItem('localeNames');
