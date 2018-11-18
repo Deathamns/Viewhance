@@ -314,28 +314,44 @@ init = function() {
 	var MODE_WIDTH = 3;
 	var MODE_HEIGHT = 4;
 
-	if ( vAPI.mediaType === 'img' ) {
-		mOrigWidth = media.naturalWidth;
-		mOrigHeight = media.naturalHeight;
-
-		if ( mOrigWidth !== mOrigHeight ) {
-			// image-orientation in Firefox doesn't flip natural sizes
-			if ( mOrigWidth / mOrigHeight === media.height / media.width ) {
-				mOrigWidth = media.naturalHeight;
-				mOrigHeight = media.naturalWidth;
-			}
-		}
-	} else {
-		mOrigWidth = media.videoWidth;
-		mOrigHeight = media.videoHeight;
-	}
-
 	if ( !cfg.mediaInfo ) {
 		cfg.mediaInfo = false;
 	}
 
 	cfg.hiddenScrollbars = win.getComputedStyle(root).overflow === 'hidden'
 		|| win.getComputedStyle(doc.body).overflow === 'hidden';
+
+	var setOriginalDimensions = function() {
+		if ( vAPI.mediaType === 'img' ) {
+			mOrigWidth = media.naturalWidth;
+			mOrigHeight = media.naturalHeight;
+
+			if ( mOrigWidth !== mOrigHeight ) {
+				// image-orientation in Firefox doesn't flip natural sizes
+				if ( mOrigWidth / mOrigHeight === media.height / media.width ) {
+					mOrigWidth = media.naturalHeight;
+					mOrigHeight = media.naturalWidth;
+				}
+			}
+		} else {
+			mOrigWidth = media.videoWidth;
+			mOrigHeight = media.videoHeight;
+		}
+
+		if ( !cfg.scaling ) {
+			return;
+		}
+
+		if ( cfg.scaling === '*' || cfg.scaling < 0 ) {
+			mOrigWidth /= win.devicePixelRatio;
+			mOrigHeight /= win.devicePixelRatio;
+		}
+
+		if ( typeof cfg.scaling === 'number' ) {
+			mOrigWidth *= Math.abs(cfg.scaling);
+			mOrigHeight *= Math.abs(cfg.scaling);
+		}
+	};
 
 	var setMediaStyle = function() {
 		var css = '';
@@ -384,8 +400,8 @@ init = function() {
 		if ( (m.mode !== MODE_FIT || m.angle )
 			&& (m.box.width > winW || m.box.height > winH) ) {
 			s.cursor = 'move';
-		} else if ( mWidth < mOrigWidth
-			|| mHeight < mOrigHeight ) {
+		} else if ( mWidth < Math.round(mOrigWidth)
+			|| mHeight < Math.round(mOrigHeight) ) {
 			s.cursor = vAPI.browser.zoomIn;
 		} else {
 			s.cursor = '';
@@ -424,18 +440,20 @@ init = function() {
 
 	var convertInfoParameter = function(a, param) {
 		var m = media;
+		var ow = m.naturalWidth || m.videoWidth;
+		var oh = m.naturalHeight || m.videoHeight;
 
 		switch ( param ) {
-			case 'w': return m.width || m.videoWidth;
-			case 'h': return m.height || m.videoHeight;
-			case 'ow': return mOrigWidth;
-			case 'oh': return mOrigHeight;
+			case 'w': return m.width || m.clientWidth;
+			case 'h': return m.height || m.clientHeight;
+			case 'ow': return ow;
+			case 'oh': return oh;
 			case 'url': return win.location.href;
 			case 'name': return m.alt;
 			case 'ratio':
-				return Math.round(mOrigWidth / mOrigHeight * 100) / 100;
+				return Math.round(ow / oh * 100) / 100;
 			case 'perc':
-				m = (m.width || m.videoWidth) * 100 / mOrigWidth;
+				m = (m.width || m.videoWidth) * 100 / ow;
 				return m < 2 ? m.toFixed(1) : Math.round(m);
 			case 'size':
 				if ( m._size !== void 0 ) {
@@ -515,7 +533,7 @@ init = function() {
 			boxW = boxRatio * winH;
 		} else if ( newMode === MODE_ORIG
 			|| newMode === MODE_FIT && noFit.real ) {
-			delete mediaCss.width;
+			boxW = mOrigWidth;
 		}
 
 		if ( boxW ) {
@@ -1298,7 +1316,8 @@ init = function() {
 		}
 
 		if ( media.mode < MODE_WIDTH && noFit.real ) {
-			if ( media.mode === MODE_CUSTOM && mWidth !== mOrigWidth ) {
+			if ( media.mode === MODE_CUSTOM
+				&& mWidth !== Math.round(mOrigWidth) ) {
 				resizeMedia(MODE_ORIG);
 			} else if ( (media.mode === MODE_FIT || media.mode === MODE_ORIG)
 				&& (media.box.width === winW || media.box.height === winH) ) {
@@ -1312,7 +1331,7 @@ init = function() {
 			} else {
 				resizeMedia(
 					MODE_FIT,
-					mWidth === mOrigWidth
+					mWidth === Math.round(mOrigWidth)
 						? media.box.width / media.box.height > winW / winH
 							? winW
 							: winH * media.box.width / media.box.height
@@ -1545,7 +1564,6 @@ init = function() {
 		media.removeAttribute('height');
 		resizeMedia(media.mode);
 	});
-	toggleWheelZoom();
 
 	if ( vAPI.mediaType === 'video' ) {
 		media.addEventListener('click', function(e) {
@@ -1572,6 +1590,8 @@ init = function() {
 		});
 	}
 
+	toggleWheelZoom();
+	setOriginalDimensions();
 	progress = win.getComputedStyle(media);
 	// Original dimensions with padding and border
 	mFullWidth = mOrigWidth
