@@ -68,7 +68,11 @@ vAPI.tabs = {
 			params.url = vAPI._baseURI + params.url;
 		}
 
-		win.gBrowser.loadOneTab(params.url, {inBackground: !params.active});
+		win.gBrowser.loadOneTab(params.url, {
+			inBackground: !params.active,
+			triggeringPrincipal:
+				Services.scriptSecurityManager.getSystemPrincipal()
+		});
 	}
 };
 
