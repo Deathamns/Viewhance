@@ -13,7 +13,7 @@ try {
 vAPI.crx = true;
 
 vAPI.browser = {
-	irPixelated: vAPI.firefox ? '-moz-crisp-edges' : 'pixelated',
+	irPixelated: vAPI.firefox ? 'crisp-edges' : 'pixelated',
 	transformCSS: 'transform',
 	transitionCSS: 'transition',
 	transitionend: 'transitionend',

@@ -1486,7 +1486,8 @@ init = function() {
 
 				var ir = win.getComputedStyle(media).imageRendering;
 
-				if ( ir === vAPI.browser.irPixelated ) {
+				if ( ir === vAPI.browser.irPixelated
+					|| ir === vAPI.browser.irPixelated.replace(/^-(moz|webkit|ms)-/) ) {
 					mediaCss['image-rendering'] = 'auto';
 				} else {
 					mediaCss['image-rendering'] = vAPI.browser.irPixelated;
