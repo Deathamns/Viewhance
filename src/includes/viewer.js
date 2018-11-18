@@ -223,6 +223,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'color: silver;',
 	'}',
 	'input[type="range"] {',
+		'width: 125px;',
 		'vertical-align: middle;',
 	'}',
 	'li ul > li {',
