@@ -29,7 +29,9 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			}
 
 			if ( typeof newPrefs[key] !== typeof defPrefs[key] ) {
-				continue;
+				if ( defPrefs[key] !== null ) {
+					continue;
+				}
 			}
 
 			if ( newPrefs[key] === defPrefs[key] ) {
