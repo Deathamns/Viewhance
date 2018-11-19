@@ -1076,14 +1076,25 @@ init = function() {
 
 	media.addEventListener('dragend', toggleDraggable);
 
-	(cfg.clickOverDoc ? doc : media).addEventListener('mousedown', function(e) {
+	doc.addEventListener('mousedown', function(e) {
 		if ( e.button === 1 ) {
+			return;
+		}
+
+		if ( menu && cfg.clickOverDoc && menu.contains(e.target) ) {
 			return;
 		}
 
 		// Try not to interfere with mouse gesture scripts
 		if ( e.button !== 2 ) {
-			pdsp(e, false);
+			// Firefox selects the image even with-moz-user-select: none
+			// so we prevent mousedown
+			pdsp(e, e.button === 0 && e.target !== media);
+		}
+
+		// Placed after the Firefox selection workaround
+		if ( !cfg.clickOverDoc && e.target !== media ) {
+			return;
 		}
 
 		if ( vAPI.mediaType === 'video' ) {
@@ -1302,7 +1313,7 @@ init = function() {
 			return;
 		}
 
-		if ( cfg.clickOverDoc && menu && menu.contains(e.target) ) {
+		if ( menu && cfg.clickOverDoc && menu.contains(e.target) ) {
 			return;
 		}
 
