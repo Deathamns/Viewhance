@@ -513,7 +513,7 @@ init = function() {
 	};
 
 	var resizeMedia = function(mode, w) {
-		var boxW;
+		var boxW, radians, sin, cos;
 		var newMode = mode === void 0 ? MODE_FIT : mode;
 		var boxRatio = media.angle
 			? media.box.width / media.box.height
@@ -526,6 +526,12 @@ init = function() {
 			newMode = boxRatio > winW / winH ? MODE_WIDTH : MODE_HEIGHT;
 		}
 
+		if ( media.angle ) {
+			radians = media.angle * Math.PI / 180;
+			sin = Math.abs(Math.sin(radians));
+			cos = Math.abs(Math.cos(radians));
+		}
+
 		if ( w ) {
 			boxW = w;
 		} else if ( newMode === MODE_WIDTH ) {
@@ -534,14 +540,13 @@ init = function() {
 			boxW = boxRatio * winH;
 		} else if ( newMode === MODE_ORIG
 			|| newMode === MODE_FIT && noFit.real ) {
-			boxW = mOrigWidth;
+			boxW = media.angle
+				? mFullWidth * cos + mFullHeight * sin
+				: mOrigWidth;
 		}
 
 		if ( boxW ) {
 			if ( media.angle ) {
-				var radians = media.angle * Math.PI / 180;
-				var sin = Math.abs(Math.sin(radians));
-				var cos = Math.abs(Math.cos(radians));
 				mediaCss.width = boxW * cos - boxW / boxRatio * sin;
 				mediaCss.width /= cos * cos - sin * sin;
 				boxW = mediaCss.width;
