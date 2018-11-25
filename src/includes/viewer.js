@@ -1735,6 +1735,7 @@ init = function() {
 		} else {
 			filterName = t.parentNode.textContent.trim();
 			media.filters[filterName] = t.value + (t.getAttribute('unit') || '%');
+			t.title = media.filters[filterName];
 		}
 
 		for ( filterName in media.filters ) {
@@ -1773,7 +1774,8 @@ init = function() {
 							min: 0,
 							max: 250,
 							step: 10,
-							value: 100
+							value: 100,
+							title: '100%'
 						}
 					},
 					' brightness'
@@ -1786,7 +1788,8 @@ init = function() {
 							min: 0,
 							max: 300,
 							step: 25,
-							value: 100
+							value: 100,
+							title: '100%'
 						}
 					},
 					' contrast'
@@ -1799,7 +1802,8 @@ init = function() {
 							min: 0,
 							max: 1000,
 							step: 50,
-							value: 100
+							value: 100,
+							title: '100%'
 						}
 					},
 					' saturate'
@@ -1812,7 +1816,8 @@ init = function() {
 							min: 0,
 							max: 100,
 							step: 25,
-							value: 0
+							value: 0,
+							title: '0%'
 						}
 					},
 					' grayscale'
@@ -1825,7 +1830,8 @@ init = function() {
 							min: 0,
 							max: 100,
 							step: 100,
-							value: 0
+							value: 0,
+							title: '0%'
 						}
 					},
 					' invert'
@@ -1838,7 +1844,8 @@ init = function() {
 							min: 0,
 							max: 100,
 							step: 20,
-							value: 0
+							value: 0,
+							title: '0%'
 						}
 					},
 					' sepia'
@@ -1852,7 +1859,8 @@ init = function() {
 							max: 360,
 							step: 36,
 							value: 0,
-							unit: 'deg'
+							unit: 'deg',
+							title: '0deg'
 						}
 					},
 					' hue-rotate'
@@ -1866,7 +1874,8 @@ init = function() {
 							max: 20,
 							step: 1,
 							value: 0,
-							unit: 'px'
+							unit: 'px',
+							title: '0px'
 						}
 					},
 					' blur'
