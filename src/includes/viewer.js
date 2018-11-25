@@ -155,8 +155,11 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'box-shadow: none;',
 	'}',
 	'#menu {',
+		'display: flex;',
 		'position: fixed;',
 		'top: 0;',
+	'}',
+	'#menu:not(.permanent) {',
 		'opacity: 0;',
 		vAPI.browser.transitionCSS, ': opacity .15s, left .2s;',
 	'}',
@@ -1086,7 +1089,7 @@ init = function() {
 			return;
 		}
 
-		if ( menu && cfg.clickOverDoc && menu.contains(e.target) ) {
+		if ( menu && menu.contains(e.target) ) {
 			return;
 		}
 
@@ -1706,18 +1709,25 @@ init = function() {
 	menu = root.appendChild(doc.createElement('div'));
 	menu.id = 'menu';
 
-	if ( win.getComputedStyle(menu).display === 'none' ) {
-		menu.parentNode.removeChild(menu);
-		menu = null;
-		return;
+	switch ( win.getComputedStyle(menu).display ) {
+		case 'none':
+			menu.parentNode.removeChild(menu);
+			menu = null;
+			return;
+
+		case 'flex':
+			menu.style.display = 'block';
+			break;
+
+		case 'block':
+			menu.classList.add('permanent');
+			break;
 	}
 
 	menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px);';
 
 	if ( menu.style.filter || menu.style.webkitFilter ) {
-		vAPI.browser.filter = menu.style.filter
-			? 'filter'
-			: '-webkit-filter';
+		vAPI.browser.filter = menu.style.filter ? 'filter' : '-webkit-filter';
 	}
 
 	var onMenuChange = function(e) {
@@ -1911,7 +1921,10 @@ init = function() {
 
 	menu.width = menu.offsetWidth;
 	menu.height = menu.offsetHeight;
-	menu.style.cssText = 'display: none; left: -' + menu.width + 'px';
+
+	if ( !menu.classList.contains('permanent') ) {
+		menu.style.cssText = 'display: none; left: -' + menu.width + 'px';
+	}
 
 	menu.addEventListener('mousedown', function(e) {
 		var t = e.target;
@@ -2028,44 +2041,7 @@ init = function() {
 		}
 	};
 
-	var menuTrigger = function(e) {
-		if ( panning || freeZoom || e.shiftKey ) {
-			return;
-		}
-
-		var triggerArea = [menu.width, menu.height];
-		var mta = cfg.menuTriggerArea;
-
-		if ( Array.isArray(mta) ) {
-			triggerArea[0] = parseFloat(mta[0]) || triggerArea[0];
-			triggerArea[1] = parseFloat(mta[1]) || triggerArea[1];
-
-			if ( mta[0] && typeof mta[0] === 'string' ) {
-				triggerArea[0] *= winW / 100;
-			}
-
-			if ( mta[1] && typeof mta[1] === 'string' ) {
-				triggerArea[1] *= winH / 100;
-			}
-		}
-
-		if ( e.clientX > triggerArea[0] || e.clientX < 0
-			|| e.clientY > triggerArea[1] || e.clientY < 0 ) {
-			return;
-		}
-
-		if ( menu.style.display === 'block' ) {
-			return;
-		}
-
-		menu.style.display = 'block';
-		doc.removeEventListener('mousemove', menuTrigger);
-
-		setTimeout(function() {
-			menu.style.left = '0';
-			menu.style.opacity = '1';
-		}, 50);
-
+	var loadMenuIcons = function() {
 		if ( menu.iconsLoaded ) {
 			return;
 		}
@@ -2138,11 +2114,51 @@ init = function() {
 		onMenuClick(e);
 	});
 
-	menu.addEventListener(vAPI.browser.transitionend, function(e) {
-		if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
-			this.style.display = 'none';
+	if ( menu.classList.contains('permanent') ) {
+		loadMenuIcons();
+		return;
+	}
+
+	var menuTrigger = function(e) {
+		if ( panning || freeZoom || e.shiftKey ) {
+			return;
 		}
-	});
+
+		var triggerArea = [menu.width, menu.height];
+		var mta = cfg.menuTriggerArea;
+
+		if ( Array.isArray(mta) ) {
+			triggerArea[0] = parseFloat(mta[0]) || triggerArea[0];
+			triggerArea[1] = parseFloat(mta[1]) || triggerArea[1];
+
+			if ( mta[0] && typeof mta[0] === 'string' ) {
+				triggerArea[0] *= winW / 100;
+			}
+
+			if ( mta[1] && typeof mta[1] === 'string' ) {
+				triggerArea[1] *= winH / 100;
+			}
+		}
+
+		if ( e.clientX > triggerArea[0] || e.clientX < 0
+			|| e.clientY > triggerArea[1] || e.clientY < 0 ) {
+			return;
+		}
+
+		if ( menu.style.display === 'block' ) {
+			return;
+		}
+
+		menu.style.display = 'block';
+		doc.removeEventListener('mousemove', menuTrigger);
+
+		setTimeout(function() {
+			menu.style.left = '0';
+			menu.style.opacity = '1';
+		}, 50);
+
+		loadMenuIcons();
+	};
 
 	menu.addEventListener('mouseenter', function() {
 		if ( !this.hideTimer ) {
@@ -2162,6 +2178,12 @@ init = function() {
 			menu.style.left = '-' + menu.offsetWidth + 'px';
 			menu.style.opacity = '0';
 		}, 800);
+	});
+
+	menu.addEventListener(vAPI.browser.transitionend, function(e) {
+		if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
+			this.style.display = 'none';
+		}
 	});
 
 	// Safari showed the menu even if the cursor wasn't at the edge
