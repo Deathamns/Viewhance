@@ -73,23 +73,21 @@
 
 		.zoom-in {
 			cursor: zoom-in;
-			cursor: -moz-zoom-in;
-			cursor: -webkit-zoom-in;
-			cursor: -ms-zoom-in;
 		}
 
 		.versions > li > pre {
 			margin: 5px 0 0;
 			overflow: hidden;
-			-webkit-transition: max-height .3s;
-			-moz-transition: max-height .3s;
 			transition: max-height .3s;
 		}
-
 
 		#install {
 			max-width: 1000px;
 			text-align: center;
+		}
+		#install > img {
+			width: 32px;
+			height: 32px;
 		}
 		#install > span {
 			display: block;
@@ -114,19 +112,15 @@
 			display: inline-block;
 			padding: 5px;
 			background-color: #fff;
-			background: -moz-linear-gradient(top, #fff, rgba(245, 245, 255, .9));
-			background: -o-linear-gradient(top, #fff, rgba(245, 245, 255, .9));
 			background: linear-gradient(to bottom, #fff, rgba(245, 245, 255, .9));
 			border: 1px solid #ddd;
 			border-radius: 6px;
 			box-shadow: 0 0 10px #666;
 			opacity: 0;
 			visibility: hidden;
-			-webkit-transition: visibility 0s .2s, opacity .3s, top .2s;
 			transition: visibility 0s .2s, opacity .3s, top .2s;
 		}
 		#install > div:hover > div {
-			-webkit-transition-delay: .1s;
 			transition-delay: .1s;
 			top: 100%;
 			visibility: visible;
@@ -296,6 +290,16 @@
 		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
 
 	<ul class="versions">
+		<li id="v2018.1129.1652"><b>2018.1129.1652</b>
+		<pre>
++ Export/Import for settings at the Info page in Options
++ New option: register clicks on the whole document, not just over the image
++ Custom trigger area for the menu as hidden option (can be set via the import feature): <b>menuTriggerArea</b> <i>(measured from the top left corner)</i>: [px, px] or ['%', '%'] or null for default values, which is the size of the menu itself
++ New hidden option: <b>scaling</b> (float, e.g. <i>1.5</i> => 150%) - it fakes the original dimensions. Special value: <b>*</b> ignores device scaling, so it renders the media at 100%. If negative value is used, the device scaling is ignored first, then the absolute of the scale value is applied
+# Other minor fixes
+		</pre>
+		</li>
+
 		<li id="v2018.805.1235"><b>2018.805.1235</b>
 		<pre>
 * Trigger area for the menu became the area of the menu itself (the area can be increased by setting transparent borders for the menu via custom CSS)
