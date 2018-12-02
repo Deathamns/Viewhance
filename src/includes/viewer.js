@@ -1082,9 +1082,7 @@ init = function() {
 		win.scrollTo(0, 0);
 	};
 
-	media.addEventListener('dragend', toggleDraggable);
-
-	doc.addEventListener('mousedown', function(e) {
+	var onMouseDown = function(e) {
 		if ( e.button === 1 ) {
 			return;
 		}
@@ -1208,9 +1206,9 @@ init = function() {
 		lastEvent.clientY = e.clientY;
 		lastEvent.button = e.button;
 		progress = setTimeout(longpressHandler, 300);
-	}, true);
+	};
 
-	doc.addEventListener('mouseup', function(e) {
+	var onMouseUp = function(e) {
 		if ( e.button !== 0 ) {
 			return;
 		}
@@ -1371,9 +1369,9 @@ init = function() {
 		} else {
 			resizeMedia(MODE_FIT);
 		}
-	}, true);
+	};
 
-	doc.addEventListener('keydown', function(e) {
+	var onKeyDown = function(e) {
 		if ( stopScroll ) {
 			stopScroll();
 		}
@@ -1576,15 +1574,57 @@ init = function() {
 		}
 
 		pdsp(e, x !== true, true);
-	}, true);
+	};
 
-	doc.addEventListener('contextmenu', onContextMenu, true);
-	win.addEventListener('resize', function() {
+	var onWinResize = function() {
 		media.removeAttribute('class');
 		media.removeAttribute('width');
 		media.removeAttribute('height');
 		resizeMedia(media.mode);
-	});
+	};
+
+	var startFrameExtractor = function(params) {
+		var message = {cmd: 'loadFile', path: 'js/frames.js'};
+
+		var onFrameEvent = function(ev) {
+			this.removeEventListener(ev.type, onFrameEvent);
+			// Error if detail is not null
+			if ( ev.detail !== null ) {
+				// eslint-disable-next-line no-alert
+				alert(ev.detail);
+				var item = menu.querySelector('li[data-cmd="frames"]');
+				item.parentNode.removeChild(item);
+				return;
+			}
+
+			win.removeEventListener('resize', onWinResize);
+			doc.removeEventListener('mousedown', onMouseDown, true);
+			doc.removeEventListener('mouseup', onMouseUp, true);
+			doc.removeEventListener('contextmenu', onContextMenu, true);
+			doc.removeEventListener('keydown', onKeyDown, true);
+
+			if ( menu ) {
+				menu.parentNode.removeChild(menu);
+			}
+		};
+
+		vAPI.messaging.send(message, function(data) {
+			doc.addEventListener('extractor-error', onFrameEvent);
+			doc.body.dataset.wheelEventName = vAPI.browser.wheel;
+			doc.body.dataset.fullFrames = !!params.fullFrames;
+
+			var frames = doc.createElement('script');
+			frames.textContent = data;
+			doc.body.removeChild(doc.body.appendChild(frames));
+		});
+	};
+
+	win.addEventListener('resize', onWinResize);
+	doc.addEventListener('mousedown', onMouseDown, true);
+	doc.addEventListener('mouseup', onMouseUp, true);
+	doc.addEventListener('contextmenu', onContextMenu, true);
+	doc.addEventListener('keydown', onKeyDown, true);
+	media.addEventListener('dragend', toggleDraggable);
 
 	if ( vAPI.mediaType === 'video' ) {
 		media.addEventListener('click', function(e) {
@@ -1995,30 +2035,7 @@ init = function() {
 				doc.querySelector('#menu li.filters > form').reset();
 			}
 		} else if ( cmd === 'frames' ) {
-			var message = {cmd: 'loadFile', path: 'js/frames.js'};
-			vAPI.messaging.send(message, function(data) {
-				doc.addEventListener('extractor-error', function(ev) {
-					// Success
-					if ( ev.detail !== null ) {
-						// eslint-disable-next-line no-alert
-						alert(ev.detail);
-						var item = menu.querySelector('li[data-cmd="frames"]');
-						item.parentNode.removeChild(item);
-						return;
-					}
-
-					if ( menu ) {
-						menu.parentNode.removeChild(menu);
-					}
-				});
-
-				doc.body.dataset.wheelEventName = vAPI.browser.wheel;
-				doc.body.dataset.fullFrames = e.button === 0;
-
-				var frames = doc.createElement('script');
-				frames.textContent = data;
-				doc.body.removeChild(doc.body.appendChild(frames));
-			});
+			startFrameExtractor({fullFrames: e.button === 0});
 		} else if ( cmd === 'options' && e.button !== 1 ) {
 			vAPI.messaging.send({
 				cmd: 'openURL',
