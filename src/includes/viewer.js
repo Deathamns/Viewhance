@@ -2107,6 +2107,8 @@ init = function() {
 
 		if ( cmd ) {
 			handleCommand(cmd, e);
+			// Opera loses focus after clicking on SVGs?
+			win.focus();
 		}
 	};
 
