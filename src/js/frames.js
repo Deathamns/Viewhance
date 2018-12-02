@@ -723,9 +723,10 @@ xhr.addEventListener('readystatechange', function() {
 			}
 
 			if ( e.ctrlKey ) {
-				if ( e.target.toDataURL && speed.value < 1 ) {
+				if ( e.target.toDataURL && speed.valueAsNumber < 1 ) {
 					var canvasImg = document.createElement('img');
 					canvasImg.src = e.target.toDataURL();
+					canvasImg.className = e.target.className;
 					this.replaceChild(canvasImg, e.target);
 					wrap.step(null);
 				}
@@ -759,24 +760,28 @@ xhr.addEventListener('readystatechange', function() {
 		};
 
 		wrap.wheeler = function(e) {
-			wrap.step((e.deltaY || -e.wheelDelta) > 0);
-			wrap.stop();
 			e.preventDefault();
 			e.stopImmediatePropagation();
+
+			if ( speed.valueAsNumber ) {
+				wrap.stop();
+			}
 
 			if ( wrap.classList.contains('showall') ) {
 				disableShowAll();
 			}
+
+			wrap.step((e.deltaY || -e.wheelDelta) > 0);
 		};
 
 		wrap.animate = function() {
 			clearTimeout(wrap.animationTimer);
-			wrap.step(wrap.speedValue < 0);
+			wrap.step(speed.valueAsNumber < 0);
 
-			if ( wrap.speedValue ) {
+			if ( speed.valueAsNumber ) {
 				wrap.animationTimer = setTimeout(
 					wrap.animate,
-					frames[wrap.current].delay / Math.abs(wrap.speedValue)
+					frames[wrap.current].delay / Math.abs(speed.valueAsNumber)
 				);
 			}
 		};
@@ -784,6 +789,10 @@ xhr.addEventListener('readystatechange', function() {
 		wrap.stop = function() {
 			clearTimeout(this.animationTimer);
 			speed.value = 0;
+
+			if ( !wrap.classList.contains('showall') ) {
+				wrap.addEventListener(wheelEventName, wrap.wheeler);
+			}
 		};
 
 		wrap.step = function(backward) {
@@ -815,35 +824,31 @@ xhr.addEventListener('readystatechange', function() {
 				+ ' / ' + frames.length;
 		};
 
-		wrap.addEventListener('mouseup', onWrapMouseUp);
-		wrap.addEventListener(wheelEventName, wrap.wheeler);
-		currentFrame.addEventListener(wheelEventName, wrap.wheeler);
-
 		currentFrame.addEventListener('input', function() {
-			if ( parseFloat(speed.value, 10) !== 0 ) {
+			if ( speed.valueAsNumber ) {
 				wrap.stop();
 			}
 
 			if ( wrap.classList.contains('showall') ) {
-				onWrapMouseUp.call(wrap, {button: 0});
+				disableShowAll();
 			}
 
 			wrap.step(null);
 		});
 
 		speed.addEventListener('input', function() {
-			wrap.speedValue = parseFloat(speed.value) || 0;
-
-			if ( wrap.speedValue === 0 ) {
+			if ( !speed.valueAsNumber ) {
 				wrap.stop();
-				wrap.addEventListener(wheelEventName, wrap.wheeler);
 				return;
 			}
 
 			wrap.classList.remove('showall');
-			wrap.removeEventListener(wheelEventName, wrap.wheeler);
 			wrap.animate();
 		});
+
+		wrap.addEventListener('mouseup', onWrapMouseUp);
+		wrap.addEventListener(wheelEventName, wrap.wheeler);
+		currentFrame.addEventListener(wheelEventName, wrap.wheeler);
 	};
 
 	var processNextFrame = function() {
