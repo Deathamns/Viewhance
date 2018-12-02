@@ -243,8 +243,29 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'overflow-y: scroll !important;',
 		'text-align: center;',
 	'}',
-	'body.frames * {',
+	'body.frames > div {',
+		'width: 100%;',
+		'height: 100%;',
+		'box-sizing: border-box;',
+		'padding: 10px;',
+	'}',
+	'#top-panel {',
+		'position: fixed;',
+		'top: 0;',
+		'left: 0;',
+		'width: 100%;',
+		'padding: 10px;',
+		'background-image: linear-gradient(to bottom, #fff, #ddd);',
+		'box-shadow: 0 0 15px rgba(0, 0, 0, .4);',
+	'}',
+	'#frames {',
+		'margin: 50px 0 5px;',
+	'}',
+	'#frames > canvas, #frames > img {',
 		'margin: 2px;',
+	'}',
+	'#frames > .highlighted {',
+		'outline: 2px solid #00a1ff;',
 	'}',
 	'#frames > canvas, #frames > img {',
 		'display: none;',
@@ -264,7 +285,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'display: inline-block !important;',
 	'}',
 	'.partial-frame:hover {',
-		'outline: 1px dotted gray;',
+		'outline: 1px dotted #666;',
 	'}',
 	// Custom CSS
 	cfg.css
@@ -1584,14 +1605,45 @@ init = function() {
 	};
 
 	var startFrameExtractor = function(params) {
-		var message = {cmd: 'loadFile', path: 'js/frames.js'};
+		if ( !params ) {
+			var hashParams = win.location.hash.slice(1).split(';');
 
+			if ( !hashParams[0] ) {
+				return;
+			}
+
+			var hasParams = false;
+			var validKeys = {frm: 'initialFrame', full: 'fullFrames'};
+			params = {};
+
+			for ( var i = 0; i < hashParams.length; ++i ) {
+				var param = hashParams[i].split(':');
+
+				if ( validKeys[param[0]] ) {
+					params[validKeys[param[0]]] = param[1];
+					hasParams = true;
+				}
+			}
+
+			if ( !hasParams ) {
+				return;
+			}
+
+			params.initFromHash = true;
+		}
+
+		var message = {cmd: 'loadFile', path: 'js/frames.js'};
 		var onFrameEvent = function(ev) {
 			this.removeEventListener(ev.type, onFrameEvent);
+
 			// Error if detail is not null
 			if ( ev.detail !== null ) {
 				// eslint-disable-next-line no-alert
-				alert(ev.detail);
+
+				if ( !params.initFromHash ) {
+					alert(ev.detail);
+				}
+
 				var item = menu.querySelector('li[data-cmd="frames"]');
 				item.parentNode.removeChild(item);
 				return;
@@ -1609,9 +1661,9 @@ init = function() {
 		};
 
 		vAPI.messaging.send(message, function(data) {
-			doc.addEventListener('extractor-error', onFrameEvent);
+			doc.addEventListener('extractor-event', onFrameEvent);
 			doc.body.dataset.wheelEventName = vAPI.browser.wheel;
-			doc.body.dataset.fullFrames = !!params.fullFrames;
+			doc.body.dataset.params = JSON.stringify(params);
 
 			var frames = doc.createElement('script');
 			frames.textContent = data;
@@ -2206,6 +2258,7 @@ init = function() {
 	// Safari showed the menu even if the cursor wasn't at the edge
 	setTimeout(function() {
 		doc.addEventListener('mousemove', menuTrigger);
+		startFrameExtractor();
 	}, 500);
 };
 

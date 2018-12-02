@@ -175,7 +175,7 @@ xhr.addEventListener('readystatechange', function() {
 
 		if ( contentLength && contentLength > maxSize ) {
 			this.abort();
-			document.dispatchEvent(new CustomEvent('extractor-error', {
+			document.dispatchEvent(new CustomEvent('extractor-event', {
 				detail: 'Image is too large...'
 			}));
 			return;
@@ -219,7 +219,7 @@ xhr.addEventListener('readystatechange', function() {
 
 		if ( !this.imgType ) {
 			this.abort();
-			document.dispatchEvent(new CustomEvent('extractor-error', {
+			document.dispatchEvent(new CustomEvent('extractor-event', {
 				detail: 'Not animated...'
 			}));
 			return;
@@ -234,7 +234,7 @@ xhr.addEventListener('readystatechange', function() {
 	}
 
 	if ( this.responseText.length > maxSize ) {
-		document.dispatchEvent(new CustomEvent('extractor-error', {
+		document.dispatchEvent(new CustomEvent('extractor-event', {
 			detail: 'Image is too large...'
 		}));
 		return;
@@ -458,7 +458,7 @@ xhr.addEventListener('readystatechange', function() {
 
 		// Animation flag
 		if ( bin.packed[6] === '0' ) {
-			document.dispatchEvent(new CustomEvent('extractor-error', {
+			document.dispatchEvent(new CustomEvent('extractor-event', {
 				detail: this.imgType + ': not animated...'
 			}));
 			return;
@@ -489,7 +489,7 @@ xhr.addEventListener('readystatechange', function() {
 			}
 
 			if ( !animation.ANIM ) {
-				document.dispatchEvent(new CustomEvent('extractor-error', {
+				document.dispatchEvent(new CustomEvent('extractor-event', {
 					detail: this.imgType + ': ANIM chunk not found!'
 				}));
 				return;
@@ -544,7 +544,7 @@ xhr.addEventListener('readystatechange', function() {
 	}
 
 	if ( frames.length < 1 ) {
-		document.dispatchEvent(new CustomEvent('extractor-error', {
+		document.dispatchEvent(new CustomEvent('extractor-event', {
 			detail: this.imgType + ': not animated...'
 		}));
 		return;
@@ -563,7 +563,8 @@ xhr.addEventListener('readystatechange', function() {
 	}
 
 	var generateImageSRC, wrap, speed, currentFrame;
-	var drawFullFrame = document.body.dataset.fullFrames === 'true';
+	var params = JSON.parse(document.body.dataset.params);
+	var drawFullFrame = !!params.fullFrames;
 	var canvas = document.createElement('canvas');
 	var ctx = canvas.getContext('2d');
 	// "new Image" doesn't work in Maxthon
@@ -674,7 +675,8 @@ xhr.addEventListener('readystatechange', function() {
 
 			if ( canvas.width !== this.width
 				|| canvas.height !== this.height ) {
-				c.title = this.width + 'x' + this.height;
+				c.title = this.width + ' x ' + this.height
+					+ ' @ ' + frame.xOffset + ', ' + frame.yOffset;
 				c.className = 'partial-frame';
 			}
 		}
@@ -689,16 +691,31 @@ xhr.addEventListener('readystatechange', function() {
 
 		++frames.idx;
 		currentFrame.value = frames.idx;
+		currentFrame.nextElementSibling.value = currentFrame.value
+			+ ' / ' + frames.length;
 
 		processNextFrame(); // eslint-disable-line
 	};
 
 	var done = function() {
 		var wheelEventName = document.body.dataset.wheelEventName;
-		wrap.current = 0;
+		currentFrame.value = parseInt(params.initialFrame, 10) || 1;
+		currentFrame.nextElementSibling.value = currentFrame.value
+			+ ' / ' + frames.length;
+		wrap.current = currentFrame.value | 0;
 		wrap.children[wrap.children.length - 1].style.display = '';
 		wrap.children[wrap.current].style.display = 'inline-block';
-		currentFrame.value = 1;
+
+		var disableShowAll = function() {
+			wrap.addEventListener(wheelEventName, wrap.wheeler);
+			wrap.classList.remove('showall');
+
+			var highlighted = wrap.querySelector('.highlighted');
+
+			if ( highlighted ) {
+				highlighted.classList.remove('highlighted');
+			}
+		};
 
 		var onWrapMouseUp = function(e) {
 			if ( e.button !== 0 ) {
@@ -727,12 +744,18 @@ xhr.addEventListener('readystatechange', function() {
 					wrap.step(null);
 				}
 
-				this.addEventListener(wheelEventName, this.wheeler);
+				disableShowAll();
 			} else {
 				this.removeEventListener(wheelEventName, this.wheeler);
+				var oldRect = e.target.getBoundingClientRect();
+				this.classList.add('showall');
+				var newRect = e.target.getBoundingClientRect();
+				e.target.classList.add('highlighted');
+				window.scrollTo(
+					newRect.left - oldRect.left,
+					newRect.top - oldRect.top
+				);
 			}
-
-			this.classList.toggle('showall');
 		};
 
 		wrap.wheeler = function(e) {
@@ -740,6 +763,10 @@ xhr.addEventListener('readystatechange', function() {
 			wrap.stop();
 			e.preventDefault();
 			e.stopImmediatePropagation();
+
+			if ( wrap.classList.contains('showall') ) {
+				disableShowAll();
+			}
 		};
 
 		wrap.animate = function() {
@@ -828,7 +855,7 @@ xhr.addEventListener('readystatechange', function() {
 			img = null;
 			done();
 			document.dispatchEvent(
-				new CustomEvent('extractor-error', {detail: null})
+				new CustomEvent('extractor-event', {detail: null})
 			);
 		}
 	};
@@ -846,15 +873,16 @@ xhr.addEventListener('readystatechange', function() {
 	wrap.className = 'frames';
 	// Workaround wrapper for interference with Chrome's default viewer
 	wrap = wrap.appendChild(document.createElement('div'));
-	wrap.style.cssText = 'width: 100%; height: 100%';
 	var ce = document.createElement.bind(document);
 	var ct = document.createTextNode.bind(document);
-	var n = wrap.appendChild(ce('a'));
+	var tp = wrap.appendChild(ce('div'));
+	tp.id = 'top-panel';
+	var n = tp.appendChild(ce('a'));
 	n.className = 'back';
-	n.href = location.href;
+	n.href = location.href.replace(/#.*/, '');
 	n.textContent = '\u2190';
-	wrap.appendChild(ct(' '));
-	n = wrap.appendChild(ce('input'));
+	tp.appendChild(ct(' '));
+	n = tp.appendChild(ce('input'));
 	n.type = 'number';
 	n.id = 'speed';
 	n.style.cssText = 'width: 55px; text-align: center';
@@ -862,8 +890,8 @@ xhr.addEventListener('readystatechange', function() {
 	n.step = 0.5;
 	n.min = -10;
 	n.max = 10;
-	wrap.appendChild(ct('x '));
-	n = wrap.appendChild(ce('input'));
+	tp.appendChild(ct('x '));
+	n = tp.appendChild(ce('input'));
 	n.type = 'range';
 	n.id = 'current-frame';
 	n.style = 'width: 500px; vertical-align: middle';
@@ -871,10 +899,10 @@ xhr.addEventListener('readystatechange', function() {
 	n.value = 1;
 	n.step = 1;
 	n.min = 1;
-	wrap.appendChild(ct(' '));
-	n = wrap.appendChild(ce('output'));
-	n.for = 'currentFrame';
+	tp.appendChild(ct(' '));
+	n = tp.appendChild(ce('output'));
 	n.textContent = '1 / ' + frames.length;
+
 	wrap.appendChild(ct(' '));
 	wrap.appendChild(ce('div')).id = 'frames';
 
@@ -887,7 +915,7 @@ xhr.addEventListener('readystatechange', function() {
 });
 
 xhr.addEventListener('error', function() {
-	document.dispatchEvent(new CustomEvent('extractor-error', {
+	document.dispatchEvent(new CustomEvent('extractor-event', {
 		detail: 'Failed to load!'
 	}));
 });
