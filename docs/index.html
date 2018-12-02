@@ -59,7 +59,7 @@
 
 		code {
 			padding: 4px;
-			display: block;
+			display: inline-block;
 			border: 1px solid #ddd;
 		}
 
@@ -290,6 +290,16 @@
 		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
 
 	<ul class="versions">
+		<li id="v2018.1202.1831"><b>2018.1202.1831</b>
+		<pre>
++ Frame exctractor for animated images now accepts parameters from the URL: <b>frm</b> - initial frame number, <b>full</b> - force full frame exctraction. Example: <code>https://url/animated_image.gif#<b>frm:23;full:1</b></code> (obviously this works only for those use this extension)
+* Other frame extractor imporvements
+# Event handling fixes (some clicks didn't register)
+# (opr) Shortcuts stopped working after cliking menu items
+# (opr) Workaround for percentage calculation in the title
+		</pre>
+		</li>
+
 		<li id="v2018.1129.1652"><b>2018.1129.1652</b>
 		<pre>
 + Export/Import for settings at the Info page in Options
