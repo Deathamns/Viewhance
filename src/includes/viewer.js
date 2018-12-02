@@ -469,8 +469,8 @@ init = function() {
 		var oh = m.naturalHeight || m.videoHeight;
 
 		switch ( param ) {
-			case 'w': return m.width || m.clientWidth;
-			case 'h': return m.height || m.clientHeight;
+			case 'w': return m.angle ? m.clientWidth : m.width;
+			case 'h': return m.angle ? m.clientHeight : m.height;
 			case 'ow': return ow;
 			case 'oh': return oh;
 			case 'url': return win.location.href;
@@ -478,7 +478,8 @@ init = function() {
 			case 'ratio':
 				return Math.round(ow / oh * 100) / 100;
 			case 'perc':
-				m = (m.width || m.videoWidth) * 100 / ow;
+				m = m.videoWidth || (m.angle ? m.clientWidth : m.width);
+				m *= 100 / ow;
 				return m < 2 ? m.toFixed(1) : Math.round(m);
 			case 'size':
 				if ( m._size !== void 0 ) {
