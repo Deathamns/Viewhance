@@ -7,6 +7,7 @@
 	"center": true,
 	"clickOverDoc": false,
 	"wheelZoom": false,
+	"wheelZoomWithKey": "",
 	"zoomParams": "",
 	"mediaAttrs": "autoplay controls loop",
 	"lpLeft": 1,

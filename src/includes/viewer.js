@@ -730,10 +730,6 @@ init = function() {
 	};
 
 	var wheelZoom = function(e) {
-		if ( !isValidWheelTarget(e.target) ) {
-			return;
-		}
-
 		pdsp(e);
 		stopScroll();
 
@@ -863,11 +859,7 @@ init = function() {
 		});
 	};
 
-	var onWheel = function(e) {
-		if ( !isValidWheelTarget(e.target) ) {
-			return;
-		}
-
+	var wheelPan = function(e) {
 		var w = Math.round(media.box.width);
 		var h = Math.round(media.box.height);
 
@@ -898,23 +890,28 @@ init = function() {
 		win.scrollBy(x, y);
 	};
 
-	var toggleWheelZoom = function() {
-		var evName = vAPI.browser.wheel;
+	var onWheel = function(e) {
+		if ( !isValidWheelTarget(e.target) ) {
+			return;
+		}
+
+		if ( cfg.wheelZoom || e[cfg.wheelZoomWithKey + 'Key'] ) {
+			wheelZoom(e);
+		} else {
+			wheelPan(e);
+		}
+	};
+
+	var toggleWheelZoom = function(noToggle) {
+		if ( !noToggle ) {
+			cfg.wheelZoom = !cfg.wheelZoom;
+		}
+
 		var zoomMenuItem = menu && menu.querySelector('li[data-cmd="zoom"]');
 
 		if ( zoomMenuItem ) {
 			zoomMenuItem.style.display = cfg.wheelZoom ? 'none' : '';
 		}
-
-		if ( cfg.wheelZoom ) {
-			doc.removeEventListener(evName, onWheel, true);
-			doc.addEventListener(evName, wheelZoom, true);
-		} else {
-			doc.removeEventListener(evName, wheelZoom, true);
-			doc.addEventListener(evName, onWheel, true);
-		}
-
-		cfg.wheelZoom = !cfg.wheelZoom;
 	};
 
 	var onMoveFrame = function() {
@@ -1673,6 +1670,10 @@ init = function() {
 	};
 
 	win.addEventListener('resize', onWinResize);
+	doc.addEventListener(vAPI.browser.wheel, onWheel, {
+		passive: false,
+		capture: true
+	});
 	doc.addEventListener('mousedown', onMouseDown, true);
 	doc.addEventListener('mouseup', onMouseUp, true);
 	doc.addEventListener('contextmenu', onContextMenu, true);
@@ -1704,7 +1705,6 @@ init = function() {
 		});
 	}
 
-	toggleWheelZoom();
 	setOriginalDimensions();
 	progress = win.getComputedStyle(media);
 	// Original dimensions with padding and border
@@ -1806,6 +1806,7 @@ init = function() {
 		case 'none':
 			menu.parentNode.removeChild(menu);
 			menu = null;
+			toggleWheelZoom(true);
 			return;
 
 		case 'flex':
@@ -2012,6 +2013,7 @@ init = function() {
 		{tag: 'li', attrs: {'data-cmd': 'options'}}
 	]);
 
+	toggleWheelZoom(true);
 	menu.width = menu.offsetWidth;
 	menu.height = menu.offsetHeight;
 

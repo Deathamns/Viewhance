@@ -248,6 +248,10 @@
 			"#": 0,
 			">": "Zoom with mouse wheel"
 		},
+		"wheelZoomWithKey": {
+			"#": 0,
+			">": "Zoom with mouse wheel with key"
+		},
 		"zoomParams": {
 			"#": 0,
 			">": "Zoom step; snap points"

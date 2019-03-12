@@ -231,6 +231,10 @@
 		"wheelZoom": {
 			"#": 0,
 			">": "Nagyítás görgetéssel"
+		},
+		"wheelZoomWithKey": {
+			"#": 0,
+			">": "Nagyítás görgetéssel gomb nyomva-tartásával"
 		}
 	}
 }
