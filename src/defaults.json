@@ -18,8 +18,8 @@
 		"Bing|https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=%url",
 		"Yandex|https://yandex.ru/images/search?rpt=imageview&img_url=%url",
 		"ZXing QRCode|https://zxing.org/w/decode?full=true&u=%url",
-		"ImgOps|https://imgops.com/%url",
-		"Pixlr|https://apps.pixlr.com/editor/?image=%url",
+		"ImgOps|https://imgops.com/%raw_url",
+		"Pixlr|https://www.pixlr.com/editor/?image=%url",
 		"PicMonkey|https://www.picmonkey.com/service?_import=%url"
 	],
 	"menuTriggerArea": null,

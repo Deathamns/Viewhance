@@ -2081,7 +2081,9 @@ init = function() {
 		var href = t.href;
 
 		if ( href && href.indexOf('%') !== -1 ) {
-			t.href = href.replace('%url', encodeURIComponent(media.src));
+			t.href = href
+				.replace('%raw_url', media.src)
+				.replace('%url', encodeURIComponent(media.src));
 		}
 
 		pdsp(e, !!t.textContent);
