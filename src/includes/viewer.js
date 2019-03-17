@@ -158,13 +158,17 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'display: flex;',
 		'position: fixed;',
 		'top: 0;',
+		'left: 0;',
 	'}',
 	'#menu:not(.permanent) {',
 		'opacity: 0;',
-		vAPI.browser.transitionCSS, ': opacity .15s, left .2s;',
+		vAPI.browser.transitionCSS, ': opacity .15s, top .2s, right .2s, bottom .2s, left .2s;',
+	'}',
+	'#menu > ul {',
+		'display: flex;',
+		'flex-direction: column;',
 	'}',
 	'ul {',
-		'display: inline-block;',
 		'margin: 0;',
 		'padding: 8px 0;',
 		'background: rgba(0, 0, 0, .6); color: #fff;',
@@ -195,21 +199,52 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'li > svg:hover {',
 		'opacity: .6;',
 	'}',
-	'li ul {',
+	'li > ul {',
+		'display: block;',
 		'visibility: hidden;',
 		'position: absolute;',
-		'top: 0;',
-		'left: 100%;',
 		'text-align: left;',
 		'opacity: 0;',
 	'}',
-	'li:hover ul {',
+	'.top.left.vertical li > ul {',
+		'top: 0;',
+		'left: 100%;',
+	'}',
+	'.top.left.horizontal li > ul {',
+		'top: 100%;',
+		'left: 0;',
+	'}',
+	'.top.right.vertical li > ul {',
+		'top: 0;',
+		'right: 100%;',
+	'}',
+	'.top.right.horizontal li > ul {',
+		'top: 100%;',
+		'right: 0;',
+	'}',
+	'.bottom.left.vertical li > ul {',
+		'bottom: 0;',
+		'left: 100%;',
+	'}',
+	'.bottom.left.horizontal li > ul {',
+		'bottom: 100%;',
+		'left: 0;',
+	'}',
+	'.bottom.right.vertical li > ul {',
+		'bottom: 0;',
+		'right: 100%;',
+	'}',
+	'.bottom.right.horizontal li > ul {',
+		'bottom: 100%;',
+		'right: 0;',
+	'}',
+	'li:hover > ul {',
 		'display: block;',
 		'visibility: visible;',
 		'opacity: 1;',
 		vAPI.browser.transitionCSS, ': visibility .4s, opacity .2s .3s;',
 	'}',
-	'li ul > li {',
+	'li > ul > li {',
 		'display: block !important;',
 		'font-size: 15px;',
 	'}',
@@ -1802,26 +1837,28 @@ init = function() {
 	menu = root.appendChild(doc.createElement('div'));
 	menu.id = 'menu';
 
-	switch ( win.getComputedStyle(menu).display ) {
+	menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px);';
+
+	if ( menu.style.filter || menu.style.webkitFilter ) {
+		vAPI.browser.filter = menu.style.filter ? 'filter' : '-webkit-filter';
+	}
+
+	var menuStyle = win.getComputedStyle(menu);
+
+	switch ( menuStyle.display ) {
 		case 'none':
 			menu.parentNode.removeChild(menu);
 			menu = null;
 			toggleWheelZoom(true);
 			return;
 
-		case 'flex':
-			menu.style.display = 'block';
-			break;
-
 		case 'block':
 			menu.classList.add('permanent');
 			break;
-	}
 
-	menu.style.cssText = '-webkit-filter: blur(0px); filter: blur(0px);';
-
-	if ( menu.style.filter || menu.style.webkitFilter ) {
-		vAPI.browser.filter = menu.style.filter ? 'filter' : '-webkit-filter';
+		default:
+			menu.style.display = 'block';
+			break;
 	}
 
 	var onMenuChange = function(e) {
@@ -2014,11 +2051,29 @@ init = function() {
 	]);
 
 	toggleWheelZoom(true);
-	menu.width = menu.offsetWidth;
-	menu.height = menu.offsetHeight;
+
+	menu.direction = win.getComputedStyle(menu.firstElementChild)
+		.flexDirection.lastIndexOf('column', 0)
+		? 'horizontal'
+		: 'vertical';
+
+	menu.animProperty = menu.direction === 'vertical'
+		? menuStyle.right === 'auto' ? 'left' : 'right'
+		: menuStyle.bottom === 'auto' ? 'top' : 'bottom';
+
+	menu.classList.add(menu.direction);
+	menu.classList.add(menuStyle.right === 'auto' ? 'left' : 'right');
+	menu.classList.add(menuStyle.bottom === 'auto' ? 'top' : 'bottom');
+
+	var menuRect = menu.getBoundingClientRect();
 
 	if ( !menu.classList.contains('permanent') ) {
-		menu.style.cssText = 'display: none; left: -' + menu.width + 'px';
+		menu.style.cssText = 'display: none;'
+			+ menu.animProperty + ': -'
+			+ (menu.direction === 'vertical'
+				? menuRect.width
+				: menuRect.height)
+			+ 'px';
 	}
 
 	menu.addEventListener('mousedown', function(e) {
@@ -2198,28 +2253,32 @@ init = function() {
 			return;
 		}
 
-		var triggerArea = [menu.width, menu.height];
 		var mta = cfg.menuTriggerArea;
+		var extendedTrigger = [0, 0];
 
 		if ( Array.isArray(mta) ) {
-			triggerArea[0] = parseFloat(mta[0]) || triggerArea[0];
-			triggerArea[1] = parseFloat(mta[1]) || triggerArea[1];
-
-			if ( mta[0] && typeof mta[0] === 'string' ) {
-				triggerArea[0] *= winW / 100;
+			if ( mta[0] ) {
+				extendedTrigger[0] = typeof mta[0] === 'string'
+					? parseFloat(mta[0]) * winW / 100
+					: mta[0];
 			}
 
-			if ( mta[1] && typeof mta[1] === 'string' ) {
-				triggerArea[1] *= winH / 100;
+			if ( mta[1] ) {
+				extendedTrigger[1] = typeof mta[1] === 'string'
+					? parseFloat(mta[1]) * winH / 100
+					: mta[1];
 			}
 		}
 
-		if ( e.clientX > triggerArea[0] || e.clientX < 0
-			|| e.clientY > triggerArea[1] || e.clientY < 0 ) {
+		if ( menuRect.right + extendedTrigger[0] < e.clientX
+			|| menuRect.left - extendedTrigger[0] > e.clientX
+			|| menuRect.top + extendedTrigger[1] > e.clientY
+			|| menuRect.bottom - extendedTrigger[1] < e.clientY ) {
 			return;
 		}
 
 		if ( menu.style.display === 'block' ) {
+			console.log(1);
 			return;
 		}
 
@@ -2227,7 +2286,7 @@ init = function() {
 		doc.removeEventListener('mousemove', menuTrigger);
 
 		setTimeout(function() {
-			menu.style.left = '0';
+			menu.style[menu.animProperty] = '0';
 			menu.style.opacity = '1';
 		}, 50);
 
@@ -2241,7 +2300,7 @@ init = function() {
 
 		clearTimeout(this.hideTimer);
 		this.hideTimer = null;
-		this.style.left = '0';
+		this.style[menu.animProperty] = '0';
 		this.style.opacity = '1';
 	});
 
@@ -2249,13 +2308,18 @@ init = function() {
 		this.hideTimer = setTimeout(function() {
 			doc.addEventListener('mousemove', menuTrigger);
 			menu.hideTimer = null;
-			menu.style.left = '-' + menu.offsetWidth + 'px';
+			menu.style[menu.animProperty] = '-'
+				+ (menu.direction === 'vertical'
+					? menu.offsetWidth
+					: menu.offsetHeight)
+				+ 'px';
 			menu.style.opacity = '0';
 		}, 800);
 	});
 
 	menu.addEventListener(vAPI.browser.transitionend, function(e) {
-		if ( e.propertyName === 'left' && this.style.left[0] === '-' ) {
+		if ( e.propertyName === menu.animProperty
+			&& this.style[menu.animProperty][0] === '-' ) {
 			this.style.display = 'none';
 		}
 	});
