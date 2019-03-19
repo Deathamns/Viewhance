@@ -2256,32 +2256,50 @@ init = function() {
 			return;
 		}
 
+		var right = menuRect.right;
+		var left = menuRect.left;
+		var top = menuRect.top;
+		var bottom = menuRect.bottom;
 		var mta = cfg.menuTriggerArea;
-		var extendedTrigger = [0, 0];
 
 		if ( Array.isArray(mta) ) {
 			if ( mta[0] ) {
-				extendedTrigger[0] = typeof mta[0] === 'string'
+				var xw = typeof mta[0] === 'string'
 					? parseFloat(mta[0]) * winW / 100
 					: mta[0];
+
+				if ( menu.classList.contains('left') ) {
+					right -= menuRect.width;
+				} else {
+					left += menuRect.width;
+				}
+
+				left -= xw;
+				right += xw;
 			}
 
 			if ( mta[1] ) {
-				extendedTrigger[1] = typeof mta[1] === 'string'
+				var yh = typeof mta[1] === 'string'
 					? parseFloat(mta[1]) * winH / 100
 					: mta[1];
+
+				if ( menu.classList.contains('top') ) {
+					bottom -= menuRect.height;
+				} else {
+					top += menuRect.height;
+				}
+
+				top -= yh;
+				bottom += yh;
 			}
 		}
 
-		if ( menuRect.right + extendedTrigger[0] < e.clientX
-			|| menuRect.left - extendedTrigger[0] > e.clientX
-			|| menuRect.top + extendedTrigger[1] > e.clientY
-			|| menuRect.bottom - extendedTrigger[1] < e.clientY ) {
+		if ( right < e.clientX || bottom < e.clientY
+			|| top > e.clientY || left > e.clientX ) {
 			return;
 		}
 
 		if ( menu.style.display === 'block' ) {
-			console.log(1);
 			return;
 		}
 
