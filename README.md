@@ -16,7 +16,7 @@ Only the latest browser versions are fully supported. It may work on older versi
 - [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527)
 
 ## Contribution ##
-- **Localization** You can use [this helper tool](https://rawgit.com/Deathamns/Viewhance/master/l10n/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
+- **Localization** You can use [this helper tool](https://deathamns.github.io/Viewhance/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
 - **Code** If you have a bug-fix, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge too much from the main goal; viewing enhancements.
 The code must work on all supported platforms, except if the browser's extension API doesn't provide appropriate functionality, then fail silently.
 

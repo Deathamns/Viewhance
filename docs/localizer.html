@@ -245,7 +245,7 @@ var defLang = 'en';
 var trgLocaleExists = false;
 var isLocal = !location.host || location.host === 'localhost';
 var baseUrl = isLocal
-	? 'http://localhost/l10n/'
+	? '../l10n/'
 	: 'https://api.github.com/repos/Deathamns/Viewhance/contents/l10n/';
 
 var $ = function(s, n) {
@@ -569,7 +569,9 @@ $('#locales-table').ondblclick = function(e) {
 	}
 
 	var ta = document.createElement('textarea');
-	ta.value = ta.defaultValue = target.textContent;
+	ta.value = target.textContent;
+	ta.defaultValue = ta.value;
+	ta.lang = $('#target-language > select').value;
 	var guessedLines = countLines(
 		ta.value || $(
 			'td:nth-child(3)',
@@ -709,7 +711,7 @@ $('#export-button').onclick = function(e) {
 
 	emptyGroup = true;
 
-	for ( var group in data ) {
+	for ( group in data ) {
 		if ( group[0] === '_' ) {
 			continue;
 		}

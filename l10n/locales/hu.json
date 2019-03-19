@@ -41,8 +41,8 @@
 			">": "Itt lehetseéges a háttér színének, kép keretének/árnyékának, stb. beállítása, illetve a görgősávok és a lebegő menü elrejtése.\nPéldákért vidd az egérkurzort a kérdőjel fölé, a színkódokhoz pedig használd a fenti színválasztót."
 		},
 		"customCssTip": {
-			"#": 1,
-			">": "<code>body {\n background: #f3f3f5; /* Bármilyen elfogadott background érték (szín, url(), színátmenet...). */\n overflow: hidden; /* Elrejti a görgősávot. \"hidden\" változtatása \"auto\"-ra a megjelenítésükhöz. */\n}\n\n#media {\n background: #eef; /* Más háttér kizárólag a képnek. */\n border: 10px solid white; /* Egyéni képkeret. */\n box-shadow: 0 0 10px grey; /* Kép körüli árnyék. */\n cursor: default !important; /* Az egérkurzor változatlan marad ezzel az értékkel. */\n}\n\n.mask {\n color: rgba(0, 0, 0, .4); /* A szabad méretezés mask színe. */\n}\n\n#menu {\n display: none; /* A lebegő menü elrejtése. */\n}\n</code>"
+			"#": 2,
+			">": "<code>body {\n background: #f3f3f5; /* Bármilyen elfogadott background érték (szín, url(), színátmenet...). */\n overflow: hidden; /* Elrejti a görgősávot. \"hidden\" változtatása \"auto\"-ra a megjelenítésükhöz. */\n}\n\n#media {\n background: #eef; /* Más háttér kizárólag a képnek. */\n border: 10px solid white; /* Egyéni képkeret. */\n box-shadow: 0 0 10px grey; /* Kép körüli árnyék. */\n cursor: default !important; /* Az egérkurzor változatlan marad ezzel az értékkel. */\n}\n\n/* A szabad méretezés mask színe. */\n.mask { color: rgba(0, 0, 0, .4); }\n\n/* Menü elrejtése. */\n#menu { display: none; }\n\n/* Statikus menü. */\n#menu { display: block; }\n\n/* Menü elhelyezése: */\n#menu { top: auto; bottom: 0; } /* jobb lent */\n#menu { left: auto; bottom: 0; } /* fent bal */\n#menu { top: auto; left: auto; right: 0; bottom: 0; } /* lent bal */\n\n/* Horizontális menü */\n#menu > ul { flex-direction: row; }\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,
