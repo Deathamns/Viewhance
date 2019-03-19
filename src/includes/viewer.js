@@ -930,7 +930,8 @@ init = function() {
 			return;
 		}
 
-		if ( cfg.wheelZoom || e[cfg.wheelZoomWithKey + 'Key'] ) {
+		if ( cfg.wheelZoom
+			|| cfg.wheelZoomWithKey && e[cfg.wheelZoomWithKey + 'Key'] ) {
 			wheelZoom(e);
 		} else {
 			wheelPan(e);
