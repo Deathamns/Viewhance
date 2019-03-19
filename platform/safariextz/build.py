@@ -5,7 +5,7 @@ import json
 import subprocess
 from io import open
 from time import time
-from shutil import rmtree, copy
+from shutil import rmtree, copy, which
 from collections import OrderedDict
 
 try:
@@ -148,6 +148,12 @@ class Platform(object):
                 'https://www.apple.com/appleca/AppleIncRootCertificate.cer',
                 pj(certs, 'AppleIncRootCertificate.cer')
             )
+
+        if which('xar') is None:
+            try: rmtree(tmp_dir)
+            except: pass
+
+            return False
 
         subprocess.call([
             'xar', '-czf', package,

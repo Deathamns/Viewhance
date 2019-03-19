@@ -404,10 +404,14 @@ for platform_name in platforms:
         platform.write_files(params['-useln'])
 
         if params['-pack']:
-            platform.write_package()
+            if platform.write_package() == False:
+                print('Package creation failed for ' + platform_name +
+                    ' @ ' + platform.build_dir)
+            else:
+                print('Package is ready for ' + platform_name +
+                    ' @ ' + platform.build_dir)
+
             platform.write_update_file()
-            print('Package is ready for ' + platform_name +
-                ' @ ' + platform.build_dir)
         else:
             print('Files are ready for ' + platform_name +
                 ' @ ' + platform.build_dir)
