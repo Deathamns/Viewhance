@@ -155,7 +155,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'box-shadow: none;',
 	'}',
 	'#menu {',
-		'display: flex;',
+		'display: inline-flex;',
 		'position: fixed;',
 		'top: 0;',
 		'left: 0;',
@@ -165,7 +165,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		vAPI.browser.transitionCSS, ': opacity .15s, top .2s, right .2s, bottom .2s, left .2s;',
 	'}',
 	'#menu > ul {',
-		'display: flex;',
+		'display: inline-flex;',
 		'flex-direction: column;',
 	'}',
 	'ul {',
@@ -199,52 +199,52 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'li > svg:hover {',
 		'opacity: .6;',
 	'}',
-	'li > ul {',
+	'li ul {',
 		'display: block;',
 		'visibility: hidden;',
 		'position: absolute;',
 		'text-align: left;',
 		'opacity: 0;',
 	'}',
-	'.top.left.vertical li > ul {',
+	'.top.left.vertical li ul {',
 		'top: 0;',
 		'left: 100%;',
 	'}',
-	'.top.left.horizontal li > ul {',
+	'.top.left.horizontal li ul {',
 		'top: 100%;',
 		'left: 0;',
 	'}',
-	'.top.right.vertical li > ul {',
+	'.top.right.vertical li ul {',
 		'top: 0;',
 		'right: 100%;',
 	'}',
-	'.top.right.horizontal li > ul {',
+	'.top.right.horizontal li ul {',
 		'top: 100%;',
 		'right: 0;',
 	'}',
-	'.bottom.left.vertical li > ul {',
+	'.bottom.left.vertical li ul {',
 		'bottom: 0;',
 		'left: 100%;',
 	'}',
-	'.bottom.left.horizontal li > ul {',
+	'.bottom.left.horizontal li ul {',
 		'bottom: 100%;',
 		'left: 0;',
 	'}',
-	'.bottom.right.vertical li > ul {',
+	'.bottom.right.vertical li ul {',
 		'bottom: 0;',
 		'right: 100%;',
 	'}',
-	'.bottom.right.horizontal li > ul {',
+	'.bottom.right.horizontal li ul {',
 		'bottom: 100%;',
 		'right: 0;',
 	'}',
-	'li:hover > ul {',
+	'li:hover > ul, li:hover > form > ul {',
 		'display: block;',
 		'visibility: visible;',
 		'opacity: 1;',
 		vAPI.browser.transitionCSS, ': visibility .4s, opacity .2s .3s;',
 	'}',
-	'li > ul > li {',
+	'li ul > li {',
 		'display: block !important;',
 		'font-size: 15px;',
 	'}',
@@ -2059,22 +2059,21 @@ init = function() {
 		: 'vertical';
 
 	menu.animProperty = menu.direction === 'vertical'
-		? menuStyle.right === 'auto' ? 'left' : 'right'
-		: menuStyle.bottom === 'auto' ? 'top' : 'bottom';
+		? menuStyle.left === '0px' ? 'left' : 'right'
+		: menuStyle.top === '0px' ? 'top' : 'bottom';
 
 	menu.classList.add(menu.direction);
-	menu.classList.add(menuStyle.right === 'auto' ? 'left' : 'right');
-	menu.classList.add(menuStyle.bottom === 'auto' ? 'top' : 'bottom');
-
-	var menuRect = menu.getBoundingClientRect();
+	menu.classList.add(menuStyle.left === '0px' ? 'left' : 'right');
+	menu.classList.add(menuStyle.top === '0px' ? 'top' : 'bottom');
+	menu.isLeft = menu.classList.contains('left');
+	menu.isTop = menu.classList.contains('top');
+	menu.width = menu.offsetWidth;
+	menu.height = menu.offsetHeight;
 
 	if ( !menu.classList.contains('permanent') ) {
 		menu.style.cssText = 'display: none;'
 			+ menu.animProperty + ': -'
-			+ (menu.direction === 'vertical'
-				? menuRect.width
-				: menuRect.height)
-			+ 'px';
+			+ (menu.direction === 'vertical' ? menu.width : menu.height) + 'px';
 	}
 
 	menu.addEventListener('mousedown', function(e) {
@@ -2256,10 +2255,10 @@ init = function() {
 			return;
 		}
 
-		var right = menuRect.right;
-		var left = menuRect.left;
-		var top = menuRect.top;
-		var bottom = menuRect.bottom;
+		var left = 0;
+		var right = menu.width;
+		var top = 0;
+		var bottom = menu.height;
 		var mta = cfg.menuTriggerArea;
 
 		if ( Array.isArray(mta) ) {
@@ -2268,14 +2267,12 @@ init = function() {
 					? parseFloat(mta[0]) * winW / 100
 					: mta[0];
 
-				if ( menu.classList.contains('left') ) {
-					right -= menuRect.width;
+				if ( menu.isLeft ) {
+					right = xw;
 				} else {
-					left += menuRect.width;
+					left = winW - xw;
+					right = winW;
 				}
-
-				left -= xw;
-				right += xw;
 			}
 
 			if ( mta[1] ) {
@@ -2283,14 +2280,22 @@ init = function() {
 					? parseFloat(mta[1]) * winH / 100
 					: mta[1];
 
-				if ( menu.classList.contains('top') ) {
-					bottom -= menuRect.height;
+				if ( menu.isTop ) {
+					bottom = yh;
 				} else {
-					top += menuRect.height;
+					top = winH - yh;
+					bottom = winH;
 				}
+			}
+		} else {
+			if ( !menu.isLeft ) {
+				left = winW - menu.width;
+				right = winW;
+			}
 
-				top -= yh;
-				bottom += yh;
+			if ( !menu.isTop ) {
+				top = winH - menu.height;
+				bottom = winH;
 			}
 		}
 
