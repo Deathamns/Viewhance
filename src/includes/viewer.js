@@ -162,7 +162,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 	'}',
 	'#menu:not(.permanent) {',
 		'opacity: 0;',
-		vAPI.browser.transitionCSS, ': opacity .15s, top .2s, right .2s, bottom .2s, left .2s;',
+		vAPI.browser.transitionCSS, ': opacity .1s, top .2s, right .2s, bottom .2s, left .2s;',
 	'}',
 	'#menu > ul {',
 		'display: inline-flex;',

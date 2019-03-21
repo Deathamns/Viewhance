@@ -24,7 +24,7 @@
 
 		.FAQ {
 			float: right;
-			margin: 0 0 10px;
+			margin: 0 0 10px 10px;
 			max-width: 40%;
 			border-bottom: 1px solid #e5e5e5;
 			border-left: 1px solid #e5e5e5;
@@ -34,7 +34,7 @@
 
 		.FAQ > ul {
 			list-style-type: square;
-			font-size: 10px;
+			font-size: 0.9em;
 			padding: 0 0 0 10px;
 		}
 
@@ -60,7 +60,7 @@
 		code {
 			padding: 4px;
 			display: inline-block;
-			border: 1px solid #ddd;
+			border: 1px solid #ccc;
 		}
 
 		.versions > li:target {
@@ -102,6 +102,9 @@
 			font-family: "trebuchet ms", "lucida grande", "lucida sans unicode", "arial", "helvetica", sans-serif;
 			margin: 0 20px;
 		}
+		.fade {
+			opacity: .3;
+		}
 		#install > div > div {
 			font: 11px Tahoma, Consolas;
 			width: 1000%;
@@ -115,7 +118,7 @@
 			background: linear-gradient(to bottom, #fff, rgba(245, 245, 255, .9));
 			border: 1px solid #ddd;
 			border-radius: 6px;
-			box-shadow: 0 0 10px #666;
+			box-shadow: 0 0 10px #ddd;
 			opacity: 0;
 			visibility: hidden;
 			transition: visibility 0s .2s, opacity .3s, top .2s;
@@ -174,7 +177,11 @@
 		<h3>FAQ</h3>
 		<ul>
 			<li>
-				<em>What the buttons do on the floating menu?</em>
+				<h3>Where can I report issues?</h3>
+				<a href="https://github.com/Deathamns/Viewhance/issues">Here</a>.
+			</li>
+			<li>
+				<h3>What the buttons do on the floating menu?</h3>
 				* - the wheel, and both left and right mouse buttons can be used on it
 				<table class="menu-icons">
 					<tr>
@@ -216,8 +223,15 @@
 				</table>
 			</li>
 			<li>
-				<em>Where can I report issues?</em>
-				<a href="https://github.com/Deathamns/Viewhance/issues">Here</a>.
+				<h3>How to change the menu position or its size?</h3>
+				You can achive that with <b>custom CSS</b>, which can be set at the options page. You can see examples if you hover over the question mark beside that option. Also you can inspect the menu in the DOM to see its structure if you want to customize it futher.
+			</li>
+			<li>
+				<h3>Hidden options</h3>
+				You can change hidden options by importing them at Options / Info. For example: <code>{"menuTriggerArea": ["10%", 100]}</code><br><br>
+
+				<code>menuTriggerArea</code> Custom trigger area for the menu (measured from the corner where the menu is placed). Possible values: [px, px] or ["%", "%"] or null (default, which is the size of the menu).<br><br>
+				<code>scaling</code> It fakes the original dimensions. Possible values: float (e.g., <b>1.5</b> for 150%), special value: <code>*</code> ignores device scaling, so it renders the media at 100%. If negative value is used, the device scaling is ignored first, then the absolute of the scale value is applied.
 			</li>
 		</ul>
 	</div>
@@ -229,9 +243,9 @@
 		<div>
 			<img src="img/browser_icons/icon32_opera.png" alt="Opera">
 			<div>
-					To install on Opera 12, download the extension file and drop it into the browser window.
+				To install on Opera 12, download the extension file and drop it into the browser window.
 				<br><br>
-					In Opera 15+, the extension must be manually enabled in the Extension manager (Ctrl+Shift+E) after install.
+				In Opera 15+, the extension must be manually enabled in the Extension manager (Ctrl+Shift+E) after install.
 				<br><br>
 				<div style="float: left; width: 50%; text-align: center">
 					<a href="https://tiny.cc/Viewhance-oex" rel="nofollow" title="Install for Opera 12">
@@ -243,8 +257,6 @@
 						<img src="img/browser_icons/icon32_operc.png" alt="Opera 15+" style="vertical-align: middle"> <b>15+</b>
 					</a>
 				</div>
-				<br>
-				<br>
 			</div>
 		</div>
 		<div>
@@ -258,21 +270,23 @@
 			</a>
 		</div>
 		<div>
-			<a href="https://tiny.cc/Viewhance-safariextz" rel="nofollow">
-				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+">
-			</a>
-		</div>
-		<div>
 			<a href="http://extension.maxthon.com/detail/index.php?view_id=2527" rel="nofollow">
 				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon" title="Install from Maxthon Extension Center">
 			</a>
 		</div>
-		<!-- <div>
-			<a href="viewhance-edge.zip" rel="nofollow">
-				<img src="img/browser_icons/icon32_msedge.png" alt="MS Edge" title="Install from Microsoft Edge">
+		<div>
+			<!-- https://tiny.cc/Viewhance-safariextz -->
+			<a rel="nofollow" class="fade">
+				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+">
 			</a>
-			<div><a href="https://www.youtube.com/watch?v=hKAywBrQeAw#t=54">This video</a> will show you how to install it on MS Edge (versions available only on <a href="https://insider.windows.com/">Windows Insider</a>).</div>
-		</div> -->
+			<div>You have to install it from source. Also it hasn't been tested for a while now, it might not even work.</div>
+		</div>
+		<div>
+			<a rel="nofollow" class="fade">
+				<img src="img/browser_icons/icon32_msedge.png" alt="MS Edge">
+			</a>
+			<div>You have to install it from source or use the Chrome version.</div>
+		</div>
 	</div>
 
 	<pre>
@@ -290,6 +304,15 @@
 		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
 
 	<ul class="versions">
+		<li id="v2019.321.1540"><b>v2019.321.1540</b>
+		<pre>
++ New option: zooming when holding a modifier key
++ Allow changing the menu position (via CSS)
+# Updated send-to URLs
+* Other smaller fixes
+		</pre>
+		</li>
+
 		<li id="v2018.1202.1831"><b>2018.1202.1831</b>
 		<pre>
 + Frame exctractor for animated images now accepts parameters from the URL: <b>frm</b> - initial frame number, <b>full</b> - force full frame exctraction. Example: <code>https://url/animated_image.gif#<b>frm:23;full:1</b></code> (obviously this works only for those use this extension)
@@ -304,7 +327,7 @@
 		<pre>
 + Export/Import for settings at the Info page in Options
 + New option: register clicks on the whole document, not just over the image
-+ Custom trigger area for the menu as hidden option (can be set via the import feature): <b>menuTriggerArea</b> <i>(measured from the top left corner)</i>: [px, px] or ['%', '%'] or null for default values, which is the size of the menu itself
++ Custom trigger area for the menu as hidden option (can be set via the import feature): <b>menuTriggerArea</b> <i>(measured from the top left corner)</i>: [px, px] or ["%", "%"] or null for default values, which is the size of the menu itself
 + New hidden option: <b>scaling</b> (float, e.g. <i>1.5</i> => 150%) - it fakes the original dimensions. Special value: <b>*</b> ignores device scaling, so it renders the media at 100%. If negative value is used, the device scaling is ignored first, then the absolute of the scale value is applied
 # Other minor fixes
 		</pre>
