@@ -123,7 +123,12 @@ var onMessage = function(message, source, respond) {
 				return;
 			}
 
-			vAPI.tabs.create({url: url, active: !message.nf});
+			vAPI.tabs.create({
+				url: url,
+				active: !message.nf,
+				openerTabId: source.tabId,
+				index: 1e4
+			});
 		});
 	} else if ( cmd === 'loadFile' ) {
 		xhr(

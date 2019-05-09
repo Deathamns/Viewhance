@@ -62,7 +62,7 @@ vAPI.tabs = {
 vAPI.messaging = {
 	listen: function(callback) {
 		chrome.runtime.onMessage.addListener(function(message, sender, respond) {
-			callback(message, {url: sender.url}, respond);
+			callback(message, {url: sender.url, tabId: sender.tab.id}, respond);
 			return true;
 		});
 	}
