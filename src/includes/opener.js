@@ -30,13 +30,13 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 
 	var elementsFromPoint, lastMouseDownTime, lastMouseDownX, lastMouseDownY;
 
-	var checkBG = function(cs) {
+	var checkBG = function(s) {
 		// ("...\"") - Gecko
 		// (...) or ('...)') - WebKit
 		// ("...&quot;") - Presto
 		// eslint-disable-next-line max-len
 		var rgxCssUrl = /\burl\(([^'")][^)]*|"[^"\\]+(?:\\.[^"\\]*)*|'[^'\\]+(?:\\.[^'\\]*)*)(?=['"]?\))/g;
-		var imgs = cs.backgroundImage + cs.content + cs.listStyleImage;
+		var imgs = [s.backgroundImage, s.content, s.listStyleImage].join(' ');
 
 		imgs = imgs.match(rgxCssUrl);
 
@@ -205,10 +205,10 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			return;
 		}
 
-		var elapsed = e.timeStamp - lastMouseDownTime >= 300;
+		var longPress = e.timeStamp - lastMouseDownTime >= 300;
 
-		if ( !(e.ctrlKey && e.altKey && !e.shiftKey && !elapsed && opener > 1
-			|| elapsed && (opener === 1 || opener === 3)
+		if ( !(e.ctrlKey && e.altKey && !e.shiftKey && !longPress && opener > 1
+			|| longPress && (opener === 1 || opener === 3)
 				&& !e.ctrlKey && !e.shiftKey && !e.altKey) ) {
 			return;
 		}
