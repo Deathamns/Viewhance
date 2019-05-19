@@ -155,36 +155,23 @@ Object.defineProperty(vAPI, 'mediaType', {
 		var selector, media;
 
 		if ( vAPI.firefox ) {
-			var head = document.head;
-			selector
-				= 'meta[content="width=device-width; height=device-height;"],'
-				+ 'link[rel=stylesheet][href^="resource://gre/res/TopLevel"],'
-				+ 'link[rel=stylesheet][href^="resource://content-accessible/TopLevel"],'
-				+ 'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]';
-			this._mediaType = '';
-
-			if ( !head || head.querySelectorAll(selector).length !== 3 ) {
-				return this._mediaType;
-			}
-
-			media = document.querySelector(
-				'body > img:first-child, '
-					+ 'body > video[controls][autoplay]:not([src]):empty'
+			media = document.head && document.head.querySelector(
+				'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]'
 			);
+			this._mediaType = '';
 
 			if ( !media ) {
 				return this._mediaType;
 			}
 
-			if ( media.src && media.src === window.location.href ) {
-				this._mediaType = 'img';
+			media = media.href.match(/TopLevel(Video|Image)/);
+
+			if ( !media ) {
 				return this._mediaType;
 			}
 
-			// When media is redirected the currentSrc doesn't change
-			/*if ( media.parentNode.currentSrc !== location.href ) {
-				return this._mediaType;
-			}*/
+			this._mediaType = media[1] === 'Video' ? 'video' : 'img';
+			return this._mediaType;
 		} else {
 			selector = 'meta[name=viewport][content^="width=device-width"]';
 			this._mediaType = '';
