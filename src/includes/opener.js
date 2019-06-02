@@ -116,10 +116,10 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			for ( var i = 0; i < elements.length; ++i ) {
 				var node = elements[i];
 
-				if ( rgxIgnore.test(node.localName) ) {
-					if ( !rgxIgnore.test(target.localName) ) {
-						continue;
-					}
+				if ( urls.length > 0
+					&& rgxIgnore.test(node.localName)
+					&& !rgxIgnore.test(target.localName) ) {
+					continue;
 				}
 
 				var url = checkIMG(node);
