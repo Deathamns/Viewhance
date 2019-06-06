@@ -1147,11 +1147,12 @@ init = function() {
 		}
 
 		// Try not to interfere with mouse gesture scripts
-		if ( e.button !== 2 ) {
+		// Can't reproduce it in latest versions, so disable for now
+		/*if ( e.button !== 2 ) {
 			// Firefox selects the image even with-moz-user-select: none
 			// so we prevent mousedown
 			pdsp(e, e.button === 0 && e.target !== media);
-		}
+		}*/
 
 		// Placed after the Firefox selection workaround
 		if ( !cfg.clickOverDoc && e.target !== media ) {
