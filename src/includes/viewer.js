@@ -421,6 +421,10 @@ init = function() {
 		}
 
 		media.style.cssText = css;
+
+		if ( !cfg.hiddenScrollbars ) {
+			calcViewportDimensions();
+		}
 	};
 
 	var calcViewportDimensions = function() {
@@ -898,7 +902,9 @@ init = function() {
 		var w = Math.round(media.box.width);
 		var h = Math.round(media.box.height);
 
-		if ( w <= winW && h <= winH ) {
+		if ( w <= winW && h <= winH
+			// Pass vertical scolling to the browser
+			|| e.clientX >= winW ) {
 			return;
 		}
 
@@ -913,6 +919,7 @@ init = function() {
 				return;
 			}
 		} else if ( h <= winH && w > winW
+			|| e.clientY >= winH
 			|| e.clientX < winW / 2 && e.clientY > winH - 100
 			|| e.deltaX && !e.deltaY ) {
 			x = (y < 0 ? -winW : winW) / 5;
@@ -930,7 +937,8 @@ init = function() {
 			return;
 		}
 
-		if ( cfg.wheelZoom
+		// Ignore scollbars
+		if ( cfg.wheelZoom && e.clientX < winW && e.clientY < winH
 			|| cfg.wheelZoomWithKey && e[cfg.wheelZoomWithKey + 'Key'] ) {
 			wheelZoom(e);
 		} else {
