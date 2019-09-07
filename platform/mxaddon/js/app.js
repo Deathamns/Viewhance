@@ -86,6 +86,32 @@ Object.defineProperty(vAPI, 'mediaType', {
 		this._mediaType = '';
 
 		if ( !media ) {
+			// Newer Maxthons use chromium
+			media = document.querySelector(
+				'body[style^="margin: 0px;"] > '
+				+ 'img[style*="user-select: none"]:first-child, '
+				+ 'body > video[name=media][controls][autoplay]'
+					+ ':first-child:not([src])'
+			);
+
+			if ( !media ) {
+				return this._mediaType;
+			}
+
+			var source = media.querySelector('source');
+
+			// Latest Chromium versions use <source>
+			if ( source ) {
+				if ( source.src !== location.href ) {
+					return this._mediaType;
+				}
+			} else if ( media.src !== location.href ) {
+				if ( media.currentSrc !== location.href ) {
+					return this._mediaType;
+				}
+			}
+
+			this._mediaType = media.localName;
 			return this._mediaType;
 		}
 
