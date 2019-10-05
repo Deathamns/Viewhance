@@ -283,7 +283,7 @@ var onHashChange = function() {
 	section.style.display = 'block';
 
 	if ( hash === 'info' ) {
-		vAPI.messaging.send({cmd: 'loadFile', path: 'locales.json'}, function(response) {
+		vAPI.messaging.send({cmd: 'loadFile', path: 'data/locales.json'}, function(response) {
 			var translators;
 			var rows = [];
 			var locales = JSON.parse(response);

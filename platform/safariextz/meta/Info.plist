@@ -29,12 +29,12 @@
 		<dict>
 			<key>Start</key>
 			<array>
-				<string>includes/app.js</string>
-				<string>includes/viewer.js</string>
+				<string>js/app.js</string>
+				<string>js/viewer.js</string>
 			</array>
 			<key>End</key>
 			<array>
-				<string>includes/opener.js</string>
+				<string>js/opener.js</string>
 			</array>
 		</dict>
 		<key>Whitelist</key>

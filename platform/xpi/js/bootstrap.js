@@ -5,7 +5,7 @@
 'use strict';
 
 let bgProcess;
-const addonName = 'Viewhance';
+const addonName = '{{name}}';
 
 // Components.utils.import('resource://gre/modules/Console.jsm');
 

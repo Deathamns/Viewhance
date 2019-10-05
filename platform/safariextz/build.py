@@ -7,11 +7,7 @@ from io import open
 from time import time
 from shutil import rmtree, copy, which
 from collections import OrderedDict
-
-try:
-    from urllib import urlretrieve as download
-except:
-    from urllib.request import urlretrieve as download
+from urllib.request import urlretrieve
 
 
 os.chdir(os.path.split(os.path.abspath(__file__))[0])
@@ -26,12 +22,13 @@ class Platform(object):
     requires_all_strings = True
     l10n_dir = 'locales'
 
-    def __init__(self, build_dir, config, languages, desc_string, package_name):
+    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = os.path.join(
             build_dir,
             config['name'] + '.safariextension'
         )
         self.config = config
+        self.params = params
         self.languages = languages
         self.desc_string = desc_string
         self.package_name = package_name
@@ -71,10 +68,8 @@ class Platform(object):
         for alpha2 in lng_strings:
             locale_dir = os.path.join(self.build_dir, self.l10n_dir, alpha2)
 
-            try:
-                os.makedirs(locale_dir)
-            except:
-                pass
+            try: os.makedirs(locale_dir)
+            except: pass
 
             if not os.path.exists(locale_dir):
                 sys.stderr.write(
@@ -93,16 +88,20 @@ class Platform(object):
                     'wt', encoding='utf-8', newline='\n'
                 )
 
+                if self.params['-min']:
+                    json_args = {'separators': (',', ':')}
+                else:
+                    json_args = {'separators': (',', ': '), 'indent': '\t'}
+
                 with locale as f:
                     f.write('vAPI.l10nData = ')
                     f.write(
                         json.dumps(
                             lang[grp],
-                            separators=(',', ':'),
+                            **json_args,
                             ensure_ascii=False
                         )
                     )
-                    f.write(';\n')
 
     def write_files(self, use_symlinks=False):
         copy(pj('meta', 'Settings.plist'), pj(self.build_dir))
@@ -110,7 +109,7 @@ class Platform(object):
     def write_package(self):
         key = pj('secret', 'key.pem')
         certs = pj('secret', 'certs')
-        tmp_dir = pj(os.path.dirname(self.build_dir), '.tmp')
+        tmp_dir = self.build_dir + '.tmp'
         package = self.package_name + '.' + self.ext
 
         if not os.path.isfile(key):
@@ -137,22 +136,22 @@ class Platform(object):
 
         if not os.path.isfile(pj(certs, 'AppleWWDRCA.cer')):
             print('Downloading AppleWWDRCA.cer...')
-            download(
+            urlretrieve(
                 'https://developer.apple.com/certificationauthority/AppleWWDRCA.cer',
                 pj(certs, 'AppleWWDRCA.cer')
             )
 
         if not os.path.isfile(pj(certs, 'AppleIncRootCertificate.cer')):
             print('Downloading AppleIncRootCertificate.cer...')
-            download(
+            urlretrieve(
                 'https://www.apple.com/appleca/AppleIncRootCertificate.cer',
                 pj(certs, 'AppleIncRootCertificate.cer')
             )
 
         if which('xar') is None:
+            sys.stderr.write('xar command is not available\n')
             try: rmtree(tmp_dir)
             except: pass
-
             return False
 
         subprocess.call([

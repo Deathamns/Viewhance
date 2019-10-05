@@ -1,13 +1,15 @@
 from __future__ import unicode_literals
 import sys
 import os
-import subprocess
+import zipfile as zip
 from io import open
 from shutil import copy
 from xml.sax.saxutils import escape as escp
+from mimetypes import guess_type as mime_type
 
 os.chdir(os.path.split(os.path.abspath(__file__))[0])
 pj = os.path.join
+
 
 class Platform(object):
     ext = os.path.basename(os.path.dirname(__file__))
@@ -15,9 +17,10 @@ class Platform(object):
     requires_all_strings = True
     l10n_dir = 'locale'
 
-    def __init__(self, build_dir, config, languages, desc_string, package_name):
+    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = pj(build_dir, self.ext)
         self.config = config
+        self.params = params
         self.languages = languages
         self.desc_string = desc_string
         self.package_name = package_name
@@ -126,10 +129,8 @@ class Platform(object):
         for alpha2 in lng_strings:
             locale_dir = pj(self.build_dir, 'locale', alpha2)
 
-            try:
-                os.makedirs(locale_dir)
-            except:
-                pass
+            try: os.makedirs(locale_dir)
+            except: pass
 
             if not os.path.exists(locale_dir):
                 sys.stderr.write(
@@ -152,13 +153,31 @@ class Platform(object):
                         f.write('\n')
 
     def write_files(self, use_symlinks=False):
-        copy(pj('js', 'bootstrap.js'), pj(self.build_dir))
+        with open(pj('js', 'bootstrap.js'), 'r') as obs, \
+             open(pj(self.build_dir, 'bootstrap.js'), 'w') as nbs:
+            nbs.write(obs.read().replace('{{name}}', self.config['name']))
+
         copy(pj('js', 'frame_module.js'), pj(self.build_dir, 'js'))
         copy(pj('js', 'frame_script.js'), pj(self.build_dir, 'js'))
 
+        self.extra_js_min = {
+            'bootstrap.js': pj(self.build_dir, 'bootstrap.js'),
+            'frame_module.js': pj(self.build_dir, 'js', 'frame_module.js'),
+            'frame_script.js': pj(self.build_dir, 'js', 'frame_script.js'),
+        }
+
     def write_package(self):
         package = self.package_name + '.' + self.ext;
-        subprocess.call(
-            ['7z', 'a', '-r', '-tzip', package, pj(self.build_dir, '*')],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
+
+        with zip.ZipFile(package, 'w', zip.ZIP_DEFLATED) as z:
+            for root, dirs, files in os.walk(self.build_dir):
+                for file in files:
+                    fn = pj(root, file)
+                    wargs = [fn, fn[len(self.build_dir):]]
+                    mime = mime_type(fn)[0]
+
+                    if mime and re.search(r'^image/(?!svg)', mime):
+                        wargs.append(zip.ZIP_STORED)
+
+                    z.write(*wargs)
+

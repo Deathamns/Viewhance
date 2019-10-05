@@ -4,9 +4,11 @@ import os
 import re
 import json
 import subprocess
+import zipfile as zip
 from io import open
 from struct import pack
 from collections import OrderedDict
+from mimetypes import guess_type as mime_type
 
 os.chdir(os.path.split(os.path.abspath(__file__))[0])
 pj = os.path.join
@@ -18,9 +20,10 @@ class Platform(object):
     requires_all_strings = False
     l10n_dir = '_locales'
 
-    def __init__(self, build_dir, config, languages, desc_string, package_name):
+    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = pj(build_dir, self.ext)
         self.config = config
+        self.params = params
         self.languages = languages
         self.desc_string = desc_string
         self.package_name = package_name
@@ -58,10 +61,8 @@ class Platform(object):
                 alpha2.replace('-', '_')
             )
 
-            try:
-                os.makedirs(locale_dir)
-            except:
-                pass
+            try: os.makedirs(locale_dir)
+            except: pass
 
             if not os.path.exists(locale_dir):
                 sys.stderr.write(
@@ -90,10 +91,15 @@ class Platform(object):
             locale_file = pj(locale_dir, 'messages.json')
 
             with open(locale_file, 'wt', encoding='utf-8', newline='\n') as f:
+                if self.params['-min']:
+                    json_args = {'separators': (',', ':')}
+                else:
+                    json_args = {'separators': (',', ': '), 'indent': '\t'}
+
                 f.write(
                     json.dumps(
                         strings,
-                        separators=(',', ':'),
+                        **json_args,
                         ensure_ascii=False
                     )
                 )
@@ -103,19 +109,26 @@ class Platform(object):
 
     def write_package(self):
         key = pj('.', 'secret', 'key.pem')
-        zip = self.package_name + '.zip';
+        zip_file = self.package_name + '.zip';
         package = self.package_name + '.' + self.ext;
 
-        try: os.remove(zip)
+        try: os.remove(zip_file)
         except: pass
 
         try: os.remove(package)
         except: pass
 
-        subprocess.call(
-            ['7z', 'a', '-r', '-mx=9', zip, pj(self.build_dir, '*')],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
+        with zip.ZipFile(zip_file, 'w', zip.ZIP_DEFLATED, compresslevel=9) as z:
+            for root, dirs, files in os.walk(self.build_dir):
+                for file in files:
+                    fn = pj(root, file)
+                    wargs = [fn, fn[len(self.build_dir):]]
+                    mime = mime_type(fn)[0]
+
+                    if mime and re.search(r'^image/(?!svg)', mime):
+                        wargs.append(zip.ZIP_STORED)
+
+                    z.write(*wargs)
 
         with open(os.devnull) as devnull:
             publickey = subprocess.Popen(
@@ -124,7 +137,7 @@ class Platform(object):
             ).stdout.read()
 
             signature = subprocess.Popen(
-                ['openssl', 'sha1', '-sign', key, zip],
+                ['openssl', 'sha1', '-sign', key, zip_file],
                 stdout=subprocess.PIPE, stderr=devnull
             ).stdout.read()
 
@@ -133,9 +146,7 @@ class Platform(object):
         package.write(pack('<3I', 2, len(publickey), len(signature)))
         package.write(publickey)
         package.write(signature)
-        package.write(open(zip, 'rb').read())
+        package.write(open(zip_file, 'rb').read())
 
-        subprocess.call(
-            ['7z', 'a', zip, key],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
+        with zip.ZipFile(zip_file, 'a', zip.ZIP_DEFLATED, compresslevel=9) as z:
+            z.write(key, os.path.basename(key))

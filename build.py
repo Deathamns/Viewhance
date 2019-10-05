@@ -1,16 +1,19 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from __future__ import unicode_literals
 import sys
 import os
 import re
 import json
+import zipfile
+import subprocess
 from io import open
 from sys import argv
 from glob import glob
 from copy import deepcopy
 from datetime import datetime
 from collections import OrderedDict
+from urllib.request import urlretrieve
 from shutil import rmtree, copy
 
 sys.dont_write_bytecode = True
@@ -43,6 +46,7 @@ platforms = []
 params = {
     '-meta': False,
     '-pack': False,
+    '-min': False,
     '-useln': False
 }
 
@@ -62,7 +66,53 @@ for i in range(1, len(argv)):
     elif not add_platform(arg):
         sys.stderr.write('Invalid argument: ' + arg + '\n')
 
-if params['-useln'] and params['-pack']:
+
+if params['-min']:
+    minifiers = {
+        'closure-compiler': {
+            'file': 'closure-compiler-v20190909.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20190909.zip',
+        },
+        'yuicompressor': {
+            'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
+            'url': 'https://github.com/downloads/yui/yuicompressor/yuicompressor-2.4.7.zip',
+        },
+        'htmlcompressor': {
+            'file': 'htmlcompressor-1.5.3.jar',
+            'url': 'http://www.java2s.com/Code/JarDownload/htmlcompressor/htmlcompressor-1.5.3.jar.zip',
+        }
+    }
+
+    bin_dir = pj(build_dir, '.bin')
+
+    if not os.path.isdir(bin_dir):
+        os.makedirs(bin_dir)
+
+    for minifier_name, minifier in minifiers.items():
+        jar_path = pj(bin_dir, os.path.basename(minifier['file']))
+
+        if os.path.isfile(jar_path):
+            minifiers[minifier_name] = jar_path
+            continue
+
+        zip = pj(bin_dir, os.path.basename(minifier['url']))
+        print(minifier['url'] + '...')
+        urlretrieve(minifier['url'], filename=zip)
+
+        with zipfile.ZipFile(zip) as zf:
+            with open(jar_path, 'wb') as jf:
+                jf.write(zf.read(minifier['file']))
+
+            minifiers[minifier_name] = jar_path
+
+        os.remove(zip)
+
+        if not os.path.isfile(jar_path):
+            params['-min'] = False
+            break
+
+
+if params['-useln'] and (params['-pack'] or params['-min']):
     params['-useln'] = False
 
 
@@ -85,10 +135,27 @@ if not config:
 
 def_lang = config['def_lang']
 config['version'] = re.sub(
-    '(?<=\.)0+',
+    r'(?<=\.)0+',
     '',
     datetime.utcnow().strftime("%Y.%m%d.%H%M")
 )
+
+
+def copytree(src, dst, symlinks=False):
+    try: os.makedirs(dst)
+    except: pass
+
+    for name in os.listdir(src):
+        srcname = os.path.join(src, name)
+        dstname = os.path.join(dst, name)
+
+        if os.path.isdir(srcname):
+            copytree(srcname, dstname, symlinks)
+        elif symlinks:
+            os.symlink(srcname, dstname)
+        else:
+            copy(srcname, dstname)
+
 
 def read_locales(locale_glob, exclude=None):
     global locale_list, languages, l10n_strings_sparse
@@ -228,12 +295,22 @@ if def_lang not in languages:
 read_locales('*', [def_lang])
 
 
+tmp_dir = pj(build_dir, '.tmp')
+
+try: rmtree(tmp_dir)
+except: pass
+
+try: os.makedirs(tmp_dir)
+except: raise SystemExit('Failed to create temp directory!')
+
+copytree(src_dir, tmp_dir)
+
+
 for alpha2 in l10n_strings_sparse:
     if 'groupless' in l10n_strings_sparse[alpha2]:
         del l10n_strings_sparse[alpha2]['groupless']
 
-
-locales_json = os.path.abspath(pj('build', 'locales.json'))
+locales_json = pj(tmp_dir, 'data', 'locales.json')
 
 with open(locales_json, 'wt', encoding='utf-8', newline='\n') as f:
     locales = {}
@@ -266,32 +343,80 @@ with open(locales_json, 'wt', encoding='utf-8', newline='\n') as f:
 
     locales['_'] = def_lang
 
+    if params['-min']:
+        json_format = {
+            'separators': (',', ':')
+        }
+    else:
+        json_format = {
+            'indent': '\t',
+            'separators': (',', ': ')
+        }
+
     f.write(
         json.dumps(
             locales,
-            separators=(',', ':'),
+            **json_format,
             sort_keys=True,
             ensure_ascii=False
         )
     )
 
 
-def copytree(src, dst, symlinks=False):
-    try:
-        os.makedirs(dst)
-    except:
-        pass
+if params['-min']:
+    defaults_json = pj(tmp_dir, 'data', 'defaults.json')
 
-    for name in os.listdir(src):
-        srcname = os.path.join(src, name)
-        dstname = os.path.join(dst, name)
+    with open(defaults_json, 'rt', encoding='utf-8', newline='\n') as f:
+        defaults_content = json.load(f)
 
-        if os.path.isdir(srcname):
-            copytree(srcname, dstname, symlinks)
-        elif symlinks:
-            os.symlink(srcname, dstname)
-        else:
-            copy(srcname, dstname)
+    with open(defaults_json, 'w', encoding='utf-8', newline='\n') as f:
+        f.write(
+            json.dumps(
+                defaults_content,
+                separators=(',', ':'),
+                sort_keys=True,
+                ensure_ascii=False
+            )
+        )
+
+    min_js_files = glob(pj(tmp_dir, '**', '*.js'), recursive=True)
+    for js_file in min_js_files:
+        subprocess.call([
+            'java', '-jar', minifiers['closure-compiler'],
+            '--warning_level', 'QUIET',
+            '--language_in=ECMASCRIPT_NEXT',
+            '--strict_mode_input',
+            '--rewrite_polyfills=false',
+            '--compilation_level=SIMPLE',
+            '--js_output_file', js_file,
+            js_file
+        ], cwd=tmp_dir)
+
+    subprocess.call([
+        'java', '-jar', minifiers['yuicompressor'],
+        '--charset', 'utf-8',
+        '--type', 'css',
+        '-o', pj(tmp_dir, 'css', 'options.css'),
+        pj(tmp_dir, 'css', 'options.css')
+    ], cwd=tmp_dir)
+
+    subprocess.call([
+        'java', '-jar', minifiers['htmlcompressor'],
+        '--type', 'html',
+        '--remove-quotes',
+        '--remove-intertag-spaces',
+        '-o', pj(tmp_dir, ''),
+        pj(tmp_dir, '')
+    ], cwd=tmp_dir)
+
+    subprocess.call([
+        'java', '-jar', minifiers['htmlcompressor'],
+        '--type', 'html',
+        '--remove-quotes',
+        '--remove-intertag-spaces',
+        '-o', pj(tmp_dir, 'css', 'menu_icons.svg'),
+        pj(tmp_dir, 'css', 'menu_icons.svg')
+    ], cwd=tmp_dir)
 
 
 for platform_name in platforms:
@@ -310,6 +435,7 @@ for platform_name in platforms:
     platform = platform.Platform(
         build_dir,
         config,
+        params,
         languages,
         app_desc_string,
         os.path.abspath(pj(
@@ -320,15 +446,11 @@ for platform_name in platforms:
 
 
     if not params['-meta']:
-        try:
-            rmtree(platform.build_dir)
-        except:
-            pass
+        try: rmtree(platform.build_dir)
+        except: pass
 
-    try:
-        os.makedirs(platform.build_dir)
-    except:
-        pass
+    try: os.makedirs(platform.build_dir)
+    except: pass
 
     if not os.path.exists(platform.build_dir):
         sys.stderr.write(
@@ -342,10 +464,8 @@ for platform_name in platforms:
     locale_dir = pj(platform.build_dir, platform.l10n_dir)
 
     if os.path.exists(locale_dir):
-        try:
-            rmtree(locale_dir)
-        except:
-            pass
+        try: rmtree(locale_dir)
+        except: pass
 
     try:
         os.makedirs(locale_dir)
@@ -364,30 +484,24 @@ for platform_name in platforms:
     else:
         platform.write_locales(l10n_strings_sparse)
 
-    copy(locales_json, platform.build_dir)
-
     if not params['-meta']:
-        copytree(
-            src_dir,
-            platform.build_dir,
-            params['-useln']
-        )
-
         platform_js_dir = pj(platform_dir, platform_name, 'js')
 
         if params['-useln']:
+            copytree(src_dir, platform.build_dir, params['-useln'])
             os.symlink(
                 pj(platform_js_dir, 'app_bg.js'),
                 pj(platform.build_dir, 'js', 'app_bg.js')
             )
         else:
+            copytree(tmp_dir, platform.build_dir)
             copy(
                 pj(platform_js_dir, 'app_bg.js'),
                 pj(platform.build_dir, 'js')
             )
 
         # app.js is extended with app_common.js, so symlink is not applicable
-        copy(pj(platform_js_dir, 'app.js'), pj(platform.build_dir, 'includes'))
+        copy(pj(platform_js_dir, 'app.js'), pj(platform.build_dir, 'js'))
 
 
         if common_app_code is None:
@@ -396,12 +510,33 @@ for platform_name in platforms:
             with open(f_path, 'rt', encoding='utf-8', newline='\n') as f:
                 common_app_code = f.read()
 
-        f_path = pj(platform.build_dir, 'includes', 'app.js')
+        f_path = pj(platform.build_dir, 'js', 'app.js')
 
         with open(f_path, 'at', encoding='utf-8', newline='\n') as f:
             f.write(common_app_code)
 
         platform.write_files(params['-useln'])
+
+        if params['-min']:
+            js_files = {
+                'app.js': pj(platform.build_dir, 'js', 'app.js'),
+                'app_bg.js': pj(platform.build_dir, 'js', 'app_bg.js'),
+            }
+
+            try: js_files.update(platform.extra_js_min)
+            except: pass
+
+            for js_file in js_files.values():
+                subprocess.call([
+                    'java', '-jar', minifiers['closure-compiler'],
+                    '--warning_level', 'QUIET',
+                    '--strict_mode_input',
+                    '--language_in=ECMASCRIPT_NEXT',
+                    '--rewrite_polyfills=false',
+                    '--compilation_level=SIMPLE',
+                    '--js_output_file', js_file,
+                    js_file
+                ], cwd=platform.build_dir)
 
         if params['-pack']:
             if platform.write_package() == False:
@@ -423,7 +558,4 @@ for platform_name in platforms:
 
     del platform
 
-
-if os.path.isfile(locales_json):
-    os.remove(locales_json)
-
+rmtree(tmp_dir)

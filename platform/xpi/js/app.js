@@ -4,6 +4,7 @@
 
 var vAPI = Object.create(null);
 
+vAPI.xpi = true;
 vAPI.firefox = true;
 
 vAPI.browser = {
@@ -62,7 +63,8 @@ vAPI.messaging = {
 		sendAsyncMessage(_hostName_ + ':background', {
 			listenerId: _sandboxId_,
 			data: message,
-			url: window.location.href
+			url: window.location.href,
+			private: vAPI.isPrivateContext
 		});
 	}
 };

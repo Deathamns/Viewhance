@@ -6,13 +6,13 @@ this.EXPORTED_SYMBOLS = ['docObserver'];
 
 const Ci = Components.interfaces;
 const hostName = Components.stack.filename.match(/:\/\/(\w+)/)[1];
+const contentBaseURI = 'chrome://' + hostName + '/content/js/';
 const {Services} = Components.utils.import(
 	'resource://gre/modules/Services.jsm',
 	null
 );
 
 const docObserver = {
-	contentBaseURI: 'chrome://' + hostName + '/content/includes/',
 	uniqueSandboxId: 1,
 	io: Components.classes['@mozilla.org/network/io-service;1']
 		.getService(Components.interfaces.nsIIOService),
@@ -134,8 +134,8 @@ const docObserver = {
 
 		if ( js ) {
 			let lss = Services.scriptloader.loadSubScript;
-			lss(this.contentBaseURI + 'app.js', sandbox);
-			lss(this.contentBaseURI + js, sandbox);
+			lss(contentBaseURI + 'app.js', sandbox);
+			lss(contentBaseURI + js, sandbox);
 		}
 	},
 

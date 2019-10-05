@@ -14,7 +14,7 @@ var xhr = function(url, onLoad) {
 };
 
 var updatePrefs = function(newPrefs, storedPrefs) {
-	xhr('defaults.json', function() {
+	xhr('data/defaults.json', function() {
 		var key;
 		var defPrefs = JSON.parse(this.responseText);
 		cachedPrefs = {};
@@ -100,7 +100,7 @@ var onMessage = function(message, source, respond) {
 			return;
 		}
 
-		xhr('defaults.json', function() {
+		xhr('data/defaults.json', function() {
 			response._app = vAPI.app;
 			response._defaultPrefs = this.responseText;
 			respond(response);

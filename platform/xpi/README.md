@@ -1,7 +1,5 @@
 ## Firefox ##
 
-Dependencies: `7z`.
-
 This platform is for the legacy XUL addon system, if you're insterested in WebExtensions then refer to the `crx` platform.
 
 Installing happens by creating a [proxy file](https://developer.mozilla.org/en-US/Add-ons/Setting_up_extension_development_environment#Firefox_extension_proxy_file), which content will be the absolute path of the `build/xpi` directory, and its name should be the ID of the extension (`see meta/install.rdf`).

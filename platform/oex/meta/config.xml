@@ -6,6 +6,6 @@
 	<content src="background.html" type="text/html" encoding="utf-8"/>
 	<feature name="opera:share-cookies" required="false"/>
 	<access origin="*" subdomains="true"/>
-	<license>Copyright 2010-2017 {author}. All rights reserved.</license>
+	<license>Copyright 2010-2019 {author}. All rights reserved.</license>
 	<update-description href="https://drive.google.com/uc?id=0Bx8fnUCX4W2IcmE4LWhybndOMnc&amp;export=download"/>
 {locale_info}</widget>

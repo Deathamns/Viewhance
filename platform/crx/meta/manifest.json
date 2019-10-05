@@ -31,8 +31,8 @@
 				"<all_urls>"
 			],
 			"js": [
-				"includes/app.js",
-				"includes/viewer.js"
+				"js/app.js",
+				"js/viewer.js"
 			],
 			"run_at": "document_start",
 			"all_frames": true
@@ -42,7 +42,7 @@
 				"<all_urls>"
 			],
 			"js": [
-				"includes/opener.js"
+				"js/opener.js"
 			],
 			"run_at": "document_idle",
 			"all_frames": true

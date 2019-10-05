@@ -22,7 +22,7 @@ The code must work on all supported platforms, except if the browser's extension
 
 ## Build ##
 ```
-python build.py [platform(s)] [-meta] [-pack] [-useln]
+./build.py [platform(s)] [-meta] [-min] [-useln] [-pack]
 ```
 
 The script prepares installable directories for each platform, and if the `-pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes into the `build` directory.
@@ -31,19 +31,21 @@ Optionally, it accepts platform names (any directory name under the `platform` d
 
 For generating only meta-data (manifest and locale files, and/or update-files when the `-pack` argument is set) use the `-meta` argument.
 
+Additionally, minification (depends on Java, which needs to be manually installed, also some jar files which are automatically downloaded into the `build/.bin` folder) is possible via the `-min` argument. This argument is ignored when `-useln` or the `-pack` is used.
+
 Examples:
 ```
 # Prepare directories for every available platform
 ./build.py
 
-# Prepare directories and package them for every available platform
-./build.py -pack
-
 # Prepare directories for Firefox and Opera
 ./build.py xpi oex
 
-# Prepare and package for Chromium
-./build.py crx -pack
+# Prepare directories and package them for every available platform
+./build.py -pack
+
+# Prepare, minify, and package for Chromium
+./build.py crx -min -pack
 
 # Generate meta-data for Maxthon and Safari
 ./build.py -meta mxaddon safariextz

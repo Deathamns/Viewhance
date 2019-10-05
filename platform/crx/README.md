@@ -1,6 +1,6 @@
 ## Chromium ##
 
-Dependencies: `7z`, `openssl`.
+Dependencies: `openssl`.
 
 The build script will create a `build/crx` directory, which can be installed for a Chromium based browser, or for a browser that uses this platform (like Firefox or Edge).
 

@@ -16,9 +16,10 @@ class Platform(object):
     requires_all_strings = False
     l10n_dir = 'locale'
 
-    def __init__(self, build_dir, config, languages, desc_string, package_name):
+    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = pj(build_dir, self.ext)
         self.config = config
+        self.params = params
         self.languages = languages
         self.desc_string = desc_string
         self.package_name = os.path.abspath(pj(

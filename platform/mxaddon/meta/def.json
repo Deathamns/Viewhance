@@ -24,8 +24,8 @@
 			"entryPoints": ["doc_start"],
 			"exclude": ["res"],
 			"js": [
-				"includes/app.js",
-				"includes/viewer.js"
+				"js/app.js",
+				"js/viewer.js"
 			],
 			"includeFrames": true
 		},
@@ -34,7 +34,7 @@
 			"entryPoints": ["doc_end"],
 			"exclude": ["res"],
 			"js": [
-				"includes/opener.js"
+				"js/opener.js"
 			],
 			"includeFrames": true
 		}
