@@ -93,6 +93,9 @@ if ( cfg.favicon ) {
 	head.appendChild(faviconLink);
 }
 
+head.appendChild(doc.createElement('meta')).name = 'referrer';
+head.lastElementChild.content = 'no-referrer';
+
 head.appendChild(doc.createElement('style')).textContent = [
 	'html, body {',
 		'width: 100%;',
