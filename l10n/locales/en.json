@@ -182,7 +182,7 @@
 		},
 		"scCycleModes": {
 			"#": 0,
-			">": "Cycle through sizing modes: natural, fit to width, fit to height"
+			">": "Cycle sizing modes: natural, fit to width, fit to height"
 		},
 		"scDragndrop": {
 			"#": 3,
@@ -210,7 +210,7 @@
 		},
 		"scImgBg": {
 			"#": 0,
-			">": "Cycle through image backgrounds: default, black, white, check, or hold <b>Shift</b> for custom value"
+			">": "Cycle image backgrounds: default, black, white, check, or hold <b>Shift</b> for custom value"
 		},
 		"scModeContain": {
 			"#": 0,
