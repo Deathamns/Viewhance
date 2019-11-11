@@ -437,10 +437,9 @@ init = function() {
 			mOrigWidth = media.svgWidth || media.naturalWidth;
 			mOrigHeight = media.svgHeight || media.naturalHeight;
 
-			if ( mOrigWidth !== mOrigHeight ) {
+			if ( vAPI.extraFormat !== 'svg' && mOrigWidth !== mOrigHeight ) {
 				// image-orientation in Firefox doesn't flip natural sizes
 				if ( mOrigWidth / mOrigHeight === media.height / media.width ) {
-					// This should happen with SVGs, so _natural* not needed
 					mOrigWidth = media.naturalHeight;
 					mOrigHeight = media.naturalWidth;
 				}

@@ -52,6 +52,7 @@ let startPlayer = function() {
 				}
 			}
 		});
+
 		dash.initialize(media, vAPI.extraFormatUrl, false);
 
 		dash.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, function() {
@@ -62,6 +63,7 @@ let startPlayer = function() {
 		});
 
 		dash.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_RENDERED, onQualityChanged);
+
 		dash.on(dashjs.MediaPlayer.events.ERROR, function() {
 			dash.reset();
 		});
@@ -81,10 +83,11 @@ let startPlayer = function() {
 		hls._recoverAttempted = 0;
 		hls.attachMedia(media);
 		hls.loadSource(vAPI.extraFormatUrl);
+
 		hls.on(Hls.Events.MANIFEST_PARSED, function() {
-			media.play();
-			// hls.currentLevel = generateQualityList(hls.levels)[0].index;
+			hls.currentLevel = hls.levels.length - 1;
 			generateQualityList(hls.levels);
+			media.play();
 		});
 
 		hls.on(Hls.Events.LEVEL_SWITCHED, onQualityChanged);
