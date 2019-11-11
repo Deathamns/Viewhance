@@ -110,8 +110,6 @@ if ( cfg.favicon && !vAPI.isDataUrl ) {
 	head.appendChild(faviconLink);
 }
 
-root.classList.add(vAPI.mediaType);
-
 head.appendChild(doc.createElement('meta')).name = 'referrer';
 head.lastElementChild.content = 'no-referrer';
 
@@ -137,7 +135,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'background-clip: padding-box;',
 		'image-orientation: from-image;',
 	'}',
-	'html.audio #media, html.video video:not([id="media"]) {',
+	'html.audio #media, html video:not([id="media"]) {',
 		'position: absolute;',
 		'top: 0;',
 		'right: 0;',
@@ -150,7 +148,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'width: 50%;',
 		'height: 40px !important;',
 		'min-width: 300px;',
-		'max-width: 1000px;',
+		'max-width: 100%;',
 		'box-shadow: none;',
 		'background: transparent;',
 	'}',
@@ -369,6 +367,7 @@ init = function() {
 	}
 
 	media.id = 'media';
+	root.classList.add(vAPI.mediaType);
 
 	if ( progress ) {
 		clearInterval(progress);
@@ -2282,7 +2281,8 @@ init = function() {
 
 	var onMenuClick = function(e) {
 		var trg = e.target;
-		var cmd = trg.dataset.cmd || trg.parentNode.dataset.cmd;
+		// trg is a SVG element in Opera Presto
+		var cmd = trg.dataset && trg.dataset.cmd || trg.parentNode.dataset.cmd;
 
 		if ( cmd ) {
 			handleCommand(cmd, e);
