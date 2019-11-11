@@ -16,6 +16,7 @@ class Platform(object):
     update_file = 'update.rdf'
     requires_all_strings = True
     l10n_dir = 'locale'
+    supports_extra_formats = True
 
     def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = pj(build_dir, self.ext)

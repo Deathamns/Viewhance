@@ -1,4 +1,4 @@
-/* global addMessageListener, removeMessageListener, sendAsyncMessage, _hostName_, _sandboxId_, _safeHTML_ */
+/* global addMessageListener, removeMessageListener, sendAsyncMessage, _hostName_, _sandboxId_, _tabId_, _frameId_, _safeHTML_ */
 
 'use strict';
 
@@ -64,7 +64,9 @@ vAPI.messaging = {
 			listenerId: _sandboxId_,
 			data: message,
 			url: window.location.href,
-			private: vAPI.isPrivateContext
+			private: vAPI.isPrivateContext,
+			tabId: _tabId_,
+			frameId: _frameId_
 		});
 	}
 };

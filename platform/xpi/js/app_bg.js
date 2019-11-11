@@ -5,6 +5,7 @@ const {Services} = Cu.import('resource://gre/modules/Services.jsm');
 
 var vAPI = Object.create(null);
 
+vAPI.xpi = true;
 vAPI.firefox = true;
 vAPI._baseURI = 'chrome://' + location.host + '/content/';
 
@@ -86,7 +87,12 @@ vAPI.messaging = {
 
 			callback(
 				request.data.data,
-				{url: request.data.url},
+				{
+					url: request.data.url,
+					private: request.data.private,
+					tabId: request.data.tabId,
+					frameId: request.data.frameId
+				},
 				function(response) {
 					messager.sendAsyncMessage(listenerId, response);
 				}
@@ -98,6 +104,236 @@ vAPI.messaging = {
 			this._listener
 		);
 	}
+};
+
+vAPI.watchReceivedHeaders = function(prefs) {
+	const headersObserver = {
+		TYPE_DOCUMENT: Ci.nsIContentPolicy.TYPE_DOCUMENT,
+
+		updateTab: function(channel, url) {
+			let loadContext;
+
+			try {
+				loadContext = channel.notificationCallbacks
+					.QueryInterface(Ci.nsIInterfaceRequestor)
+					.getInterface(Ci.nsILoadContext);
+			} catch ( ex ) {
+				try {
+					loadContext = channel.loadGroup.notificationCallbacks
+						.getInterface(Ci.nsILoadContext);
+				} catch ( ex ) {
+					return;
+				}
+			}
+
+			if ( !loadContext ) {
+				return;
+			}
+
+			if ( loadContext.topFrameElement ) {
+				loadContext.topFrameElement.loadURI(url);
+				return;
+			}
+
+			try {
+				let win = loadContext.associatedWindow;
+				(win.top || win).QueryInterface(Ci.nsIInterfaceRequestor)
+					.getInterface(Ci.nsIWebNavigation)
+					.QueryInterface(Ci.nsIDocShell)
+					.rootTreeItem
+					.QueryInterface(Ci.nsIInterfaceRequestor)
+					.getInterface(Ci.nsIDOMWindow)
+					.gBrowser
+					.loadURI(url);
+			} catch (ex) {
+				//
+			}
+		},
+
+		observe: function(channel) {
+			if ( channel instanceof Ci.nsIHttpChannel === false ) {
+				return;
+			}
+
+			if ( (channel.loadInfo.externalContentPolicyType
+				|| channel.loadInfo.contentPolicyType) !== this.TYPE_DOCUMENT ) {
+				return;
+			}
+
+			let contentType;
+
+			try {
+				// Automatically removes charset and converts to lowercase
+				contentType = channel.contentType;
+			} catch ( ex ) {
+				//
+			}
+
+			let isMedia = false;
+			let streamingMediaType = null;
+
+			if ( contentType ) {
+				if ( contentType === 'image/svg+xml' ) {
+					if ( !prefs.viewSvg
+						|| channel.requestMethod !== 'GET'
+						|| channel.URI.ref === 'direct-view' ) {
+						return;
+					}
+
+					this.updateTab(
+						channel,
+						vAPI._baseURI + 'viewer.html#svg:'
+							+ channel.URI.spec.replace(/#.*/, '')
+					);
+					return;
+				}
+
+				if ( /^(image(?!\/svg)|video|audio)\//.test(contentType) ) {
+					isMedia = true;
+				} else if ( prefs.extraFormats ) {
+					switch ( contentType ) {
+						case 'application/vnd.apple.mpegurl':
+						case 'application/mpegurl':
+						case 'application/x-mpegurl':
+						case 'audio/mpegurl':
+						case 'audio/x-mpegurl':
+							streamingMediaType = 'hls';
+							break;
+						case 'application/dash+xml':
+							streamingMediaType = 'dash';
+							break;
+						case 'application/vnd.ms-sstr+xml':
+							streamingMediaType = 'mss';
+							break;
+					}
+
+					if ( streamingMediaType ) {
+						isMedia = true;
+					}
+				}
+			}
+
+			let dispHeader;
+
+			try {
+				dispHeader = channel.contentDisposition;
+			} catch ( ex ) {
+				//
+			}
+
+			if ( dispHeader && !isMedia ) {
+				let ext = channel.contentDispositionFilename.match(
+					/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))$/i
+				);
+
+				if ( ext ) {
+					ext = ext[1].toLowerCase();
+
+					if ( ext.startsWith('svg') ) {
+						if ( !prefs.viewSvg
+							|| channel.requestMethod !== 'GET'
+							|| channel.URI.ref === 'direct-view' ) {
+							return;
+						}
+
+						this.updateTab(
+							channel,
+							vAPI._baseURI + 'viewer.html#svg:'
+								+ channel.URI.spec.replace(/#.*/, '')
+						);
+						return;
+					}
+
+					if ( ext === 'm3u8' ) {
+						streamingMediaType = 'hls';
+					} else if ( ext === 'mpd' ) {
+						streamingMediaType = 'dash';
+					}
+
+					if ( streamingMediaType ) {
+						if ( prefs.extraFormats ) {
+							isMedia = true;
+						} else {
+							streamingMediaType = null;
+						}
+					} else {
+						isMedia = true;
+						// At this point we are sure that content-type is not media
+						channel.contentType = /^(mp[34]|webm|og)/.test(ext)
+							? 'video/mp4'
+							: 'image/png';
+					}
+				}
+			}
+
+			if ( !isMedia && prefs.extraFormats ) {
+				streamingMediaType = channel.URI.spec.match(
+					/(?:\.[mM](?:3[uU]8|[pP][dD])|\/Manifest)(?=$|[?#])/
+				);
+
+				if ( streamingMediaType ) {
+					isMedia = true;
+
+					switch ( streamingMediaType[0].toLowerCase() ) {
+						case '.m3u8':
+							streamingMediaType = 'hls';
+							break;
+						case '.mpd':
+							streamingMediaType = 'dash';
+							break;
+						case '/manifest':
+							streamingMediaType = 'mss';
+							break;
+					}
+				}
+			}
+
+			if ( streamingMediaType ) {
+				if ( channel.contentLength > 0 && channel.contentLength < 256 ) {
+					return;
+				}
+
+				this.updateTab(
+					channel,
+					vAPI._baseURI + 'viewer.html#' + streamingMediaType + ':'
+						+ channel.URI.spec.replace(/#.*/, '')
+				);
+				return;
+			}
+
+			if ( isMedia && prefs.forceInlineMedia
+				&& dispHeader === channel.DISPOSITION_ATTACHMENT ) {
+				channel.setResponseHeader(
+					'Content-Disposition',
+					channel.contentDispositionHeader.replace(
+						/^\s*attachment/i,
+						'inline'
+					),
+					false
+				);
+			}
+
+			if ( isMedia ) {
+				channel.setResponseHeader('Content-Security-Policy', '', false);
+			}
+		}
+	};
+
+	this.unWatchReceivedHeaders = function() {
+		Services.obs.removeObserver(headersObserver, 'http-on-examine-response');
+		Services.obs.removeObserver(headersObserver, 'http-on-examine-cached-response');
+		Services.obs.removeObserver(headersObserver, 'http-on-examine-merged-response');
+		this.mediaTabs.clear();
+		removeMediaTab();
+		this.mediaTabs = null;
+		this.loadMediaLibraries = null;
+		removeMediaTab = null;
+		this.unWatchReceivedHeaders = null;
+	};
+
+	Services.obs.addObserver(headersObserver, 'http-on-examine-response', false);
+	Services.obs.addObserver(headersObserver, 'http-on-examine-cached-response', false);
+	Services.obs.addObserver(headersObserver, 'http-on-examine-merged-response', false);
 };
 
 Services.mm.loadFrameScript(
@@ -165,6 +401,10 @@ vAPI._browserPrefs.suppress();
 
 window.addEventListener('unload', function() {
 	vAPI._browserPrefs.restore();
+
+	if ( vAPI.unWatchReceivedHeaders ) {
+		vAPI.unWatchReceivedHeaders();
+	}
 
 	var messaging = vAPI.messaging;
 	Services.mm.removeDelayedFrameScript(messaging._frameScript);

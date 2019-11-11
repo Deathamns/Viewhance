@@ -6,7 +6,7 @@ this.EXPORTED_SYMBOLS = ['docObserver'];
 
 const Ci = Components.interfaces;
 const hostName = Components.stack.filename.match(/:\/\/(\w+)/)[1];
-const contentBaseURI = 'chrome://' + hostName + '/content/js/';
+const contentBaseURI = 'chrome://' + hostName + '/content';
 const {Services} = Components.utils.import(
 	'resource://gre/modules/Services.jsm',
 	null
@@ -87,6 +87,11 @@ const docObserver = {
 
 		sandbox._sandboxId_ = sandboxId;
 		sandbox._hostName_ = hostName;
+		sandbox._tabId_ = win.top.QueryInterface(Ci.nsIInterfaceRequestor)
+			.getInterface(Ci.nsIDOMWindowUtils).outerWindowID;
+		sandbox._frameId_ = win.QueryInterface(Ci.nsIInterfaceRequestor)
+			.getInterface(Ci.nsIDOMWindowUtils).outerWindowID;
+
 		sandbox.sendAsyncMessage = messager.sendAsyncMessage.bind(messager);
 
 		sandbox.addMessageListener = function(callback) {
@@ -134,8 +139,8 @@ const docObserver = {
 
 		if ( js ) {
 			let lss = Services.scriptloader.loadSubScript;
-			lss(contentBaseURI + 'app.js', sandbox);
-			lss(contentBaseURI + js, sandbox);
+			lss(contentBaseURI + '/js/app.js', sandbox, 'UTF-8');
+			lss(contentBaseURI + '/js/' + js, sandbox, 'UTF-8');
 		}
 	},
 

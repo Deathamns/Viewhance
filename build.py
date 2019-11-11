@@ -70,8 +70,8 @@ for i in range(1, len(argv)):
 if params['-min']:
     minifiers = {
         'closure-compiler': {
-            'file': 'closure-compiler-v20190909.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20190909.zip',
+            'file': 'closure-compiler-v20191027.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20191027.zip',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
@@ -419,6 +419,25 @@ if params['-min']:
     ], cwd=tmp_dir)
 
 
+external_libs = (
+    'https://cdn.dashjs.org/v3.0.0/dash.all.min.js',
+    'https://cdn.dashjs.org/v3.0.0/dash.mss.min.js',
+    'https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.min.js'
+)
+
+ext_lib_dir = pj(build_dir, '.lib')
+
+if not os.path.isdir(ext_lib_dir):
+    os.makedirs(ext_lib_dir)
+
+for lib_url in external_libs:
+    lib_file = pj(ext_lib_dir, os.path.basename(lib_url))
+
+    if not os.path.isfile(lib_file):
+        print(lib_url + '...')
+        urlretrieve(lib_url, filename=lib_file)
+
+
 for platform_name in platforms:
     try:
         open(pj(platform_dir, '__init__.py'), 'a').close()
@@ -537,6 +556,16 @@ for platform_name in platforms:
                     '--js_output_file', js_file,
                     js_file
                 ], cwd=platform.build_dir)
+
+        if getattr(platform, 'supports_extra_formats', False):
+            copytree(
+                ext_lib_dir,
+                pj(platform.build_dir, 'js', 'lib'),
+                params['-useln']
+            )
+        else:
+            os.remove(pj(platform.build_dir, 'js', 'player.js'))
+            os.remove(pj(platform.build_dir, 'viewer.html'))
 
         if params['-pack']:
             if platform.write_package() == False:

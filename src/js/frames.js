@@ -543,7 +543,7 @@ xhr.addEventListener('readystatechange', function() {
 		}
 	}
 
-	if ( frames.length < 1 ) {
+	if ( frames.length < 2 ) {
 		document.dispatchEvent(new CustomEvent('extractor-event', {
 			detail: this.imgType + ': not animated...'
 		}));
@@ -884,7 +884,9 @@ xhr.addEventListener('readystatechange', function() {
 	tp.id = 'top-panel';
 	var n = tp.appendChild(ce('a'));
 	n.className = 'back';
-	n.href = location.href.replace(/#.*/, '');
+	n.href = document.body.dataset.isDataUrl
+		? location.href
+		: location.href.replace(/#.*/, '');
 	n.textContent = '\u2190';
 	tp.appendChild(ct(' '));
 	n = tp.appendChild(ce('input'));
@@ -925,5 +927,9 @@ xhr.addEventListener('error', function() {
 	}));
 });
 
-xhr.open('GET', location.href, true);
+xhr.open(
+	'GET',
+	document.body.dataset.isDataUrl ? location.hash.slice(1) : location.href,
+	true
+);
 xhr.send();

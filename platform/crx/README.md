@@ -2,6 +2,8 @@
 
 Dependencies: `openssl`.
 
+Supports manifest version 2.
+
 The build script will create a `build/crx` directory, which can be installed for a Chromium based browser, or for a browser that uses this platform (like Firefox or Edge).
 
 Installing for; [Chrome](https://developer.chrome.com/extensions/getstarted#unpacked); [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Temporary_Installation_in_Firefox).

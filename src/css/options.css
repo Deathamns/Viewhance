@@ -22,7 +22,7 @@ body {
 	border-top: 0;
 	padding: 6px 15px 15px;
 	background-color: #fff;
-	font: 13px "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
+	font: 14px "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
 }
 
 a {
@@ -91,6 +91,11 @@ hr {
 
 aside > .app-info {
 	font-weight: bold;
+}
+
+#app-version {
+	font-size: small;
+	color: grey;
 }
 
 #platform-info {
@@ -250,13 +255,13 @@ input, textarea, select, code, .checkbox {
 	padding: 3px;
 	background-color: rgba(242, 242, 242, 0);
 	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
-	font: 13px Verdana, sans-serif;
+	font: 14px Verdana, sans-serif;
 	color: #000;
 	transition: color .2s, border-color .2s;
 }
 
 pre, code, textarea {
-	font: 13px Consolas, Monaco, monospace;
+	font: 14px Consolas, Monaco, monospace;
 	transition: all 0s 0s;
 }
 
@@ -351,6 +356,7 @@ output {
 
 h3 {
 	clear: left;
+	margin-bottom: 0.5em;
 }
 
 .color-helper {
@@ -424,8 +430,7 @@ h3 {
 
 #locales-table {
 	border-collapse: separate;
-	padding: 0 40px;
-	font: 13px/1.4em Consolas, Monaco, monospace;
+	font-family: Consolas, Monaco, monospace;
 }
 
 #locales-table > div > span:not(:empty)::before {

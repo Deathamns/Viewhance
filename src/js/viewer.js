@@ -11,8 +11,21 @@ if ( !doc || !doc.body || !response || !response.prefs ) {
 	return;
 }
 
-var cfg = response.prefs;
 var media = doc.body.querySelector('img, video, audio');
+
+if ( !media && (vAPI.extraFormat || vAPI.isDataUrl) ) {
+	media = doc.body.appendChild(doc.createElement(vAPI.mediaType));
+
+	if ( vAPI.extraFormat === 'svg' || vAPI.isDataUrl ) {
+		// Don't set "src" for extraFormat so it won't raise an error event
+		media.src = vAPI.extraFormatUrl || win.location.hash.slice(1);
+	}
+
+	if ( vAPI.extraFormat ) {
+		// viewer.html is guaranteed to have a "head" element
+		doc.head.appendChild(doc.createElement('script')).src = './js/player.js';
+	}
+}
 
 if ( !media ) {
 	init = null;
@@ -20,6 +33,7 @@ if ( !media ) {
 	return;
 }
 
+var cfg = response.prefs;
 var pdsp = function(e, d, p) {
 	if ( !e || !e.preventDefault || !e.stopPropagation ) {
 		return;
@@ -84,14 +98,19 @@ if ( head ) {
 
 head = doc.createElement('head');
 
-if ( cfg.favicon ) {
+if ( cfg.favicon && !vAPI.isDataUrl ) {
 	var faviconLink = doc.createElement('link');
 	faviconLink.rel = 'shortcut icon';
 	faviconLink.href = cfg.favicon === '%url' && vAPI.mediaType === 'img'
-		? win.location.href
-		: cfg.favicon.replace('%url', encodeURIComponent(win.location.href));
+		? (vAPI.extraFormatUrl || win.location.href)
+		: cfg.favicon.replace(
+			'%url',
+			encodeURIComponent((vAPI.extraFormatUrl || win.location.href))
+		);
 	head.appendChild(faviconLink);
 }
+
+root.classList.add(vAPI.mediaType);
 
 head.appendChild(doc.createElement('meta')).name = 'referrer';
 head.lastElementChild.content = 'no-referrer';
@@ -118,18 +137,20 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'background-clip: padding-box;',
 		'image-orientation: from-image;',
 	'}',
-	'html.audio #media {',
-		'box-sizing: inherit;',
-		'width: 50%;',
-		'height: 40px !important;',
-		'min-width: 300px;',
-		'max-width: 1000px;',
+	'html.audio #media, html.video video:not([id="media"]) {',
 		'position: absolute;',
 		'top: 0;',
 		'right: 0;',
 		'bottom: 0;',
 		'left: 0;',
 		'margin: auto;',
+	'}',
+	'html.audio #media {',
+		'box-sizing: inherit;',
+		'width: 50%;',
+		'height: 40px !important;',
+		'min-width: 300px;',
+		'max-width: 1000px;',
 		'box-shadow: none;',
 		'background: transparent;',
 	'}',
@@ -142,10 +163,7 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'text-align: center;',
 		'font-size: 20px;',
 	'}',
-	'html.fullscreen #media {',
-		'background: black !important;',
-	'}',
-	'#media:-moz-full-screen {',
+	'html.video #media {',
 		'background: black !important;',
 	'}',
 	'a {',
@@ -260,8 +278,14 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'color: #fff;',
 		'cursor: pointer;',
 	'}',
-	'#menu > ul > li:hover, .send-hosts li > a:hover {',
+	'#menu > ul > li:hover, .send-hosts li > a:hover, .quality-picker li:hover {',
 		'color: silver;',
+	'}',
+	'.quality-picker li:hover {',
+		'cursor: pointer;',
+	'}',
+	'.active-quality {',
+		'color: orange;',
 	'}',
 	'input[type="range"] {',
 		'width: 125px;',
@@ -328,10 +352,14 @@ head.appendChild(doc.createElement('style')).textContent = [
 	// Custom CSS
 	cfg.css
 ].join('');
+
 root.insertBefore(head, doc.body);
 
 init = function() {
-	if ( vAPI.mediaType === 'img' && !media.naturalWidth ) {
+	if ( vAPI.mediaType === 'img'
+		&& (vAPI.extraFormat === 'svg' && !media.naturalWidth
+			? !media.width
+			: !media.naturalWidth) ) {
 		if ( progress && --initPingsLeft < 1 ) {
 			initPingsLeft = null;
 			clearInterval(progress);
@@ -340,13 +368,12 @@ init = function() {
 		return;
 	}
 
+	media.id = 'media';
+
 	if ( progress ) {
 		clearInterval(progress);
 		progress = null;
 	}
-
-	media.id = 'media';
-	root.classList.add(vAPI.mediaType);
 
 	if ( media.parentNode !== doc.body ) {
 		doc.body.replaceChild(media, doc.body.firstElementChild);
@@ -385,13 +412,35 @@ init = function() {
 		|| win.getComputedStyle(doc.body).overflow === 'hidden';
 
 	var setOriginalDimensions = function() {
+		if ( vAPI.extraFormat === 'svg' && !media.svgWidth ) {
+			// Firefox sometimes doesn't set naturalWidth for SVGs
+			if ( media.naturalWidth ) {
+				media.svgWidth = media.naturalWidth;
+				media.svgHeight = media.naturalHeight;
+			} else {
+				media.svgWidth = media.width;
+				media.svgHeight = media.height;
+			}
+
+			var ratio = media.svgWidth / media.svgHeight;
+
+			if ( media.svgWidth / media.svgHeight > winW / winH ) {
+				media.svgWidth = winW;
+				media.svgHeight = Math.round(winW / ratio);
+			} else {
+				media.svgHeight = winH;
+				media.svgWidth = Math.round(winH * ratio);
+			}
+		}
+
 		if ( vAPI.mediaType === 'img' ) {
-			mOrigWidth = media.naturalWidth;
-			mOrigHeight = media.naturalHeight;
+			mOrigWidth = media.svgWidth || media.naturalWidth;
+			mOrigHeight = media.svgHeight || media.naturalHeight;
 
 			if ( mOrigWidth !== mOrigHeight ) {
 				// image-orientation in Firefox doesn't flip natural sizes
 				if ( mOrigWidth / mOrigHeight === media.height / media.width ) {
+					// This should happen with SVGs, so _natural* not needed
 					mOrigWidth = media.naturalHeight;
 					mOrigHeight = media.naturalWidth;
 				}
@@ -401,19 +450,30 @@ init = function() {
 			mOrigHeight = media.videoHeight;
 		}
 
-		if ( !cfg.scaling ) {
-			return;
+		if ( cfg.scaling ) {
+			if ( cfg.scaling === '*' || cfg.scaling < 0 ) {
+				mOrigWidth /= win.devicePixelRatio;
+				mOrigHeight /= win.devicePixelRatio;
+			}
+
+			if ( typeof cfg.scaling === 'number' ) {
+				mOrigWidth *= Math.abs(cfg.scaling);
+				mOrigHeight *= Math.abs(cfg.scaling);
+			}
 		}
 
-		if ( cfg.scaling === '*' || cfg.scaling < 0 ) {
-			mOrigWidth /= win.devicePixelRatio;
-			mOrigHeight /= win.devicePixelRatio;
-		}
-
-		if ( typeof cfg.scaling === 'number' ) {
-			mOrigWidth *= Math.abs(cfg.scaling);
-			mOrigHeight *= Math.abs(cfg.scaling);
-		}
+		var mStyle = win.getComputedStyle(media);
+		// Original dimensions with padding and border
+		mFullWidth = mOrigWidth
+			+ parseInt(mStyle.paddingLeft, 10)
+			+ parseInt(mStyle.paddingRight, 10)
+			+ parseInt(mStyle.borderLeftWidth, 10)
+			+ parseInt(mStyle.borderRightWidth, 10);
+		mFullHeight = mOrigHeight
+			+ parseInt(mStyle.paddingTop, 10)
+			+ parseInt(mStyle.paddingBottom, 10)
+			+ parseInt(mStyle.borderTopWidth, 10)
+			+ parseInt(mStyle.borderBottomWidth, 10);
 	};
 
 	var setMediaStyle = function() {
@@ -507,15 +567,17 @@ init = function() {
 
 	var convertInfoParameter = function(a, param) {
 		var m = media;
-		var ow = m.naturalWidth || m.videoWidth;
-		var oh = m.naturalHeight || m.videoHeight;
+		var ow = m.svgWidth || m.naturalWidth || m.videoWidth;
+		var oh = m.svgHeight || m.naturalHeight || m.videoHeight;
 
 		switch ( param ) {
 			case 'w': return m.angle ? m.clientWidth : m.width;
 			case 'h': return m.angle ? m.clientHeight : m.height;
 			case 'ow': return ow;
 			case 'oh': return oh;
-			case 'url': return win.location.href;
+			case 'url': return vAPI.isDataUrl
+				? 'data:'
+				: (vAPI.extraFormatUrl || win.location.href);
 			case 'name': return m.alt;
 			case 'ratio':
 				return Math.round(ow / oh * 100) / 100;
@@ -528,11 +590,11 @@ init = function() {
 					return m._size;
 				}
 
-				// x.open('HEAD', win.location.href, true);
+				// x.open('HEAD', vAPI.extraFormatUrl || win.location.href, true);
 				// var size = this.getResponseHeader('content-length') | 0;
 
 				var xhr = new win.XMLHttpRequest;
-				xhr.open('GET', win.location.href, true);
+				xhr.open('GET', vAPI.extraFormatUrl || win.location.href, true);
 				xhr.overrideMimeType('text/plain; charset=x-user-defined');
 				xhr.onload = function() {
 					this.onload = null;
@@ -1706,15 +1768,26 @@ init = function() {
 			}
 		};
 
-		vAPI.messaging.send(message, function(data) {
+		var loadExtractorScript = function(data, url) {
 			doc.addEventListener('extractor-event', onFrameEvent);
 			doc.body.dataset.wheelEventName = vAPI.browser.wheel;
 			doc.body.dataset.params = JSON.stringify(params);
 
+			if ( vAPI.isDataUrl ) {
+				doc.body.dataset.isDataUrl = '1';
+			}
+
 			var frames = doc.createElement('script');
-			frames.textContent = data;
+			frames[url ? 'src' : 'textContent'] = data;
 			doc.body.removeChild(doc.body.appendChild(frames));
-		});
+		};
+
+		if ( vAPI.isDataUrl ) {
+			loadExtractorScript(message.path, true);
+			return;
+		}
+
+		vAPI.messaging.send(message, loadExtractorScript);
 	};
 
 	win.addEventListener('resize', onWinResize);
@@ -1729,6 +1802,29 @@ init = function() {
 	media.addEventListener('dragend', toggleDraggable);
 
 	if ( vAPI.mediaType === 'video' ) {
+		media.addEventListener('qualityChanged', function() {
+			setTimeout(function() {
+				setOriginalDimensions();
+				resizeMedia(media.mode);
+			}, 100);
+
+			if ( !menu ) {
+				return;
+			}
+
+			var active = menu.querySelector(
+				'.quality-picker .active-quality'
+			);
+
+			if ( active ) {
+				active.classList.remove('active-quality');
+			}
+
+			active = menu.querySelector(
+				'.quality-picker li[data-index="' + media.getQuality() + '"]'
+			).classList.add('active-quality');
+		});
+
 		media.addEventListener('click', function(e) {
 			if ( e.button !== 0 ) {
 				return;
@@ -1753,22 +1849,10 @@ init = function() {
 		});
 	}
 
+	calcViewportDimensions();
 	setOriginalDimensions();
-	progress = win.getComputedStyle(media);
-	// Original dimensions with padding and border
-	mFullWidth = mOrigWidth
-		+ parseInt(progress.paddingLeft, 10)
-		+ parseInt(progress.paddingRight, 10)
-		+ parseInt(progress.borderLeftWidth, 10)
-		+ parseInt(progress.borderRightWidth, 10);
-	mFullHeight = mOrigHeight
-		+ parseInt(progress.paddingTop, 10)
-		+ parseInt(progress.paddingBottom, 10)
-		+ parseInt(progress.borderTopWidth, 10)
-		+ parseInt(progress.borderBottomWidth, 10);
 	media.angle = 0;
 	progress = [];
-	calcViewportDimensions();
 	calcFit();
 
 	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
@@ -2057,9 +2141,28 @@ init = function() {
 				}]
 			}
 			: null,
-		vAPI.mediaType === 'img'
+		vAPI.mediaType === 'img' && !vAPI.extraFormat
 			? {tag: 'li', attrs: {'data-cmd': 'frames'}}
-			: '',
+			: null,
+		media._qualityList && media._qualityList.length > 1
+			? {
+				tag: 'li',
+				attrs: {class: 'quality-picker', 'data-svg-icon': 'frames'},
+				nodes: [{
+					tag: 'ul',
+					nodes: media._qualityList.map(function(item) {
+						return {
+							tag: 'li',
+							attrs: {
+								'data-index': item.index,
+								'data-cmd': 'quality'
+							},
+							text: item.name
+						};
+					})
+				}]
+			}
+			: null,
 		{tag: 'li', attrs: {'data-cmd': 'options'}}
 	]);
 
@@ -2160,6 +2263,10 @@ init = function() {
 			}
 		} else if ( cmd === 'frames' ) {
 			startFrameExtractor({fullFrames: e.button === 0});
+		} else if ( cmd === 'quality' ) {
+			if ( e.button === 0 && e.target.dataset.index ) {
+				media.setQuality(e.target.dataset.index | 0);
+			}
 		} else if ( cmd === 'options' && e.button !== 1 ) {
 			vAPI.messaging.send({
 				cmd: 'openURL',
@@ -2175,7 +2282,8 @@ init = function() {
 	};
 
 	var onMenuClick = function(e) {
-		var cmd = e.target.parentNode.dataset.cmd;
+		var trg = e.target;
+		var cmd = trg.dataset.cmd || trg.parentNode.dataset.cmd;
 
 		if ( cmd ) {
 			handleCommand(cmd, e);
@@ -2211,7 +2319,7 @@ init = function() {
 				).firstChild.setAttributeNS(
 					'http://www.w3.org/1999/xlink',
 					'href',
-					'#icon-' + item.dataset.cmd
+					'#icon-' + (item.dataset.svgIcon || item.dataset.cmd)
 				);
 			}
 		});
@@ -2386,13 +2494,13 @@ media.addEventListener('error', function() {
 });
 
 if ( win.location.protocol === 'data:' ) {
-	media.alt = vAPI.mediaType + ' (data:)';
+	media.alt = 'data:' + vAPI.mediaType;
 
 	if ( !cfg.mediaInfo ) {
 		doc.title = media.alt;
 	}
 } else {
-	media.alt = (win.location.href
+	media.alt = ((vAPI.extraFormatUrl || win.location.href)
 		.replace(/#.*/, '')
 		.match(/(?:[^/]+)?$/)[0] || vAPI.mediaType
 	).split('?')[0];
@@ -2457,12 +2565,6 @@ media.togglePlay = function() {
 
 media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 	this.removeEventListener(e.type, onLoadedMetadata);
-
-	if ( this.videoHeight && (vAPI.opera || vAPI.chrome) ) {
-		doc.addEventListener('fullscreenchange', function() {
-			root.classList.toggle('fullscreen');
-		});
-	}
 
 	var playerStateSaver;
 	var monitoredAttrs = mediaAttributes.slice(1, -2);
@@ -2542,7 +2644,7 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 
 	vAPI.mediaType = 'audio';
 	media.controls = true;
-	doc.title = media.alt;
+	doc.title = 'data:' + vAPI.mediaType;
 	init();
 
 	if ( vAPI.opera || vAPI.firefox ) {
@@ -2566,31 +2668,62 @@ if ( window.location.protocol === 'safari-extension:' ) {
 }
 
 var firstContact = function() {
+	if ( /(-extension|^chrome):$/.test(window.location.protocol)
+		&& /\/viewer\.html$/.test(window.location.pathname) ) {
+		vAPI.isDataUrl = window.location.hash.startsWith('#data:');
+
+		if ( !vAPI.isDataUrl ) {
+			vAPI.extraFormat = window.location.hash.match(
+				/#(svg|dash|hls|mss):(http.+)/
+			);
+
+			if ( vAPI.extraFormat ) {
+				vAPI.extraFormatUrl = vAPI.extraFormat[2];
+				vAPI.extraFormat = vAPI.extraFormat[1];
+			}
+		}
+
+		if ( vAPI.isDataUrl ) {
+			var type = window.location.hash.match(
+				/^#data:([a-z]+)/i
+			)[1].toLowerCase();
+			vAPI._mediaType = type === 'image' ? 'img' : type;
+		} else if ( vAPI.extraFormat === 'svg' ) {
+			vAPI._mediaType = 'img';
+		} else if ( vAPI.extraFormat ) {
+			vAPI._mediaType = 'video';
+		}
+	} else if ( window.location.protocol === 'data:' ) {
+		vAPI.isDataUrl = true;
+	}
+
+	var onPrefsReady = function(response) {
+		onPrefsReady = null;
+		firstContact = null;
+		init(window, document, response);
+	};
+
 	if ( vAPI.opera || vAPI.firefox ) {
-		if ( !vAPI.mediaType ) {
-			init = null;
-			firstContact = null;
-			vAPI.suicideAttempt();
+		if ( vAPI.mediaType ) {
+			vAPI.messaging.send({cmd: 'loadPrefs'}, onPrefsReady);
 			return;
 		}
 
-		vAPI.messaging.send({cmd: 'loadPrefs'}, function(response) {
-			firstContact = null;
-			init(window, document, response);
-		});
+		init = null;
+		firstContact = null;
+		vAPI.suicideAttempt();
 		return;
 	}
 
 	vAPI.messaging.send({cmd: 'loadPrefs'}, function(response) {
-		firstContact = null;
-
-		if ( !vAPI.mediaType ) {
-			init = null;
-			vAPI.suicideAttempt();
+		if ( vAPI.mediaType ) {
+			onPrefsReady(response);
 			return;
 		}
 
-		init(window, document, response);
+		init = null;
+		firstContact = null;
+		vAPI.suicideAttempt();
 	});
 };
 

@@ -68,6 +68,32 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			prefsToStore[key] = cachedPrefs[key];
 		}
 
+		if ( typeof vAPI.watchReceivedHeaders === 'function' ) {
+			if ( vAPI.unWatchReceivedHeaders ) {
+				vAPI.unWatchReceivedHeaders();
+			}
+
+			if ( cachedPrefs.extraFormats
+				|| cachedPrefs.forceInlineMedia
+				|| cachedPrefs.viewSvg ) {
+				vAPI.watchReceivedHeaders({
+					extraFormats: cachedPrefs.extraFormats,
+					forceInlineMedia: cachedPrefs.forceInlineMedia,
+					viewSvg: cachedPrefs.viewSvg
+				});
+			}
+		}
+
+		if ( typeof vAPI.watchDataTabs === 'function' ) {
+			if ( vAPI.unWatchDataTabs ) {
+				vAPI.unWatchDataTabs();
+			}
+
+			if ( cachedPrefs.viewDataURI ) {
+				vAPI.watchDataTabs();
+			}
+		}
+
 		prefsToStore = JSON.stringify(prefsToStore);
 
 		if ( prefsToStore === '{}' ) {

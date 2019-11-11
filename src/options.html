@@ -19,8 +19,8 @@
 			<aside>
 				<a href="https://tiny.cc/Viewhance" class="logo" title="Home" target="_blank"></a>
 				<div class="app-info">
-					<a href="https://github.com/Deathamns/Viewhance" id="app-name" target="_blank"></a><br>
-					<small><b id="app-version"></b></small>
+					<b id="app-name"></b><br>
+					<b id="app-version"></b>
 				</div>
 				<span id="platform-info"></span>
 				<hr>
@@ -93,6 +93,38 @@
 				</div>
 
 				<textarea id="custom-css" name="css" maxlength="4096" rows="10" data-l10n="customCssTextareaPh" data-l10n-attr="placeholder"></textarea>
+			</div>
+
+			<div class="prow">
+				<label for="extra-formats" data-l10n="extraFormats"></label>
+				<span>
+					<input id="extra-formats" name="extraFormats" type="checkbox">
+					<label for="extra-formats" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="force-inline-media" data-l10n="forceInlineMedia"></label>
+				<span>
+					<input id="force-inline-media" name="forceInlineMedia" type="checkbox">
+					<label for="force-inline-media" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="view-svg" data-l10n="viewSvg"></label>
+				<span>
+					<input id="view-svg" name="viewSvg" type="checkbox">
+					<label for="view-svg" class="checkbox"></label>
+				</span>
+			</div>
+
+			<div class="prow">
+				<label for="view-data-uri" data-l10n="viewDataURI"></label>
+				<span>
+					<input id="view-data-uri" name="viewDataURI" type="checkbox">
+					<label for="view-data-uri" class="checkbox"></label>
+				</span>
 			</div>
 
 			<div class="prow">
@@ -255,12 +287,25 @@
 				<button type="button" id="imprt-btn" data-l10n="importBtn"></button>
 			</div>
 
-			<h3><a href="https://github.com/Deathamns/Viewhance#contribution" data-l10n="infoTranslations"></a></h3>
-			<div id="locales-table"></div>
+			<hr>
 
-			<h3>Icons</h3>
-			Extension icon by <a href="https://esk6a.deviantart.com/">esk6a</a>
-
+			<ul>
+				<li><a href="https://tiny.cc/Viewhance">Changelog / FAQ</a></li>
+				<li><a href="https://github.com/Deathamns/Viewhance">@GitHub</a></li>
+				<li>Extension icon by <a href="https://esk6a.deviantart.com/">esk6a</a></li>
+				<li>
+					Libraries
+					<ul>
+						<li><a href="https://github.com/Dash-Industry-Forum/dash.js">dash.js</a> (DASH, MSS)</li>
+						<li><a href="https://github.com/video-dev/hls.js">hls.js
+</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="https://deathamns.github.io/Viewhance/localizer.html" data-l10n="infoTranslations"></a>
+					<div id="locales-table"></div>
+				</li>
+			</ul>
 		</section>
 	</form>
 </body>

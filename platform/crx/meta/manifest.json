@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
-	"default_locale": "{def_lang}",
 	"update_url": "https://clients2.google.com/service/update2/crx",
 
+	"default_locale": "{def_lang}",
 	"version": "{version}",
 	"name": "{name}",
 	"description": "__MSG_appDescriptionShort__",
@@ -14,17 +14,23 @@
 	},
 
 	"permissions": [
-		"storage"
+		"*://*/*",
+		"storage",
+		"webNavigation",
+		"webRequest",
+		"webRequestBlocking"
 	],
 
 	"background": {
 		"page": "background.html",
-		"persistent": false
+		"persistent": true
 	},
+
 	"options_ui": {
 		"page": "options.html",
 		"open_in_tab": true
 	},
+
 	"content_scripts": [
 		{
 			"matches": [

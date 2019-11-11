@@ -9,7 +9,7 @@
 		"?": "Uncategorized strings",
 		"appDescriptionLong": {
 			"#": 3,
-			">": "Enriches the built-in image and media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom informations about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (supported formats: GIF, APNG, WEBP)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
+			">": "Enriches the built-in image and media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom informations about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (supported formats: GIF, APNG, WEBP)\n- Native DASH, HLS, MSS streaming (for browsers that can support it)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
 			"?": "A longer description for the official extension repositories.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
 		},
 		"appDescriptionShort": {
@@ -64,6 +64,10 @@
 			"#": 0,
 			">": "Export"
 		},
+		"extraFormats": {
+			"#": 0,
+			">": "Support other formats (DASH, HLS, MSS)"
+		},
 		"favicon": {
 			"#": 0,
 			">": "Custom favicon"
@@ -71,6 +75,10 @@
 		"faviconTip": {
 			"#": 2,
 			">": "This option allows to set a custom tab-icon for the opened image.\nThe address of the image can be used as a variable: <b>%url</b>"
+		},
+		"forceInlineMedia": {
+			"#": 0,
+			">": "Force media inlining instead of download"
 		},
 		"importBtn": {
 			"#": 0,
@@ -159,6 +167,14 @@
 		"phClickForExample": {
 			"#": 1,
 			">": "click for examples..."
+		},
+		"viewDataURI": {
+			"#": 0,
+			">": "View data:URIs"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "View SVGs"
 		},
 		"scChangeVolume": {
 			"#": 0,

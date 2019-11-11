@@ -19,6 +19,7 @@ class Platform(object):
     update_file = 'update_{}.xml'.format(ext)
     requires_all_strings = False
     l10n_dir = '_locales'
+    supports_extra_formats = True
 
     def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = pj(build_dir, self.ext)
