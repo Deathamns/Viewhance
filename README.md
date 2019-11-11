@@ -22,7 +22,7 @@ The code must work on all supported platforms, except if the browser's extension
 
 ## Build ##
 ```
-./build.py [platform(s)] [-meta] [-min] [-useln] [-pack] [-legacy]
+./build.py [platform(s)] [-meta] [-useln] [-min] [-pack] [-legacy] [-version=x.x.x]
 ```
 
 The script prepares installable directories for each platform, and if the `-pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes into the `build` directory.
@@ -34,6 +34,10 @@ For generating only meta-data (manifest and locale files, and/or update-files wh
 Additionally, minification (depends on Java, which needs to be manually installed, also some jar files which are automatically downloaded into the `build/.bin` folder) is possible via the `-min` argument. This argument is ignored when `-useln` or the `-pack` is used.
 
 Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set.
+
+Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set.
+
+With the `-version` argument it is possible to set a specific version number. If not set, the build script will use the current date/time as version.
 
 Examples:
 ```
@@ -50,7 +54,7 @@ Examples:
 ./build.py crx -min -pack
 
 # Generate meta-data for Maxthon and Safari
-./build.py -meta mxaddon safariextz
+./build.py -meta -legacy mxaddon safariextz
 ```
 
 ## Development ##

@@ -44,11 +44,12 @@ app_desc_string = 'appDescriptionShort'
 common_app_code = None
 platforms = []
 params = {
-    '-meta': False,
-    '-pack': False,
-    '-min': False,
-    '-useln': False,
-    '-legacy': False,
+    '-meta': None,
+    '-pack': None,
+    '-min': None,
+    '-useln': None,
+    '-legacy': None,
+    '-version': None,
 }
 
 def add_platform(platform):
@@ -61,9 +62,13 @@ def add_platform(platform):
 
 for i in range(1, len(argv)):
     arg = argv[i];
+    argVal = None
+
+    if re.match(r'^-\w+=.+', arg):
+        [arg, argVal] = arg.split('=', 1)
 
     if arg in params:
-        params[arg] = True
+        params[arg] = argVal or True
     elif not add_platform(arg):
         sys.stderr.write('Invalid argument: ' + arg + '\n')
 
@@ -135,11 +140,15 @@ if not config:
 
 
 def_lang = config['def_lang']
-config['version'] = re.sub(
-    r'(?<=\.)0+',
-    '',
-    datetime.utcnow().strftime("%Y.%m%d.%H%M")
-)
+
+if isinstance(params['-version'], str):
+    config['version'] = params['-version']
+else:
+    config['version'] = re.sub(
+        r'(?<=\.)0+',
+        '',
+        datetime.utcnow().strftime("%Y.%m%d.%H%M")
+    )
 
 
 def copytree(src, dst, symlinks=False):
