@@ -47,7 +47,8 @@ params = {
     '-meta': False,
     '-pack': False,
     '-min': False,
-    '-useln': False
+    '-useln': False,
+    '-legacy': False,
 }
 
 def add_platform(platform):
@@ -463,6 +464,9 @@ for platform_name in platforms:
         ))
     )
 
+    if getattr(platform, 'legacy', False) and not params['-legacy']:
+        print('Skipping legacy ' + platform_name)
+        continue
 
     if not params['-meta']:
         try: rmtree(platform.build_dir)

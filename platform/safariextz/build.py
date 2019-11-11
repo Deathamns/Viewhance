@@ -21,6 +21,7 @@ class Platform(object):
     update_file = 'Update.plist'
     requires_all_strings = True
     l10n_dir = 'locales'
+    legacy = True
 
     def __init__(self, build_dir, config, params, languages, desc_string, package_name):
         self.build_dir = os.path.join(
