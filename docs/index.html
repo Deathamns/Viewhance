@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="nofollow,noindex,noarchive,nocache">
@@ -106,7 +106,7 @@
 			opacity: .3;
 		}
 		#install > div > div {
-			font: 11px Tahoma, Consolas;
+			font: 12px Tahoma, Consolas;
 			width: 1000%;
 			left: -450%;
 			top: 80%;
@@ -181,6 +181,10 @@
 				<a href="https://github.com/Deathamns/Viewhance/issues">Here</a>.
 			</li>
 			<li>
+				<h3>Features</h3>
+				Not every feature will work in every browser, even if you have enabled it in the settings. Good example is media in-lining or streaming media (DASH, HLS, MSS) support, which requires intercepting network requests, and not every browser is capable to do that.
+			</li>
+			<li>
 				<h3>What the buttons do on the floating menu?</h3>
 				* - the wheel, and both left and right mouse buttons can be used on it
 				<table class="menu-icons">
@@ -214,7 +218,7 @@
 					</tr>
 					<tr>
 						<td><svg><use xlink:href="img/menu_icons.svg#icon-frames"/></svg></td>
-						<td>extract frames from animated images (GIF, APNG, WEBP) - left click for drawing full frames, right click for frames as they are in the file</td>
+						<td><b>extract frames</b> from animated images (GIF, APNG, WEBP) - left click for drawing full frames, right click for frames as they are in the file / <b>bitrate selector</b> for streaming media</td>
 					</tr>
 					<tr>
 						<td><svg><use xlink:href="img/menu_icons.svg#icon-options"/></svg></td>
@@ -241,6 +245,23 @@
 	<div id="install">
 		<span>Install the latest version for</span>
 		<div>
+			<a href="https://addons.mozilla.org/addon/viewhance/" rel="nofollow">
+				<img src="img/browser_icons/icon32_firefox.png" alt="Firefox">
+			</a>
+			<div>
+				The WebExtension version can be installed from AMO.<br>
+				If you're looking for the legacy version, which could potentially run on PaleMoon, Waterfox or other Gecko based browsers, then check out the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IVU5Dd08yUU5VNUE">archive folder</a>.
+			</div>
+		</div>
+		<div>
+			<a href="https://chrome.google.com/webstore/detail/viewhance/impppjchnpfgknmbaaghfeopcgfoilac" rel="nofollow">
+				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome">
+			</a>
+			<div>
+				Install from Chrome Web Store.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
+			</div>
+		</div>
+		<div>
 			<img src="img/browser_icons/icon32_opera.png" alt="Opera">
 			<div>
 				To install on Opera 12, download the extension file and drop it into the browser window.
@@ -260,32 +281,17 @@
 			</div>
 		</div>
 		<div>
-			<a href="https://addons.mozilla.org/addon/viewhance/" rel="nofollow">
-				<img src="img/browser_icons/icon32_firefox.png" alt="Firefox">
-			</a>
-		</div>
-		<div>
-			<a href="https://chrome.google.com/webstore/detail/viewhance/impppjchnpfgknmbaaghfeopcgfoilac" rel="nofollow">
-				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome" title="Install from Chrome Web Store">
-			</a>
-		</div>
-		<div>
 			<a href="http://extension.maxthon.com/detail/index.php?view_id=2527" rel="nofollow">
-				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon" title="Install from Maxthon Extension Center">
+				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon">
 			</a>
+			<div>Install from Maxthon Extension Center, or newer versions from the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archive</a>, because as it seems Maxthon doesn't really review extension updates anymore</div>
 		</div>
 		<div>
 			<!-- https://tiny.cc/Viewhance-safariextz -->
 			<a rel="nofollow" class="fade">
 				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+">
 			</a>
-			<div>You have to install it from source. Also it hasn't been tested for a while now, it might not even work.</div>
-		</div>
-		<div>
-			<a rel="nofollow" class="fade">
-				<img src="img/browser_icons/icon32_msedge.png" alt="MS Edge">
-			</a>
-			<div>You have to install it from source or use the Chrome version.</div>
+			<div>You have to install it from source. Not that it is build with the legacy platform, and Safari 12 is the last release to support legacy extensions.</div>
 		</div>
 	</div>
 
@@ -300,10 +306,21 @@
 		opr: <a href="https://www.opera.com/download/guide/?custom=yes">Opera</a> 12
 		ffx: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, <a href="http://www.seamonkey-project.org/">SeaMonkey</a> (possibly other Gecko based browsers)
 		chr: <a href="https://www.google.com/chrome/">Chrome</a> (or other <a href="https://en.wikipedia.org/wiki/Chromium_(web_browser)#Other_browsers_based_on_Chromium">clones</a> of <a href="https://www.chromium.org/getting-involved/download-chromium">Chromium</a>, like <a href="https://vivaldi.com/download/">Vivaldi</a>, <a href="https://www.opera.com/computer/">Opera 15+</a>, <a href="https://browser.yandex.com/">Yandex Browser</a>...)
-		sfr: <a href="https://www.apple.com/safari/">Safari</a>
+		sfr: <a href="https://www.apple.com/safari/">Safari</a> <=12 (legacy)
 		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
 
 	<ul class="versions">
+		<li id="v2019.1111.1535"><b>2019.1111.1535</b>
+		<pre>
++ (crx, ffx) Support viewing the following streaming formats (with bitrate selection): DASH, HLS, MSS
++ (crx, ffx) Option to view <i>SVG</i> and/or <i>data:</i> media files in an internal viewer
++ (crx, ffx) Media in-lining, which changes Content-Desposition <b>attachment</b> to <b>inline</b> (it shows the media instead of downloading it)
+* Wheel over scrollbars shouldn't zoom
+* Newer Maxthon compatibility
+* Always use black background for videos (becuase of fullscreen)
+		</pre>
+		</li>
+
 		<li id="v2019.705.1915"><b>2019.705.1915</b>
 		<pre>
 * Media detection for newer versions of Firefox
