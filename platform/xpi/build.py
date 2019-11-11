@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import sys
 import os
+import re
 import zipfile as zip
 from io import open
 from shutil import copy
