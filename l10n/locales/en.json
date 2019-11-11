@@ -8,13 +8,13 @@
 	"groupless": {
 		"?": "Uncategorized strings",
 		"appDescriptionLong": {
-			"#": 3,
-			">": "Enriches the built-in image and media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom informations about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (supported formats: GIF, APNG, WEBP)\n- Native DASH, HLS, MSS streaming (for browsers that can support it)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
+			"#": 4,
+			">": "Enriches the built-in media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom information about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (GIF, APNG, WEBP)\n- Handling SVG and data:URIs\n- Forced inlining (show media instead of download)\n- Native DASH, HLS, MSS streaming (if the browser can support it)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
 			"?": "A longer description for the official extension repositories.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
 		},
 		"appDescriptionShort": {
-			"#": 2,
-			">": "Additional functionality for the browser's default image and video viewer.",
+			"#": 3,
+			">": "Additional functionality for the browser's built-in media viewer.",
 			"?": "A short description that appears in the extension manager.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
 		}
 	},
@@ -42,7 +42,7 @@
 		},
 		"customCssTextareaPh": {
 			"#": 0,
-			">": "Change the background color, image border/shadow, and hide the scrollbars or the floating menu... \nHover the question mark to see examples, use the color picker above for getting color codes."
+			">": "Change the background color, image border/shadow, and hide the scrollbars or the floating menu...\nHover the question mark to see examples, use the color picker above for getting color codes."
 		},
 		"customCssTip": {
 			"#": 2,

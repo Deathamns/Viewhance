@@ -7,12 +7,12 @@
 	],
 	"groupless": {
 		"appDescriptionLong": {
-			"#": 3,
-			">": "Gazdagítja a beépített képnézőt és médialejátszót különböző tulajdonságokkal és funkcionalitással.\n\nFeatures\n- Alapértelmezett méretezési módok, és azok közti váltás gyorsbillentyűkkel illetve egérgombokkal\n- Testre-szabható CSS (egyéni háttérszín, görgősávok elrejtése...)\n- Egyéni adatok megjelenítése a fül címében\n- Nagyítás egérgörgővel (tiltva alapértelmezetten)\n- Tartalom középre rendezése (alapértelmezett)\n- Forgatás/Tükrözés (gyorsbillentyűkkel vagy a menüből)\n- Lebegő menü (megjelenítés az egérkurzor bal-felső sarokba helyezésével)\n- Kép címének elküldése különböző online szolgáltatásokhoz (mint például kép keresés)\n- Képek kinyerése animált képekből (támogatott formátumok: GIF, APNG, WEBP)\n- Tetszőleges média attribútumok megadása (autoplay, loop, controls, mute, volume)\n- Képek megnyitása jobb egérgomb nyomva-tartásával vagy billentyűparanccsal (titlva alapból)\n\nTovábbi részletekért nézz rá a beállítások oldalra."
+			"#": 4,
+			">": "Gazdagítja a böngésző beépített média nézőkéjét különböző tulajdonságokkal és funkcionalitással.\n\nFunkciók\n- Alapértelmezett méretezési módok, és azok közti váltás gyorsbillentyűkkel illetve egérgombokkal\n- Testre-szabható CSS (egyéni háttérszín, görgősávok elrejtése...)\n- Egyéni adatok megjelenítése a fül címében\n- Lebegő menü (megjelenítés az egérkurzor bal-felső sarokba helyezésével)\n- Nagyítás egérgörgővel (tiltva alapértelmezetten)\n- Tartalom középre rendezése (alapértelmezett)\n- Forgatás/Tükrözés (gyorsbillentyűkkel vagy a menüből)\n- Kép címének elküldése különböző online szolgáltatásokhoz (mint például kép keresés)\n- Képek kinyerése animált képekből (GIF, APNG, WEBP)\n- SVG, data:URI támogatása\n- Média fájlok megjelenítésének kényszerítése letöltés helyett\n- DASH, HLS, MSS formátumok lejátszása (böngésző függő)\n- Tetszőleges média attribútumok megadása (autoplay, loop, controls, mute, volume)\n- Képek megnyitása jobb egérgomb nyomva-tartásával vagy billentyűparanccsal (titlva alapból)\n\nTovábbi részletekért nézz rá a beállítások oldalra."
 		},
 		"appDescriptionShort": {
-			"#": 2,
-			">": "A beépített kép- illetve videónéző funkcióit bővíti."
+			"#": 3,
+			">": "A beépített média nézőke funkcióit bővíti."
 		}
 	},
 	"options": {
