@@ -35,28 +35,26 @@ For generating only meta-data (manifest and locale files, and/or update-files wh
 
 Additionally, minification (depends on Java, which needs to be manually installed, also some jar files which are automatically downloaded into the `build/.bin` folder) is possible via the `-min` argument. This argument is ignored when `-useln` or the `-pack` is used.
 
-Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set.
-
-Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set.
+Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set (and no platforms were specificed).
 
 With the `-version` argument it is possible to set a specific version number. If not set, the build script will use the current date/time as version.
 
 Examples:
 ```
-# Prepare directories for every available platform
+# Prepare directories for non-legacy platforms
 ./build.py
 
-# Prepare directories for Firefox and Opera
+# Prepare directories for Firefox (XUL) and Opera (Presto)
 ./build.py xpi oex
 
-# Prepare directories and package them for every available platform
-./build.py -pack
+# Prepare directories and package them for every platform (including legacy)
+./build.py -pack -legacy
 
 # Prepare, minify, and package for Chromium
 ./build.py crx -min -pack
 
 # Generate meta-data for Maxthon and Safari
-./build.py -meta -legacy mxaddon safariextz
+./build.py -meta mxaddon safariextz
 ```
 
 ## Development ##

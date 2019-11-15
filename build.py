@@ -14,7 +14,7 @@ from copy import deepcopy
 from datetime import datetime
 from collections import OrderedDict
 from urllib.request import urlretrieve
-from shutil import rmtree, copy
+from shutil import rmtree, copy, which
 
 sys.dont_write_bytecode = True
 # Makes it runnable from any directory
@@ -69,11 +69,14 @@ for i in range(1, len(argv)):
 
     if arg in params:
         params[arg] = argVal or True
-    elif not add_platform(arg):
+    elif arg[0] == '-' or not add_platform(arg):
         sys.stderr.write('Invalid argument: ' + arg + '\n')
 
 
 if params['-min']:
+    if not which('java'):
+        raise SystemExit('java must be installed for minification!');
+
     minifiers = {
         'closure-compiler': {
             'file': 'closure-compiler-v20191027.jar',
@@ -126,6 +129,8 @@ if len(platforms) == 0:
     for f in os.listdir(platform_dir):
         if os.path.isdir(pj(platform_dir, f)):
             add_platform(f)
+else:
+    params['-legacy'] = None
 
 
 if len(platforms) == 0:
@@ -136,14 +141,13 @@ with open(os.path.abspath('config.json'), encoding='utf-8') as f:
     config = json.load(f)
 
 if not config:
-    raise SystemExit('Config file failed to load!')
-
+    raise SystemExit('config.json file failed to load!')
 
 def_lang = config['def_lang']
 
 if isinstance(params['-version'], str):
     config['version'] = params['-version']
-else:
+elif 'version' not in config or not config['version']:
     config['version'] = re.sub(
         r'(?<=\.)0+',
         '',
@@ -430,7 +434,7 @@ if params['-min']:
 
 
 external_libs = (
-    'https://cdn.dashjs.org/v3.0.0/dash.all.min.js',
+    'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.0/dist/dash.all.min.js',
     'https://cdn.dashjs.org/v3.0.0/dash.mss.min.js',
     'https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.min.js'
 )

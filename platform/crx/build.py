@@ -109,14 +109,9 @@ class Platform(object):
         pass
 
     def write_package(self):
-        key = pj('.', 'secret', 'key.pem')
         zip_file = self.package_name + '.zip';
-        package = self.package_name + '.' + self.ext;
 
         try: os.remove(zip_file)
-        except: pass
-
-        try: os.remove(package)
         except: pass
 
         with zip.ZipFile(zip_file, 'w', zip.ZIP_DEFLATED, compresslevel=9) as z:
@@ -131,6 +126,11 @@ class Platform(object):
 
                     z.write(*wargs)
 
+        key = pj('.', 'secret', 'key.pem')
+
+        if not os.path.isfile(key):
+            return
+
         with open(os.devnull) as devnull:
             publickey = subprocess.Popen(
                 ['openssl', 'rsa', '-pubout', '-outform', 'DER', '-in', key],
@@ -141,6 +141,11 @@ class Platform(object):
                 ['openssl', 'sha1', '-sign', key, zip_file],
                 stdout=subprocess.PIPE, stderr=devnull
             ).stdout.read()
+
+        package = self.package_name + '.' + self.ext;
+
+        try: os.remove(package)
+        except: pass
 
         package = open(package, 'wb');
         package.write(b'Cr24')
