@@ -89,7 +89,6 @@ vAPI.messaging = {
 				request.data.data,
 				{
 					url: request.data.url,
-					private: request.data.private,
 					tabId: request.data.tabId,
 					frameId: request.data.frameId
 				},
@@ -320,15 +319,10 @@ vAPI.watchReceivedHeaders = function(prefs) {
 	};
 
 	this.unWatchReceivedHeaders = function() {
+		this.unWatchReceivedHeaders = null;
 		Services.obs.removeObserver(headersObserver, 'http-on-examine-response');
 		Services.obs.removeObserver(headersObserver, 'http-on-examine-cached-response');
 		Services.obs.removeObserver(headersObserver, 'http-on-examine-merged-response');
-		this.mediaTabs.clear();
-		removeMediaTab();
-		this.mediaTabs = null;
-		this.loadMediaLibraries = null;
-		removeMediaTab = null;
-		this.unWatchReceivedHeaders = null;
 	};
 
 	Services.obs.addObserver(headersObserver, 'http-on-examine-response', false);

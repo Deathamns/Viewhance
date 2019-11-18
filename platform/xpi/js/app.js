@@ -64,7 +64,6 @@ vAPI.messaging = {
 			listenerId: _sandboxId_,
 			data: message,
 			url: window.location.href,
-			private: vAPI.isPrivateContext,
 			tabId: _tabId_,
 			frameId: _frameId_
 		});
