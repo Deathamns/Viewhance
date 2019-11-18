@@ -34,6 +34,7 @@ if ( !media ) {
 }
 
 var cfg = response.prefs;
+
 var pdsp = function(e, d, p) {
 	if ( !e || !e.preventDefault || !e.stopPropagation ) {
 		return;
@@ -359,7 +360,6 @@ init = function() {
 			? !media.width
 			: !media.naturalWidth) ) {
 		if ( progress && --initPingsLeft < 1 ) {
-			initPingsLeft = null;
 			clearInterval(progress);
 		}
 
@@ -640,7 +640,7 @@ init = function() {
 	};
 
 	var resizeMedia = function(mode, w) {
-		var boxW, radians, sin, cos;
+		var boxW, sin, cos;
 		var newMode = mode === void 0 ? MODE_FIT : mode;
 		var boxRatio = media.angle
 			? media.box.width / media.box.height
@@ -654,7 +654,7 @@ init = function() {
 		}
 
 		if ( media.angle ) {
-			radians = media.angle * Math.PI / 180;
+			var radians = media.angle * Math.PI / 180;
 			sin = Math.abs(Math.sin(radians));
 			cos = Math.abs(Math.cos(radians));
 		}
@@ -775,7 +775,10 @@ init = function() {
 			return;
 		}
 
-		cancelAnimationFrame(progress);
+		if ( progress ) {
+			cancelAnimationFrame(progress);
+		}
+
 		progress = null;
 		cancelAction = false;
 		dragSlide.length = 0;
@@ -1850,16 +1853,17 @@ init = function() {
 	calcViewportDimensions();
 	setOriginalDimensions();
 	media.angle = 0;
-	progress = [];
 	calcFit();
+
+	var doUpscale = [];
 
 	if ( vAPI.mediaType === 'img' && cfg.minUpscale ) {
 		if ( mOrigWidth >= winW * cfg.minUpscale / 100 ) {
-			progress[0] = true;
+			doUpscale[0] = true;
 		}
 
 		if ( mOrigHeight >= winH * cfg.minUpscale / 100 ) {
-			progress[1] = true;
+			doUpscale[1] = true;
 		}
 	}
 
@@ -1868,14 +1872,14 @@ init = function() {
 		if ( mOrigWidth / mOrigHeight < winW / winH ) {
 			media.mode = MODE_WIDTH;
 
-			if ( mOrigWidth < winW && !progress[0] ) {
-				media.mode = noFit.real && progress[1] ? MODE_FIT : MODE_ORIG;
+			if ( mOrigWidth < winW && !doUpscale[0] ) {
+				media.mode = noFit.real && doUpscale[1] ? MODE_FIT : MODE_ORIG;
 			}
 		} else {
 			media.mode = MODE_HEIGHT;
 
-			if ( mOrigHeight < winH && !progress[1] ) {
-				media.mode = noFit.real && progress[0] ? MODE_FIT : MODE_ORIG;
+			if ( mOrigHeight < winH && !doUpscale[1] ) {
+				media.mode = noFit.real && doUpscale[0] ? MODE_FIT : MODE_ORIG;
 			}
 		}
 	} else {
@@ -1885,13 +1889,12 @@ init = function() {
 	resizeMedia(
 		media.mode,
 		(media.mode === MODE_FIT || media.mode === MODE_ORIG && noFit.real)
-			&& progress.length
+			&& doUpscale.length
 			? mOrigWidth / mOrigHeight > winW / winH
 				? winW
 				: winH * mOrigWidth / mOrigHeight
 			: void 0
 	);
-	progress = null;
 
 	if ( doc.readyState === 'loading' ) {
 		(function() {

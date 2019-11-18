@@ -120,50 +120,44 @@ var BinaryTools = function(data) {
 	};
 };
 
-var b64enc;
+// Solves utf8 problems
+var b64enc = window.opera ? btoa : function(b64str) {
+	var c1, c2;
+	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	var mod = b64str.length % 3;
+	var l = b64str.length - mod;
+	var pos = 0;
+	var res = '';
 
-if ( window.opera ) {
-	b64enc = btoa;
-} else {
-	// Solves utf8 problems
-	b64enc = function(b64str) {
-		var c1, c2;
-		var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-		var mod = b64str.length % 3;
-		var l = b64str.length - mod;
-		var pos = 0;
-		var res = '';
-
-		while ( pos < l ) {
-			c1 = b64str.charCodeAt(pos++) & 0xff;
-			c2 = b64str.charCodeAt(pos++) & 0xff;
-			res += b64chars[c1 >> 2];
-			res += b64chars[(c1 & 3) << 4 | c2 >> 4];
-			c1 = b64str.charCodeAt(pos++) & 0xff;
-			res += b64chars[(c2 & 0x0f) << 2 | c1 >> 6];
-			res += b64chars[c1 & 0x3f];
-		}
-
-		if ( mod === 0 ) {
-			return res;
-		}
-
+	while ( pos < l ) {
 		c1 = b64str.charCodeAt(pos++) & 0xff;
-		res += b64chars[c1 >> 2];
+		c2 = b64str.charCodeAt(pos++) & 0xff;
+		res += chars[c1 >> 2];
+		res += chars[(c1 & 3) << 4 | c2 >> 4];
+		c1 = b64str.charCodeAt(pos++) & 0xff;
+		res += chars[(c2 & 0x0f) << 2 | c1 >> 6];
+		res += chars[c1 & 0x3f];
+	}
 
-		if ( mod === 1 ) {
-			res += b64chars[(c1 & 3) << 4];
-			res += '==';
-		} else {
-			c2 = b64str.charCodeAt(pos++) & 0xff;
-			res += b64chars[(c1 & 3) << 4 | c2 >> 4];
-			res += b64chars[(c2 & 0x0f) << 2];
-			res += '=';
-		}
-
+	if ( mod === 0 ) {
 		return res;
-	};
-}
+	}
+
+	c1 = b64str.charCodeAt(pos++) & 0xff;
+	res += chars[c1 >> 2];
+
+	if ( mod === 1 ) {
+		res += chars[(c1 & 3) << 4];
+		res += '==';
+	} else {
+		c2 = b64str.charCodeAt(pos++) & 0xff;
+		res += chars[(c1 & 3) << 4 | c2 >> 4];
+		res += chars[(c2 & 0x0f) << 2];
+		res += '=';
+	}
+
+	return res;
+};
 
 var maxSize = 20 * 1024 * 1024;
 var xhr = new XMLHttpRequest;

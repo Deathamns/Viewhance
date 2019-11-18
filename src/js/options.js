@@ -551,7 +551,7 @@ window.addEventListener('load', function() {
 				txtArea.value = JSON.stringify(
 					data.prefs,
 					null,
-					e.shiftKey ? '\t' : null
+					e.shiftKey ? '\t' : 0
 				);
 				txtArea.selectionStart = 0;
 				txtArea.selectionEnd = txtArea.value.length;
@@ -561,7 +561,7 @@ window.addEventListener('load', function() {
 			var prefs;
 
 			try {
-				var prefs = JSON.parse($('#eximport > textarea').value);
+				prefs = JSON.parse($('#eximport > textarea').value);
 			} catch ( ex ) {
 				changeColor(e.target, 'red', 2000);
 				return;

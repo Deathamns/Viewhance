@@ -6,7 +6,7 @@ To try it out (when installed), open a media file ([image](https://upload.wikime
 
 Visit one of the extension stores (below) to see the list of features.
 
-[Changelog / FAQ](https://tiny.cc/Viewhance).
+[Changelog / FAQ](https://tiny.cc/Viewhance)
 
 ## Browser support / Installation ##
 Only the latest browser versions are fully supported. It may work on older versions, but extra effort won't be made to stretch the compatibility for the sake of outdated platforms.
