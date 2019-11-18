@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import unicode_literals
 import sys
 import os
 import re
@@ -14,7 +13,7 @@ from copy import deepcopy
 from datetime import datetime
 from collections import OrderedDict
 from urllib.request import urlretrieve
-from shutil import rmtree, copy, which
+from shutil import rmtree, copy, which, move
 
 sys.dont_write_bytecode = True
 # Makes it runnable from any directory
@@ -79,8 +78,8 @@ if params['-min']:
 
     minifiers = {
         'closure-compiler': {
-            'file': 'closure-compiler-v20191027.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20191027.zip',
+            'file': 'closure-compiler-v20191111.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20191111.zip',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
@@ -397,14 +396,17 @@ if params['-min']:
     for js_file in min_js_files:
         subprocess.call([
             'java', '-jar', minifiers['closure-compiler'],
-            '--warning_level', 'QUIET',
-            '--language_in=ECMASCRIPT_NEXT',
+            '--charset=utf-8',
+            '--warning_level=QUIET',
             '--strict_mode_input',
+            '--language_in=ECMASCRIPT_NEXT',
+            '--language_out=ECMASCRIPT_2015',
             '--rewrite_polyfills=false',
             '--compilation_level=SIMPLE',
-            '--js_output_file', js_file,
+            '--js_output_file', js_file + 'min',
             js_file
         ], cwd=tmp_dir)
+        move(js_file + 'min', js_file)
 
     subprocess.call([
         'java', '-jar', minifiers['yuicompressor'],
@@ -565,14 +567,17 @@ for platform_name in platforms:
             for js_file in js_files.values():
                 subprocess.call([
                     'java', '-jar', minifiers['closure-compiler'],
-                    '--warning_level', 'QUIET',
+                    '--charset=utf-8',
+                    '--warning_level=QUIET',
                     '--strict_mode_input',
                     '--language_in=ECMASCRIPT_NEXT',
+                    '--language_out=ECMASCRIPT_2015',
                     '--rewrite_polyfills=false',
                     '--compilation_level=SIMPLE',
-                    '--js_output_file', js_file,
+                    '--js_output_file', js_file + 'min',
                     js_file
                 ], cwd=platform.build_dir)
+                move(js_file + 'min', js_file)
 
         if getattr(platform, 'supports_extra_formats', False):
             copytree(
