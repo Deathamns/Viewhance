@@ -81,7 +81,6 @@ vAPI.watchReceivedHeaders = function(prefs) {
 
 			switch ( headerName ) {
 				case 'content-type':
-				case 'content-length':
 				case 'content-disposition':
 				case 'content-security-policy':
 					headers[headerName] = header;
@@ -94,6 +93,11 @@ vAPI.watchReceivedHeaders = function(prefs) {
 		let streamingMediaType = null;
 
 		if ( contentType ) {
+			if ( details.statusCode >= 400
+				&& contentType.startsWith('text/') ) {
+				return {};
+			}
+
 			if ( contentType === 'image/svg+xml' ) {
 				if ( !prefs.viewSvg
 					|| details.method !== 'GET'
@@ -109,9 +113,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				return {};
 			}
 
-			if ( /^(image(?!\/svg)|video|audio)\//.test(contentType) ) {
-				isMedia = true;
-			} else if ( prefs.extraFormats ) {
+			if ( prefs.extraFormats ) {
 				switch ( contentType ) {
 					case 'application/vnd.apple.mpegurl':
 					case 'application/mpegurl':
@@ -131,6 +133,11 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				if ( streamingMediaType ) {
 					isMedia = true;
 				}
+			}
+
+			if ( !isMedia
+				&& /^(image(?!\/svg)|video|audio)\//.test(contentType) ) {
+				isMedia = true;
 			}
 		}
 
@@ -194,7 +201,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 
 		if ( !isMedia && prefs.extraFormats ) {
 			streamingMediaType = details.url.match(
-				/(?:\.[mM](?:3[uU]8|[pP][dD])|\/Manifest)(?=$|[?#])/
+				/(?:\.[mM](?:3[uU]8|[pP][dD])|\/[Mm]anifest)(?=$|[?#])/
 			);
 
 			if ( streamingMediaType ) {
@@ -215,11 +222,6 @@ vAPI.watchReceivedHeaders = function(prefs) {
 		}
 
 		if ( streamingMediaType ) {
-			if ( headers['content-length']
-				&& (headers['content-length'].value | 0) < 256 ) {
-				return {};
-			}
-
 			chrome.tabs.update(details.tabId, {
 				url: chrome.runtime.getURL(
 					'viewer.html#' + streamingMediaType + ':'

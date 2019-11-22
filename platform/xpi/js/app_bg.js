@@ -172,6 +172,11 @@ vAPI.watchReceivedHeaders = function(prefs) {
 			let streamingMediaType = null;
 
 			if ( contentType ) {
+				if ( channel.responseStatus >= 400
+					&& contentType.startsWith('text/') ) {
+					return;
+				}
+
 				if ( contentType === 'image/svg+xml' ) {
 					if ( !prefs.viewSvg
 						|| channel.requestMethod !== 'GET'
@@ -187,9 +192,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 					return;
 				}
 
-				if ( /^(image(?!\/svg)|video|audio)\//.test(contentType) ) {
-					isMedia = true;
-				} else if ( prefs.extraFormats ) {
+				if ( prefs.extraFormats ) {
 					switch ( contentType ) {
 						case 'application/vnd.apple.mpegurl':
 						case 'application/mpegurl':
@@ -209,6 +212,11 @@ vAPI.watchReceivedHeaders = function(prefs) {
 					if ( streamingMediaType ) {
 						isMedia = true;
 					}
+				}
+
+				if ( !isMedia
+					&& /^(image(?!\/svg)|video|audio)\//.test(contentType) ) {
+					isMedia = true;
 				}
 			}
 
@@ -267,7 +275,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 
 			if ( !isMedia && prefs.extraFormats ) {
 				streamingMediaType = channel.URI.spec.match(
-					/(?:\.[mM](?:3[uU]8|[pP][dD])|\/Manifest)(?=$|[?#])/
+					/(?:\.[mM](?:3[uU]8|[pP][dD])|\/[Mm]anifest)(?=$|[?#])/
 				);
 
 				if ( streamingMediaType ) {
@@ -288,10 +296,6 @@ vAPI.watchReceivedHeaders = function(prefs) {
 			}
 
 			if ( streamingMediaType ) {
-				if ( channel.contentLength > 0 && channel.contentLength < 256 ) {
-					return;
-				}
-
 				this.updateTab(
 					channel,
 					vAPI._baseURI + 'viewer.html#' + streamingMediaType + ':'
