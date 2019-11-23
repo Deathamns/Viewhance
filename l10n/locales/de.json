@@ -27,6 +27,10 @@
 			"#": 0,
 			">": "Inhalt zentrieren"
 		},
+		"clickOverDoc": {
+			"#": 0,
+			">": "Erlaube Klicks auf der ganzen Seite"
+		},
 		"customCss": {
 			"#": 0,
 			">": "Angepasster Style (CSS)"
@@ -47,6 +51,18 @@
 			"#": 0,
 			">": "abgeschaltet"
 		},
+		"eximpSettings": {
+			"#": 0,
+			">": "Export-/Importeinstellungen"
+		},
+		"exportBtn": {
+			"#": 0,
+			">": "Export"
+		},
+		"extraFormats": {
+			"#": 0,
+			">": "Unterstützung Fremdformate (DASH, HLS, MSS)"
+		},
 		"favicon": {
 			"#": 0,
 			">": "Angepasstes Favicon"
@@ -54,6 +70,14 @@
 		"faviconTip": {
 			"#": 2,
 			">": "Diese Einstellung erlaubt das setzen eines eigenen Icons für das Tab (Favicon) des geöffneten Bildes. Die Adresse des Bildes kann als Variable verwendet werden: <b>%url</b>"
+		},
+		"forceInlineMedia": {
+			"#": 0,
+			">": "Erzwinge Medieneinbettung (anstelle Download)"
+		},
+		"importBtn": {
+			"#": 0,
+			">": "Import"
 		},
 		"infoTranslations": {
 			"#": 1,
@@ -88,8 +112,8 @@
 			">": "Bildinformationen"
 		},
 		"mediaInfoTip": {
-			"#": 2,
-			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - Originalbreite\n<b>%oh</b> - Originalhöhe\n<b>%ratio</b> - Aktuelle Breite : Aktuelle Höhe\n<b>%w</b> - Aktuelle Breite\n<b>%h</b> - Aktuelle Höhe\n<b>%perc</b> - Vergrößerung in Prozent\n<b>%url</b> - vollständige URL\n<b>%name</b> - Dateiname"
+			"#": 3,
+			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - Originalbreite\n<b>%oh</b> - Originalhöhe\n<b>%ratio</b> - Aktuelle Breite : Aktuelle Höhe\n<b>%w</b> - Aktuelle Breite\n<b>%h</b> - Aktuelle Höhe\n<b>%perc</b> - Vergrößerung in Prozent\n<b>%url</b> - vollständige URL\n<b>%name</b> - Dateiname\n<b>%size</b> - formatierte Dateigröße (mglw. nicht verfügbar)"
 		},
 		"minUpscale": {
 			"#": 0,
@@ -139,6 +163,14 @@
 			"#": 1,
 			">": "Für Beispiele drücken"
 		},
+		"viewDataURI": {
+			"#": 0,
+			">": "Ansicht Data-URIs"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "Ansicht SVGs"
+		},
 		"scChangeVolume": {
 			"#": 0,
 			">": "<b>Auf / Ab</b> um Lautstärke anzupassen"
@@ -178,6 +210,10 @@
 		"scModeContain": {
 			"#": 0,
 			">": "Automatische Größenanpassung"
+		},
+		"scModeFill": {
+			"#": 0,
+			">": "Ausfüllen"
 		},
 		"scModeNatural": {
 			"#": 0,
@@ -222,6 +258,14 @@
 		"wheelZoom": {
 			"#": 0,
 			">": "Mausradzoom"
+		},
+		"wheelZoomWithKey": {
+			"#": 0,
+			">": "Zoom mit Mausrad und Taste"
+		},
+		"zoomParams": {
+			"#": 0,
+			">": "Zoomstufe; Knackpunkte"
 		}
 	}
 }
