@@ -144,9 +144,8 @@ vAPI.watchReceivedHeaders = function(prefs) {
 		let dispHeader = headers['content-disposition'];
 
 		if ( dispHeader && !isMedia ) {
-			let dispVal = dispHeader.value.toLowerCase().split(';', 2);
-			let ext = dispVal[1].match(
-				/^\s*filename\*?\s*=.+\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))/i
+			let ext = dispHeader.value.match(
+				/;\s*filename\*?\s*=.+\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))(?:\s*")?(?:\s*;|$)/i
 			);
 
 			if ( ext ) {
