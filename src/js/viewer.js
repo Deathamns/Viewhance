@@ -1764,7 +1764,7 @@ init = function() {
 			doc.removeEventListener('contextmenu', onContextMenu, true);
 			doc.removeEventListener('keydown', onKeyDown, true);
 
-			if ( menu ) {
+			if ( menu && menu.parentNode ) {
 				menu.parentNode.removeChild(menu);
 			}
 		};
@@ -1789,6 +1789,7 @@ init = function() {
 		}
 
 		vAPI.messaging.send(message, loadExtractorScript);
+		startFrameExtractor = function() {};
 	};
 
 	win.addEventListener('resize', onWinResize);
