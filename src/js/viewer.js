@@ -21,7 +21,7 @@ if ( !media && (vAPI.extraFormat || vAPI.isDataUrl) ) {
 		media.src = vAPI.extraFormatUrl || win.location.hash.slice(1);
 	}
 
-	if ( vAPI.extraFormat ) {
+	if ( vAPI.extraFormat && vAPI.extraFormat !== 'svg' ) {
 		// viewer.html is guaranteed to have a "head" element
 		doc.head.appendChild(doc.createElement('script')).src = './js/player.js';
 	}
