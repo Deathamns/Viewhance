@@ -121,42 +121,42 @@ var BinaryTools = function(data) {
 };
 
 // Solves utf8 problems
-var b64enc = window.opera ? btoa : function(b64str) {
+var b64enc = window.opera ? btoa : function(str) {
 	var c1, c2;
 	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-	var mod = b64str.length % 3;
-	var l = b64str.length - mod;
+	var mod = str.length % 3;
+	var l = str.length - mod;
 	var pos = 0;
-	var res = '';
+	var r = '';
 
 	while ( pos < l ) {
-		c1 = b64str.charCodeAt(pos++) & 0xff;
-		c2 = b64str.charCodeAt(pos++) & 0xff;
-		res += chars[c1 >> 2];
-		res += chars[(c1 & 3) << 4 | c2 >> 4];
-		c1 = b64str.charCodeAt(pos++) & 0xff;
-		res += chars[(c2 & 0x0f) << 2 | c1 >> 6];
-		res += chars[c1 & 0x3f];
+		c1 = str.charCodeAt(pos++) & 0xff;
+		c2 = str.charCodeAt(pos++) & 0xff;
+		r += chars[c1 >> 2];
+		r += chars[(c1 & 3) << 4 | c2 >> 4];
+		c1 = str.charCodeAt(pos++) & 0xff;
+		r += chars[(c2 & 0x0f) << 2 | c1 >> 6];
+		r += chars[c1 & 0x3f];
 	}
 
 	if ( mod === 0 ) {
-		return res;
+		return r;
 	}
 
-	c1 = b64str.charCodeAt(pos++) & 0xff;
-	res += chars[c1 >> 2];
+	c1 = str.charCodeAt(pos++) & 0xff;
+	r += chars[c1 >> 2];
 
 	if ( mod === 1 ) {
-		res += chars[(c1 & 3) << 4];
-		res += '==';
+		r += chars[(c1 & 3) << 4];
+		r += '==';
 	} else {
-		c2 = b64str.charCodeAt(pos++) & 0xff;
-		res += chars[(c1 & 3) << 4 | c2 >> 4];
-		res += chars[(c2 & 0x0f) << 2];
-		res += '=';
+		c2 = str.charCodeAt(pos++) & 0xff;
+		r += chars[(c1 & 3) << 4 | c2 >> 4];
+		r += chars[(c2 & 0x0f) << 2];
+		r += '=';
 	}
 
-	return res;
+	return r;
 };
 
 var maxSize = 20 * 1024 * 1024;
