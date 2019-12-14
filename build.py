@@ -436,9 +436,9 @@ if params['-min']:
 
 
 external_libs = (
-    'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.0/dist/dash.all.min.js',
-    'https://cdn.dashjs.org/v3.0.0/dash.mss.min.js',
-    'https://github.com/video-dev/hls.js/releases/download/v0.12.4/hls.min.js'
+    'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.1/dist/dash.all.min.js',
+    'https://cdn.dashjs.org/v3.0.1/dash.mss.min.js',
+    'https://github.com/video-dev/hls.js/releases/download/v0.13.0/hls.min.js'
 )
 
 ext_lib_dir = pj(build_dir, '.lib')
