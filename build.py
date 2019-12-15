@@ -4,6 +4,7 @@ import sys
 import os
 import re
 import json
+import hashlib
 import zipfile
 import subprocess
 from io import open
@@ -435,23 +436,36 @@ if params['-min']:
     ], cwd=tmp_dir)
 
 
-external_libs = (
-    'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.1/dist/dash.all.min.js',
-    'https://cdn.dashjs.org/v3.0.1/dash.mss.min.js',
-    'https://github.com/video-dev/hls.js/releases/download/v0.13.0/hls.min.js'
-)
+external_libs = [
+    ('d2788a6093d11575c236def3993911e80806c1ccb1ba6578b24047507b8b0f95', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.1/dist/dash.all.min.js'),
+    ('482de8742bcbcf8a0a140e336381fdc47dc9ff503041215830ff09528f3272d6', 'https://cdn.dashjs.org/v3.0.1/dash.mss.min.js'),
+    ('06ea8a2cea6f584051fb6e77052c840874f14453aabd0d89c4d6f854d87a5830', 'https://github.com/video-dev/hls.js/releases/download/v0.13.0/hls.min.js')
+]
 
 ext_lib_dir = pj(build_dir, '.lib')
 
 if not os.path.isdir(ext_lib_dir):
     os.makedirs(ext_lib_dir)
 
-for lib_url in external_libs:
-    lib_file = pj(ext_lib_dir, os.path.basename(lib_url))
 
-    if not os.path.isfile(lib_file):
-        print(lib_url + '...')
-        urlretrieve(lib_url, filename=lib_file)
+for lib_hash, lib_url in external_libs:
+    lib_path = pj(ext_lib_dir, os.path.basename(lib_url))
+
+    if os.path.isfile(lib_path):
+        hash = hashlib.sha256()
+
+        with open(lib_path, 'rb') as f:
+            while True:
+                data = f.read(4096)
+                if not data:
+                    break;
+                hash.update(data)
+
+        if hash.hexdigest() == lib_hash:
+            continue
+
+    print(lib_url + '...')
+    urlretrieve(lib_url, filename=lib_path)
 
 
 for platform_name in platforms:
