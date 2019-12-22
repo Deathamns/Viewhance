@@ -5,6 +5,20 @@ document.title = ':: ' + vAPI.app.name + ' :: v' + vAPI.app.version;
 var cachedPrefs;
 var onPrefsUpdatedCallbacks = [];
 
+if ( vAPI.permissions ) {
+	vAPI.prefPermissions = {
+		forceInlineMedia: {
+			perms: ['webRequestBlocking'],
+			noPermValue: false
+		},
+		viewDataURI: {
+			perms: ['webNavigation'],
+			noPermValue: false
+		}
+	};
+}
+
+
 var xhr = function(url, onLoad) {
 	var req = new XMLHttpRequest;
 	req.overrideMimeType('application/json;charset=utf-8');
@@ -14,7 +28,9 @@ var xhr = function(url, onLoad) {
 };
 
 var updatePrefs = function(newPrefs, storedPrefs) {
-	xhr('data/defaults.json', function() {
+	var currentPermissions = null;
+
+	var onDefaultsReady = function() {
 		var key;
 		var defPrefs = JSON.parse(this.responseText);
 		cachedPrefs = {};
@@ -46,6 +62,23 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			}
 
 			cachedPrefs[key] = newPrefs[key];
+		}
+
+		if ( Array.isArray(currentPermissions) ) {
+			for ( var prefName in vAPI.prefPermissions ) {
+				var pref = vAPI.prefPermissions[prefName];
+				var i = pref.perms.length;
+
+				while ( i-- ) {
+					if ( currentPermissions.indexOf(pref.perms[i]) !== -1) {
+						continue;
+					}
+
+					cachedPrefs[prefName] = pref.noPermValue;
+					defPrefs[prefName] = pref.noPermValue;
+					break;
+				}
+			}
 		}
 
 		while ( onPrefsUpdatedCallbacks.length ) {
@@ -101,6 +134,16 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 		} else if ( prefsToStore !== JSON.stringify(storedPrefs) ) {
 			vAPI.storage.set('cfg', prefsToStore);
 		}
+	};
+
+	if ( !vAPI.permissions ) {
+		xhr('data/defaults.json', onDefaultsReady);
+		return;
+	}
+
+	vAPI.permissions.getAll(function(res) {
+		currentPermissions = res.permissions;
+		xhr('data/defaults.json', onDefaultsReady);
 	});
 };
 
@@ -127,6 +170,10 @@ var onMessage = function(message, source, respond) {
 		}
 
 		xhr('data/defaults.json', function() {
+			if ( vAPI.prefPermissions ) {
+				response._prefPermissions = vAPI.prefPermissions;
+			}
+
 			response._app = vAPI.app;
 			response._defaultPrefs = this.responseText;
 			respond(response);

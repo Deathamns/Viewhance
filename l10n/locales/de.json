@@ -163,14 +163,6 @@
 			"#": 1,
 			">": "Für Beispiele drücken"
 		},
-		"viewDataURI": {
-			"#": 0,
-			">": "Ansicht Data-URIs"
-		},
-		"viewSvg": {
-			"#": 0,
-			">": "Ansicht SVGs"
-		},
 		"scChangeVolume": {
 			"#": 0,
 			">": "<b>Auf / Ab</b> um Lautstärke anzupassen"
@@ -254,6 +246,14 @@
 		"shortcuts": {
 			"#": 0,
 			">": "Tastaturkürzel"
+		},
+		"viewDataURI": {
+			"#": 0,
+			">": "Ansicht Data-URIs"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "Ansicht SVGs"
 		},
 		"wheelZoom": {
 			"#": 0,

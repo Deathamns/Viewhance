@@ -164,17 +164,13 @@
 			"#": 0,
 			">": "right long-press"
 		},
+		"permisssionWarning": {
+			"#": 0,
+			">": "The following options require optional permissions:"
+		},
 		"phClickForExample": {
 			"#": 1,
 			">": "click for examples..."
-		},
-		"viewDataURI": {
-			"#": 0,
-			">": "View data:URIs"
-		},
-		"viewSvg": {
-			"#": 0,
-			">": "View SVGs"
 		},
 		"scChangeVolume": {
 			"#": 0,
@@ -259,6 +255,14 @@
 		"shortcuts": {
 			"#": 0,
 			">": "Shortcuts"
+		},
+		"viewDataURI": {
+			"#": 0,
+			">": "View data:URIs"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "View SVGs"
 		},
 		"wheelZoom": {
 			"#": 0,

@@ -1,6 +1,6 @@
 'use strict';
 
-var vAPI = Object.create(null);
+const vAPI = Object.create(null);
 
 try {
 	void chrome.storage.local;
@@ -17,7 +17,7 @@ vAPI.app = {
 	name: vAPI.app.name,
 	version: vAPI.app.version,
 	platform: (function() {
-		var vendor = navigator.userAgent.match(
+		let vendor = navigator.userAgent.match(
 			/((Edge|Firefox)|\S+)\/(\S+)(?: \([^/]+)?$/
 		);
 
@@ -45,7 +45,7 @@ vAPI.storage = {
 	},
 
 	set: function(key, value) {
-		var data = {};
+		let data = {};
 		data[key] = value;
 		chrome.storage.local.set(data);
 	},
@@ -72,7 +72,13 @@ vAPI.messaging = {
 	}
 };
 
+vAPI.permissions = chrome.permissions;
+
 vAPI.watchReceivedHeaders = function(prefs) {
+	if ( !chrome.webRequest ) {
+		return;
+	}
+
 	const onHeadersReceived = function(details) {
 		let headers = {};
 
@@ -228,17 +234,22 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				)
 			});
 
-			return {cancel: true};
+			return {};
 		}
 
-		if ( isMedia && dispHeader && prefs.forceInlineMedia ) {
+		if ( !isMedia || !prefs.forceInlineMedia ) {
+			return {};
+		}
+
+		if ( dispHeader ) {
 			dispHeader.value = dispHeader.value.replace(
 				/^\s*attachment/i,
 				'inline'
 			);
 		}
 
-		if ( isMedia && headers['content-security-policy'] ) {
+		// We only have blocking request with forceInlineMedia
+		if ( headers['content-security-policy'] ) {
 			headers['content-security-policy'].value = '';
 		}
 
@@ -250,13 +261,23 @@ vAPI.watchReceivedHeaders = function(prefs) {
 		this.unWatchReceivedHeaders = null;
 	};
 
+	const options = ['responseHeaders'];
+
+	if ( prefs.forceInlineMedia ) {
+		options.push('blocking');
+	}
+
 	chrome.webRequest.onHeadersReceived.addListener(onHeadersReceived, {
 		urls: ['<all_urls>'],
 		types: ['main_frame']
-	}, ['responseHeaders', 'blocking']);
+	}, options);
 };
 
 vAPI.watchDataTabs = function() {
+	if ( !chrome.webNavigation ) {
+		return;
+	}
+
 	let onBeforeNavigate = function(details) {
 		if ( details.parentFrameId !== -1 ) {
 			return;

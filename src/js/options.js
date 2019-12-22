@@ -244,7 +244,143 @@ var save = function() {
 		}
 	}
 
-	vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+	if ( !vAPI.permissions ) {
+		vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+		changeColor($('#button-reset'));
+		changeColor($('#button-save'), 'green');
+		return;
+	}
+
+	if ( $('.overlay-dim') ) {
+		return;
+	}
+
+	vAPI.permissions.getAll(function(res) {
+		var newPerms = {};
+		var newPermsMsg = [];
+		var dropPerms = {};
+		var keepPerms = {};
+
+		for ( var prefName in vAPI.prefPermissions ) {
+			var pref = vAPI.prefPermissions[prefName];
+			var f = $('[name=' + prefName + ']');
+
+			if ( (f.type === 'checkbox' ? f.checked : f.value) === pref.noPermValue ) {
+				pref.perms.forEach(function(perm) {
+					if ( res.permissions.indexOf(perm) !== -1) {
+						dropPerms[perm] = true;
+					}
+				});
+				continue;
+			}
+
+			var i = pref.perms.length;
+			var permsNeeded = [];
+
+			while ( i-- ) {
+				keepPerms[pref.perms[i]] = true;
+
+				if ( res.permissions.indexOf(pref.perms[i]) === -1 ) {
+					permsNeeded.push(pref.perms[i]);
+					newPerms[pref.perms[i]] = true;
+				}
+			}
+
+			if ( !permsNeeded.length ) {
+				continue;
+			}
+
+			newPermsMsg.push(
+				$('.prow > label[for="' + f.id + '"]').textContent
+					+ ' <= ' + permsNeeded
+			);
+		}
+
+		for ( var perm in keepPerms ) {
+			delete dropPerms[perm];
+		}
+
+		dropPerms = Object.keys(dropPerms);
+
+		if ( dropPerms.length ) {
+			dropPerms = {permissions: dropPerms};
+			vAPI.permissions.remove(dropPerms);
+		}
+
+		newPerms = Object.keys(newPerms);
+
+		if ( !newPerms.length ) {
+			vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+			changeColor($('#button-reset'));
+			changeColor($('#button-save'), 'green');
+			return;
+		}
+
+		newPermsMsg.unshift(vAPI.l10n('permisssionWarning') + '\n');
+
+		vAPI.buildNodes(document.body, [{
+			tag: 'div',
+			attrs: {class: 'overlay-dim'},
+			nodes: [{
+				tag: 'div',
+				nodes: [{
+					tag: 'div', text: newPermsMsg.join('\n')
+				}, {
+					tag: 'br'
+				}, {
+					tag: 'button',
+					text: '✔',
+					attrs: {class: 'accept'}
+				}, {
+					tag: 'button',
+					text: '✘',
+					attrs: {class: 'reject'}
+				}]
+			}]
+		}]);
+
+		$('.overlay-dim').onclick = function(ev) {
+			if ( ev.target.localName === 'button' ) {
+				this.parentNode.removeChild(this);
+				this.onclick = null;
+			}
+
+			if ( !ev.target.classList.contains('accept') ) {
+				return;
+			}
+
+			var perms = {permissions: newPerms};
+
+			vAPI.permissions.request(perms, function() {
+				vAPI.permissions.getAll(function(res) {
+					for ( var prefName in vAPI.prefPermissions ) {
+						var pref = vAPI.prefPermissions[prefName];
+						var i = pref.perms.length;
+
+						while ( i-- ) {
+							if ( res.permissions.indexOf(pref.perms[i]) !== -1 ) {
+								continue;
+							}
+
+							var f = $('[name=' + prefName + ']');
+
+							if ( f.type === 'checkbox' ) {
+								f.checked = pref.noPermValue;
+							} else {
+								f.value = pref.noPermValue;
+							}
+
+							break;
+						}
+					}
+
+					vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+					changeColor($('#button-reset'));
+					changeColor($('#button-save'), 'green');
+				});
+			});
+		};
+	});
 };
 
 var onHashChange = function() {
@@ -532,8 +668,6 @@ window.addEventListener('load', function() {
 		}
 
 		save();
-		changeColor(resetButton);
-		changeColor(this, 'green');
 	});
 
 	$('#eximport').addEventListener('click', function(e) {
@@ -582,6 +716,11 @@ window.addEventListener('load', function() {
 		$('#platform-info').textContent = data._app.platform;
 		document.title = ':: ' + data._app.name + ' ::';
 		defaultPrefs = JSON.parse(data._defaultPrefs);
+
+		if ( data._prefPermissions ) {
+			vAPI.prefPermissions = data._prefPermissions;
+		}
+
 		load(data.prefs);
 		onHashChange();
 		document.body.style.display = 'block';

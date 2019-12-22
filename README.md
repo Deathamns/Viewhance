@@ -14,8 +14,8 @@ Only the latest browser versions are fully supported. It may work on older versi
 - [Firefox](https://addons.mozilla.org/addon/viewhance/) (or its relatives; SeaMonkey, Pale Moon...)
 - [Opera](https://tiny.cc/Viewhance-oex) 12
 - [Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac) (other Chromium clones; Vivaldi, Opera 15+...)
-- [Safari](https://tiny.cc/Viewhance-safariextz)
 - [Maxthon](http://extension.maxthon.com/detail/index.php?view_id=2527)
+- [Safari](https://tiny.cc/Viewhance-safariextz) (legacy v5.1 - v12)
 
 ## Contribution ##
 - **Localization** You can use [this helper tool](https://deathamns.github.io/Viewhance/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).

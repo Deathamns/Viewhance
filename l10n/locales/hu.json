@@ -148,17 +148,13 @@
 			"#": 0,
 			">": "jobb klikk hosszan-tartva"
 		},
+		"permisssionWarning": {
+			"#": 0,
+			">": "Az alábbi funkciók használatához további engedélyek szükségesek:"
+		},
 		"phClickForExample": {
 			"#": 1,
 			">": "kattints példákért..."
-		},
-		"viewDataURI": {
-			"#": 0,
-			">": "Nézőke alkalmazása data: címekre"
-		},
-		"viewSvg": {
-			"#": 0,
-			">": "Nézőke alkalmazása SVG fájlokra"
 		},
 		"scChangeVolume": {
 			"#": 0,
@@ -243,6 +239,14 @@
 		"shortcuts": {
 			"#": 0,
 			">": "Billentyűparancsok"
+		},
+		"viewDataURI": {
+			"#": 0,
+			">": "Nézőke alkalmazása data: címekre"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "Nézőke alkalmazása SVG fájlokra"
 		},
 		"wheelZoom": {
 			"#": 0,

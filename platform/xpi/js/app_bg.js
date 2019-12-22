@@ -304,7 +304,11 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				return;
 			}
 
-			if ( isMedia && prefs.forceInlineMedia
+			if ( !isMedia ) {
+				return;
+			}
+
+			if ( prefs.forceInlineMedia
 				&& dispHeader === channel.DISPOSITION_ATTACHMENT ) {
 				channel.setResponseHeader(
 					'Content-Disposition',
@@ -316,9 +320,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				);
 			}
 
-			if ( isMedia ) {
-				channel.setResponseHeader('Content-Security-Policy', '', false);
-			}
+			channel.setResponseHeader('Content-Security-Policy', '', false);
 		}
 	};
 

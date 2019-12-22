@@ -134,6 +134,8 @@ if ( /^(chrome|ms-browser|moz)-extension:/.test(location.protocol) ) {
 			return s;
 		}
 	};
+
+	vAPI.permissions = chrome.permissions;
 }
 
 

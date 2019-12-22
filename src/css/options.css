@@ -341,7 +341,8 @@ input[type="color"] {
 
 input[type="number"] {
 	width: 60px;
-	box-shadow: none; /* Firefox marks "invalid" inputs */
+	/* Firefox marks "invalid" inputs */
+	box-shadow: none;
 }
 
 input[type="range"] {
@@ -451,4 +452,41 @@ h3 {
 	margin: 5px 10px;
 	padding: 10px;
 	width: auto;
+}
+
+.overlay-dim {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding-top: 100px;
+	background: rgba(228, 228, 228, 0.7);
+	text-align: center;
+}
+
+.overlay-dim > div {
+	box-shadow: 0 0 50px silver;
+	padding: 20px;
+	background: #fff;
+	white-space: pre-line;
+}
+
+.overlay-dim > div > button {
+	margin: 0 10%;
+	padding: 10px;
+	min-width: 50px;
+	font-size: 1.5em;
+	cursor: pointer;
+}
+
+.overlay-dim button.accept {
+	color: green;
+}
+
+.overlay-dim button.reject {
+	color: firebrick;
 }
