@@ -18,7 +18,6 @@ if ( vAPI.permissions ) {
 	};
 }
 
-
 var xhr = function(url, onLoad) {
 	var req = new XMLHttpRequest;
 	req.overrideMimeType('application/json;charset=utf-8');

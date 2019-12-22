@@ -5,12 +5,6 @@
 // eslint-disable-next-line padded-blocks
 var init = function(win, doc, response) {
 
-if ( !doc || !doc.body || !response || !response.prefs ) {
-	init = null;
-	vAPI.suicideAttempt();
-	return;
-}
-
 var media = doc.body.querySelector('img, video, audio');
 
 if ( !media && (vAPI.extraFormat || vAPI.isDataUrl) ) {
@@ -2703,6 +2697,14 @@ var firstContact = function() {
 	var onPrefsReady = function(response) {
 		onPrefsReady = null;
 		firstContact = null;
+
+		if ( !document || !document.body || !response || !response.prefs
+			|| vAPI.isDataUrl && !response.prefs.viewDataURI ) {
+			init = null;
+			vAPI.suicideAttempt();
+			return;
+		}
+
 		init(window, document, response);
 	};
 
