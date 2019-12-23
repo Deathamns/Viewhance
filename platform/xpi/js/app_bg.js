@@ -180,7 +180,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				if ( contentType === 'image/svg+xml' ) {
 					if ( !prefs.viewSvg
 						|| channel.requestMethod !== 'GET'
-						|| channel.URI.ref === 'direct-view' ) {
+						|| channel.URI.ref === 'direct-svg' ) {
 						return;
 					}
 
@@ -239,7 +239,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 					if ( ext.startsWith('svg') ) {
 						if ( !prefs.viewSvg
 							|| channel.requestMethod !== 'GET'
-							|| channel.URI.ref === 'direct-view' ) {
+							|| channel.URI.ref === 'direct-svg' ) {
 							return;
 						}
 

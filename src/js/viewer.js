@@ -2140,6 +2140,12 @@ init = function() {
 		vAPI.mediaType === 'img' && !vAPI.extraFormat
 			? {tag: 'li', attrs: {'data-cmd': 'frames'}}
 			: null,
+		vAPI.extraFormat === 'svg'
+			? {tag: 'li', attrs: {
+				'data-cmd': 'direct-svg',
+				'data-svg-icon': 'frames'
+			}}
+			: null,
 		media._qualityList && media._qualityList.length > 1
 			? {
 				tag: 'li',
@@ -2257,6 +2263,8 @@ init = function() {
 				media.style[vAPI.browser.filter] = '';
 				doc.querySelector('#menu li.filters > form').reset();
 			}
+		} else if ( cmd === 'direct-svg' ) {
+			win.location.href = vAPI.extraFormatUrl + '#' + cmd;
 		} else if ( cmd === 'frames' ) {
 			startFrameExtractor({fullFrames: e.button === 0});
 		} else if ( cmd === 'quality' ) {
