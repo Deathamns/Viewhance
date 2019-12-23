@@ -16,11 +16,11 @@
 	"permissions": [
 		"<all_urls>",
 		"storage",
-		"webRequest"
+		"webRequest",
+		"webRequestBlocking"
 	],
 
 	"optional_permissions": [
-		"webRequestBlocking",
 		"webNavigation"
 	],
 

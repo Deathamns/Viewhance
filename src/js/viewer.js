@@ -2699,7 +2699,8 @@ var firstContact = function() {
 		firstContact = null;
 
 		if ( !document || !document.body || !response || !response.prefs
-			|| vAPI.isDataUrl && !response.prefs.viewDataURI ) {
+			|| !response.prefs.viewDataURI
+				&& window.location.protocol === 'data:' ) {
 			init = null;
 			vAPI.suicideAttempt();
 			return;

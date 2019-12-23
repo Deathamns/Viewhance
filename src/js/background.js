@@ -7,10 +7,6 @@ var onPrefsUpdatedCallbacks = [];
 
 if ( vAPI.permissions ) {
 	vAPI.prefPermissions = {
-		forceInlineMedia: {
-			perms: ['webRequestBlocking'],
-			noPermValue: false
-		},
 		viewDataURI: {
 			perms: ['webNavigation'],
 			noPermValue: false
@@ -80,26 +76,6 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			}
 		}
 
-		while ( onPrefsUpdatedCallbacks.length ) {
-			onPrefsUpdatedCallbacks.pop()();
-		}
-
-		var prefsToStore = {};
-
-		for ( key in defPrefs ) {
-			if ( cachedPrefs[key] === defPrefs[key] ) {
-				continue;
-			}
-
-			if ( typeof defPrefs[key] === 'object' ) {
-				if ( JSON.stringify(cachedPrefs[key]) === JSON.stringify(defPrefs[key]) ) {
-					continue;
-				}
-			}
-
-			prefsToStore[key] = cachedPrefs[key];
-		}
-
 		if ( typeof vAPI.watchReceivedHeaders === 'function' ) {
 			if ( vAPI.unWatchReceivedHeaders ) {
 				vAPI.unWatchReceivedHeaders();
@@ -124,6 +100,26 @@ var updatePrefs = function(newPrefs, storedPrefs) {
 			if ( cachedPrefs.viewDataURI ) {
 				vAPI.watchDataTabs();
 			}
+		}
+
+		while ( onPrefsUpdatedCallbacks.length ) {
+			onPrefsUpdatedCallbacks.pop()();
+		}
+
+		var prefsToStore = {};
+
+		for ( key in defPrefs ) {
+			if ( cachedPrefs[key] === defPrefs[key] ) {
+				continue;
+			}
+
+			if ( typeof defPrefs[key] === 'object' ) {
+				if ( JSON.stringify(cachedPrefs[key]) === JSON.stringify(defPrefs[key]) ) {
+					continue;
+				}
+			}
+
+			prefsToStore[key] = cachedPrefs[key];
 		}
 
 		prefsToStore = JSON.stringify(prefsToStore);
@@ -183,6 +179,12 @@ var onMessage = function(message, source, respond) {
 		});
 	} else if ( cmd === 'savePrefs' ) {
 		vAPI.storage.get('cfg', function(cfg) {
+			if ( Array.isArray(message.dropPerms) && message.dropPerms.length ) {
+				onPrefsUpdatedCallbacks.push(function() {
+					vAPI.permissions.remove({permissions: message.dropPerms});
+				});
+			}
+
 			updatePrefs(message.prefs, JSON.parse(cfg || '{}'));
 		});
 	} else if ( cmd === 'openURL' ) {

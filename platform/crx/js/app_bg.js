@@ -116,7 +116,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 						'viewer.html#svg:' + details.url.replace(/#.*/, '')
 					)
 				});
-				return {};
+				return {cancel: true};
 			}
 
 			if ( prefs.extraFormats ) {
@@ -169,7 +169,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 							'viewer.html#svg:' + details.url.replace(/#.*/, '')
 						)
 					});
-					return {};
+					return {cancel: true};
 				}
 
 				if ( ext === 'm3u8' ) {
@@ -234,23 +234,22 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				)
 			});
 
+			return {cancel: true};
+		}
+
+		if ( !isMedia ) {
 			return {};
 		}
 
-		if ( !isMedia || !prefs.forceInlineMedia ) {
-			return {};
+		if ( headers['content-security-policy'] ) {
+			headers['content-security-policy'].value = '';
 		}
 
-		if ( dispHeader ) {
+		if ( dispHeader && prefs.forceInlineMedia ) {
 			dispHeader.value = dispHeader.value.replace(
 				/^\s*attachment/i,
 				'inline'
 			);
-		}
-
-		// We only have blocking request with forceInlineMedia
-		if ( headers['content-security-policy'] ) {
-			headers['content-security-policy'].value = '';
 		}
 
 		return {responseHeaders: details.responseHeaders};
@@ -261,16 +260,10 @@ vAPI.watchReceivedHeaders = function(prefs) {
 		this.unWatchReceivedHeaders = null;
 	};
 
-	const options = ['responseHeaders'];
-
-	if ( prefs.forceInlineMedia ) {
-		options.push('blocking');
-	}
-
 	chrome.webRequest.onHeadersReceived.addListener(onHeadersReceived, {
 		urls: ['<all_urls>'],
 		types: ['main_frame']
-	}, options);
+	}, ['responseHeaders', 'blocking']);
 };
 
 vAPI.watchDataTabs = function() {

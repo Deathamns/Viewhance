@@ -301,16 +301,14 @@ var save = function() {
 		}
 
 		dropPerms = Object.keys(dropPerms);
-
-		if ( dropPerms.length ) {
-			dropPerms = {permissions: dropPerms};
-			vAPI.permissions.remove(dropPerms);
-		}
-
 		newPerms = Object.keys(newPerms);
 
 		if ( !newPerms.length ) {
-			vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+			vAPI.messaging.send({
+				cmd: 'savePrefs',
+				prefs: prefs,
+				dropPerms: dropPerms
+			});
 			changeColor($('#button-reset'));
 			changeColor($('#button-save'), 'green');
 			return;
@@ -349,9 +347,7 @@ var save = function() {
 				return;
 			}
 
-			var perms = {permissions: newPerms};
-
-			vAPI.permissions.request(perms, function() {
+			vAPI.permissions.request({permissions: newPerms}, function() {
 				vAPI.permissions.getAll(function(res) {
 					for ( var prefName in vAPI.prefPermissions ) {
 						var pref = vAPI.prefPermissions[prefName];
@@ -374,7 +370,11 @@ var save = function() {
 						}
 					}
 
-					vAPI.messaging.send({cmd: 'savePrefs', prefs: prefs});
+					vAPI.messaging.send({
+						cmd: 'savePrefs',
+						prefs: prefs,
+						dropPerms: dropPerms
+					});
 					changeColor($('#button-reset'));
 					changeColor($('#button-save'), 'green');
 				});
