@@ -9,7 +9,7 @@
 		}
 
 		body {
-			font: 12px verdana;
+			font: 13px verdana;
 			/*width: 120%;*/
 		}
 
@@ -53,7 +53,7 @@
 			-o-tab-size: 2;
 			tab-size: 2;
 			white-space: pre-wrap;
-			font: normal normal 400 12px/normal Consolas, Menlo, monospace;
+			font: normal normal 400 14px/normal Consolas, Menlo, monospace;
 			color: black;
 		}
 
@@ -218,7 +218,7 @@
 					</tr>
 					<tr>
 						<td><svg><use xlink:href="img/menu_icons.svg#icon-frames"/></svg></td>
-						<td><b>extract frames</b> from animated images (GIF, APNG, WEBP) - left click for drawing full frames, right click for frames as they are in the file / <b>bitrate selector</b> for streaming media</td>
+						<td><b>extract frames</b> from animated images (GIF, APNG, WEBP) - left click for full frames, right click for frames as they are in the file / <b>bitrate selector</b> for streaming media / <b>view SVG directly</b></td>
 					</tr>
 					<tr>
 						<td><svg><use xlink:href="img/menu_icons.svg#icon-options"/></svg></td>
@@ -291,7 +291,7 @@
 			<a rel="nofollow" class="fade">
 				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+">
 			</a>
-			<div>You have to install it from source. Not that it is build with the legacy platform, and Safari 12 is the last release to support legacy extensions.</div>
+			<div>You have to install it from source. Note that it is build with the legacy platform, and Safari 12 is the last release to support legacy extensions.</div>
 		</div>
 	</div>
 
@@ -310,6 +310,20 @@
 		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
 
 	<ul class="versions">
+		<li id="v2019.1223.1811"><b>2019.1223.1811</b>
+		<pre>
+# (crx) Fix media detection via Content-Disposition
+# Fix unnecessary loading of <i>player.js</i> for SVGs (caused JS errors)
+* Improve streaming media type detection
+* Apply the <i>viewDataURI</i> option for all browsers
+* View SVGs directly via the ... menu icon
+* Show original error messages for invalid media (instead of trying to show the media)
+* Update external libraries to their newest versions
+* (crx) Make the <i>webNavigation</i> permission optional (to prevent Firefox from blocking updates, however this disables <b>View data:URIs</b>)
+* Updated German translation (by <a href="https://github.com/sioh">sioh</a>)
+		</pre>
+		</li>
+
 		<li id="v2019.1119.1805"><b>2019.1119.1805</b>
 		<pre>
 Warning: the following new features require new permissions (to detect all these media types)
