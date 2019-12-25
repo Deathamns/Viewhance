@@ -88,7 +88,7 @@ if params['-min']:
         },
         'htmlcompressor': {
             'file': 'htmlcompressor-1.5.3.jar',
-            'url': 'http://www.java2s.com/Code/JarDownload/htmlcompressor/htmlcompressor-1.5.3.jar.zip',
+            'url': 'https://github.com/serg472/htmlcompressor/releases/download/1.5.3/htmlcompressor-1.5.3.jar',
         }
     }
 
@@ -104,21 +104,22 @@ if params['-min']:
             minifiers[minifier_name] = jar_path
             continue
 
-        zip = pj(bin_dir, os.path.basename(minifier['url']))
+        file_path = pj(bin_dir, os.path.basename(minifier['url']))
         print(minifier['url'] + '...')
-        urlretrieve(minifier['url'], filename=zip)
+        urlretrieve(minifier['url'], filename=file_path)
 
-        with zipfile.ZipFile(zip) as zf:
-            with open(jar_path, 'wb') as jf:
-                jf.write(zf.read(minifier['file']))
+        if file_path.endswith('.zip'):
+            with zipfile.ZipFile(file_path) as zf:
+                with open(jar_path, 'wb') as jf:
+                    jf.write(zf.read(minifier['file']))
 
-            minifiers[minifier_name] = jar_path
-
-        os.remove(zip)
+            os.remove(file_path)
 
         if not os.path.isfile(jar_path):
             params['-min'] = False
             break
+
+        minifiers[minifier_name] = jar_path
 
 
 if params['-useln'] and (params['-pack'] or params['-min']):
