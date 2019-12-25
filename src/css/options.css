@@ -54,6 +54,10 @@ hr {
 	margin: 10px 0;
 }
 
+#nav-menu > a {
+	margin: 0 2px;
+}
+
 #right-panel {
 	position: absolute;
 	top: 0;
@@ -386,6 +390,10 @@ h3 {
 	margin: 5px;
 	width: 35px;
 	text-align: center;
+}
+
+.sub-shortcuts > li > label {
+	margin-left: 0.5em;
 }
 
 .sub-shortcuts input {
