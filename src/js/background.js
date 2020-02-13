@@ -1,4 +1,4 @@
-'use strict';
+/* eslint strict:off */
 
 document.title = ':: ' + vAPI.app.name + ' :: v' + vAPI.app.version;
 

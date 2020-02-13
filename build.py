@@ -14,7 +14,7 @@ from copy import deepcopy
 from datetime import datetime
 from collections import OrderedDict
 from urllib.request import urlretrieve
-from shutil import rmtree, copy, which, move
+from shutil import rmtree, copy, which, move, copyfileobj
 
 sys.dont_write_bytecode = True
 # Makes it runnable from any directory
@@ -79,8 +79,8 @@ if params['-min']:
 
     minifiers = {
         'closure-compiler': {
-            'file': 'closure-compiler-v20191111.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20191111.zip',
+            'file': 'closure-compiler-v20200204.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20200204.zip',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
@@ -438,9 +438,9 @@ if params['-min']:
 
 
 external_libs = [
-    ('d2788a6093d11575c236def3993911e80806c1ccb1ba6578b24047507b8b0f95', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.1/dist/dash.all.min.js'),
-    ('482de8742bcbcf8a0a140e336381fdc47dc9ff503041215830ff09528f3272d6', 'https://cdn.dashjs.org/v3.0.1/dash.mss.min.js'),
-    ('06ea8a2cea6f584051fb6e77052c840874f14453aabd0d89c4d6f854d87a5830', 'https://github.com/video-dev/hls.js/releases/download/v0.13.0/hls.min.js')
+    ('4d41d954fb54ece11819818a4b3a154489b41058aa4d34d1509c69e0aad3366e', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.2/dist/dash.all.min.js'),
+    ('eacd1215f1222bb3147a2e3bd7e43c08aa9f5f2bcfc56895c88660b13dba071f', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.2/dist/dash.mss.min.js'),
+    ('7ac505e1d7317c033da524290bbcd7080844eee8b4999eba6a248d993999c81a', 'https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.min.js')
 ]
 
 ext_lib_dir = pj(build_dir, '.lib')
@@ -453,7 +453,7 @@ for lib_hash, lib_url in external_libs:
     lib_path = pj(ext_lib_dir, os.path.basename(lib_url))
 
     if os.path.isfile(lib_path):
-        hash = hashlib.sha256()
+        hash = hashlib.sha3_256()
 
         with open(lib_path, 'rb') as f:
             while True:
@@ -538,42 +538,33 @@ for platform_name in platforms:
         platform.write_locales(l10n_strings_sparse)
 
     if not params['-meta']:
-        platform_js_dir = pj(platform_dir, platform_name, 'js')
-
         if params['-useln']:
             copytree(src_dir, platform.build_dir, params['-useln'])
-            os.symlink(
-                pj(platform_js_dir, 'app_bg.js'),
-                pj(platform.build_dir, 'js', 'app_bg.js')
-            )
         else:
             copytree(tmp_dir, platform.build_dir)
-            copy(
-                pj(platform_js_dir, 'app_bg.js'),
-                pj(platform.build_dir, 'js')
-            )
 
-        # app.js is extended with app_common.js, so symlink is not applicable
-        copy(pj(platform_js_dir, 'app.js'), pj(platform.build_dir, 'js'))
-
-
-        if common_app_code is None:
-            f_path = pj(platform_dir, 'app_common.js')
-
-            with open(f_path, 'rt', encoding='utf-8', newline='\n') as f:
-                common_app_code = f.read()
+        platform_js_dir = pj(platform_dir, platform_name, 'js')
 
         f_path = pj(platform.build_dir, 'js', 'app.js')
 
-        with open(f_path, 'at', encoding='utf-8', newline='\n') as f:
-            f.write(common_app_code)
+        with open(f_path, 'wb') as f:
+            copyfileobj(open(pj(platform_js_dir, 'app.js'), 'rb'), f)
+            copyfileobj(open(pj(src_dir, 'js', 'app.js'), 'rb'), f)
+
+
+        f_path = pj(platform.build_dir, 'js', 'background.js')
+
+        with open(f_path, 'wb') as f:
+            copyfileobj(open(pj(platform_js_dir, 'app_bg.js'), 'rb'), f)
+            copyfileobj(open(pj(src_dir, 'js', 'background.js'), 'rb'), f)
+
 
         platform.write_files(params['-useln'])
 
         if params['-min']:
             js_files = {
                 'app.js': pj(platform.build_dir, 'js', 'app.js'),
-                'app_bg.js': pj(platform.build_dir, 'js', 'app_bg.js'),
+                'background.js': pj(platform.build_dir, 'js', 'background.js'),
             }
 
             try: js_files.update(platform.extra_js_min)
