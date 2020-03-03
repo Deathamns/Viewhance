@@ -104,7 +104,7 @@ class Platform(object):
                     )
                 )
 
-    def write_files(self, use_symlinks=False):
+    def write_files(self):
         pass
 
     def write_package(self):

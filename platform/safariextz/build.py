@@ -103,7 +103,7 @@ class Platform(object):
                         )
                     )
 
-    def write_files(self, use_symlinks=False):
+    def write_files(self):
         copy(pj('meta', 'Settings.plist'), pj(self.build_dir))
 
     def write_package(self):

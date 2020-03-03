@@ -47,7 +47,6 @@ params = {
     '-meta': None,
     '-pack': None,
     '-min': None,
-    '-useln': None,
     '-legacy': None,
     '-version': None,
 }
@@ -120,10 +119,6 @@ if params['-min']:
             break
 
         minifiers[minifier_name] = jar_path
-
-
-if params['-useln'] and (params['-pack'] or params['-min']):
-    params['-useln'] = False
 
 
 if len(platforms) == 0:
@@ -538,13 +533,9 @@ for platform_name in platforms:
         platform.write_locales(l10n_strings_sparse)
 
     if not params['-meta']:
-        if params['-useln']:
-            copytree(src_dir, platform.build_dir, params['-useln'])
-        else:
-            copytree(tmp_dir, platform.build_dir)
+        copytree(tmp_dir, platform.build_dir)
 
         platform_js_dir = pj(platform_dir, platform_name, 'js')
-
         f_path = pj(platform.build_dir, 'js', 'app.js')
 
         with open(f_path, 'wb') as f:
@@ -559,7 +550,7 @@ for platform_name in platforms:
             copyfileobj(open(pj(src_dir, 'js', 'background.js'), 'rb'), f)
 
 
-        platform.write_files(params['-useln'])
+        platform.write_files()
 
         if params['-min']:
             js_files = {
@@ -586,11 +577,7 @@ for platform_name in platforms:
                 move(js_file + 'min', js_file)
 
         if getattr(platform, 'supports_extra_formats', False):
-            copytree(
-                ext_lib_dir,
-                pj(platform.build_dir, 'js', 'lib'),
-                params['-useln']
-            )
+            copytree(ext_lib_dir, pj(platform.build_dir, 'js', 'lib'))
         else:
             os.remove(pj(platform.build_dir, 'js', 'player.js'))
             os.remove(pj(platform.build_dir, 'viewer.html'))

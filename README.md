@@ -24,7 +24,7 @@ The code must work on all supported platforms, except if the browser's extension
 
 ## Build ##
 ```
-./build.py [platform(s)] [-meta] [-useln] [-min] [-pack] [-legacy] [-version=x.x.x]
+./build.py [platform(s)] [-meta] [-min] [-pack] [-legacy] [-version=x.x.x]
 ```
 
 The script prepares installable directories for each platform, and if the `-pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes into the `build` directory.
@@ -33,7 +33,7 @@ Optionally, it accepts platform names (any directory name under the `platform` d
 
 For generating only meta-data (manifest and locale files, and/or update-files when the `-pack` argument is set) use the `-meta` argument.
 
-Additionally, minification (depends on Java, which needs to be manually installed, also some jar files which are automatically downloaded into the `build/.bin` folder) is possible via the `-min` argument. This argument is ignored when `-useln` or the `-pack` is used.
+Additionally, minification (depends on Java, which needs to be manually installed, also some jar files which are automatically downloaded into the `build/.bin` folder) is possible via the `-min` argument. This argument is ignored when `-pack` is used.
 
 Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set (and no platforms were specificed).
 
@@ -59,8 +59,6 @@ Examples:
 
 ## Development ##
 For testing, you can build (described above) the extension for a selected platform, and install it from the `build/_platform_` directory for your browser.
-
-Some browsers (on some platforms) support reading the files through symbolic links, and for them there is a `-useln` argument for the `build.py` script to create symbolic links instead of copying the files. `-useln` is ignored when `-pack` is used.
 
 Alternatively, the extension can be built into a packaged file, which can be installed as well.
 

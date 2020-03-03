@@ -120,7 +120,7 @@ class Platform(object):
                         f.write(string)
                         f.write('\n')
 
-    def write_files(self, use_symlinks=False):
+    def write_files(self):
         copy_tree('icons', pj(self.build_dir, 'icons'), preserve_times=False)
 
     def write_package(self):

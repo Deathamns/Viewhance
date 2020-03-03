@@ -153,7 +153,7 @@ class Platform(object):
                         )
                         f.write('\n')
 
-    def write_files(self, use_symlinks=False):
+    def write_files(self):
         with open(pj('js', 'bootstrap.js'), 'r') as obs, \
              open(pj(self.build_dir, 'bootstrap.js'), 'w') as nbs:
             nbs.write(obs.read().replace('{{name}}', self.config['name']))

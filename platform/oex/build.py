@@ -110,7 +110,7 @@ class Platform(object):
                         )
                     )
 
-    def write_files(self, use_symlinks=False):
+    def write_files(self):
         inc_dir = pj(self.build_dir, 'includes');
         js_dir = pj(self.build_dir, 'js')
         os.makedirs(inc_dir)
