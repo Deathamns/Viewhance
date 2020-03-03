@@ -435,7 +435,7 @@ if params['-min']:
 external_libs = [
     ('4d41d954fb54ece11819818a4b3a154489b41058aa4d34d1509c69e0aad3366e', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.2/dist/dash.all.min.js'),
     ('eacd1215f1222bb3147a2e3bd7e43c08aa9f5f2bcfc56895c88660b13dba071f', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.2/dist/dash.mss.min.js'),
-    ('7ac505e1d7317c033da524290bbcd7080844eee8b4999eba6a248d993999c81a', 'https://github.com/video-dev/hls.js/releases/download/v0.13.1/hls.min.js')
+    ('928d85a8c4c18fe0081da8433be8b463d31c78c09b9dc752c9cb9e5ce76459ce', 'https://github.com/video-dev/hls.js/releases/download/v0.13.2/hls.min.js')
 ]
 
 ext_lib_dir = pj(build_dir, '.lib')
