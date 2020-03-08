@@ -78,8 +78,8 @@ if params['-min']:
 
     minifiers = {
         'closure-compiler': {
-            'file': 'closure-compiler-v20200204.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20200204.zip',
+            'file': 'closure-compiler-v20200224.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20200224.zip',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
