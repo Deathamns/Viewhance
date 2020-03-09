@@ -107,7 +107,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 			if ( contentType === 'image/svg+xml' ) {
 				if ( !prefs.viewSvg
 					|| details.method !== 'GET'
-					|| details.url.endsWith('#direct-svg') ) {
+					|| details.url.endsWith('#direct-view') ) {
 					return {};
 				}
 
@@ -160,7 +160,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				if ( ext.startsWith('svg') ) {
 					if ( !prefs.viewSvg
 						|| details.method !== 'GET'
-						|| details.url.endsWith('#direct-svg') ) {
+						|| details.url.endsWith('#direct-view') ) {
 						return {};
 					}
 
@@ -227,6 +227,10 @@ vAPI.watchReceivedHeaders = function(prefs) {
 		}
 
 		if ( streamingMediaType ) {
+			if ( details.url.endsWith('#direct-view') ) {
+				return {};
+			}
+
 			chrome.tabs.update(details.tabId, {
 				url: chrome.runtime.getURL(
 					'viewer.html#' + streamingMediaType + ':'

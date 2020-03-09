@@ -14,6 +14,10 @@ let startPlayer = function() {
 		media.dispatchEvent(new CustomEvent('qualityChanged', {bubbles: false}));
 	};
 
+	let onError = function() {
+		media.dispatchEvent(new Event('error', {bubbles: false}));
+	};
+
 	let generateQualityList = function(list, indexProp = null) {
 		let i = list.length;
 		let qualityList = [];
@@ -66,6 +70,7 @@ let startPlayer = function() {
 
 		dash.on(dashjs.MediaPlayer.events.ERROR, function() {
 			dash.reset();
+			onError();
 		});
 
 		media.getQuality = function() {
@@ -100,6 +105,7 @@ let startPlayer = function() {
 			// https://video-dev.github.io/hls.js/latest/docs/API.html#fatal-error-recovery
 			if ( Hls._recoverAttempted > 1 ) {
 				hls.destroy();
+				onError();
 				return;
 			}
 

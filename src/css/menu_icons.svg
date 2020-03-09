@@ -50,6 +50,10 @@
 	<path d="M5 30h20v30h-20zm35 0h20v30h-20zm35 0h20v30h-20z" stroke-width="7" fill="currentColor"/>
 </symbol>
 
+<symbol id="icon-direct-view" viewBox="0 0 100 100">
+	<path d="M20 5L5 20L70 80L20 95L95 95L95 30L80 70z" stroke-width="7" stroke-linejoin="round" fill="currentColor"/>
+</symbol>
+
 <symbol id="icon-options" viewBox="0 0 100 100">
 	<path d="M94.14 41.22A45 45 0 0 1 94.14 58.78A8 8 1 0 0 87.42 75A45 45 0 0 1 75 87.42A8 8 1 0 0 58.78 94.14A45 45 0 0 1 41.22 94.14A8 8 1 0 0 25 87.42A45 45 0 0 1 12.58 75A8 8 1 0 0 5.86 58.78A45 45 0 0 1 5.86 41.22A8 8 1 0 0 12.58 25A45 45 0 0 1 25 12.58A8 8 1 0 0 41.22 5.86A45 45 0 0 1 58.78 5.86A8 8 1 0 0 75 12.58A45 45 0 0 1 87.42 25A8 8 1 0 0 94.14 41.22M50 50m -15, 0a 15,15 0 1,0 30,0a 15,15 0 1,0 -30,0" fill="currentColor"/>
 </symbol>

@@ -180,7 +180,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				if ( contentType === 'image/svg+xml' ) {
 					if ( !prefs.viewSvg
 						|| channel.requestMethod !== 'GET'
-						|| channel.URI.ref === 'direct-svg' ) {
+						|| channel.URI.ref === 'direct-view' ) {
 						return;
 					}
 
@@ -239,7 +239,7 @@ vAPI.watchReceivedHeaders = function(prefs) {
 					if ( ext.startsWith('svg') ) {
 						if ( !prefs.viewSvg
 							|| channel.requestMethod !== 'GET'
-							|| channel.URI.ref === 'direct-svg' ) {
+							|| channel.URI.ref === 'direct-view' ) {
 							return;
 						}
 
@@ -296,6 +296,10 @@ vAPI.watchReceivedHeaders = function(prefs) {
 			}
 
 			if ( streamingMediaType ) {
+				if ( channel.URI.ref === 'direct-view' ) {
+					return;
+				}
+
 				this.updateTab(
 					channel,
 					vAPI._baseURI + 'viewer.html#' + streamingMediaType + ':'

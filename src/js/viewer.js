@@ -2140,12 +2140,6 @@ init = function() {
 		vAPI.mediaType === 'img' && !vAPI.extraFormat
 			? {tag: 'li', attrs: {'data-cmd': 'frames'}}
 			: null,
-		vAPI.extraFormat === 'svg'
-			? {tag: 'li', attrs: {
-				'data-cmd': 'direct-svg',
-				'data-svg-icon': 'frames'
-			}}
-			: null,
 		media._qualityList && media._qualityList.length > 1
 			? {
 				tag: 'li',
@@ -2164,6 +2158,11 @@ init = function() {
 					})
 				}]
 			}
+			: null,
+		vAPI.extraFormat
+			? {tag: 'li', attrs: {
+				'data-cmd': 'direct-view'
+			}}
 			: null,
 		{tag: 'li', attrs: {'data-cmd': 'options'}}
 	]);
@@ -2263,7 +2262,7 @@ init = function() {
 				media.style[vAPI.browser.filter] = '';
 				doc.querySelector('#menu li.filters > form').reset();
 			}
-		} else if ( cmd === 'direct-svg' ) {
+		} else if ( cmd === 'direct-view' ) {
 			win.location.href = vAPI.extraFormatUrl + '#' + cmd;
 		} else if ( cmd === 'frames' ) {
 			startFrameExtractor({fullFrames: e.button === 0});
@@ -2496,6 +2495,10 @@ media.addEventListener('error', function() {
 	clearInterval(progress);
 	root.classList.add('load-failed');
 	media.id = 'media';
+
+	if ( vAPI.extraFormat ) {
+		win.location.href = vAPI.extraFormatUrl + '#direct-view';
+	}
 });
 
 if ( win.location.protocol === 'data:' ) {

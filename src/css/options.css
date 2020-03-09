@@ -392,12 +392,8 @@ h3 {
 	text-align: center;
 }
 
-.sub-shortcuts > li > label {
-	margin-left: 0.5em;
-}
-
 .sub-shortcuts input {
-	margin: 0;
+	margin: 0 5px 0 0;
 }
 
 .sub-shortcuts li {
