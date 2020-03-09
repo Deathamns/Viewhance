@@ -1,7 +1,5 @@
 /* eslint strict:off */
 
-document.title = ':: ' + vAPI.app.name + ' :: v' + vAPI.app.version;
-
 var cachedPrefs;
 var onPrefsUpdatedCallbacks = [];
 
@@ -15,19 +13,30 @@ if ( vAPI.permissions ) {
 }
 
 var xhr = function(url, onLoad) {
+	if ( typeof fetch !== 'undefined' ) {
+		fetch(url).then(function(response) {
+			return response.text();
+		}).then(function(responseText) {
+			onLoad(responseText);
+		});
+		return;
+	}
+
 	var req = new XMLHttpRequest;
-	req.overrideMimeType('application/json;charset=utf-8');
+	req.overrideMimeType('text/plain;charset=utf-8');
 	req.open('GET', url, true);
-	req.addEventListener('load', onLoad);
+	req.addEventListener('load', function() {
+		onLoad(this.responseText);
+	});
 	req.send();
 };
 
 var updatePrefs = function(newPrefs, storedPrefs) {
 	var currentPermissions = null;
 
-	var onDefaultsReady = function() {
+	var onDefaultsReady = function(responseText) {
 		var key;
-		var defPrefs = JSON.parse(this.responseText);
+		var defPrefs = JSON.parse(responseText);
 		cachedPrefs = {};
 
 		for ( key in defPrefs ) {
@@ -164,13 +173,13 @@ var onMessage = function(message, source, respond) {
 			return;
 		}
 
-		xhr('data/defaults.json', function() {
+		xhr('data/defaults.json', function(responseText) {
 			if ( vAPI.prefPermissions ) {
 				response._prefPermissions = vAPI.prefPermissions;
 			}
 
 			response._app = vAPI.app;
-			response._defaultPrefs = this.responseText;
+			response._defaultPrefs = responseText;
 			respond(response);
 		});
 	} else if ( cmd === 'loadStoredPrefs' ) {
@@ -205,15 +214,7 @@ var onMessage = function(message, source, respond) {
 			});
 		});
 	} else if ( cmd === 'loadFile' ) {
-		xhr(
-			location.protocol + '//'
-				+ location.host
-				+ location.pathname.replace(/[^/]*$/, '')
-				+ message.path,
-			function() {
-				respond(this.responseText);
-			}
-		);
+		xhr(message.path, respond);
 	}
 };
 
