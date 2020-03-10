@@ -16,7 +16,7 @@
 		"TinEye|https://www.tineye.com/search?sort=size&order=desc&url=%url",
 		"Google|https://www.google.com/searchbyimage?image_url=%url",
 		"Bing|https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=%url",
-		"Yandex|https://yandex.ru/images/search?rpt=imageview&img_url=%url",
+		"Yandex|https://yandex.com/images/search?rpt=imageview&url=%url",
 		"ZXing QRCode|https://zxing.org/w/decode?full=true&u=%url",
 		"ImgOps|https://imgops.com/%raw_url",
 		"Pixlr|https://www.pixlr.com/editor/?image=%url",
