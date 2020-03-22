@@ -7,31 +7,21 @@ from time import time
 from shutil import rmtree, copy, which
 from collections import OrderedDict
 from urllib.request import urlretrieve
+from .. import base
 
 
-os.chdir(os.path.split(os.path.abspath(__file__))[0])
-pj = os.path.join
-
-def norm_cygdrive(path):
-    return '/cygdrive/' + path[0] + path[2:].replace('\\', '/') if path[1] == ':' else path
-
-class Platform(object):
-    ext = os.path.basename(os.path.dirname(__file__))
+class Platform(base.PlatformBase):
     update_file = 'Update.plist'
-    requires_all_strings = True
     l10n_dir = 'locales'
-    legacy = True
+    requires_all_strings = True
+    disabled = True
 
-    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
+    def __init__(self, build_dir, *args):
+        super().__init__(build_dir, *args)
         self.build_dir = os.path.join(
             build_dir,
-            config['name'] + '.safariextension'
+            self.config['name'] + '.safariextension'
         )
-        self.config = config
-        self.params = params
-        self.languages = languages
-        self.desc_string = desc_string
-        self.package_name = package_name
 
     def __del__(self):
         for param in ['description', 'build_number', 'update_file']:
@@ -104,11 +94,11 @@ class Platform(object):
                     )
 
     def write_files(self):
-        copy(pj('meta', 'Settings.plist'), pj(self.build_dir))
+        copy(self.pjif('meta', 'Settings.plist'), self.build_dir)
 
     def write_package(self):
-        key = pj('secret', 'key.pem')
-        certs = pj('secret', 'certs')
+        key = self.pjif('secret', 'key.pem')
+        certs = self.pjif('secret', 'certs')
         tmp_dir = self.build_dir + '.tmp'
         package = self.package_name + '.' + self.ext
 
@@ -116,9 +106,9 @@ class Platform(object):
             sys.stderr.write(key + ' is missing\n')
             return
 
-        if not os.path.isfile(pj(certs, 'safari_extension.cer')):
+        if not os.path.isfile(self.pjif(certs, 'safari_extension.cer')):
             sys.stderr.write(
-                pj(certs, 'safari_extension.cer') + ' is missing\n'
+                self.pjif(certs, 'safari_extension.cer') + ' is missing\n'
             )
             return
 
@@ -134,18 +124,18 @@ class Platform(object):
         try: os.makedirs(certs)
         except: pass
 
-        if not os.path.isfile(pj(certs, 'AppleWWDRCA.cer')):
+        if not os.path.isfile(self.pjif(certs, 'AppleWWDRCA.cer')):
             print('Downloading AppleWWDRCA.cer...')
             urlretrieve(
                 'https://developer.apple.com/certificationauthority/AppleWWDRCA.cer',
-                pj(certs, 'AppleWWDRCA.cer')
+                self.pjif(certs, 'AppleWWDRCA.cer')
             )
 
-        if not os.path.isfile(pj(certs, 'AppleIncRootCertificate.cer')):
+        if not os.path.isfile(self.pjif(certs, 'AppleIncRootCertificate.cer')):
             print('Downloading AppleIncRootCertificate.cer...')
             urlretrieve(
                 'https://www.apple.com/appleca/AppleIncRootCertificate.cer',
-                pj(certs, 'AppleIncRootCertificate.cer')
+                self.pjif(certs, 'AppleIncRootCertificate.cer')
             )
 
         if which('xar') is None:
@@ -174,9 +164,9 @@ class Platform(object):
             'xar', '--sign', '-f', package,
             '--digestinfo-to-sign', digest_dat,
             '--sig-size', str(sig_len),
-            '--cert-loc', pj(certs, 'safari_extension.cer'),
-            '--cert-loc', pj(certs, 'AppleWWDRCA.cer'),
-            '--cert-loc', pj(certs, 'AppleIncRootCertificate.cer')
+            '--cert-loc', self.pjif(certs, 'safari_extension.cer'),
+            '--cert-loc', self.pjif(certs, 'AppleWWDRCA.cer'),
+            '--cert-loc', self.pjif(certs, 'AppleIncRootCertificate.cer')
         ])
 
         subprocess.call([

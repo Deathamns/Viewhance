@@ -7,32 +7,18 @@ import zipfile as zip
 from io import open
 from struct import pack
 from collections import OrderedDict
-from mimetypes import guess_type as mime_type
-
-os.chdir(os.path.split(os.path.abspath(__file__))[0])
-pj = os.path.join
+from .. import base
 
 
-class Platform(object):
-    ext = os.path.basename(os.path.dirname(__file__))
-    update_file = 'update_{}.xml'.format(ext)
-    requires_all_strings = False
-    l10n_dir = '_locales'
+class Platform(base.PlatformBase):
     supports_extra_formats = True
-
-    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
-        self.build_dir = pj(build_dir, self.ext)
-        self.config = config
-        self.params = params
-        self.languages = languages
-        self.desc_string = desc_string
-        self.package_name = package_name
+    l10n_dir = '_locales'
 
     def write_manifest(self):
-        manifest_dest = pj(self.build_dir, 'manifest.json')
+        manifest_dest = os.path.join(self.build_dir, 'manifest.json')
 
         with open(manifest_dest, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(pj('meta', 'manifest.json'), 'r') as tmpl:
+            with open(self.pjif('meta', 'manifest.json'), 'r') as tmpl:
                 f.write(
                     re.sub(
                         r'\{(?=\W)|(?<=\W)\}',
@@ -45,17 +31,18 @@ class Platform(object):
         if not self.config['update_url']:
             return
 
-        update_file = pj(self.build_dir, '..', self.update_file)
+        update_file_name = 'update_{}.xml'.format(self.ext)
+        update_file = os.path.join(self.build_dir, '..', update_file_name)
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(pj('meta', self.update_file), 'r') as tmpl:
+            with open(self.pjif('meta', update_file_name), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):
         def_desc = self.languages[self.config['def_lang']][self.desc_string]
 
         for alpha2 in lng_strings:
-            locale_dir = pj(
+            locale_dir = os.path.join(
                 self.build_dir,
                 self.l10n_dir,
                 alpha2.replace('-', '_')
@@ -88,7 +75,7 @@ class Platform(object):
                         'message': lng_strings[alpha2][grp][string]
                     }
 
-            locale_file = pj(locale_dir, 'messages.json')
+            locale_file = os.path.join(locale_dir, 'messages.json')
 
             with open(locale_file, 'wt', encoding='utf-8', newline='\n') as f:
                 if self.params['-min']:
@@ -104,28 +91,15 @@ class Platform(object):
                     )
                 )
 
-    def write_files(self):
-        pass
-
     def write_package(self):
         zip_file = self.package_name + '.zip';
 
         try: os.remove(zip_file)
         except: pass
 
-        with zip.ZipFile(zip_file, 'w', zip.ZIP_DEFLATED, compresslevel=9) as z:
-            for root, dirs, files in os.walk(self.build_dir):
-                for file in files:
-                    fn = pj(root, file)
-                    wargs = [fn, fn[len(self.build_dir):]]
-                    mime = mime_type(fn)[0]
+        self.zip_package(zip_file, 9)
 
-                    if mime and re.search(r'^image/(?!svg)', mime):
-                        wargs.append(zip.ZIP_STORED)
-
-                    z.write(*wargs)
-
-        key = pj('.', 'secret', 'key.pem')
+        key = self.pjif('secret', 'key.pem')
 
         if not os.path.isfile(key):
             return

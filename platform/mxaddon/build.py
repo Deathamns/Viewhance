@@ -4,30 +4,14 @@ import re
 import json
 from io import open
 from distutils.dir_util import copy_tree
-
-os.chdir(os.path.split(os.path.abspath(__file__))[0])
-pj = os.path.join
+from .. import base
 
 
-class Platform(object):
-    ext = os.path.basename(os.path.dirname(__file__))
-    update_file = None
-    requires_all_strings = False
+class Platform(base.PlatformBase):
     l10n_dir = 'locale'
 
-    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
-        self.build_dir = pj(build_dir, self.ext)
-        self.config = config
-        self.params = params
-        self.languages = languages
-        self.desc_string = desc_string
-        self.package_name = os.path.abspath(pj(
-            build_dir,
-            config['name'].lower() + '-' + config['version']
-        ))
-
     def write_manifest(self):
-        with open(os.path.join('meta', 'def.json'), 'r') as tmpl:
+        with open(self.pjif('meta', 'def.json'), 'r') as tmpl:
             def_json = os.path.join(self.build_dir, 'def.json')
 
             with open(def_json, 'wt', encoding='utf-8', newline='\n') as f:
@@ -39,9 +23,6 @@ class Platform(object):
                         tmpl.read()
                     ).format(**self.config)
                 )
-
-    def write_update_file(self):
-        pass
 
     def write_locales(self, lng_strings):
         # http://translate.maxthon.com/
@@ -121,7 +102,11 @@ class Platform(object):
                         f.write('\n')
 
     def write_files(self):
-        copy_tree('icons', pj(self.build_dir, 'icons'), preserve_times=False)
+        copy_tree(
+            'icons',
+            os.path.join(self.build_dir, 'icons'),
+            preserve_times=False
+        )
 
     def write_package(self):
         mxpack = __import__(

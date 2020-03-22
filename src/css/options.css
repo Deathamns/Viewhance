@@ -6,6 +6,10 @@
 	background: #adf;
 }
 
+:focus {
+	outline: none;
+}
+
 html {
 	min-height: 100%;
 	background-color: #f3f3f5;
@@ -32,10 +36,6 @@ a {
 
 a:hover {
 	color: #000;
-}
-
-:focus {
-	outline: none;
 }
 
 .fn {

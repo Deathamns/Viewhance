@@ -1,30 +1,16 @@
 import sys
 import os
-import re
-import zipfile as zip
 from io import open
 from shutil import copy
 from xml.sax.saxutils import escape as escp
-from mimetypes import guess_type as mime_type
-
-os.chdir(os.path.split(os.path.abspath(__file__))[0])
-pj = os.path.join
+from .. import base
 
 
-class Platform(object):
-    ext = os.path.basename(os.path.dirname(__file__))
+class Platform(base.PlatformBase):
+    supports_extra_formats = True
     update_file = 'update.rdf'
     requires_all_strings = True
     l10n_dir = 'locale'
-    supports_extra_formats = True
-
-    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
-        self.build_dir = pj(build_dir, self.ext)
-        self.config = config
-        self.params = params
-        self.languages = languages
-        self.desc_string = desc_string
-        self.package_name = package_name
 
     def __del__(self):
         for param in ['extra', 'description']:
@@ -32,7 +18,7 @@ class Platform(object):
                 del self.config[param]
 
     def write_manifest(self):
-        install_rdf = pj(self.build_dir, 'install.rdf')
+        install_rdf = os.path.join(self.build_dir, 'install.rdf')
 
         with open(install_rdf, 'wt', encoding='utf-8', newline='\n') as f:
             l10n = []
@@ -97,12 +83,12 @@ class Platform(object):
                 self.languages[self.config['def_lang']][self.desc_string]
             )
 
-            install_rdf_tmpl_path = pj('meta', 'install.rdf')
+            install_rdf_tmpl_path = self.pjif('meta', 'install.rdf')
 
             with open(install_rdf_tmpl_path, 'r') as install_rdf_tmpl:
                 f.write(install_rdf_tmpl.read().format(**self.config))
 
-        chrome_manifest = pj(self.build_dir, 'chrome.manifest')
+        chrome_manifest = os.path.join(self.build_dir, 'chrome.manifest')
 
         with open(chrome_manifest, 'wt', encoding='utf-8', newline='\n') as f:
             f.write(
@@ -116,10 +102,10 @@ class Platform(object):
         if not self.config['update_url']:
             return
 
-        update_file = pj(self.build_dir, '..', self.update_file)
+        update_file = os.path.join(self.build_dir, '..', self.update_file)
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(pj('meta', self.update_file), 'r') as tmpl:
+            with open(self.pjif('meta', self.update_file), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):
@@ -128,7 +114,7 @@ class Platform(object):
         }
 
         for alpha2 in lng_strings:
-            locale_dir = pj(self.build_dir, 'locale', alpha2)
+            locale_dir = os.path.join(self.build_dir, 'locale', alpha2)
 
             try: os.makedirs(locale_dir)
             except: pass
@@ -141,7 +127,7 @@ class Platform(object):
 
             for grp in locale_files:
                 group = locale_files[grp]
-                locale = pj(locale_dir, group)
+                locale = os.path.join(locale_dir, group)
                 current_group = lng_strings[alpha2][grp]
 
                 with open(locale, 'wt', encoding='utf-8', newline='\n') as f:
@@ -154,31 +140,18 @@ class Platform(object):
                         f.write('\n')
 
     def write_files(self):
-        with open(pj('js', 'bootstrap.js'), 'r') as obs, \
-             open(pj(self.build_dir, 'bootstrap.js'), 'w') as nbs:
+        with open(self.pjif('js', 'bootstrap.js'), 'r') as obs, \
+             open(os.path.join(self.build_dir, 'bootstrap.js'), 'w') as nbs:
             nbs.write(obs.read().replace('{{name}}', self.config['name']))
 
-        copy(pj('js', 'frame_module.js'), pj(self.build_dir, 'js'))
-        copy(pj('js', 'frame_script.js'), pj(self.build_dir, 'js'))
+        copy(self.pjif('js', 'frame_module.js'), os.path.join(self.build_dir, 'js'))
+        copy(self.pjif('js', 'frame_script.js'), os.path.join(self.build_dir, 'js'))
 
         self.extra_js_min = {
-            'bootstrap.js': pj(self.build_dir, 'bootstrap.js'),
-            'frame_module.js': pj(self.build_dir, 'js', 'frame_module.js'),
-            'frame_script.js': pj(self.build_dir, 'js', 'frame_script.js'),
+            'bootstrap.js': os.path.join(self.build_dir, 'bootstrap.js'),
+            'frame_module.js': os.path.join(self.build_dir, 'js', 'frame_module.js'),
+            'frame_script.js': os.path.join(self.build_dir, 'js', 'frame_script.js'),
         }
 
     def write_package(self):
-        package = self.package_name + '.' + self.ext;
-
-        with zip.ZipFile(package, 'w', zip.ZIP_DEFLATED) as z:
-            for root, dirs, files in os.walk(self.build_dir):
-                for file in files:
-                    fn = pj(root, file)
-                    wargs = [fn, fn[len(self.build_dir):]]
-                    mime = mime_type(fn)[0]
-
-                    if mime and re.search(r'^image/(?!svg)', mime):
-                        wargs.append(zip.ZIP_STORED)
-
-                    z.write(*wargs)
-
+        self.zip_package(self.package_name + '.' + self.ext)

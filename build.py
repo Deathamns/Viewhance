@@ -47,7 +47,7 @@ params = {
     '-meta': None,
     '-pack': None,
     '-min': None,
-    '-legacy': None,
+    '-disabled': None,
     '-version': None,
 }
 
@@ -69,7 +69,7 @@ for i in range(1, len(argv)):
     if arg in params:
         params[arg] = argVal or True
     elif arg[0] == '-' or not add_platform(arg):
-        sys.stderr.write('Invalid argument: ' + arg + '\n')
+        raise SystemExit('Invalid argument: ' + arg)
 
 
 if params['-min']:
@@ -126,7 +126,7 @@ if len(platforms) == 0:
         if os.path.isdir(pj(platform_dir, f)):
             add_platform(f)
 else:
-    params['-legacy'] = None
+    params['-disabled'] = None
 
 
 if len(platforms) == 0:
@@ -433,8 +433,8 @@ if params['-min']:
 
 
 external_libs = [
-    ('4d41d954fb54ece11819818a4b3a154489b41058aa4d34d1509c69e0aad3366e', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.2/dist/dash.all.min.js'),
-    ('eacd1215f1222bb3147a2e3bd7e43c08aa9f5f2bcfc56895c88660b13dba071f', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.2/dist/dash.mss.min.js'),
+    ('957dcf4caf7bb2c1c408d6fe9a2d204d75e6328efd29412393ceef1347cd7a6e', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.3/dist/dash.all.min.js'),
+    ('3c3e5690f3b10a7dbc980f859c31a1eab75fee1c51c9cad3527fdafd6c3da61c', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.3/dist/dash.mss.min.js'),
     ('928d85a8c4c18fe0081da8433be8b463d31c78c09b9dc752c9cb9e5ce76459ce', 'https://github.com/video-dev/hls.js/releases/download/v0.13.2/hls.min.js')
 ]
 
@@ -489,8 +489,8 @@ for platform_name in platforms:
         ))
     )
 
-    if getattr(platform, 'legacy', False) and not params['-legacy']:
-        print('Skipping legacy ' + platform_name)
+    if getattr(platform, 'disabled', False) and not params['-disabled']:
+        print('Skipping disabled ' + platform_name)
         continue
 
     if not params['-meta']:
@@ -535,18 +535,17 @@ for platform_name in platforms:
     if not params['-meta']:
         copytree(tmp_dir, platform.build_dir)
 
-        platform_js_dir = pj(platform_dir, platform_name, 'js')
         f_path = pj(platform.build_dir, 'js', 'app.js')
 
         with open(f_path, 'wb') as f:
-            copyfileobj(open(pj(platform_js_dir, 'app.js'), 'rb'), f)
+            copyfileobj(open(platform.pjif('js', 'app.js'), 'rb'), f)
             copyfileobj(open(pj(src_dir, 'js', 'app.js'), 'rb'), f)
 
 
         f_path = pj(platform.build_dir, 'js', 'background.js')
 
         with open(f_path, 'wb') as f:
-            copyfileobj(open(pj(platform_js_dir, 'app_bg.js'), 'rb'), f)
+            copyfileobj(open(platform.pjif('js', 'app_bg.js'), 'rb'), f)
             copyfileobj(open(pj(src_dir, 'js', 'background.js'), 'rb'), f)
 
 

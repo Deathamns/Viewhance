@@ -24,7 +24,7 @@ The code must work on all supported platforms, except if the browser's extension
 
 ## Build ##
 ```
-./build.py [platform(s)] [-meta] [-min] [-pack] [-legacy] [-version=x.x.x]
+./build.py [platform(s)] [-meta] [-min] [-pack] [-disabled] [-version=x.x.x]
 ```
 
 The script prepares installable directories for each platform, and if the `-pack` argument is supplied, it will create installable packages (and update-files depending on the platform). All the output of this script goes into the `build` directory.
@@ -35,20 +35,20 @@ For generating only meta-data (manifest and locale files, and/or update-files wh
 
 Additionally, minification (depends on Java, which needs to be manually installed, also some jar files which are automatically downloaded into the `build/.bin` folder) is possible via the `-min` argument. This argument is ignored when `-pack` is used.
 
-Some platforms might be marked as legacy and they will be skipped at build unless the `-legacy` argument is set (and no platforms were specificed).
+Platforms might be marked as disabled and they will be ignored at build unless the `-disabled` argument is set.
 
 With the `-version` argument it is possible to set a specific version number. If not set, the build script will use the current date/time as version.
 
 Examples:
 ```
-# Prepare directories for non-legacy platforms
+# Prepare directories for non-disabled platforms
 ./build.py
 
 # Prepare directories for Firefox (XUL) and Opera (Presto)
 ./build.py xpi oex
 
-# Prepare directories and package them for every platform (including legacy)
-./build.py -pack -legacy
+# Prepare directories and package them for every platform (including disabled)
+./build.py -pack -disabled
 
 # Prepare, minify, and package for Chromium
 ./build.py crx -min -pack

@@ -1,28 +1,17 @@
 import sys
 import os
-import re
 import json
-import zipfile as zip
 from io import open
-from mimetypes import guess_type as mime_type
-
-os.chdir(os.path.split(os.path.abspath(__file__))[0])
-pj = os.path.join
+from .. import base
 
 
-class Platform(object):
-    ext = os.path.basename(os.path.dirname(__file__))
-    update_file = 'update_{}.xml'.format(ext)
+class Platform(base.PlatformBase):
     requires_all_strings = True
     l10n_dir = 'locales'
 
-    def __init__(self, build_dir, config, params, languages, desc_string, package_name):
-        self.build_dir = pj(build_dir, self.ext)
-        self.config = config
-        self.params = params
-        self.languages = languages
-        self.desc_string = desc_string
-        self.package_name = package_name
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.update_file = 'update_{}.xml'.format(self.ext)
 
     def __del__(self):
         for param in ['locale_info', 'update_file']:
@@ -31,7 +20,7 @@ class Platform(object):
 
     def write_manifest(self):
         manifest_name = 'config.xml'
-        config_xml_path = pj(self.build_dir, manifest_name)
+        config_xml_path = os.path.join(self.build_dir, manifest_name)
 
         with open(config_xml_path, 'wt', encoding='utf-8', newline='\n') as f:
             tmp = []
@@ -54,17 +43,17 @@ class Platform(object):
             self.config['locale_info'] = '\n'.join(tmp) + '\n'
             self.config['update_file'] = self.update_file
 
-            with open(pj('meta', manifest_name), 'r') as tmpl:
+            with open(self.pjif('meta', manifest_name), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_update_file(self):
         if not self.config['update_url']:
             return
 
-        update_file = pj(self.build_dir, '..', self.update_file)
+        update_file = os.path.join(self.build_dir, '..', self.update_file)
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(pj('meta', self.update_file), 'r') as tmpl:
+            with open(self.pjif('meta', self.update_file), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):
@@ -73,7 +62,7 @@ class Platform(object):
         }
 
         for alpha2 in lng_strings:
-            locale_dir = pj(self.build_dir, 'locales', alpha2)
+            locale_dir = os.path.join(self.build_dir, 'locales', alpha2)
 
             try: os.makedirs(locale_dir)
             except: pass
@@ -91,7 +80,7 @@ class Platform(object):
                     continue
 
                 locale = open(
-                    pj(locale_dir, locale_files[grp]),
+                    os.path.join(locale_dir, locale_files[grp]),
                     'wt', encoding='utf-8', newline='\n'
                 )
 
@@ -111,17 +100,26 @@ class Platform(object):
                     )
 
     def write_files(self):
-        inc_dir = pj(self.build_dir, 'includes');
-        js_dir = pj(self.build_dir, 'js')
+        inc_dir = os.path.join(self.build_dir, 'includes');
+        js_dir = os.path.join(self.build_dir, 'js')
         os.makedirs(inc_dir)
-        os.replace(pj(js_dir, 'app.js'), pj(inc_dir, 'app.js'))
-        os.replace(pj(js_dir, 'opener.js'), pj(inc_dir, 'opener.js'))
-        os.replace(pj(js_dir, 'viewer.js'), pj(inc_dir, 'viewer.js'))
+        os.replace(
+            os.path.join(js_dir, 'app.js'),
+            os.path.join(inc_dir, 'app.js')
+        )
+        os.replace(
+            os.path.join(js_dir, 'opener.js'),
+            os.path.join(inc_dir, 'opener.js')
+        )
+        os.replace(
+            os.path.join(js_dir, 'viewer.js'),
+            os.path.join(inc_dir, 'viewer.js')
+        )
         self.extra_js_min = {
-            'app.js': pj(inc_dir, 'app.js')
+            'app.js': os.path.join(inc_dir, 'app.js')
         }
 
-        options_html = pj(self.build_dir, 'options.html')
+        options_html = os.path.join(self.build_dir, 'options.html')
 
         with open(options_html, 'rt', encoding='utf-8', newline='\n') as f:
             html = f.read()
@@ -132,16 +130,4 @@ class Platform(object):
             f.write(html.replace('./js/app.js', './includes/app.js'))
 
     def write_package(self):
-        package = self.package_name + '.' + self.ext;
-
-        with zip.ZipFile(package, 'w', zip.ZIP_DEFLATED, compresslevel=9) as z:
-            for root, dirs, files in os.walk(self.build_dir):
-                for file in files:
-                    fn = pj(root, file)
-                    wargs = [fn, fn[len(self.build_dir):]]
-                    mime = mime_type(fn)[0]
-
-                    if mime and re.search(r'^image/(?!svg)', mime):
-                        wargs.append(zip.ZIP_STORED)
-
-                    z.write(*wargs)
+        self.zip_package(self.package_name + '.' + self.ext, 9)
