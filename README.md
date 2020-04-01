@@ -25,16 +25,11 @@ To try it out (when installed), open a media file ([image](https://upload.wikime
 ## Browser/platform support ##
 The following platforms are supported, for each the latest browser version:
 
-- [**crx**](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac) - many Chromium based [browsers](https://en.wikipedia.org/wiki/Chromium_\(web_browser\)#Browsers_based_on_Chromium) (Chrome, Opera 15+, Vivaldi, Edge...), or browsers with WebExtension support (e.g., [Firefox](https://addons.mozilla.org/addon/viewhance/))
-- [**xpi**](https://tiny.cc/Viewhance-xpi) - XUL based platforms (older Firefox, SeaMonkey, Pale Moon...)
-- [**oex**](https://tiny.cc/Viewhance-oex) - Opera 12 (Presto based)
-- [**mxaddon**](http://extension.maxthon.com/detail/index.php?view_id=2527) - Maxthon
+- **crx** - many Chromium based [browsers](https://en.wikipedia.org/wiki/Chromium_\(web_browser\)#Browsers_based_on_Chromium) ([Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac), Opera 15+, Vivaldi, Edge...), or browsers with WebExtension support (e.g., [Firefox](https://addons.mozilla.org/addon/viewhance/))
+- **xpi** - XUL based platforms (older Firefox, SeaMonkey, Pale Moon...)
+- **oex** - Opera 12 (Presto based)
+- **mxaddon** - Maxthon
 - **safariextz** (legacy) - Safari v5.1 - v12
-
-## Contribution ##
-- **Localization** You can use [this helper tool](https://deathamns.github.io/Viewhance/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
-- **Code** If you have a bug-fix, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge too much from the main goal; viewing enhancements.
-The code must work on all supported platforms, except if the browser's extension API doesn't provide appropriate functionality, then fail silently.
 
 ## Build ##
 ```
@@ -46,10 +41,15 @@ Without arguments the script will generate the necessary files for each non-disa
 Additional information for specific platforms can be found in their directories.
 
 `platf1 platf2...` - list of platforms (directory names under `platform/`) if building for all platforms is not desired
+
 `-meta` - generate only meta-data (localization, manifest files)
+
 `-pack` - creates installable/distributable packages (with `-meta` it will also generate meta files for updating)
+
 `-min` - compress source files (JS, HTML, CSS) (Java is required)
+
 `-all` - build disabled platforms as well (if it's not listed as a platform already)
+
 `-version=x.x.x` - use custom version number, instead of an auto-generated based on the current date-time (YYYY.MMDD.HHII)
 
 Examples:
@@ -69,3 +69,8 @@ Examples:
 # Generate meta-data for Maxthon and Safari
 ./build.py -meta mxaddon safariextz
 ```
+
+## Contribution ##
+- **Localization** You can use [this helper tool](https://deathamns.github.io/Viewhance/localizer.html) for translating strings. The result can be sent as a pull request on GitHub (instructions are shown when you export your work on the localizer page).
+- **Code** If you have a bug-fix, or did some tweaks, then you can send a pull request with your changes. Criteria: Try to respect the code styling, use [`eslint`](http://eslint.org/), don't diverge too much from the main goal; viewing enhancements.
+The code must work on all supported platforms, except if the browser's extension API doesn't provide appropriate functionality, then fail silently.
