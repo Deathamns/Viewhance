@@ -13,7 +13,7 @@ if ( vAPI.permissions ) {
 }
 
 var xhr = function(url, onLoad) {
-	if ( typeof fetch !== 'undefined' ) {
+	if ( typeof fetch !== 'undefined' && !vAPI.maxthon ) {
 		fetch(url).then(function(response) {
 			return response.text();
 		}).then(function(responseText) {
