@@ -43,11 +43,12 @@ app_desc_string = 'appDescriptionShort'
 
 common_app_code = None
 platforms = []
+listed_platforms = {}
 params = {
     '-meta': None,
     '-pack': None,
     '-min': None,
-    '-disabled': None,
+    '-all': None,
     '-version': None,
 }
 
@@ -68,7 +69,9 @@ for i in range(1, len(argv)):
 
     if arg in params:
         params[arg] = argVal or True
-    elif arg[0] == '-' or not add_platform(arg):
+    elif add_platform(arg):
+        listed_platforms[arg] = True
+    elif arg[0] == '-':
         raise SystemExit('Invalid argument: ' + arg)
 
 
@@ -78,8 +81,8 @@ if params['-min']:
 
     minifiers = {
         'closure-compiler': {
-            'file': 'closure-compiler-v20200224.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20200224.zip',
+            'file': 'closure-compiler-v20200315.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20200315.zip',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
@@ -126,7 +129,7 @@ if len(platforms) == 0:
         if os.path.isdir(pj(platform_dir, f)):
             add_platform(f)
 else:
-    params['-disabled'] = None
+    params['-all'] = None
 
 
 if len(platforms) == 0:
@@ -485,15 +488,16 @@ for platform_name in platforms:
         app_desc_string,
         os.path.abspath(pj(
             build_dir,
-            config['name'].lower() + '-' + config['version']
+            config['name'].lower() + '-' + config['version'] + '-' + platform_name
         ))
     )
 
-    if getattr(platform, 'disabled', False) and not params['-disabled']:
-        print('Skipping disabled ' + platform_name)
-        continue
+    if getattr(platform, 'disabled', False):
+        if not params['-all'] and platform_name not in listed_platforms:
+            print('Skipping disabled ' + platform_name)
+            continue
 
-    if not params['-meta']:
+    if not params['-meta'] or params['-pack']:
         try: rmtree(platform.build_dir)
         except: pass
 
@@ -532,72 +536,73 @@ for platform_name in platforms:
     else:
         platform.write_locales(l10n_strings_sparse)
 
-    if not params['-meta']:
-        copytree(tmp_dir, platform.build_dir)
-
-        f_path = pj(platform.build_dir, 'js', 'app.js')
-
-        with open(f_path, 'wb') as f:
-            copyfileobj(open(platform.pjif('js', 'app.js'), 'rb'), f)
-            copyfileobj(open(pj(src_dir, 'js', 'app.js'), 'rb'), f)
+    if params['-meta'] and not params['-pack']:
+        print('Meta-data is ready for ' + platform_name)
+        del platform
+        continue
 
 
-        f_path = pj(platform.build_dir, 'js', 'background.js')
+    copytree(tmp_dir, platform.build_dir)
 
-        with open(f_path, 'wb') as f:
-            copyfileobj(open(platform.pjif('js', 'app_bg.js'), 'rb'), f)
-            copyfileobj(open(pj(src_dir, 'js', 'background.js'), 'rb'), f)
+    f_path = pj(platform.build_dir, 'js', 'app.js')
+
+    with open(f_path, 'wb') as f:
+        copyfileobj(open(platform.pjif('js', 'app.js'), 'rb'), f)
+        copyfileobj(open(pj(src_dir, 'js', 'app.js'), 'rb'), f)
 
 
-        platform.write_files()
+    f_path = pj(platform.build_dir, 'js', 'background.js')
 
-        if params['-min']:
-            js_files = {
-                'app.js': pj(platform.build_dir, 'js', 'app.js'),
-                'background.js': pj(platform.build_dir, 'js', 'background.js'),
-            }
+    with open(f_path, 'wb') as f:
+        copyfileobj(open(platform.pjif('js', 'app_bg.js'), 'rb'), f)
+        copyfileobj(open(pj(src_dir, 'js', 'background.js'), 'rb'), f)
 
-            try: js_files.update(platform.extra_js_min)
-            except: pass
 
-            for js_file in js_files.values():
-                subprocess.call([
-                    'java', '-jar', minifiers['closure-compiler'],
-                    '--charset=utf-8',
-                    '--warning_level=QUIET',
-                    '--strict_mode_input',
-                    '--language_in=ECMASCRIPT_NEXT',
-                    '--language_out=ECMASCRIPT_2015',
-                    '--rewrite_polyfills=false',
-                    '--compilation_level=SIMPLE',
-                    '--js_output_file', js_file + 'min',
-                    js_file
-                ], cwd=platform.build_dir)
-                move(js_file + 'min', js_file)
+    platform.write_files()
 
-        if getattr(platform, 'supports_extra_formats', False):
-            copytree(ext_lib_dir, pj(platform.build_dir, 'js', 'lib'))
-        else:
-            os.remove(pj(platform.build_dir, 'js', 'player.js'))
-            os.remove(pj(platform.build_dir, 'viewer.html'))
+    if params['-min']:
+        js_files = {
+            'app.js': pj(platform.build_dir, 'js', 'app.js'),
+            'background.js': pj(platform.build_dir, 'js', 'background.js'),
+        }
 
-        if params['-pack']:
-            if platform.write_package() == False:
-                print('Package creation failed for ' + platform_name +
-                    ' @ ' + platform.build_dir)
-            else:
-                print('Package is ready for ' + platform_name +
-                    ' @ ' + platform.build_dir)
+        try: js_files.update(platform.extra_js_min)
+        except: pass
 
-            platform.write_update_file()
-        else:
-            print('Files are ready for ' + platform_name +
-                ' @ ' + platform.build_dir)
+        for js_file in js_files.values():
+            subprocess.call([
+                'java', '-jar', minifiers['closure-compiler'],
+                '--charset=utf-8',
+                '--warning_level=QUIET',
+                '--strict_mode_input',
+                '--language_in=ECMASCRIPT_NEXT',
+                '--language_out=ECMASCRIPT_2015',
+                '--rewrite_polyfills=false',
+                '--compilation_level=SIMPLE',
+                '--js_output_file', js_file + 'min',
+                js_file
+            ], cwd=platform.build_dir)
+            move(js_file + 'min', js_file)
+
+    if getattr(platform, 'supports_extra_formats', False):
+        copytree(ext_lib_dir, pj(platform.build_dir, 'js', 'lib'))
     else:
-        if params['-pack']:
-            platform.write_update_file()
+        os.remove(pj(platform.build_dir, 'js', 'player.js'))
+        os.remove(pj(platform.build_dir, 'viewer.html'))
 
-        print('Meta-data has been generated for ' + platform_name)
+    if params['-pack']:
+        if platform.write_package() == False:
+            print('Package creation failed for ' + platform_name +
+                ' @ ' + platform.build_dir)
+        else:
+            if params['-meta']:
+                platform.write_update_file()
+
+            print('Package is ready for ' + platform_name +
+                ' @ ' + pj(build_dir, platform.package_name))
+    else:
+        print('Files are ready for ' + platform_name +
+            ' @ ' + platform.build_dir)
 
     del platform
 

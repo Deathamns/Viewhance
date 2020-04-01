@@ -31,11 +31,14 @@ class Platform(base.PlatformBase):
         if not self.config['update_url']:
             return
 
-        update_file_name = 'update_{}.xml'.format(self.ext)
-        update_file = os.path.join(self.build_dir, '..', update_file_name)
+        update_file = os.path.join(
+            self.build_dir,
+            '..',
+            'update_{}.xml'.format(self.platform_name)
+        )
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(self.pjif('meta', update_file_name), 'r') as tmpl:
+            with open(self.pjif('meta', 'update.xml'), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):

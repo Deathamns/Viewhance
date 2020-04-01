@@ -9,15 +9,6 @@ class Platform(base.PlatformBase):
     requires_all_strings = True
     l10n_dir = 'locales'
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.update_file = 'update_{}.xml'.format(self.ext)
-
-    def __del__(self):
-        for param in ['locale_info', 'update_file']:
-            if param in self.config:
-                del self.config[param]
-
     def write_manifest(self):
         manifest_name = 'config.xml'
         config_xml_path = os.path.join(self.build_dir, manifest_name)
@@ -41,19 +32,24 @@ class Platform(base.PlatformBase):
                     tmp.append('\n'.join(trans_lines))
 
             self.config['locale_info'] = '\n'.join(tmp) + '\n'
-            self.config['update_file'] = self.update_file
 
             with open(self.pjif('meta', manifest_name), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
+
+            del self.config['locale_info']
 
     def write_update_file(self):
         if not self.config['update_url']:
             return
 
-        update_file = os.path.join(self.build_dir, '..', self.update_file)
+        update_file = os.path.join(
+            self.build_dir,
+            '..',
+            'update_{}.xml'.format(self.platform_name)
+        )
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(self.pjif('meta', self.update_file), 'r') as tmpl:
+            with open(self.pjif('meta', 'update.xml'), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):

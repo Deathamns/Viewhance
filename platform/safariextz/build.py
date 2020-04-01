@@ -11,7 +11,6 @@ from .. import base
 
 
 class Platform(base.PlatformBase):
-    update_file = 'Update.plist'
     l10n_dir = 'locales'
     requires_all_strings = True
     disabled = True
@@ -22,6 +21,7 @@ class Platform(base.PlatformBase):
             build_dir,
             self.config['name'] + '.safariextension'
         )
+        self.update_file = 'Update.plist'
 
     def __del__(self):
         for param in ['description', 'build_number', 'update_file']:

@@ -8,14 +8,8 @@ from .. import base
 
 class Platform(base.PlatformBase):
     supports_extra_formats = True
-    update_file = 'update.rdf'
     requires_all_strings = True
     l10n_dir = 'locale'
-
-    def __del__(self):
-        for param in ['extra', 'description']:
-            if param in self.config:
-                del self.config[param]
 
     def write_manifest(self):
         install_rdf = os.path.join(self.build_dir, 'install.rdf')
@@ -88,6 +82,9 @@ class Platform(base.PlatformBase):
             with open(install_rdf_tmpl_path, 'r') as install_rdf_tmpl:
                 f.write(install_rdf_tmpl.read().format(**self.config))
 
+            del self.config['extra']
+            del self.config['description']
+
         chrome_manifest = os.path.join(self.build_dir, 'chrome.manifest')
 
         with open(chrome_manifest, 'wt', encoding='utf-8', newline='\n') as f:
@@ -102,10 +99,14 @@ class Platform(base.PlatformBase):
         if not self.config['update_url']:
             return
 
-        update_file = os.path.join(self.build_dir, '..', self.update_file)
+        update_file = os.path.join(
+            self.build_dir,
+            '..',
+            'update_{}.rdf'.format(self.platform_name)
+        )
 
         with open(update_file, 'wt', encoding='utf-8', newline='\n') as f:
-            with open(self.pjif('meta', self.update_file), 'r') as tmpl:
+            with open(self.pjif('meta', 'update.rdf'), 'r') as tmpl:
                 f.write(tmpl.read().format(**self.config))
 
     def write_locales(self, lng_strings):
