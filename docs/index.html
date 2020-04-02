@@ -85,7 +85,9 @@
 			max-width: 1000px;
 			text-align: center;
 		}
-		#install > img {
+		.browser-icon {
+			filter:  drop-shadow(0 0 1px grey);
+			vertical-align: middle;
 			width: 32px;
 			height: 32px;
 		}
@@ -244,82 +246,93 @@
 		</ul>
 	</div>
 
-	<small>Viewhance is a browser extension that adds extra functionality to the browser's default image/media viewer. URL for sharing: <a href="https://tiny.cc/Viewhance"><b>https://tiny.cc/Viewhance</b></a></small><br>
+	<div style="padding: 20px 0 0 20px">
+	<b>Viewhance</b> is a browser extension that adds extra functionality to the browser's default image/media viewer. URL for sharing: <a href="https://tiny.cc/Viewhance"><b>https://tiny.cc/Viewhance</b></a><br>
 
 	<div id="install">
 		<span>Install the latest version for</span>
 		<div>
 			<a href="https://addons.mozilla.org/addon/viewhance/" rel="nofollow">
-				<img src="img/browser_icons/icon32_firefox.png" alt="Firefox">
+				<img src="img/browser_icons/icon32_firefox.png" alt="Firefox" class="browser-icon">
 			</a>
 			<div>
-				The WebExtension version can be installed from AMO.<br>
-				If you're looking for the legacy version, which could potentially run on PaleMoon, Waterfox or other Gecko based browsers, then check out the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IVU5Dd08yUU5VNUE">archive folder</a>.
+				The WebExtension version can be installed from <a href="https://addons.mozilla.org/en-US/firefox/addon/viewhance/">AMO</a>.<br>
+				If you're looking for the legacy version, which could potentially run on PaleMoon, Waterfox or other Gecko based browsers, then check out the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IVU5Dd08yUU5VNUE">archive</a>.
 			</div>
 		</div>
 		<div>
 			<a href="https://chrome.google.com/webstore/detail/viewhance/impppjchnpfgknmbaaghfeopcgfoilac" rel="nofollow">
-				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome">
+				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome" class="browser-icon">
 			</a>
 			<div>
-				Install from Chrome Web Store.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
+				Install from <a href="https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac">Chrome Web Store</a>.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
 			</div>
 		</div>
 		<div>
-			<img src="img/browser_icons/icon32_opera.png" alt="Opera">
+			<img src="img/browser_icons/icon32_opera.png" alt="Opera" class="browser-icon">
 			<div>
 				To install on Opera 12, download the extension file and drop it into the browser window.
 				<br><br>
 				In Opera 15+, the extension must be manually enabled in the Extension manager (Ctrl+Shift+E) after install.
 				<br><br>
 				<div style="float: left; width: 50%; text-align: center">
-					<a href="https://tiny.cc/Viewhance-oex" rel="nofollow" title="Install for Opera 12">
-						<img src="img/browser_icons/icon32_opera.png" alt="Opera 12" style="vertical-align: middle"> <b>12</b>
+					<a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U" rel="nofollow" title="Install for Opera 12">
+						<img src="img/browser_icons/icon32_opera.png" alt="Opera 12" class="browser-icon"> <b>12</b> (oex)
 					</a>
 				</div>
 				<div style="float: left; width: 50%; text-align: center">
-					<a href="https://tiny.cc/Viewhance-crx" rel="nofollow" title="Install for Opera 15+">
-						<img src="img/browser_icons/icon32_operc.png" alt="Opera 15+" style="vertical-align: middle"> <b>15+</b>
+					<a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U" rel="nofollow" title="Install for Opera 15+">
+						<img src="img/browser_icons/icon32_operc.png" alt="Opera 15+" class="browser-icon"> <b>15+</b> (crx)
 					</a>
 				</div>
 			</div>
 		</div>
 		<div>
 			<a href="http://extension.maxthon.com/detail/index.php?view_id=2527" rel="nofollow">
-				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon">
+				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon" class="browser-icon">
 			</a>
-			<div>Install from Maxthon Extension Center, or newer versions from the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archive</a>, because as it seems Maxthon doesn't really review extension updates anymore</div>
+			<div>Install from <a href="https://extension.maxthon.com/detail/index.php?view_id=2527">Maxthon Extension Center</a>, or newer versions from the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archive</a>, because as it seems Maxthon doesn't really review extension updates anymore</div>
 		</div>
 		<div>
-			<!-- https://tiny.cc/Viewhance-safariextz -->
 			<a rel="nofollow" class="fade">
-				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+">
+				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+" class="browser-icon">
 			</a>
 			<div>You have to install it from source. Note that it is build with the legacy platform, and Safari 12 is the last release to support legacy extensions.</div>
 		</div>
 	</div>
 
+	<h3>Features</h3>
 	<pre>
-	+ Added feature
-	* Improved/changed feature
-	# Bug fixed
+	- Default sizing modes and switching between them via shortcuts or with mouse clicks
+	- Custom CSS (background color for the page or media, hidden scrollbars...)
+	- Custom information about the media in the tab title
+	- Floating menu (mouse cursor over the top-left)
+	- Mouse wheel zooming (off by default)
+	- Centering content (default)
+	- Rotate/Flip (via shortcuts or from the menu)
+	- Sending the address of the media to different services (such as reverse image search)
+	- Frame extraction for animated images (GIF, APNG, WEBP)
+	- Handling SVG and data:URIs
+	- Forced inlining (show media instead of download)
+	- Native DASH, HLS, MSS streaming (if the browser can support it)
+	- Customizable media attributes (autoplay, loop, controls, mute, volume)
+	- Opening images from regular web-pages with right long-press or with shortcut (off by default)</pre>
 
-	<a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">Archive</a>
+	<h3>Changelog <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U"><small>Archive</small></a></h3>
 
-	<b>Browsers</b> (only the latest versions of each browser are fully supported)
-		opr: <a href="https://www.opera.com/download/guide/?custom=yes">Opera</a> 12
-		ffx: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, <a href="http://www.seamonkey-project.org/">SeaMonkey</a> (possibly other Gecko based browsers)
-		chr: <a href="https://www.google.com/chrome/">Chrome</a> (or other <a href="https://en.wikipedia.org/wiki/Chromium_(web_browser)#Other_browsers_based_on_Chromium">clones</a> of <a href="https://www.chromium.org/getting-involved/download-chromium">Chromium</a>, like <a href="https://vivaldi.com/download/">Vivaldi</a>, <a href="https://www.opera.com/computer/">Opera 15+</a>, <a href="https://browser.yandex.com/">Yandex Browser</a>...)
-		sfr: <a href="https://www.apple.com/safari/">Safari</a> <=12 (legacy)
-		mxt: <a href="http://www.maxthon.com/">Maxthon</a></pre>
+	<pre>
+	<b>+</b> Added feature
+	<b>*</b> Improved/changed feature
+	<b>#</b> Bug fixed</pre>
 
 	<ul class="versions">
-		<li id="v2020.401.1919"><b>2020.401.1919</b>
+		<li id="v2020.402.1540"><b>2020.402.1540</b>
 		<pre>
 * Load original SVG, or manifest files (for streaming media) directly via a button, or automatically on error
 # Styling fixes
 * Update "Send to" URL list
 * Use newer libraries
+* Updated Russian translation (by <a href="https://github.com/Rodny0">Rodny</a>)
 		</pre>
 		</li>
 

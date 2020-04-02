@@ -4,28 +4,12 @@ A browser extension to enhance the browser's default media viewer.
 
 To try it out (when installed), open a media file ([image](https://upload.wikimedia.org/wikipedia/commons/e/ec/StLouisArchMultExpToneMapped.jpg) / [video](https://upload.wikimedia.org/wikipedia/commons/d/de/Hdr_time_lapse_montage.ogv) / [audio](https://upload.wikimedia.org/wikipedia/en/3/3d/Sample_of_Daft_Punk's_Da_Funk.ogg)) in a new tab.
 
-[Changelog / FAQ](https://tiny.cc/Viewhance)
-
-## Features ##
-- Default sizing modes and switching between them via shortcuts or with mouse clicks
-- Custom CSS (background color for the page or media, hidden scrollbars...)
-- Custom information about the media in the tab title
-- Floating menu (mouse cursor over the top-left)
-- Mouse wheel zooming (off by default)
-- Centering content (default)
-- Rotate/Flip (via shortcuts or from the menu)
-- Sending the address of the media to different services (such as reverse image search)
-- Frame extraction for animated images (GIF, APNG, WEBP)
-- Handling SVG and data:URIs
-- Forced inlining (show media instead of download)
-- Native DASH, HLS, MSS streaming (if the browser can support it)
-- Customizable media attributes (autoplay, loop, controls, mute, volume)
-- Opening images from regular web-pages with right long-press or with shortcut (off by default)
+[Install / Changelog / FAQ](https://tiny.cc/Viewhance)
 
 ## Browser/platform support ##
-The following platforms are supported, for each the latest browser version:
+The following platforms are supported (for each the latest browser version):
 
-- **crx** - many Chromium based [browsers](https://en.wikipedia.org/wiki/Chromium_\(web_browser\)#Browsers_based_on_Chromium) ([Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac), Opera 15+, Vivaldi, Edge...), or browsers with WebExtension support (e.g., [Firefox](https://addons.mozilla.org/addon/viewhance/))
+- **crx** - many Chromium [browsers](https://en.wikipedia.org/wiki/Chromium_\(web_browser\)#Browsers_based_on_Chromium) ([Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac), Opera 15+, Vivaldi, Edge...), or browsers with WebExtension support ([Firefox](https://addons.mozilla.org/addon/viewhance/))
 - **xpi** - XUL based platforms (older Firefox, SeaMonkey, Pale Moon...)
 - **oex** - Opera 12 (Presto based)
 - **mxaddon** - Maxthon
@@ -36,21 +20,16 @@ The following platforms are supported, for each the latest browser version:
 ./build.py [platform(s)] [-meta] [-min] [-pack] [-all] [-version=x.x.x]
 ```
 
-All arguments are optional. The output and temporary files go into the `build` directory.
-Without arguments the script will generate the necessary files for each non-disabled platform.
+All arguments are optional. The output and temporary files go into the `build` directory.  
+Without arguments the script will generate the necessary files for each non-disabled platform.  
 Additional information for specific platforms can be found in their directories.
 
-`platf1 platf2...` - list of platforms (directory names under `platform/`) if building for all platforms is not desired
-
-`-meta` - generate only meta-data (localization, manifest files)
-
-`-pack` - creates installable/distributable packages (with `-meta` it will also generate meta files for updating)
-
-`-min` - compress source files (JS, HTML, CSS) (Java is required)
-
-`-all` - build disabled platforms as well (if it's not listed as a platform already)
-
-`-version=x.x.x` - use custom version number, instead of an auto-generated based on the current date-time (YYYY.MMDD.HHII)
+**`platf1 platf2...`** list of platforms (directory names under `platform/`) if building for all platforms is not desired  
+**`-meta`** generates only meta-data (localization, manifest files)  
+**`-pack`** creates installable/distributable packages (with `-meta` it will also generate meta files for updating)  
+**`-min`** compress source files (JS, HTML, CSS) (Java is required)  
+**`-all`** build disabled platforms as well (if it's not listed as a platform already)  
+**`-version=x.x.x`** custom version string, current date-time (YYYY.MMDD.HHII) if not set
 
 Examples:
 ```
