@@ -105,6 +105,14 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 		elementsFromPoint = function(x, y, target) {
 			var urls = [];
 			var rgxIgnore = /^(html|body)$/;
+			var pseudos = [
+				null,
+				'::before',
+				'::after',
+				'::first-letter',
+				'::first-line',
+				'::placeholder'
+			];
 			var tmpStyle = document.createElement('style');
 			tmpStyle.textContent = '*{pointer-events:auto!important}';
 			document.head.appendChild(tmpStyle);
@@ -126,8 +134,10 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 					urls.push(url);
 				}
 
-				if ( url = checkBG(win.getComputedStyle(node)) ) {
-					urls = urls.concat(url);
+				for ( var j = 0; j < pseudos.length; ++j ) {
+					if ( url = checkBG(win.getComputedStyle(node, pseudos[j])) ) {
+						urls = urls.concat(url);
+					}
 				}
 
 				if ( node.shadowRoot ) {
