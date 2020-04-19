@@ -3,6 +3,9 @@
 		"browser": true,
 		"es6": true
 	},
+	"parserOptions": {
+	    "ecmaVersion": 2020,
+	},
 	"globals": {
 		"vAPI": true,
 		// used instead of "window" if we refer to extension context

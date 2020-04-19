@@ -54,17 +54,17 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 	};
 
 	var checkIMG = function(node) {
-		var nname = node.localName;
+		var lname = node.localName;
 
-		if ( nname === 'img' || nname === 'embed' || node.type === 'image' ) {
+		if ( lname === 'img' || lname === 'embed' || node.type === 'image' ) {
 			return node.currentSrc || node.src;
-		} else if ( nname === 'canvas' ) {
+		} else if ( lname === 'canvas' ) {
 			return node.toDataURL();
-		} else if ( nname === 'object' ) {
+		} else if ( lname === 'object' ) {
 			if ( node.data ) {
 				return node.data;
 			}
-		} else if ( nname === 'area' ) {
+		} else if ( lname === 'area' ) {
 			var img = document.querySelector(
 				'img[usemap="#' + node.parentNode.name + '"]'
 			);
@@ -72,7 +72,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			if ( img && img.src ) {
 				return img.src;
 			}
-		} else if ( nname === 'video' ) {
+		} else if ( lname === 'video' ) {
 			try {
 				var canvas = document.createElement('canvas');
 				canvas.width = node.clientWidth;
@@ -84,7 +84,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			} catch ( ex ) {
 				return node.poster || null;
 			}
-		} else if ( /^\[object SVG/.test(node.toString()) ) {
+		} else if ( lname === 'svg' ) {
 			var svgString = (new win.XMLSerializer).serializeToString(
 				node.ownerSVGElement === null
 					? node
@@ -92,9 +92,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			);
 
 			if ( typeof svgString === 'string' ) {
-				return 'data:image/svg+xml,' + encodeURIComponent(
-					svgString
-				);
+				return 'data:image/svg+xml,' + encodeURIComponent(svgString);
 			}
 		} else if ( node.poster ) {
 			return node.poster;
@@ -108,8 +106,8 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			var urls = [];
 			var rgxIgnore = /^(html|body)$/;
 			var tmpStyle = document.createElement('style');
-			document.head.appendChild(tmpStyle).textContent
-				= '* { pointer-events: auto !important; }';
+			tmpStyle.textContent = '*{pointer-events:auto!important}';
+			document.head.appendChild(tmpStyle);
 			var elements = document.elementsFromPoint(x, y);
 			document.head.removeChild(tmpStyle);
 
@@ -130,6 +128,17 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 
 				if ( url = checkBG(win.getComputedStyle(node)) ) {
 					urls = urls.concat(url);
+				}
+
+				if ( node.shadowRoot ) {
+					node.shadowRoot.appendChild(tmpStyle);
+					elements.splice.apply(
+						elements,
+						[i + 1, 0].concat(
+							node.shadowRoot.elementsFromPoint(x, y)
+						)
+					);
+					node.shadowRoot.removeChild(tmpStyle);
 				}
 			}
 
