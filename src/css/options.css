@@ -1,7 +1,3 @@
-::-moz-selection {
-	background: #adf;
-}
-
 ::selection {
 	background: #adf;
 }
@@ -124,7 +120,6 @@ nav > a {
 	border-bottom: 3px solid transparent;
 	padding: 5px 6px;
 	text-decoration: none;
-	color: #1155ef;
 	transition: border-bottom-color .5s;
 }
 
@@ -178,7 +173,7 @@ nav > .active {
 	left: -45px;
 	width: auto;
 	height: auto;
-	box-shadow: 0 0 10px #dedede;
+	box-shadow: 0 0 8px #ccc;
 	border: 1px solid #ddd;
 	border-left: none;
 	border-radius: 6px;
@@ -266,7 +261,7 @@ input, textarea, select, code, .checkbox {
 
 pre, code, textarea {
 	font: 14px Consolas, Monaco, monospace;
-	transition: all 0s 0s;
+	transition: none;
 }
 
 code {
@@ -312,8 +307,6 @@ input[type="checkbox"] {
 	padding: 0;
 	color: transparent;
 	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }
@@ -493,4 +486,94 @@ h3 {
 
 .overlay-dim button.reject {
 	color: firebrick;
+}
+
+@media (prefers-color-scheme: dark) {
+	::selection {
+		background: #b49000;
+		color: #000;
+	}
+
+	html {
+		background-color: #262626;
+		color: #e5e5e5;
+	}
+
+	body {
+		background-color: #31302d;
+	}
+
+	a {
+		color: orange;
+	}
+
+	a:hover {
+		color: yellow;
+	}
+
+	hr {
+		border: 1px solid #666;
+	}
+
+	#right-panel > aside {
+		background-color: #31302d;
+	}
+
+	a.logo {
+		opacity: .8;
+	}
+
+	nav > a:hover {
+		color: #fff;
+	}
+
+	nav > .active {
+		border-bottom: 3px solid #909;
+		color: yellow;
+	}
+
+	.tip:hover {
+		background-color: #31302d;
+		color: #e5e5e5;
+		box-shadow: 0 0 10px ;
+	}
+
+	.tip::before {
+		color: #fff;
+	}
+
+	.prow:hover label:not(.checkbox), label:not(.checkbox):hover {
+		color: yellow;
+	}
+
+	input, textarea, select, code, .checkbox {
+		background: #3a3a3a;
+		background-image: linear-gradient(to bottom, #404040, #3a3a3a);
+		color: #e5e5e5;
+	}
+
+	.checkbox {
+		color: transparent;
+	}
+
+	input[type="checkbox"]:checked + .checkbox {
+		color: white;
+	}
+
+	.op-buttons > button, .action-buttons > span {
+		background-image: linear-gradient(to bottom, silver, silver);
+		color: #000;
+	}
+
+	.overlay-dim {
+		background: rgba(50, 50, 50, 0.7);
+	}
+
+	.overlay-dim > div {
+		background: #31302d;
+	}
+
+	.overlay-dim > div > button {
+		background-color: silver;
+	}
 }

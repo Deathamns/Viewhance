@@ -594,7 +594,7 @@ window.addEventListener('load', function() {
 			}
 
 			if ( e.target !== keys[i] ) {
-				changeColor(e.target, 'red');
+				changeColor(e.target, 'firebrick');
 			}
 
 			return;
@@ -655,7 +655,7 @@ window.addEventListener('load', function() {
 			return;
 		}
 
-		this.style.color = 'orange';
+		this.style.color = '#d80';
 		this.pending = setTimeout(this.reset, 2000);
 		e.preventDefault();
 	});
@@ -697,7 +697,7 @@ window.addEventListener('load', function() {
 			try {
 				prefs = JSON.parse($('#eximport > textarea').value);
 			} catch ( ex ) {
-				changeColor(e.target, 'red', 2000);
+				changeColor(e.target, 'firebrick', 2000);
 				return;
 			}
 
