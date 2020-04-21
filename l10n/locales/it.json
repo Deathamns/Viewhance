@@ -1,0 +1,281 @@
+{
+	"_translators": [
+		{
+			"email": "fastzyx(at)yahoo(dot)com",
+			"name": "FastZyx",
+			"realname": "FastZyx"
+		}
+	],
+	"groupless": {
+		"appDescriptionLong": {
+			"#": 4,
+			">": "Arricchisce il visualizzatore multimediale integrato con diverse possibilità e funzionalità di personalizzazione.\n\nCaratteristiche:\n- Modalità di dimensionamento predefinite e passaggio da una scorciatoia all'altra tramite clic del mouse\n- CSS personalizzato (colore di sfondo per la pagina o il media, barre di scorrimento nascoste ...)\n- Informazioni personalizzate sui media nel titolo della scheda\n- Menu mobile (cursore del mouse in alto a sinistra)\n- Zoom con la rotellina del mouse (disattivato per impostazione predefinita)\n- Centratura dei contenuti (impostazione predefinita)\n- Ruota / Capovolgi (tramite scorciatoie o dal menu)\n- Invio dell'indirizzo del media a diversi servizi (come la ricerca inversa delle immagini)\n- Estrazione di frame per immagini animate (GIF, APNG, WEBP)\n- Gestione di SVG e dati: URI\n- Inline forzato (mostra media invece di scaricare)\n- Streaming nativo DASH, HLS, MSS (se il browser può supportarlo)\n- Attributi multimediali personalizzabili (riproduzione automatica, loop, controlli, disattivazione audio, volume)\n- Apertura di immagini da normali pagine Web con la pressione prolungata destra o con scorciatoia (disattivato per impostazione predefinita)\n\nControlla la pagina Opzioni per maggiori dettagli."
+		},
+		"appDescriptionShort": {
+			"#": 3,
+			">": "Funzionalità aggiuntive per il visualizzatore multimediale integrato nel browser."
+		}
+	},
+	"options": {
+		"buttonReset": {
+			"#": 0,
+			">": "Predefinite"
+		},
+		"buttonSave": {
+			"#": 0,
+			">": "Salva"
+		},
+		"centerContent": {
+			"#": 0,
+			">": "Centra"
+		},
+		"clickOverDoc": {
+			"#": 0,
+			">": "Abilita i click sull'intera pagina"
+		},
+		"customCss": {
+			"#": 0,
+			">": "Stile personalizzato (CSS)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Cambia il colore di sfondo, il bordo/l'ombra dell'immagine e nasconde le barre di scorrimento o il menu mobile ...\nPassa il mouse sul punto interrogativo per vedere degli esempi, utilizza il selettore colori per ottenere i codici colore."
+		},
+		"customCssTip": {
+			"#": 2,
+			">": "<code>body {\n background: #f3f3f5; /* Qualsiasi proprietà di sfondo valida (color, url (), gradient ...). */\n overflow: hidden; /* Nasconde le barre di scorrimento. Per visualizzarle, cambia \"hidden\" in \"auto\". */\n}\n\n#media {\n background: #eef; /* Sfondo diverso per l'immagine. */\n border: 10px solid white; /* Bordo dell'immagine. */\n box-shadow: 0 0 10px grey; /* Ombra dell'immagine. */\n cursor: default !important; /* Non consentire al cursore del mouse di cambiare. */\n}\n\n/* Colore della maschera zoom libero. */\n.mask { color: rgba(0, 0, 0, .4); }\n\n/* Disabilita il menu. */\n#menu { display: none; }\n\n/* Mostra sempre il menu. */\n#menu { display: block; }\n\n/* Altre posizioni del menu: */\n#menu { top: auto; bottom: 0; } /* in basso a sinistra */\n#menu { left: auto; right: 0; } /* in alto a destra */\n#menu { top: auto; left: auto; right: 0; bottom: 0; } /* in basso a destra */\n\n/* Menu orizzontale */\n#menu > ul { flex-direction: row; }\n</code>"
+		},
+		"defaultMode": {
+			"#": 0,
+			">": "Modalità di dimensionamento iniziale"
+		},
+		"disabled": {
+			"#": 0,
+			">": "Disabilitata"
+		},
+		"eximpSettings": {
+			"#": 0,
+			">": "Impostazioni Importa/Esporta"
+		},
+		"exportBtn": {
+			"#": 0,
+			">": "Esporta"
+		},
+		"extraFormats": {
+			"#": 0,
+			">": "Supporta altri formati (DASH, HLS, MSS)"
+		},
+		"favicon": {
+			"#": 0,
+			">": "Favicon personalizzata"
+		},
+		"faviconTip": {
+			"#": 2,
+			">": "Questa opzione consente di impostare un'icona personalizzata della scheda per l'immagine aperta.\nL'indirizzo dell'immagine può essere usato come una variabile: <b>% url </b>"
+		},
+		"forceInlineMedia": {
+			"#": 0,
+			">": "Forza l'esecuzione/anteprima dei file multimediali al posto del download"
+		},
+		"importBtn": {
+			"#": 0,
+			">": "Importa"
+		},
+		"infoTranslations": {
+			"#": 1,
+			">": "Traduzioni"
+		},
+		"longpressActionFitImage": {
+			"#": 0,
+			">": "adatta a larghezza/altezza"
+		},
+		"longpressActionWheelZoom": {
+			"#": 0,
+			">": "attiva/disattiva lo zoom con la rotellina"
+		},
+		"longpressLeft": {
+			"#": 0,
+			">": "Azione con pressione prolungata del tasto sinistro"
+		},
+		"longpressRight": {
+			"#": 0,
+			">": "Azione con pressione prolungata del tasto destro"
+		},
+		"mediaAttributes": {
+			"#": 1,
+			">": "Attributi del file multimediale"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Attributi accettabili\n<b>autoplay</b>: il video si avvia automaticamente\n<b>loop</b>: ripeti la riproduzione\n<b>controls</b>: mostra i controlli del riproduttore\n<b>muted</b> - audio disattivato\n<b>volume=0-100</b> - volume predefinito (%)"
+		},
+		"mediaInfo": {
+			"#": 0,
+			">": "Informazioni sull'immagine"
+		},
+		"mediaInfoTip": {
+			"#": 3,
+			">": "Visualizza informazioni personalizzate nel titolo della scheda. Può contenere le seguenti variabili:\n<b>%ow</b> - larghezza originale\n<b>%oh</b> - altezza originale\n<b>%ratio</b> - larghezza corrente/altezza corrente\n<b>%w</b> - larghezza corrente\n<b>%h</b> - altezza attuale\n<b>%perc</b> - percentuale della dimensione originale\n<b>%url</b> - URL completo\n<b>%name</b> - nome file\n<b>%size</b> - dimensione file formattata (potrebbe non funzionare)"
+		},
+		"minUpscale": {
+			"#": 0,
+			">": "Ingrandisci le immagini piccole"
+		},
+		"minUpscaleTip": {
+			"#": 1,
+			">": "Normalmente, le immagini più piccole non verranno ingrandite all'area di visualizzazione. Questa opzione lo costringe a farlo.\nIl valore è espresso in percentuale e indica allo script di ingrandire quelle immagini che sono maggiori della percentuale data della larghezza o dell'altezza dell'area di visualizzazione (dipende dall'opzione precedente)."
+		},
+		"modeAutoFit": {
+			"#": 0,
+			">": "Contiene"
+		},
+		"modeBestFit": {
+			"#": 0,
+			">": "adattamento migliore"
+		},
+		"modeNatural": {
+			"#": 0,
+			">": "grandezza naturale"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "Generale"
+		},
+		"navInfo": {
+			"#": 0,
+			">": "Informazioni"
+		},
+		"opener": {
+			"#": 0,
+			">": "Apri immagini da normali pagine Web"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "enntrambe"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + tasto destro"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "pressione prolungata del tasto destro"
+		},
+		"permisssionWarning": {
+			"#": 0,
+			">": "Le seguenti opzioni richiedono autorizzazioni opzionali:"
+		},
+		"phClickForExample": {
+			"#": 1,
+			">": "clicca per gli esempi..."
+		},
+		"scChangeVolume": {
+			"#": 0,
+			">": "<b>Su / Giù</b> Aumenta/diminuisce il volume"
+		},
+		"scCycleModes": {
+			"#": 0,
+			">": "Ciclo della modalità di dimensionamento: naturale, adatta alla larghezza, adatta all'altezza"
+		},
+		"scDragndrop": {
+			"#": 3,
+			">": "Tieni premuto <b>Ctrl</b> o <b>Alt</b> per trascinare l'immagine se non si adatta all'areadi visualizzazione"
+		},
+		"scFlipHorizontal": {
+			"#": 0,
+			">": "Capovolgi orizzontalmente"
+		},
+		"scFlipVertical": {
+			"#": 0,
+			">": "Capovolgi verticalmente"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Sposta il cursore sul bordo superiore sinistro della pagina per mostrare il menu"
+		},
+		"scFreeZoom": {
+			"#": 0,
+			">": "<b>Maiusc + trascina</b> sull'immagine per utilizzare lo zoom libero, tieni premuto <b>Ctrl</b> per spostare la selezione"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "Per scorrere l'immagine in orizzontale, utilizza la rotellina del mouse sul bordo inferiore sinistro"
+		},
+		"scImgBg": {
+			"#": 0,
+			">": "Ciclare gli sfondi delle immagini: impostazione predefinita, nero, bianco, selezionare o tenere premuto <b>Maiusc</b> per un valore personalizzato"
+		},
+		"scModeContain": {
+			"#": 0,
+			">": "Adatta"
+		},
+		"scModeFill": {
+			"#": 0,
+			">": "Riempi"
+		},
+		"scModeNatural": {
+			"#": 0,
+			">": "Dimensione normale"
+		},
+		"scPixelate": {
+			"#": 0,
+			">": "Immagine pixelata"
+		},
+		"scReset": {
+			"#": 0,
+			">": "<b>Esc</b> ripristina l'immagine nella sua forma originale o esce dallo zoom libero"
+		},
+		"scRotateLeft": {
+			"#": 0,
+			">": "Ruota a sinistra"
+		},
+		"scRotateRight": {
+			"#": 0,
+			">": "Ruota a destra"
+		},
+		"scTogglePlay": {
+			"#": 0,
+			">": "<b>Spazio</b> Attiva/disattiva riproduzione/pausa"
+		},
+		"scWheelZoom": {
+			"#": 0,
+			">": "Attiva/disattiva lo zoom con la rotellina"
+		},
+		"scZoom": {
+			"#": 0,
+			">": "Zoom avanti/indietro"
+		},
+		"sendTo": {
+			"#": 0,
+			">": "Invia immagine a..."
+		},
+		"shortcuts": {
+			"#": 0,
+			">": "Scorciatoie"
+		},
+		"viewDataURI": {
+			"#": 0,
+			">": "Visualizza dati: URI"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "Visualizza SVG"
+		},
+		"wheelZoom": {
+			"#": 0,
+			">": "Zoom con rotellina del mouse"
+		},
+		"wheelZoomWithKey": {
+			"#": 0,
+			">": "Zoom con rotellina del mouse con tasto"
+		},
+		"zoomParams": {
+			"#": 0,
+			">": "Incremento dello zoom; livelli"
+		},
+		"zoomParamsTip": {
+			"#": 0,
+			">": "Formato: <b>incremento; livello1 livello2 livello3</b>\n<b>incremento</b> - percentuale di ingrandimento (dalle dimensioni effettive dell'immagine) divisa per 100 (ad esempio, <b>0,3</b> - 30%, quindi l'immagine ingrandita sarà il 130% dell'immagine corrente).\n<b>livelli</b> (minimo due valori, separati da spazio) - diverse scale della dimensione originale (ad es. 0,25 0,5 0,75 1 1,5 - queste scale verranno utilizzate dal 25% al 150%, al di fuori di questo intervallo  viene utilizzato <i>incremento</i>).\nTenendo premuto <i>Alt</i> o <i>Maiusc</i> durante lo zoom si ignoreranno i livelli."
+		}
+	}
+}
