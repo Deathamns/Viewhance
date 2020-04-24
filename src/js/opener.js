@@ -82,13 +82,11 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 				);
 				return canvas.toDataURL('image/jpeg');
 			} catch ( ex ) {
-				return node.poster || null;
+				return node.poster || node.currentSrc;
 			}
-		} else if ( lname === 'svg' ) {
+		} else if ( node instanceof win.SVGElement ) {
 			var svgString = (new win.XMLSerializer).serializeToString(
-				node.ownerSVGElement === null
-					? node
-					: node.ownerSVGElement
+				node.ownerSVGElement || node
 			);
 
 			if ( typeof svgString === 'string' ) {
@@ -115,6 +113,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 			];
 			var tmpStyle = document.createElement('style');
 			tmpStyle.textContent = '*{pointer-events:auto!important}';
+
 			document.head.appendChild(tmpStyle);
 			var elements = document.elementsFromPoint(x, y);
 			document.head.removeChild(tmpStyle);
