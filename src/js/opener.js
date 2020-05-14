@@ -139,15 +139,17 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 					}
 				}
 
-				if ( node.shadowRoot ) {
-					node.shadowRoot.appendChild(tmpStyle);
+				var shadowRoot = node.openOrClosedShadowRoot || node.shadowRoot;
+
+				if ( shadowRoot ) {
+					shadowRoot.appendChild(tmpStyle);
 					elements.splice.apply(
 						elements,
 						[i + 1, 0].concat(
-							node.shadowRoot.elementsFromPoint(x, y)
+							shadowRoot.elementsFromPoint(x, y)
 						)
 					);
-					node.shadowRoot.removeChild(tmpStyle);
+					shadowRoot.removeChild(tmpStyle);
 				}
 			}
 
