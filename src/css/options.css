@@ -50,10 +50,6 @@ hr {
 	margin: 10px 0;
 }
 
-#nav-menu > a {
-	margin: 0 2px;
-}
-
 #right-panel {
 	position: absolute;
 	top: 0;
@@ -81,8 +77,8 @@ hr {
 	height: 128px;
 	margin-top: 5px;
 	border-radius: 10px;
-	background: url(../icon.png) no-repeat center;
-	transition: box-shadow .2s;
+	background: url("../icon.png") no-repeat center;
+	transition: box-shadow 0.2s;
 }
 
 .logo:hover {
@@ -95,7 +91,7 @@ aside > .app-info {
 
 #app-version {
 	font-size: 0.8em;
-	color: grey;
+	color: gray;
 }
 
 #platform-info {
@@ -110,26 +106,27 @@ body.safari .safari, body.maxthon .maxthon {
 	display: none;
 }
 
-nav {
+#nav-menu {
 	margin-bottom: 20px;
 	text-align: center;
 }
 
-nav > a {
+#nav-menu > a {
 	display: inline-block;
 	border-bottom: 3px solid transparent;
+	margin: 0 2px;
 	padding: 5px 6px;
 	text-decoration: none;
-	transition: border-bottom-color .5s;
+	transition: border-bottom-color 0.5s;
 }
 
-nav > a:hover {
+#nav-menu > a:hover {
 	border-bottom: 3px solid #aaf;
 	color: #000;
 	transition: border-bottom-color 0s;
 }
 
-nav > .active {
+#nav-menu > .active {
 	border-bottom: 3px solid #000;
 	color: #000;
 }
@@ -159,13 +156,7 @@ nav > .active {
 	white-space: pre-wrap;
 	color: rgba(0, 0, 0, 0);
 	font: 12px/150% Verdana, sans-serif;
-	transition: visibility 0s 0.5s, opacity 0.5s, color .7s;
-}
-
-.tiptop:hover > .tip:not(:empty) {
-	visibility: visible;
-	opacity: 1;
-	transition-delay: 0s;
+	transition: visibility 0s 0.5s, opacity 0.5s, color 0.7s;
 }
 
 .tip:hover {
@@ -183,6 +174,12 @@ nav > .active {
 	color: #000;
 }
 
+.tiptop:hover > .tip:not(:empty) {
+	visibility: visible;
+	opacity: 1;
+	transition-delay: 0s;
+}
+
 .tip::before {
 	display: inline-block;
 	margin-right: 20px;
@@ -192,7 +189,7 @@ nav > .active {
 	padding: 0 6px 2px;
 	text-align: center;
 	text-shadow: 0 0 3px #000, 0 0 3px #000;
-	font: 700 17px Verdana, sans-serif;
+	font: bold 17px Verdana, sans-serif;
 	color: #fff;
 	content: "?";
 }
@@ -213,7 +210,7 @@ nav > .active {
 	padding-top: 8px;
 }
 
-.prow:hover label:not(.checkbox), label:not(.checkbox):hover {
+label:not(.checkbox):hover, .prow:hover label:not(.checkbox) {
 	color: #45f;
 }
 
@@ -256,7 +253,7 @@ input, textarea, select, code, .checkbox {
 	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
 	font: 14px Verdana, sans-serif;
 	color: #000;
-	transition: color .2s, border-color .2s;
+	transition: color 0.2s, border-color 0.2s;
 }
 
 pre, code, textarea {
@@ -307,7 +304,6 @@ input[type="checkbox"] {
 	padding: 0;
 	color: transparent;
 	vertical-align: middle;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -315,7 +311,7 @@ input[type="checkbox"] {
 	position: absolute;
 	left: 3px;
 	top: 0;
-	font-weight: 700;
+	font-weight: bold;
 	font-family: "Segoe UI Symbol", sans-serif;
 	content: "✔";
 }
@@ -360,7 +356,7 @@ h3 {
 .color-helper {
 	float: right;
 	opacity: 0.3;
-	transition: opacity .3s;
+	transition: opacity 0.3s;
 }
 
 .color-helper:hover {
@@ -399,7 +395,7 @@ h3 {
 	border-radius: 3px;
 	background-color: #fff;
 	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
-	font-weight: 700;
+	font-weight: bold;
 	font-size: 14px;
 	cursor: pointer;
 	color: #000;
@@ -407,11 +403,11 @@ h3 {
 
 .op-buttons > button {
 	width: 95%;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	margin-bottom: 10px;
 	padding: 10px 0;
-	font: 700 14px Arial;
-	transition: border-color .3s, color .3s;
+	font: bold 14px Arial, serif;
+	transition: border-color 0.3s, color 0.3s;
 }
 
 .op-buttons > button:hover {
@@ -481,7 +477,7 @@ h3 {
 }
 
 .overlay-dim button.accept {
-	color: green;
+	color: #0f0;
 }
 
 .overlay-dim button.reject {
@@ -520,14 +516,14 @@ h3 {
 	}
 
 	a.logo {
-		opacity: .8;
+		opacity: 0.8;
 	}
 
-	nav > a:hover {
+	#nav-menu > a:hover {
 		color: #fff;
 	}
 
-	nav > .active {
+	#nav-menu > .active {
 		border-bottom: 3px solid #909;
 		color: yellow;
 	}
@@ -535,14 +531,14 @@ h3 {
 	.tip:hover {
 		background-color: #31302d;
 		color: #e5e5e5;
-		box-shadow: 0 0 10px ;
+		box-shadow: 0 0 10px;
 	}
 
 	.tip::before {
 		color: #fff;
 	}
 
-	.prow:hover label:not(.checkbox), label:not(.checkbox):hover {
+	label:not(.checkbox):hover, .prow:hover label:not(.checkbox) {
 		color: yellow;
 	}
 

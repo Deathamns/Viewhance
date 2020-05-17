@@ -9,8 +9,7 @@
 		}
 
 		body {
-			font: 13px verdana;
-			/*width: 120%;*/
+			font: 13px Verdana, serif;
 		}
 
 		a {
@@ -22,7 +21,7 @@
 			color: blue !important;
 		}
 
-		.FAQ {
+		#faq {
 			float: right;
 			margin: 0 0 10px 10px;
 			max-width: 40%;
@@ -32,19 +31,19 @@
 			padding: 0 5px 0 10px;
 		}
 
-		.FAQ > ul {
+		#faq > ul {
 			list-style-type: square;
 			font-size: 0.9em;
 			padding: 0 0 0 10px;
 		}
 
-		.FAQ > ul > li > em {
+		#faq > ul > li > em {
 			font-weight: bold;
 			margin: 10px 0 3px;
 			display: block;
 		}
 
-		.FAQ li {
+		#faq li {
 			clear: both;
 		}
 
@@ -53,7 +52,7 @@
 			-o-tab-size: 2;
 			tab-size: 2;
 			white-space: pre-wrap;
-			font: normal normal 400 14px/normal Consolas, Menlo, monospace;
+			font: normal normal bold 14px/normal Consolas, Menlo, monospace;
 			color: black;
 		}
 
@@ -78,19 +77,21 @@
 		.versions > li > pre {
 			margin: 5px 0 0;
 			overflow: hidden;
-			transition: max-height .3s;
+			transition: max-height 0.3s;
 		}
 
 		#install {
 			max-width: 1000px;
 			text-align: center;
 		}
+
 		.browser-icon {
-			filter:  drop-shadow(0 0 1px grey);
+			filter: drop-shadow(0 0 1px gray);
 			vertical-align: middle;
 			width: 32px;
 			height: 32px;
 		}
+
 		#install > span {
 			display: block;
 			margin: 20px 0 15px;
@@ -98,17 +99,20 @@
 			font-weight: bold;
 			letter-spacing: 1px;
 		}
+
 		#install > div {
 			position: relative;
 			display: inline-block;
-			font-family: "trebuchet ms", "lucida grande", "lucida sans unicode", "arial", "helvetica", sans-serif;
+			font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, serif;
 			margin: 0 20px;
 		}
+
 		.fade {
-			opacity: .3;
+			opacity: 0.3;
 		}
+
 		#install > div > div {
-			font: 12px Tahoma, Consolas;
+			font: 12px Tahoma, Consolas, monospace;
 			width: 1000%;
 			left: -450%;
 			top: 80%;
@@ -116,21 +120,22 @@
 			position: absolute;
 			display: inline-block;
 			padding: 5px;
-			background-color: #fff;
-			background: linear-gradient(to bottom, #fff, rgba(245, 245, 255, .9));
+			background: #fff linear-gradient(to bottom, #fff, rgba(245, 245, 255, 0.9));
 			border: 1px solid #ddd;
 			border-radius: 6px;
 			box-shadow: 0 0 10px #ddd;
 			opacity: 0;
 			visibility: hidden;
-			transition: visibility 0s .2s, opacity .3s, top .2s;
+			transition: visibility 0s 0.2s, opacity 0.3s, top 0.2s;
 		}
+
 		#install > div:hover > div {
-			transition-delay: .1s;
+			transition-delay: 0.1s;
 			top: 100%;
 			visibility: visible;
 			opacity: 1;
 		}
+
 		#install > a {
 			text-decoration: none;
 		}
@@ -144,32 +149,32 @@
 			background: #4d4d4d;
 		}
 
-		.menu-icons tr:first-child > td:first-child {
-			padding-top: 15px;
+		.menu-icons td:last-child {
+			padding-left: 10px;
+			vertical-align: middle;
 		}
 
-		.menu-icons tr:last-child > td:first-child {
-			padding-bottom: 15px;
+		.menu-icons tr:first-child > td:first-child {
+			padding-top: 15px;
 		}
 
 		.menu-icons td:first-child > svg {
 			width: 25px;
 			height: 25px;
 			cursor: pointer;
-			fill: rgba(0,0,0,0);
+			fill: rgba(0, 0, 0, 0);
 			stroke: #fff;
 			stroke-width: 7px;
 			color: #fff;
-			transition: opacity .2s;
+			transition: opacity 0.2s;
 		}
 
 		.menu-icons td:first-child > svg:hover {
-			opacity: .6;
+			opacity: 0.6;
 		}
 
-		.menu-icons td:last-child {
-			padding-left: 10px;
-			vertical-align: middle;
+		.menu-icons tr:last-child > td:first-child {
+			padding-bottom: 15px;
 		}
 	</style>
 	<title>Viewhance :: Archive</title>
