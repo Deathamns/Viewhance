@@ -81,8 +81,8 @@ if params['-min']:
 
     minifiers = {
         'closure-compiler': {
-            'file': 'closure-compiler-v20200315.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20200315.zip',
+            'file': 'closure-compiler-v20200628.jar',
+            'url': 'https://dl.google.com/closure-compiler/compiler-20200628.zip',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
@@ -436,9 +436,9 @@ if params['-min']:
 
 
 external_libs = [
-    ('957dcf4caf7bb2c1c408d6fe9a2d204d75e6328efd29412393ceef1347cd7a6e', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.3/dist/dash.all.min.js'),
-    ('3c3e5690f3b10a7dbc980f859c31a1eab75fee1c51c9cad3527fdafd6c3da61c', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.0.3/dist/dash.mss.min.js'),
-    ('928d85a8c4c18fe0081da8433be8b463d31c78c09b9dc752c9cb9e5ce76459ce', 'https://github.com/video-dev/hls.js/releases/download/v0.13.2/hls.min.js')
+    ('5a31f3ff33585f69a7f84b1e51407d55957652a34a0edf45fb65e358ad1b49d1', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.1.2/dist/dash.all.min.js'),
+    ('76aeea1383fd6d305cc9e0636db4742ca3ae5f17a81a15199da316455862a406', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v3.1.2/dist/dash.mss.min.js'),
+    ('c2448b41e33b82e673b078b922e1bedcb43574d7b1d71435517ab345f780a9eb', 'https://github.com/video-dev/hls.js/releases/download/v0.14.7/hls.min.js')
 ]
 
 ext_lib_dir = pj(build_dir, '.lib')
