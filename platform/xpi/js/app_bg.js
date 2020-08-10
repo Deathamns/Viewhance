@@ -228,10 +228,29 @@ vAPI.watchReceivedHeaders = function(prefs) {
 				//
 			}
 
-			if ( dispHeader && !isMedia ) {
-				let ext = channel.contentDispositionFilename.match(
-					/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))$/i
-				);
+			if ( !isMedia ) {
+				let ext;
+
+				if ( dispHeader ) {
+					ext = channel.contentDispositionFilename.match(
+						/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))$/i
+					);
+				} else if ( prefs.forceInlineMedia
+					&& contentType === 'application/octet-stream' ) {
+					ext = channel.URI.path.match(
+						/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|mp[34])$/
+					);
+				}
+
+				if ( !ext && prefs.extraFormats ) {
+					ext = channel.URI.path.match(
+						/(?:\.[mM](?:3[uU]8|[pP][dD])|\/[Mm]anifest)$/
+					);
+
+					if ( ext ) {
+						ext[1] = ext[1].slice(1);
+					}
+				}
 
 				if ( ext ) {
 					ext = ext[1].toLowerCase();
@@ -251,46 +270,21 @@ vAPI.watchReceivedHeaders = function(prefs) {
 						return;
 					}
 
+					isMedia = true;
+
 					if ( ext === 'm3u8' ) {
 						streamingMediaType = 'hls';
 					} else if ( ext === 'mpd' ) {
 						streamingMediaType = 'dash';
+					} else if ( ext === 'manifest' ) {
+						streamingMediaType = 'mss';
 					}
 
-					if ( streamingMediaType ) {
-						if ( prefs.extraFormats ) {
-							isMedia = true;
-						} else {
-							streamingMediaType = null;
-						}
-					} else {
-						isMedia = true;
+					if ( !streamingMediaType ) {
 						// At this point we are sure that content-type is not media
 						channel.contentType = /^(mp[34]|webm|og)/.test(ext)
 							? 'video/mp4'
 							: 'image/png';
-					}
-				}
-			}
-
-			if ( !isMedia && prefs.extraFormats ) {
-				streamingMediaType = channel.URI.spec.match(
-					/(?:\.[mM](?:3[uU]8|[pP][dD])|\/[Mm]anifest)(?=$|[?#])/
-				);
-
-				if ( streamingMediaType ) {
-					isMedia = true;
-
-					switch ( streamingMediaType[0].toLowerCase() ) {
-						case '.m3u8':
-							streamingMediaType = 'hls';
-							break;
-						case '.mpd':
-							streamingMediaType = 'dash';
-							break;
-						case '/manifest':
-							streamingMediaType = 'mss';
-							break;
 					}
 				}
 			}

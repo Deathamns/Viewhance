@@ -149,10 +149,29 @@ vAPI.watchReceivedHeaders = function(prefs) {
 
 		let dispHeader = headers['content-disposition'];
 
-		if ( dispHeader && !isMedia ) {
-			let ext = dispHeader.value.match(
-				/;\s*filename\*?\s*=.+\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))(?:\s*")?(?:\s*;|$)/i
-			);
+		if ( !isMedia ) {
+			let ext;
+
+			if ( dispHeader ) {
+				ext = dispHeader.value.match(
+					/;\s*filename\*?\s*=.+\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))(?:\s*")?(?:\s*;|$)/i
+				);
+			} else if ( prefs.forceInlineMedia
+				&& contentType === 'application/octet-stream' ) {
+				ext = details.url.match(
+					/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|mp[34])(?=$|[?#])/
+				);
+			}
+
+			if ( !ext && prefs.extraFormats ) {
+				ext = details.url.match(
+					/(?:\.[mM](?:3[uU]8|[pP][dD])|\/[Mm]anifest)(?=$|[?#])/
+				);
+
+				if ( ext ) {
+					ext[1] = ext[1].slice(1);
+				}
+			}
 
 			if ( ext ) {
 				ext = ext[1].toLowerCase();
@@ -172,21 +191,17 @@ vAPI.watchReceivedHeaders = function(prefs) {
 					return {cancel: true};
 				}
 
+				isMedia = true;
+
 				if ( ext === 'm3u8' ) {
 					streamingMediaType = 'hls';
 				} else if ( ext === 'mpd' ) {
 					streamingMediaType = 'dash';
+				} else if ( ext === 'manifest' ) {
+					streamingMediaType = 'mss';
 				}
 
-				if ( streamingMediaType ) {
-					if ( prefs.extraFormats ) {
-						isMedia = true;
-					} else {
-						streamingMediaType = null;
-					}
-				} else {
-					isMedia = true;
-
+				if ( !streamingMediaType ) {
 					let mediaType = /^(mp[34]|webm|og)/.test(ext)
 						? 'video/mp4'
 						: 'image/png';
@@ -200,28 +215,6 @@ vAPI.watchReceivedHeaders = function(prefs) {
 							value: mediaType
 						});
 					}
-				}
-			}
-		}
-
-		if ( !isMedia && prefs.extraFormats ) {
-			streamingMediaType = details.url.match(
-				/(?:\.[mM](?:3[uU]8|[pP][dD])|\/[Mm]anifest)(?=$|[?#])/
-			);
-
-			if ( streamingMediaType ) {
-				isMedia = true;
-
-				switch ( streamingMediaType[0].toLowerCase() ) {
-					case '.m3u8':
-						streamingMediaType = 'hls';
-						break;
-					case '.mpd':
-						streamingMediaType = 'dash';
-						break;
-					case '/manifest':
-						streamingMediaType = 'mss';
-						break;
 				}
 			}
 		}
