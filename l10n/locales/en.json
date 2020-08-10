@@ -273,12 +273,12 @@
 			">": "Zoom with mouse wheel with key"
 		},
 		"zoomParams": {
-			"#": 0,
-			">": "Zoom step; snap points"
+			"#": 1,
+			">": "Zoom steps; snap points"
 		},
 		"zoomParamsTip": {
-			"#": 0,
-			">": "Format: <b>step; snap1 snap2 snap3</b>\n<b>step</b> - zoom-in percent (from the actual size image) divided by 100 (e.g., <b>0.3</b> - 30%, so the zoomed-in image will be 130% of the current image).\n<b>snaps</b> (minimum two values, separated by white-space) - different scales of the original size (e.g., 0.25 0.5 0.75 1 1.5 - these scales will be used from 25% to 150%, outside this range <i>step</i> is used).\nHolding <i>Alt</i> or <i>Shift</i> while zooming will ignore the snap points."
+			"#": 1,
+			">": "Format: <b>step1 step2; snap1 snap2 snap3</b>\n<b>step1</b> - zoom-in percent (from the actual size image) divided by 100 (e.g., <b>0.3</b> - 30%, so the zoomed-in image will be 130% of the current image). <b>step2</b> is optional and is used when <i>Shift</i> is being held.\n<b>snaps</b> (minimum two values, separated by white-space) - different scales of the original size (e.g., 0.25 0.5 0.75 1 1.5 - these scales will be used from 25% to 150%, outside this range <i>step</i> is used).\nHolding <i>Alt</i> while zooming will ignore the snap points."
 		}
 	}
 }

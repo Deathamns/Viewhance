@@ -52,6 +52,14 @@
 			"#": 0,
 			">": "kikapcsolva"
 		},
+		"eximpSettings": {
+			"#": 0,
+			">": "Beállítások exportálása/importálása"
+		},
+		"exportBtn": {
+			"#": 0,
+			">": "Exportál"
+		},
 		"extraFormats": {
 			"#": 0,
 			">": "Egyéb formátumok támogatása (DASH, HLS, MSS)"
@@ -67,6 +75,10 @@
 		"forceInlineMedia": {
 			"#": 0,
 			">": "Média fájlok kényszerített megjelenítése letöltés helyett"
+		},
+		"importBtn": {
+			"#": 0,
+			">": "Importál"
 		},
 		"infoTranslations": {
 			"#": 1,
@@ -165,7 +177,7 @@
 			">": "Méretezések közti váltás: eredeti, szélességhez-, magassághoz méretez"
 		},
 		"scDragndrop": {
-			"#": 2,
+			"#": 3,
 			">": "<b>Ctrl</b> vagy <b>Alt</b> nyomva-tartásával vonszolható a kép, ha az nem fér bele a nézetablakba"
 		},
 		"scFlipHorizontal": {
@@ -255,6 +267,14 @@
 		"wheelZoomWithKey": {
 			"#": 0,
 			">": "Nagyítás görgetéssel gomb nyomva-tartásával"
+		},
+		"zoomParams": {
+			"#": 1,
+			">": "Zoom lépések; bepattanó pontok"
+		},
+		"zoomParamsTip": {
+			"#": 1,
+			">": "Formátum: <b>lépés1 lépés2; pont1 pont2 pont3</b>\n<b>lépés1</b> - nagyítási százalék (a jelenlegi mérettől számítva) osztva 100-zal (pl., <b>0.3</b> - 30%, szóval a nagyított kép 130%-a lesz a jelenlegi méretnek). A <b>lépés2</b> opcionális, és a <i>Shift</i> lenyomásával használatos.\nA <b>pontok</b> (legalább két érték, hellyel elválasztva) - az eredeti méret különböző méretarányai (pl., 0.25 0.5 0.75 1 1.5 - 25% és 150% között csak ezekre az arányokra ugrál, ezen a skálán kívül bedig a <i>lépés</i>-t használja).\nAz <i>Alt</i> nyomva-tartásával a bepattanó pontok nem aktívak."
 		}
 	}
 }

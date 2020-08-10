@@ -835,12 +835,22 @@ init = function() {
 
 	cfg.zoomParams = (cfg.zoomParams || '').split(/\s*;+\s*/);
 	cfg.zoomParams = {
-		step: 1 + Math.max(0.01, cfg.zoomParams[0].trim() || (1 / 3)),
+		step: cfg.zoomParams[0].trim().split(/\s+/),
 		snaps: (cfg.zoomParams[1] || '').trim().split(/\s+/)
 			.map(parseFloat).filter(function(el, idx, list) {
 				return el && list.indexOf(el, idx + 1) === -1;
 			}).sort()
 	};
+
+	cfg.zoomParams.primaryStep = 1 + Math.max(
+		0.01,
+		cfg.zoomParams.step[0] || (1 / 3)
+	);
+	cfg.zoomParams.secondaryStep = 1 + Math.max(
+		0.01,
+		cfg.zoomParams.step[1] || (1 / 13)
+	);
+	delete cfg.zoomParams.step;
 
 	var wheelZoom = function(e) {
 		pdsp(e);
@@ -848,18 +858,19 @@ init = function() {
 
 		var boxW, zoomIn;
 		var zp = cfg.zoomParams;
+		var step = e.shiftKey ? zp.secondaryStep : zp.primaryStep;
 
 		if ( (e.deltaY || -e.wheelDelta) > 0 ) {
 			zoomIn = false;
-			boxW = Math.max(1, mWidth / zp.step);
+			boxW = Math.max(1, mWidth / step);
 		} else {
 			zoomIn = true;
-			boxW = mWidth * zp.step;
+			boxW = mWidth * step;
 			boxW = boxW > 10 ? boxW : boxW + 3;
 		}
 
 		snap:
-		if ( !(e.shiftKey || e.altKey) && zp.snaps.length > 1 ) {
+		if ( !e.altKey && zp.snaps.length > 1 ) {
 			var newScale = boxW / mOrigWidth;
 			var curScale = mWidth / mOrigWidth;
 			var i = zp.snaps.length - 1;
@@ -871,7 +882,7 @@ init = function() {
 
 				if ( curScale < zp.snaps[0] ) {
 					if ( newScale > zp.snaps[0]
-						|| Math.abs(newScale - zp.snaps[0]) < zp.step - 1 ) {
+						|| Math.abs(newScale - zp.snaps[0]) < step - 1 ) {
 						newScale = zp.snaps[0] * mOrigWidth;
 
 						if ( Math.abs(mWidth - Math.round(newScale)) > 2 ) {
@@ -887,7 +898,7 @@ init = function() {
 
 				if ( curScale > zp.snaps[i] && mWidth !== boxW ) {
 					if ( newScale < zp.snaps[i]
-						|| Math.abs(newScale - zp.snaps[i]) < zp.step - 1 ) {
+						|| Math.abs(newScale - zp.snaps[i]) < step - 1 ) {
 						newScale = zp.snaps[i] * mOrigWidth;
 
 						if ( Math.abs(mWidth - Math.round(newScale)) > 2 ) {
@@ -917,7 +928,7 @@ init = function() {
 					++i;
 
 					if ( zp.snaps[i] === void 0 ) {
-						newScale = zp.snaps[zp.snaps.length - 1] + zp.step - 1;
+						newScale = zp.snaps[zp.snaps.length - 1] + step - 1;
 					} else {
 						newScale = zp.snaps[i];
 					}
@@ -925,7 +936,7 @@ init = function() {
 					--i;
 
 					if ( zp.snaps[i] === void 0 ) {
-						newScale = zp.snaps[0] - zp.step + 1;
+						newScale = zp.snaps[0] - step + 1;
 					} else {
 						newScale = zp.snaps[i];
 					}
