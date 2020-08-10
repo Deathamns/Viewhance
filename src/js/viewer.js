@@ -379,6 +379,16 @@ init = function() {
 	}
 
 	if ( vAPI.mediaType === 'audio' ) {
+		doc.title = vAPI.isDataUrl
+			? 'data:' + vAPI.extraFormat
+			: media.alt;
+
+		// FIrefox hides the controls after a while without this
+		if ( media.controls ) {
+			media.controls = false;
+			media.controls = true;
+		}
+
 		return;
 	}
 
@@ -570,7 +580,11 @@ init = function() {
 			case 'url': return vAPI.isDataUrl
 				? 'data:'
 				: (vAPI.extraFormatUrl || win.location.href);
-			case 'name': return m.alt;
+			case 'type':
+				return vAPI.extraFormat || doc.contentType.split('/')[1] || '';
+			case 'name': return vAPI.isDataUrl
+				? 'data:' + vAPI.extraFormat
+				: m.alt;
 			case 'ratio':
 				return Math.round(ow / oh * 100) / 100;
 			case 'perc':
@@ -628,7 +642,7 @@ init = function() {
 		}
 
 		doc.title = cfg.mediaInfo.replace(
-			/%(o?[wh]|url|name|ratio|perc|size)/g,
+			/%(o?[wh]|url|type|name|ratio|perc|size)/g,
 			convertInfoParameter
 		);
 	};
@@ -2656,7 +2670,6 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 
 	vAPI.mediaType = 'audio';
 	media.controls = true;
-	doc.title = 'data:' + vAPI.mediaType;
 	init();
 
 	if ( vAPI.opera || vAPI.firefox ) {

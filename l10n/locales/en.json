@@ -114,11 +114,11 @@
 		},
 		"mediaInfo": {
 			"#": 0,
-			">": "Image informations"
+			">": "Image information"
 		},
 		"mediaInfoTip": {
-			"#": 3,
-			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - original width\n<b>%oh</b> - original height\n<b>%ratio</b> - current width / current height\n<b>%w</b> - current width\n<b>%h</b> - current height\n<b>%perc</b> - percent of the original size\n<b>%url</b> - full URL\n<b>%name</b> - filename\n<b>%size</b> - formatted filesize (may not work)"
+			"#": 4,
+			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - original width\n<b>%oh</b> - original height\n<b>%ratio</b> - current width / current height\n<b>%w</b> - current width\n<b>%h</b> - current height\n<b>%perc</b> - percent of the original size\n<b>%url</b> - full URL\n<b>%type</b> - media type\n<b>%name</b> - filename\n<b>%size</b> - formatted filesize (may not work)"
 		},
 		"minUpscale": {
 			"#": 0,

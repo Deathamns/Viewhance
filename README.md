@@ -9,7 +9,7 @@ To try it out (when installed), open a media file ([image](https://upload.wikime
 ## Browser/platform support ##
 The following platforms are supported (for each the latest browser version):
 
-- **crx** - many Chromium [browsers](https://en.wikipedia.org/wiki/Chromium_\(web_browser\)#Browsers_based_on_Chromium) ([Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac), Opera 15+, Vivaldi, Edge...), or browsers with WebExtension support ([Firefox](https://addons.mozilla.org/addon/viewhance/))
+- **crx** - many Chromium [browsers](https://en.wikipedia.org/wiki/Chromium_\(web_browser\)#Browsers_based_on_Chromium) ([Chrome](https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac), Opera 15+, Vivaldi, Edge...), or browsers with WebExtension ([Firefox](https://addons.mozilla.org/addon/viewhance/))
 - **xpi** - XUL based platforms (older Firefox, SeaMonkey, Pale Moon...)
 - **oex** - Opera 12 (Presto based)
 - **mxaddon** - Maxthon
