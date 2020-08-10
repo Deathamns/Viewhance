@@ -1808,17 +1808,21 @@ init = function() {
 				return;
 			}
 
-			var active = menu.querySelector(
+			var q = menu.querySelector(
 				'.quality-picker .active-quality'
 			);
 
-			if ( active ) {
-				active.classList.remove('active-quality');
+			if ( q ) {
+				q.classList.remove('active-quality');
 			}
 
-			active = menu.querySelector(
+			q = menu.querySelector(
 				'.quality-picker li[data-index="' + media.getQuality() + '"]'
-			).classList.add('active-quality');
+			);
+
+			if ( q ) {
+				q.classList.add('active-quality');
+			}
 		});
 
 		media.addEventListener('click', function(e) {
