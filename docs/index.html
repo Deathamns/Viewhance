@@ -52,7 +52,7 @@
 			-o-tab-size: 2;
 			tab-size: 2;
 			white-space: pre-wrap;
-			font: normal normal bold 14px/normal Consolas, Menlo, monospace;
+			font: normal normal 14px/normal Consolas, Menlo, monospace;
 			color: black;
 		}
 
@@ -180,7 +180,7 @@
 	<title>Viewhance :: Archive</title>
 </head>
 <body>
-	<div class="FAQ">
+	<div id="faq">
 		<h3>FAQ</h3>
 		<ul>
 			<li>
@@ -270,7 +270,7 @@
 				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome" class="browser-icon">
 			</a>
 			<div>
-				Install from <a href="https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac">Chrome Web Store</a>.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
+				Install from <s><a href="https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac">Chrome Web Store</a></s> the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archvie</a>.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
 			</div>
 		</div>
 		<div>
@@ -302,7 +302,7 @@
 			<a rel="nofollow" class="fade">
 				<img src="img/browser_icons/icon32_safari.png" alt="Safari 5.1+" class="browser-icon">
 			</a>
-			<div>You have to install it from source. Note that it is build with the legacy platform, and Safari 12 is the last release to support legacy extensions.</div>
+			<div>You have to install it from source. Note that it is built with the legacy platform, and Safari 12 is the last release to support legacy extensions.</div>
 		</div>
 	</div>
 
@@ -331,6 +331,20 @@
 	<b>#</b> Bug fixed</pre>
 
 	<ul class="versions">
+		<li id="v2020.913.1025"><b>2020.913.1025</b>
+		<pre>
+* (opener) Support ShadowDOM
+* (opener) Support some pseudo elements
+* (opener) Handle SVG image
+* Options page respects system-wide dark mode
+* Force inline-media: check file extension for <i>application/octect-stream</i> without <i>content-type</i>
+* Added <code>%type</code> variable for <b>Image information</b></i>
+* Added secondary zoom step (via <i>Shift</i>)
+# Fix tab title for audio files
+* Updated libraries
+		</pre>
+		</li>
+
 		<li id="v2020.402.1540"><b>2020.402.1540</b>
 		<pre>
 * Load original SVG, or manifest files (for streaming media) directly via a button, or automatically on error
