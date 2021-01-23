@@ -1,38 +1,89 @@
 {
 	"_translators": [
 		{
-			"email": "kackar(at)outlook(dot)com",
-			"name": "Kaçkar"
+			"email": "vistausss(at)outlook(dot)com",
+			"name": "Vistaus",
+			"realname": "Heimen Stoffels"
 		}
 	],
+	"groupless": {
+		"?": "Uncategorized strings",
+		"appDescriptionLong": {
+			"#": 4,
+			">": "Verbetert de ingebouwde mediaweergave door allerlei mogelijkheden toe te voegen.\n\nKenmerken:\n- Standaard vergrotingsmodi, waartussen geschakeld kan worden middels sneltoetsen of de muis\n- Aangepaste css (achtergrondkleur voor de pagina of media, verborgen schuifbalken, etc.)\n- Aangepaste media-informatie in de tabbladnaam\n- Zwevend menu (houd de cursor boven de linkerbovenhoek)\n- Zoomen met het scrollwiel (standaard: uit)\n- Gecentreerde inhoud (standaard)\n- Draaien/Spiegelen (middels sneltoetsen of het menu)\n- Deel het adres van de media met externe diensten (zoals omgekeerd zoeken naar afbeeldingen)\n- Extraheer frames van bewegende afbeeldingen (gif, apng, webp)\n- SVG- en data:-uri's\n- Speel media gedwongen af in browser in plaats van te downloaden\n- Ingebouwde ondersteuning voor DASH-, HLS- en MSS-streaming (indien ondersteund door de browser)\n- Aanpasbare media-attributen (automatisch afspelen, herhalen, bediening, dempen, volume)\n- Open afbeeldingen van reguliere websites door de rechtermuisknop ingedrukt te houden of met een sneltoets (standaard: uit)\n\nMeer informatie is te vinden op de instellingenpagina.",
+			"?": "A longer description for the official extension repositories.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
+		},
+		"appDescriptionShort": {
+			"#": 3,
+			">": "Aanvullende functies voor de ingebouwde mediaweergave.",
+			"?": "A short description that appears in the extension manager.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
+		}
+	},
 	"options": {
+		"?": "Every string that can be found on the Options page",
 		"buttonReset": {
 			"#": 0,
-			">": "Reset"
+			">": "Standaard"
 		},
 		"buttonSave": {
 			"#": 0,
 			">": "Opslaan"
 		},
+		"centerContent": {
+			"#": 0,
+			">": "Inhoud centreren"
+		},
+		"clickOverDoc": {
+			"#": 0,
+			">": "Muisklikken toestaan op gehele pagina's"
+		},
 		"customCss": {
 			"#": 0,
-			">": "Aangepaste stijl (CSS)"
+			">": "Aangepaste stijl (css)"
+		},
+		"customCssTextareaPh": {
+			"#": 0,
+			">": "Pas de achtergrondkleur aan, de afbeeldingsrand/-schaduw, verberg de schuifbalken of het zwevende menu, etc.\nHoud de cursor boven het vraagteken om voorbeelden te bekijken of gebruik de kleurkiezer om kleurcodes op te zoeken."
+		},
+		"customCssTip": {
+			"#": 2,
+			">": "<code>body {\n background: #f3f3f5; /* Elk geldig achtergrondattribuut (color, url(), gradient...). */\n overflow: hidden; /* Verbergt de schuifbalken. Verander \"hidden\" in \"auto\" om ze te tonen. */\n}\n\n#media {\n background: #eef; /* Andere afbeeldingsachtergrond. */\n border: 10px solid white; /* Image border. */\n box-shadow: 0 0 10px grey; /* Schaduw van de afbeelding. */\n cursor: default !important; /* Laat de cursor ongemoeid. */\n}\n\n/* Kleur van de vrijezoommaskering. */\n.mask { color: rgba(0, 0, 0, .4); }\n\n/* Schakelt het menu uit. */\n#menu { display: none; }\n\n/* Toont het menu altijd. */\n#menu { display: block; }\n\n/* Andere menulocaties: */\n#menu { top: auto; bottom: 0; } /* linksonder */\n#menu { left: auto; right: 0; } /* rechtsboven */\n#menu { top: auto; left: auto; right: 0; bottom: 0; } /* rechtsonder */\n\n/* Horizontaal menu */\n#menu > ul { flex-direction: row; }\n</code>"
 		},
 		"defaultMode": {
 			"#": 0,
-			">": "Oorspronkelijke pas-modus"
+			">": "Initiële vergroting"
 		},
 		"disabled": {
 			"#": 0,
-			">": "uit"
+			">": "uitgeschakeld"
+		},
+		"eximpSettings": {
+			"#": 0,
+			">": "Instellingen ex-/importeren"
+		},
+		"exportBtn": {
+			"#": 0,
+			">": "Exporteren"
+		},
+		"extraFormats": {
+			"#": 0,
+			">": "Ondersteuning voor andere formaten (DASH, HLS, MSS)"
 		},
 		"favicon": {
 			"#": 0,
-			">": "Aangepaste favicon"
+			">": "Aangepast favicon"
 		},
 		"faviconTip": {
 			"#": 2,
-			">": "Deze optie maakt het mogelijk om een aangepaste tab-icoon te gebruiken voor de geopende afbeelding.\nHet adres van de afbeelding kan gebruikt worden als variabele: <b>%url</b>"
+			">": "Met deze instelling kunt u de geopende afbeelding voorzien van een aangepast tabbladpictogram.\nHet adres van de afbeelding kan worden gebruikt als een variabel: <b>%url</b>"
+		},
+		"forceInlineMedia": {
+			"#": 0,
+			">": "Media gedwongen afspelen in browser in plaats van downloaden"
+		},
+		"importBtn": {
+			"#": 0,
+			">": "Importeren"
 		},
 		"infoTranslations": {
 			"#": 1,
@@ -40,19 +91,35 @@
 		},
 		"longpressActionFitImage": {
 			"#": 0,
-			">": "breedte/hoogte passend maken"
+			">": "aanpassen aan breedte/hoogte"
+		},
+		"longpressActionWheelZoom": {
+			"#": 0,
+			">": "zoomen met scrollwiel in-/uitschakelen"
 		},
 		"longpressLeft": {
 			"#": 0,
-			">": "Linker lange druk aktie"
+			">": "Actie bij ingedrukt houden linkermuisknop"
 		},
 		"longpressRight": {
 			"#": 0,
-			">": "Rechter lange druk aktie"
+			">": "Actie bij ingedrukt houden rechtermuisknop"
+		},
+		"mediaAttributes": {
+			"#": 1,
+			">": "Media-attributen"
+		},
+		"mediaAttributesTip": {
+			"#": 1,
+			">": "Toegestane attributen\n<b>autoplay</b> - video wordt automatisch afgespeeld\n<b>loop</b> - video wordt herhaald\n<b>controls</b> - spelerbediening tonen\n<b>muted</b> - geluid dempen\n<b>volume=0-100</b> - standaardvolume (%)"
 		},
 		"mediaInfo": {
 			"#": 0,
-			">": "Afbeeldings informatie"
+			">": "Afbeeldingsinformatie"
+		},
+		"mediaInfoTip": {
+			"#": 4,
+			">": "Toon aangepaste informatie in de tabbladnaam. Deze mag de volgende variabelen bevatten:\n<b>%ow</b> - oorspronkelijke breedte\n<b>%oh</b> - oorspronkelijke hoogte\n<b>%ratio</b> - huidige breedte/hoogte\n<b>%w</b> - huidige breedte\n<b>%h</b> - huidige hoogte\n<b>%perc</b> - aantal procent van de oorspronkelijke grootte\n<b>%url</b> - volledige url\n<b>%type</b> - soort media\n<b>%name</b> - bestandsnaam\n<b>%size</b> - opgemaakte bestandsgrootte (werkt mogelijk niet)"
 		},
 		"minUpscale": {
 			"#": 0,
@@ -60,79 +127,159 @@
 		},
 		"minUpscaleTip": {
 			"#": 1,
-			">": "Normaal gesproken worden kleinere afbeeldingen niet vergroot. Deze optie dwingt afbeeldingen te vergroten.\nDe waarde is in procenten, en vertelt het script om afbeeldingen die groter zijn de gegeven procenten van de breedte of hoogte van de kijker te vergroten (afhankelijk van de vorige optie)."
+			">": "Normaliter worden kleinere afbeeldingen niet aangepast aan de weergavegrootte, maar met deze instelling wel.\nDe waarde dient te worden opgegeven in procenten. Hiermee geeft het script door dat afbeeldingen die kleiner zijn dan de weergavegrootte dienen te worden vergroot (afhankelijk van de vorige instelling)."
 		},
 		"modeAutoFit": {
 			"#": 0,
-			">": "bevatten"
+			">": "automatisch"
 		},
 		"modeBestFit": {
 			"#": 0,
-			">": "best afstemmen"
+			">": "inpassen"
 		},
 		"modeNatural": {
 			"#": 0,
-			">": "natuurlijk formaat"
+			">": "natuurlijke grootte"
+		},
+		"navGeneral": {
+			"#": 1,
+			">": "Algemeen"
 		},
 		"navInfo": {
 			"#": 0,
-			">": "Info"
+			">": "Informatie"
+		},
+		"opener": {
+			"#": 0,
+			">": "Afbeeldingen van reguliere websites openen"
+		},
+		"openerBoth": {
+			"#": 0,
+			">": "beide"
+		},
+		"openerCtrlAltClick": {
+			"#": 0,
+			">": "Ctrl + Alt + rechtermuisklik"
+		},
+		"openerRightLong": {
+			"#": 0,
+			">": "rechtermuisknop ingedrukt houden"
+		},
+		"permisssionWarning": {
+			"#": 0,
+			">": "De volgende instellingen vereisen optionele toegangsrechten:"
 		},
 		"phClickForExample": {
 			"#": 1,
-			">": "klikken voor voorbeelden..."
+			">": "klik om voorbeelden te bekijken..."
+		},
+		"scChangeVolume": {
+			"#": 0,
+			">": "<b>Pijltje omhoog/omlaag</b> Volume verhogen/verlagen"
 		},
 		"scCycleModes": {
 			"#": 0,
-			">": "Door sizing modi wisselen: normaal, breedte passend maken, hoogte passend maken"
+			">": "Schakelen tussen weergavemodi: natuurlijk, aanpassen aan breedte, aanpassen aan hoogte"
+		},
+		"scDragndrop": {
+			"#": 3,
+			">": "Houd <b>Ctrl</b> of <b>Alt</b> ingedrukt om de niet-passende afbeelding te verplaatsen"
 		},
 		"scFlipHorizontal": {
 			"#": 0,
-			">": "Horizontaal omdraaien"
+			">": "Horizontaal spiegelen"
 		},
 		"scFlipVertical": {
 			"#": 0,
-			">": "Verticaal omdraaien"
+			">": "Verticaal spiegelen"
+		},
+		"scFloatMenu": {
+			"#": 0,
+			">": "Verplaats de cursor naar de linkerbovenhoek van de pagina om het menu te tonen"
 		},
 		"scFreeZoom": {
 			"#": 0,
-			">": "<b>Shift + Sleep</b> de afbeelding om free-zoom te gebruiken, <b>Ctrl</b> ingedrukt houden om de selectie te verplaatsen"
+			">": "<b>Shift + versleep</b> de afbeelding om vrij te zoomen - Houd <b>Ctrl</b> ingedrukt om de selectie te verplaatsen"
+		},
+		"scHorizontalScroll": {
+			"#": 1,
+			">": "Scroll over de linkeronderhoek om horizontaal te scrollen"
+		},
+		"scImgBg": {
+			"#": 0,
+			">": "Schakelen tussen afbeeldingsachtergronden: standaard, zwart, wit, schaakbord, of houd <b>Shift</b> ingedrukt voor een aangepaste waarde"
 		},
 		"scModeContain": {
 			"#": 0,
-			">": "Automatisch passen"
+			">": "Inpassen"
+		},
+		"scModeFill": {
+			"#": 0,
+			">": "Opvullen"
 		},
 		"scModeNatural": {
 			"#": 0,
-			">": "Normale grootte"
+			">": "Natuurlijke grootte"
+		},
+		"scPixelate": {
+			"#": 0,
+			">": "Pixelvorming toepassen"
 		},
 		"scReset": {
 			"#": 0,
-			">": "<b>Esc</b> herstelt de afbeelding naar origineel formaat, of verlaat de vrije-zoom"
+			">": "<b>Esc</b> herstelt de oorspronkelijke afbeelding of schakelt vrij zoomen uit"
 		},
 		"scRotateLeft": {
 			"#": 0,
-			">": "Links roteren"
+			">": "Naar links draaien"
 		},
 		"scRotateRight": {
 			"#": 0,
-			">": "Rechts roteren"
+			">": "Naar rechts draaien"
+		},
+		"scTogglePlay": {
+			"#": 0,
+			">": "<b>Spatiebalk</b> Afspelen/Pauzeren"
+		},
+		"scWheelZoom": {
+			"#": 0,
+			">": "Zoomen met scrollwiel aan/uit"
 		},
 		"scZoom": {
 			"#": 0,
-			">": "In-/uitzoomen"
+			">": "In-/Uitzoomen"
 		},
 		"sendTo": {
 			"#": 0,
-			">": "Afbeelding sturen naar..."
+			">": "Afbeelding versturen naar..."
 		},
 		"shortcuts": {
 			"#": 0,
-			">": "Snelkoppelingen"
+			">": "Sneltoetsen"
+		},
+		"viewDataURI": {
+			"#": 0,
+			">": "data:uri's tonen"
+		},
+		"viewSvg": {
+			"#": 0,
+			">": "SVG-afbeeldingen tonen"
 		},
 		"wheelZoom": {
 			"#": 0,
-			">": "Zoomen met muiswiel"
+			">": "Zoomen met scrollwiel"
+		},
+		"wheelZoomWithKey": {
+			"#": 0,
+			">": "Zoomen met scrollwiel en toetsaanslag"
+		},
+		"zoomParams": {
+			"#": 1,
+			">": "Zoomstappen; inpaspunten"
+		},
+		"zoomParamsTip": {
+			"#": 1,
+			">": "Opmaak: <b>step1 step2; snap1 snap2 snap3</b>\n<b>step1</b> - inzoompercentage (van de daadwerkelijke afbeelding), gedeeld door 100 (bijv., <b>0.3</b> - 30%, zodat de ingezoomde afbeelding 130% van de huidige afbeelding zal zijn). <b>step2</b> is optioneel en wordt gebruikt als <i>Shift</i> ingedrukt wordt gehouden.\n<b>snaps</b> (minimaal twee waarden, spatiegescheiden) - verschillende schalen van de oorspronkelijke groootte (bijv., 0.25 0.5 0.75 1 1.5 - deze schalen reiken van 25% tot 150%; buiten dit bereik wordt <i>step</i> gebruikt).\nHoud <i>Alt</i> ingedrukt tijdens het zoomen om de inpaspunten te negeren."
 		}
 	}
 }
