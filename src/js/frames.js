@@ -293,8 +293,10 @@ xhr.addEventListener('readystatechange', function() {
 			} else if ( chunkType === 'IDAT' || chunkType === 'fdAT' ) {
 				if ( !animation.numFrames || animation.numFrames < 2 ) {
 					break;
+				}
+
 				// IDAT without acTL chunk should be ignored
-				} else if ( chunkType === 'IDAT' && !frames.length ) {
+				if ( chunkType === 'IDAT' && !frames.length ) {
 					// console.log('PNG: ignoring IDAT from animation...');
 					bin.pos += bin.readInt(4, bin.pos) + 12;
 					continue;
@@ -319,15 +321,16 @@ xhr.addEventListener('readystatechange', function() {
 			}
 		}
 	} else if ( this.imgType === 'GIF' ) {
-		// http://www.w3.org/Graphics/GIF/spec-gif89a.txt
+		// https://www.w3.org/Graphics/GIF/spec-gif89a.txt
 
 		bin.littleEndian = true;
 		bin.skipSubBlock = function() {
 			do {
 				this.pos += this.readInt(1, this.pos) + 1;
 
-				if ( bin.pos >= bin.length ) {
-					throw Error(this.imgType + ': end reached...');
+				if ( this.pos >= this.length ) {
+					console.warn(this.imgType + ': end reached...');
+					return;
 				}
 			} while ( this.readInt(1, this.pos) !== 0x00 );
 
