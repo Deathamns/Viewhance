@@ -2,10 +2,24 @@
 	"name": "Viewhance",
 	"version": "",
 	"def_lang": "en",
-	"homepage": "https://tiny.cc/Viewhance",
+	"homepage": "https://deathamns.github.io/Viewhance/",
 	"author": "Deathamns",
 	"author_email": "deathamns@gmail.com",
 	"author_www": "https://github.com/Deathamns",
 	"license": "BSD 3-Clause",
-	"update_url": ""
+	"update_url": "",
+	"external_libs": [
+		[
+			"0fa34dc19f58d83f5b0a04c23eea5cea9e75b28fcfc1e1bbdd56d226fb5f0d96",
+			"https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v4.2.1/dist/dash.all.min.js"
+		],
+		[
+			"9f5647628f52c1098427236741a81da5510aa85f130691ce6afc315782e299c3",
+			"https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/v4.2.1/dist/dash.mss.min.js"
+		],
+		[
+			"b3ff2f8e4943c7f55e2ee0b99af7adf7a8168c7870d3ba9c80aa9a61a4b165bf",
+			"https://github.com/video-dev/hls.js/releases/download/v1.1.3/release.zip#dist/hls.min.js"
+		]
+	]
 }

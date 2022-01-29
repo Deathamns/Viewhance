@@ -80,9 +80,10 @@ if params['-min']:
         raise SystemExit('java must be installed for minification!');
 
     minifiers = {
+        # https://mvnrepository.com/artifact/com.google.javascript/closure-compiler
         'closure-compiler': {
-            'file': 'closure-compiler-v20200719.jar',
-            'url': 'https://dl.google.com/closure-compiler/compiler-20200719.zip',
+            'file': 'closure-compiler-v20220104.jar',
+            'url': 'https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/v20220104/closure-compiler-v20220104.jar',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
@@ -435,25 +436,28 @@ if params['-min']:
     ], cwd=tmp_dir)
 
 
-external_libs = [
-    ('b82ae74525e824570f8fb5f2055f20f93bde7b713dc36b187ada45bc6d4b6c73', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/master/dist/dash.all.min.js'),
-    ('6ed48720f26a792f31a0cc1eb2e9d4be3b504968bb89eb93d3c4fcc570f93f3e', 'https://raw.githubusercontent.com/Dash-Industry-Forum/dash.js/master/dist/dash.mss.min.js'),
-    ('918eba90612a4958d45bef11f523ea4469581b98d2094b57907f0af7edad29db', 'https://github.com/video-dev/hls.js/releases/download/v0.14.12/hls.min.js')
-]
-
 ext_lib_dir = pj(build_dir, '.lib')
 
 if not os.path.isdir(ext_lib_dir):
     os.makedirs(ext_lib_dir)
 
 
-for lib_hash, lib_url in external_libs:
-    lib_path = pj(ext_lib_dir, os.path.basename(lib_url))
+for lib_hash, lib_url in config['external_libs']:
+    file_from_archive = re.match(r'^([^#]+)#(.+)$', lib_url)
 
-    if os.path.isfile(lib_path):
+    if file_from_archive:
+        lib_url = file_from_archive.group(1)
+        file_from_archive = file_from_archive.group(2)
+
+    lib_path = pj(ext_lib_dir, os.path.basename(lib_url))
+    lib_file = pj(ext_lib_dir, os.path.basename(
+        file_from_archive if file_from_archive else lib_url
+    ))
+
+    if os.path.isfile(lib_file):
         hash = hashlib.sha3_256()
 
-        with open(lib_path, 'rb') as f:
+        with open(lib_file, 'rb') as f:
             while True:
                 data = f.read(4096)
                 if not data:
@@ -465,6 +469,16 @@ for lib_hash, lib_url in external_libs:
 
     print(lib_url + '...')
     urlretrieve(lib_url, filename=lib_path)
+
+    if file_from_archive:
+        if os.path.splitext(lib_path)[1] == '.zip':
+            with zipfile.ZipFile(lib_path) as z:
+                with open(pj(ext_lib_dir, os.path.basename(file_from_archive)), 'wb') as f:
+                    f.write(z.read(file_from_archive))
+        else:
+            print('Archive not supported: ' + os.path.splitext(lib_path)[1])
+
+        os.unlink(lib_path);
 
 
 for platform_name in platforms:

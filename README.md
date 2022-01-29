@@ -4,7 +4,7 @@ A browser extension to enhance the browser's default media viewer.
 
 To try it out (when installed), open a media file ([image](https://upload.wikimedia.org/wikipedia/commons/e/ec/StLouisArchMultExpToneMapped.jpg) / [video](https://upload.wikimedia.org/wikipedia/commons/d/de/Hdr_time_lapse_montage.ogv) / [audio](https://upload.wikimedia.org/wikipedia/en/3/3d/Sample_of_Daft_Punk's_Da_Funk.ogg)) in a new tab.
 
-[Install / Changelog / FAQ](https://tiny.cc/Viewhance)
+[Install / Changelog / FAQ](https://deathamns.github.io/Viewhance/)
 
 ## Browser/platform support ##
 The following platforms are supported (for each the latest browser version):
