@@ -6,6 +6,7 @@ from .. import base
 
 
 class Platform(base.PlatformBase):
+    disabled = True
     requires_all_strings = True
     l10n_dir = 'locales'
 

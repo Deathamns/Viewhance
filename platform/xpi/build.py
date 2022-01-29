@@ -7,6 +7,7 @@ from .. import base
 
 
 class Platform(base.PlatformBase):
+    disabled = True
     supports_extra_formats = True
     requires_all_strings = True
     l10n_dir = 'locale'

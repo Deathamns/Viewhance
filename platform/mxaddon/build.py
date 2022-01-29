@@ -8,6 +8,7 @@ from .. import base
 
 
 class Platform(base.PlatformBase):
+    disabled = True
     l10n_dir = 'locale'
 
     def write_manifest(self):

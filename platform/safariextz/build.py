@@ -11,9 +11,9 @@ from .. import base
 
 
 class Platform(base.PlatformBase):
+    disabled = True
     l10n_dir = 'locales'
     requires_all_strings = True
-    disabled = True
 
     def __init__(self, build_dir, *args):
         super().__init__(build_dir, *args)
