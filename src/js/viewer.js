@@ -599,9 +599,10 @@ init = function() {
 				// x.open('HEAD', vAPI.extraFormatUrl || win.location.href, true);
 				// var size = this.getResponseHeader('content-length') | 0;
 
-				var xhr = new win.XMLHttpRequest;
+				var xhr = new win.XMLHttpRequest();
 				xhr.open('GET', vAPI.extraFormatUrl || win.location.href, true);
 				xhr.overrideMimeType('text/plain; charset=x-user-defined');
+
 				xhr.onload = function() {
 					this.onload = null;
 					var size = this.responseText.length;
@@ -629,6 +630,7 @@ init = function() {
 
 					setTitle();
 				};
+
 				xhr.send();
 				return '?B';
 		}
@@ -1761,6 +1763,7 @@ init = function() {
 		}
 
 		var message = {cmd: 'loadFile', path: 'js/frames.js'};
+
 		var onFrameEvent = function(ev) {
 			this.removeEventListener(ev.type, onFrameEvent);
 
@@ -1797,9 +1800,9 @@ init = function() {
 				doc.body.dataset.isDataUrl = '1';
 			}
 
-			var frames = doc.createElement('script');
-			frames[url ? 'src' : 'textContent'] = data;
-			doc.body.removeChild(doc.body.appendChild(frames));
+			var extractorScript = doc.createElement('script');
+			extractorScript[url ? 'src' : 'textContent'] = data;
+			doc.body.removeChild(doc.body.appendChild(extractorScript));
 		};
 
 		if ( vAPI.isDataUrl ) {

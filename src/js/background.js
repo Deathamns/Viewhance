@@ -22,7 +22,7 @@ var xhr = function(url, onLoad) {
 		return;
 	}
 
-	var req = new XMLHttpRequest;
+	var req = new XMLHttpRequest();
 	req.overrideMimeType('text/plain;charset=utf-8');
 	req.open('GET', url, true);
 	req.addEventListener('load', function() {

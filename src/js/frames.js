@@ -20,9 +20,9 @@ var crc32 = (function() {
 	return function(s) {
 		var i = 0;
 		var crc = -1;
-		var length = s.length;
+		var len = s.length;
 
-		while ( i < length ) {
+		while ( i < len ) {
 			crc = crcTable[(crc ^ s.charCodeAt(i++)) & 0xff] ^ crc >>> 8;
 		}
 
@@ -42,25 +42,25 @@ var BinaryTools = function(data) {
 		return this.data.charCodeAt(pos) & 0xff;
 	};
 
-	this.readString = function(length, position) {
+	this.readString = function(len, position) {
 		var pos;
 
 		if ( position === void 0 || position < 0 ) {
 			pos = this.pos;
-			this.pos += length || 0;
+			this.pos += len || 0;
 		} else {
 			pos = position;
 		}
 
-		return this.data.substr(pos, length || 0);
+		return this.data.substr(pos, len || 0);
 	};
 
-	this.readBits = function(length, pos) {
+	this.readBits = function(len, pos) {
 		var curbyte;
 		var bitarray = [];
 		var i = 0;
 
-		while ( i++ < length ) {
+		while ( i++ < len ) {
 			curbyte = this.readByte(pos).toString(2);
 			bitarray.push(
 				this.zeropad.substr(
@@ -160,7 +160,7 @@ var b64enc = window.opera ? btoa : function(str) {
 };
 
 var maxSize = 20 * 1024 * 1024;
-var xhr = new XMLHttpRequest;
+var xhr = new XMLHttpRequest();
 
 xhr.overrideMimeType('text/plain; charset=x-user-defined');
 xhr.addEventListener('readystatechange', function() {
@@ -628,44 +628,47 @@ xhr.addEventListener('readystatechange', function() {
 			if ( prev ) {
 				if ( prev.disposeOp === 1 ) {
 					ctx.clearRect(
-						prev.xOffset, prev.yOffset,
-						prev.width, prev.height
+						prev.xOffset,
+						prev.yOffset,
+						prev.width,
+						prev.height
 					);
 				} else if ( prev.disposeOp === 2 ) {
 					ctx.putImageData(
 						this.prevDisposeData,
-						prev.xOffset, prev.yOffset
+						prev.xOffset,
+						prev.yOffset
 					);
 				}
 			}
 
 			if ( frame.disposeOp === 2 ) {
 				this.prevDisposeData = ctx.getImageData(
-					frame.xOffset, frame.yOffset,
-					frame.width, frame.height
+					frame.xOffset,
+					frame.yOffset,
+					frame.width,
+					frame.height
 				);
 			}
 
 			// only for PNG
 			if ( frame.blendOp === 0 ) {
 				ctx.clearRect(
-					frame.xOffset, frame.yOffset,
-					frame.width, frame.height
+					frame.xOffset,
+					frame.yOffset,
+					frame.width,
+					frame.height
 				);
 			}
 
-			ctx.drawImage(
-				this,
-				frame.xOffset, frame.yOffset
-			);
+			ctx.drawImage(this, frame.xOffset, frame.yOffset);
 		}
 
 		var c = canvas.cloneNode(false);
 
 		if ( drawFullFrame ) {
 			c.getContext('2d').putImageData(
-				ctx.getImageData(0, 0, canvas.width, canvas.height),
-				0, 0
+				ctx.getImageData(0, 0, canvas.width, canvas.height), 0, 0
 			);
 		} else {
 			c.getContext('2d').drawImage(this, frame.xOffset, frame.yOffset);

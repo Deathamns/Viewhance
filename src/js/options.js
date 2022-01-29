@@ -423,6 +423,7 @@ var onHashChange = function() {
 			var translators;
 			var rows = [];
 			var locales = JSON.parse(response);
+
 			var lngMap = function(el, idx) {
 				el.name = [
 					el.name || el.realname || '',
@@ -518,6 +519,7 @@ window.addEventListener('load', function() {
 	});
 
 	var form = document.forms[0];
+
 	var onFormChange = function(e) {
 		if ( e.stopPropagation ) {
 			e.stopPropagation();

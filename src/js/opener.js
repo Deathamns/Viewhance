@@ -89,7 +89,7 @@ vAPI.messaging.send({cmd: 'loadPrefs', property: 'opener'}, function(response) {
 				return node.href.baseVal;
 			}
 
-			var svgString = (new win.XMLSerializer).serializeToString(
+			var svgString = new win.XMLSerializer().serializeToString(
 				node.ownerSVGElement || node
 			);
 

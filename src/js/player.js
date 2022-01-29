@@ -8,27 +8,27 @@
 let startPlayer = function() {
 	startPlayer = null;
 
-	let media = document.body.querySelector('video');
+	const media = document.body.querySelector('video');
 
-	let onQualityChanged = function() {
+	const onQualityChanged = function() {
 		media.dispatchEvent(new CustomEvent('qualityChanged', {bubbles: false}));
 	};
 
-	let onError = function() {
+	const onError = function() {
 		media.dispatchEvent(new Event('error', {bubbles: false}));
 	};
 
-	let generateQualityList = function(list, indexProp = null) {
+	const generateQualityList = function(list, indexProp = null) {
+		const qualityList = [];
 		let i = list.length;
-		let qualityList = [];
 
 		while ( i-- ) {
-			let quality = list[i];
+			const quality = list[i];
 			qualityList.push({
 				index: indexProp ? quality[indexProp] : i,
 				name: [
-					quality.width + '×' + quality.height,
-					(quality.bitrate / 1e6).toFixed(2) + 'Mbit/s'
+					`${quality.width}×${quality.height}`,
+					`${(quality.bitrate / 1e6).toFixed(2)}Mbit/s`
 				].join(' ')
 			});
 		}
@@ -37,7 +37,7 @@ let startPlayer = function() {
 	};
 
 	if ( vAPI.extraFormat === 'dash' || vAPI.extraFormat === 'mss' ) {
-		let dash = dashjs.MediaPlayer().create();
+		const dash = dashjs.MediaPlayer().create();
 
 		/*if ( protData ) {
 			dash.setProtectionData(protData);
@@ -84,7 +84,7 @@ let startPlayer = function() {
 			dash.setQualityFor('video', index);
 		};
 	} else if ( vAPI.extraFormat === 'hls' ) {
-		let hls = new Hls({enableWorker: !vAPI.firefox});
+		const hls = new Hls({enableWorker: !vAPI.firefox});
 		hls._recoverAttempted = 0;
 		hls.attachMedia(media);
 		hls.loadSource(vAPI.extraFormatUrl);
@@ -140,14 +140,14 @@ let startPlayer = function() {
 };
 
 let jsLibUrl;
-let jsLibs = {
+const jsLibs = {
 	dash: ['./js/lib/dash.all.min.js'],
 	mss: ['./js/lib/dash.all.min.js', './js/lib/dash.mss.min.js'],
 	hls: ['./js/lib/hls.min.js']
 }[vAPI.extraFormat];
 
 while ( jsLibUrl = jsLibs.shift() ) {
-	let script = document.createElement('script');
+	const script = document.createElement('script');
 
 	if ( !jsLibs.length ) {
 		script.onload = startPlayer;
