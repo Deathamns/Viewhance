@@ -233,12 +233,12 @@ vAPI.watchReceivedHeaders = function(prefs) {
 
 				if ( dispHeader ) {
 					ext = channel.contentDispositionFilename.match(
-						/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|m(?:p[34d]|3u8))$/i
+						/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|avif|og[gv]|m(?:p[34d]|3u8))$/i
 					);
 				} else if ( prefs.forceInlineMedia
-					&& contentType === 'application/octet-stream' ) {
+					&& contentType.endsWith('/octet-stream') ) {
 					ext = channel.URI.path.match(
-						/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|og[gv]|mp[34])$/
+						/\.(jp(?:g|eg?)|a?png|gif|bmp|svgz?|web[pm]|avif|og[gv]|mp[34])$/
 					);
 				}
 
