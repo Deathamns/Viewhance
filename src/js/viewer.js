@@ -414,6 +414,8 @@ init = function() {
 	cfg.hiddenScrollbars = win.getComputedStyle(root).overflow === 'hidden'
 		|| win.getComputedStyle(doc.body).overflow === 'hidden';
 
+	var wheelZoomOn = cfg.wheelZoom === 'on';
+
 	var setOriginalDimensions = function() {
 		if ( vAPI.extraFormat === 'svg' && !media.svgWidth ) {
 			// Firefox sometimes doesn't set naturalWidth for SVGs
@@ -860,7 +862,11 @@ init = function() {
 
 		var boxW, zoomIn;
 		var zp = cfg.zoomParams;
-		var step = e.shiftKey ? zp.secondaryStep : zp.primaryStep;
+		var step = (wheelZoomOn || e.type !== 'wheel' || cfg.wheelZoom !== 'shift'
+				? e.shiftKey
+				: e.ctrlKey)
+			? zp.secondaryStep
+			: zp.primaryStep;
 
 		if ( (e.deltaY || -e.wheelDelta) > 0 ) {
 			zoomIn = false;
@@ -1024,9 +1030,9 @@ init = function() {
 			return;
 		}
 
-		// Ignore scollbars
-		if ( cfg.wheelZoom && e.clientX < winW && e.clientY < winH
-			|| cfg.wheelZoomWithKey && e[cfg.wheelZoomWithKey + 'Key'] ) {
+		if ( (wheelZoomOn || e[cfg.wheelZoom + 'Key'])
+			// Ignore scollbars
+			&& e.clientX < winW && e.clientY < winH ) {
 			wheelZoom(e);
 		} else {
 			wheelPan(e);
@@ -1035,13 +1041,13 @@ init = function() {
 
 	var toggleWheelZoom = function(noToggle) {
 		if ( !noToggle ) {
-			cfg.wheelZoom = !cfg.wheelZoom;
+			wheelZoomOn = !wheelZoomOn;
 		}
 
 		var zoomMenuItem = menu && menu.querySelector('li[data-cmd="zoom"]');
 
 		if ( zoomMenuItem ) {
-			zoomMenuItem.style.display = cfg.wheelZoom ? 'none' : '';
+			zoomMenuItem.style.display = wheelZoomOn ? 'none' : '';
 		}
 	};
 
