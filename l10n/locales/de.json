@@ -259,10 +259,6 @@
 			"#": 0,
 			">": "Mausradzoom"
 		},
-		"wheelZoomWithKey": {
-			"#": 0,
-			">": "Zoom mit Mausrad und Taste"
-		},
 		"zoomParams": {
 			"#": 0,
 			">": "Zoomstufe; Knackpunkte"

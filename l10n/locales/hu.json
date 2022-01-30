@@ -52,6 +52,10 @@
 			"#": 0,
 			">": "kikapcsolva"
 		},
+		"enabled": {
+			"#": 0,
+			">": "bekapcsolva"
+		},
 		"eximpSettings": {
 			"#": 0,
 			">": "Beállítások exportálása/importálása"
@@ -263,10 +267,6 @@
 		"wheelZoom": {
 			"#": 0,
 			">": "Nagyítás görgetéssel"
-		},
-		"wheelZoomWithKey": {
-			"#": 0,
-			">": "Nagyítás görgetéssel gomb nyomva-tartásával"
 		},
 		"zoomParams": {
 			"#": 1,

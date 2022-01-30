@@ -56,6 +56,10 @@
 			"#": 0,
 			">": "disabled"
 		},
+		"enabled": {
+			"#": 0,
+			">": "enabled"
+		},
 		"eximpSettings": {
 			"#": 0,
 			">": "Export/import settings"
@@ -267,10 +271,6 @@
 		"wheelZoom": {
 			"#": 0,
 			">": "Zoom with mouse wheel"
-		},
-		"wheelZoomWithKey": {
-			"#": 0,
-			">": "Zoom with mouse wheel with key"
 		},
 		"zoomParams": {
 			"#": 1,

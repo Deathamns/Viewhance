@@ -265,10 +265,6 @@
 			"#": 0,
 			">": "Zoom con rotellina del mouse"
 		},
-		"wheelZoomWithKey": {
-			"#": 0,
-			">": "Zoom con rotellina del mouse con tasto"
-		},
 		"zoomParams": {
 			"#": 0,
 			">": "Incremento dello zoom; livelli"

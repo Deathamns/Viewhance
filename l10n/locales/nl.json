@@ -273,10 +273,6 @@
 			"#": 0,
 			">": "Zoomen met scrollwiel"
 		},
-		"wheelZoomWithKey": {
-			"#": 0,
-			">": "Zoomen met scrollwiel en toetsaanslag"
-		},
 		"zoomParams": {
 			"#": 1,
 			">": "Zoomstappen; inpaspunten"
