@@ -9,7 +9,7 @@
 		"?": "Uncategorized strings",
 		"appDescriptionLong": {
 			"#": 4,
-			">": "Enriches the built-in media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or with mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom information about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the address of the media to different services (such as reverse image search)\n- Frame extraction for animated images (GIF, APNG, WEBP)\n- Handling SVG and data:URIs\n- Forced inlining (show media instead of download)\n- Native DASH, HLS, MSS streaming (if the browser can support it)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
+			">": "Enriches the built-in media viewer with different customization possibilities and functionality.\n\nFeatures:\n- Default sizing modes and switching between them via shortcuts or mouse clicks\n- Custom CSS (background color for the page or media, hidden scrollbars...)\n- Custom information about the media in the tab title\n- Floating menu (mouse cursor over the top-left)\n- Mouse wheel zooming (off by default)\n- Centering content (default)\n- Rotate/Flip (via shortcuts or from the menu)\n- Sending the URL to different services (such as reverse image search)\n- Frame extraction for animated images (GIF, APNG, WEBP)\n- Handling SVG and data:URIs\n- Forced inlining (show media instead of download)\n- Native DASH, HLS, MSS streaming (if the browser can support it)\n- Customizable media attributes (autoplay, loop, controls, mute, volume)\n- Opening images from regular web-pages with right long-press or with shortcut (off by default)\n\nCheck out the Options page for more details.",
 			"?": "A longer description for the official extension repositories.\nShould be plain text, without any formatting elements (HTML, Markdown...)."
 		},
 		"appDescriptionShort": {
@@ -122,7 +122,7 @@
 		},
 		"mediaInfoTip": {
 			"#": 4,
-			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - original width\n<b>%oh</b> - original height\n<b>%ratio</b> - current width / current height\n<b>%w</b> - current width\n<b>%h</b> - current height\n<b>%perc</b> - percent of the original size\n<b>%url</b> - full URL\n<b>%type</b> - media type\n<b>%name</b> - filename\n<b>%size</b> - formatted filesize (may not work)"
+			">": "Display custom information in the title of the tab. It may contain the following variables:\n<b>%ow</b> - original width\n<b>%oh</b> - original height\n<b>%ratio</b> - current width / current height\n<b>%w</b> - current width\n<b>%h</b> - current height\n<b>%perc</b> - percent of the original size\n<b>%url</b> - full URL\n<b>%type</b> - media type\n<b>%name</b> - filename\n<b>%size</b> - formatted file size (may not work)"
 		},
 		"minUpscale": {
 			"#": 0,
@@ -130,7 +130,7 @@
 		},
 		"minUpscaleTip": {
 			"#": 1,
-			">": "Normally, smaller images won't be upscaled to the view-port. This option forces them to do so.\nThe value is given in percent, and tells the script to enlarge those images that are larger than the given percent of view-port's width or height (it depends on the previous option)."
+			">": "Normally, smaller images won't be up-scaled to the view-port. This option forces them to do so.\nThe value is given in percent, and tells the script to enlarge those images that are larger than the given percent of view-port's width or height (it depends on the previous option)."
 		},
 		"modeAutoFit": {
 			"#": 0,
