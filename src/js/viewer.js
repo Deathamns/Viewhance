@@ -1229,6 +1229,7 @@ init = function() {
 			filters.reset();
 		}
 
+		doc.body.removeAttribute('style');
 		delete media.scale;
 		delete media.bgList;
 		delete media.bgListIndex;
@@ -1539,7 +1540,8 @@ init = function() {
 
 		var key = shortcut.key(e);
 
-		if ( e.ctrlKey || freeZoom && key !== 'Esc' ) {
+		if ( e.ctrlKey && key !== cfg.key_imgBg
+			|| freeZoom && key !== 'Esc' ) {
 			return;
 		}
 
@@ -1553,7 +1555,7 @@ init = function() {
 			return;
 		}
 
-		if ( e.altKey ) {
+		if ( e.altKey && key !== cfg.key_imgBg ) {
 			return;
 		}
 
@@ -1671,28 +1673,19 @@ init = function() {
 				setMediaStyle();
 				break;
 			case cfg.key_imgBg:
-				if ( vAPI.mediaType !== 'img' ) {
-					break;
+				if ( e.ctrlKey && e.altKey ) {
+					media.bgList = null;
+					media.bgCycleMode = media.bgCycleMode === 'body'
+						? 'media'
+						: 'body';
+					return;
 				}
 
-				// eslint-disable-next-line no-alert
-				var bgValue = e.shiftKey && prompt(
-					'background',
-					media.style.background
-				);
-
-				if ( bgValue === null ) {
-					break;
-				}
-
-				if ( bgValue !== false ) {
-					mediaCss.background = bgValue;
-					setMediaStyle();
-					break;
-				}
+				var bgValue;
+				var bgElement = media.bgCycleMode === 'body' ? doc.body : media;
 
 				if ( !media.bgList ) {
-					bgValue = win.getComputedStyle(media);
+					bgValue = win.getComputedStyle(bgElement);
 					bgValue = bgValue.background || bgValue.backgroundColor;
 					media.bgList = {};
 					media.bgList[bgValue] = true;
@@ -1700,15 +1693,34 @@ init = function() {
 					media.bgList['rgb(255, 255, 255)'] = true;
 					media.bgList['url(data:image/gif;base64,R0lGODlhFAAUAPABAO'
 						+ 'jo6P///yH5BAAKAAAALAAAAAAUABQAAAIohI+hy+jAYnhJLnrsx'
-						+ 'VBP7n1YyHVaSYKhh7Lq+VotPLo1TaW3HEtlAQA7)'] = true;
+						+ 'VBP7n1YyHVaSYKhh7Lq+VotPLo1TaW3HEtlAQA7) fixed'] = true;
 					media.bgList = Object.keys(media.bgList).filter(Boolean);
 					media.bgListIndex = 0;
 				}
 
-				mediaCss.background = media.bgList[
-					++media.bgListIndex % media.bgList.length
-				];
-				setMediaStyle();
+				// eslint-disable-next-line no-alert
+				bgValue = e.shiftKey && prompt(
+					'background',
+					bgElement.style.background
+				);
+
+				if ( bgValue === null ) {
+					break;
+				}
+
+				if ( bgValue === false ) {
+					bgValue = media.bgList[
+						++media.bgListIndex % media.bgList.length
+					];
+				}
+
+				if ( bgElement === media ) {
+					mediaCss.background = bgValue;
+					setMediaStyle();
+				} else {
+					bgElement.style.background = bgValue;
+				}
+
 				break;
 			default: x = true;
 		}
