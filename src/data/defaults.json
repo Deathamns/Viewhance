@@ -16,7 +16,10 @@
 		"Google|https://www.google.com/searchbyimage?image_url=%url",
 		"Bing|https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=%url",
 		"Yandex|https://yandex.com/images/search?rpt=imageview&url=%url",
+		"Jimpl - metadata|https://jimpl.com/?url=%url",
+		"Online Convert - OCR|https://document.online-convert.com/convert-to-txt?ocr=1&external_url=%url#external_url",
 		"ZXing QRCode|https://zxing.org/w/decode?full=true&u=%url",
+		"Annotely|https://szoter.com/launch/?url=%url",
 		"ImgOps|https://imgops.com/%raw_url"
 	],
 	"menuTriggerArea": null,
