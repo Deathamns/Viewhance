@@ -343,7 +343,13 @@ head.appendChild(doc.createElement('style')).textContent = [
 		'outline: 1px dotted #666;',
 	'}',
 	// Custom CSS
-	cfg.css
+	cfg.css,
+	'@media print {',
+		'html, body, #media {',
+			'all: initial !important;',
+			'max-width: 100% !important;',
+		'}',
+	'}'
 ].join('');
 
 root.insertBefore(head, doc.body);
