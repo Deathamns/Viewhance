@@ -82,8 +82,8 @@ if params['-min']:
     minifiers = {
         # https://mvnrepository.com/artifact/com.google.javascript/closure-compiler
         'closure-compiler': {
-            'file': 'closure-compiler-v20220104.jar',
-            'url': 'https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/v20220104/closure-compiler-v20220104.jar',
+            'file': 'closure-compiler-v20220301.jar',
+            'url': 'https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/v20220301/closure-compiler-v20220301.jar',
         },
         'yuicompressor': {
             'file': 'yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar',
