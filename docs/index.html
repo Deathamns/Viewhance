@@ -177,7 +177,7 @@
 			padding-bottom: 15px;
 		}
 	</style>
-	<title>Viewhance :: Archive</title>
+	<title>Viewhance</title>
 </head>
 <body>
 	<div id="faq">
@@ -252,7 +252,7 @@
 	</div>
 
 	<div style="padding: 20px 0 0 20px">
-	<b>Viewhance</b> is a browser extension that adds extra functionality to the browser's default image/media viewer. URL for sharing: <a href="https://tiny.cc/Viewhance"><b>https://tiny.cc/Viewhance</b></a><br>
+	<b>Viewhance</b> is a browser extension that adds extra functionality to the browser's default image/media viewer.<br>
 
 	<div id="install">
 		<span>Install the latest version for</span>
@@ -262,19 +262,19 @@
 			</a>
 			<div>
 				The WebExtension version can be installed from <a href="https://addons.mozilla.org/en-US/firefox/addon/viewhance/">AMO</a>.<br>
-				If you're looking for the legacy version, which could potentially run on PaleMoon, Waterfox or other Gecko based browsers, then check out the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IVU5Dd08yUU5VNUE">archive</a>.
+				If you're looking for the legacy version, which could potentially run on PaleMoon, Waterfox or other Gecko based browsers, then check out the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IVU5Dd08yUU5VNUE">archive</a> or build it from the source code.
 			</div>
 		</div>
 		<div>
-			<a href="https://chrome.google.com/webstore/detail/viewhance/impppjchnpfgknmbaaghfeopcgfoilac" rel="nofollow">
+			<a href="https://chrome.google.com/webstore/detail/viewhance/impppjchnpfgknmbaaghfeopcgfoilac" rel="nofollow" class="fade">
 				<img src="img/browser_icons/icon32_chrome.png" alt="Chrome" class="browser-icon">
 			</a>
 			<div>
-				Install from <s><a href="https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac">Chrome Web Store</a></s> the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archvie</a>.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
+				Install from <s><a href="https://chrome.google.com/webstore/detail/impppjchnpfgknmbaaghfeopcgfoilac">Chrome Web Store</a></s> the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archive</a>.<br>Other browsers based on the Chromium platform, or follow the WebExtension API are also able to run this version, such as Opera 15+, Vivaldi, Edge...
 			</div>
 		</div>
 		<div>
-			<img src="img/browser_icons/icon32_opera.png" alt="Opera" class="browser-icon">
+			<img src="img/browser_icons/icon32_opera.png" alt="Opera" class="browser-icon fade">
 			<div>
 				To install on Opera 12, download the extension file and drop it into the browser window.
 				<br><br>
@@ -293,7 +293,7 @@
 			</div>
 		</div>
 		<div>
-			<a href="http://extension.maxthon.com/detail/index.php?view_id=2527" rel="nofollow">
+			<a href="http://extension.maxthon.com/detail/index.php?view_id=2527" rel="nofollow" class="fade">
 				<img src="img/browser_icons/icon32_maxthon.png" alt="Maxthon" class="browser-icon">
 			</a>
 			<div>Install from <a href="https://extension.maxthon.com/detail/index.php?view_id=2527">Maxthon Extension Center</a>, or newer versions from the <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U">archive</a>, because as it seems Maxthon doesn't really review extension updates anymore</div>
@@ -323,7 +323,7 @@
 	- Customizable media attributes (autoplay, loop, controls, mute, volume)
 	- Opening images from regular web-pages with right long-press or with shortcut (off by default)</pre>
 
-	<h3>Changelog <a href="https://drive.google.com/drive/folders/0Bx8fnUCX4W2IOTdESEFoM3luS1U"><small>Archive</small></a></h3>
+	<h3>Changelog</h3>
 
 	<pre>
 	<b>+</b> Added feature
@@ -331,6 +331,21 @@
 	<b>#</b> Bug fixed</pre>
 
 	<ul class="versions">
+		<li id="v2022.326.1950"><b>2022.326.1950</b>
+		<pre>
+* Merged <b>Zoom with mouse wheel</b> and <b>Zoom with mouse wheel with key</b> options (the new option needs to be set in order to work)
+* If wheel zooming is set to use the <i>Shift</i> key, then for secondary zoom steps <i>Ctrl</i> will be used while zooming with mouse wheel, <i>Shift</i> in every other case
++ Hidden feature: <i>Ctrl+Alt+B</i> to switch background changing between media and page
+* GIF parsing tweaks (helps with frame extraction for some invalid GIFs)
+* Support AVIF with inlining
+# Fix media position when printing
+# (ffx) Fix partial media initialization
+* Updated default send-to-host list
+* Updated/added translations: Russian by <a href="https://github.com/Rodny0">Rondy</a>, Dutch by <a href="https://github.com/Vistaus">Vistaus</a>, Italian by <a href="https://github.com/FastZyx">FastZyx</a>
+* Updated libraries
+		</pre>
+		</li>
+
 		<li id="v2020.913.1025"><b>2020.913.1025</b>
 		<pre>
 * (opener) Support ShadowDOM
@@ -372,19 +387,19 @@
 		<li id="v2019.1119.1805"><b>2019.1119.1805</b>
 		<pre>
 Warning: the following new features require new permissions (to detect all these media types)
-+ (crx, ffx) Support viewing the following streaming formats (with bitrate selection): DASH, HLS, MSS
++ (crx, ffx) Support viewing the following streaming formats (with bit-rate selection): DASH, HLS, MSS
 + (crx, ffx) Option to view <i>SVG</i> and/or <i>data:</i> media files in an internal viewer
-+ (crx, ffx) Media in-lining, which changes Content-Desposition <b>attachment</b> to <b>inline</b> (it shows the media instead of downloading it)
++ (crx, ffx) Media in-lining, which changes Content-Disposition <b>attachment</b> to <b>inline</b> (it shows the media instead of downloading it)
 * Wheel over scrollbars shouldn't zoom
 * Newer Maxthon compatibility
-* Always use black background for videos (becuase of fullscreen)
+* Always use black background for videos (because of full-screen)
 		</pre>
 		</li>
 
 		<li id="v2019.705.1915"><b>2019.705.1915</b>
 		<pre>
 * Media detection for newer versions of Firefox
-* Allow mousedown propagation (solves conflict with other extensions)
+* Allow mouse-down propagation (solves conflict with other extensions)
 * (opener) Check background image on body if there are no other matches
 * (opener) Switch back to opener tab when closing an opened image
 # (opener) Regex couldn't match some background images
@@ -402,10 +417,10 @@ Warning: the following new features require new permissions (to detect all these
 
 		<li id="v2018.1202.1831"><b>2018.1202.1831</b>
 		<pre>
-+ Frame exctractor for animated images now accepts parameters from the URL: <b>frm</b> - initial frame number, <b>full</b> - force full frame exctraction. Example: <code>https://url/animated_image.gif#<b>frm:23;full:1</b></code> (obviously this works only for those use this extension)
-* Other frame extractor imporvements
++ Frame exctractor for animated images now accepts parameters from the URL: <b>frm</b> - initial frame number, <b>full</b> - force full frame extraction. Example: <code>https://url/animated_image.gif#<b>frm:23;full:1</b></code> (obviously this works only for those use this extension)
+* Other frame extractor improvements
 # Event handling fixes (some clicks didn't register)
-# (opr) Shortcuts stopped working after cliking menu items
+# (opr) Shortcuts stopped working after clicking menu items
 # (opr) Workaround for percentage calculation in the title
 		</pre>
 		</li>
@@ -434,7 +449,7 @@ Warning: the following new features require new permissions (to detect all these
 # (chr) Frame extractor styling interference with default viewer
 # (ffx) Workaround for full frame extraction in recent versions of Firefox
 # (ffx) Legacy extension compatibility in recent versions of Firefox
-* Use original dimensions for non-full frames (also outline them on hover, and show their dimensions in tooltip)
+* Use original dimensions for non-full frames (also outline them on hover, and show their dimensions in tool-tip)
 		</pre>
 		</li>
 
@@ -448,17 +463,17 @@ Warning: the following new features require new permissions (to detect all these
 
 		<li id="v2017.917.1405"><b>2017.917.1405</b>
 		<pre>
-# (chr) Fix upscaling for newer versions of Chrome
+# (chr) Fix up-scaling for newer versions of Chrome
 # (ffx,sfr) Fix image tab detection for latest versions of Firefox/Safari
 * Use SVG icons for the floating menu
 * Opener: try to catch elements with <i>pointer-events: none</i>
-+ Add %size variable for the title text to show the media filesize (won't work in every case)
++ Add %size variable for the title text to show the media file size (won't work in every case)
 		</pre>
 		</li>
 
 		<li id="v2017.502.1705"><b>2017.502.1705</b>
 		<pre>
-* Make upscaling more consitent across sizing modes
+* Make up-scaling more consistent across sizing modes
 * Allow dragging the image if that fits the view-port
 * Replace fit to width/height shortcuts with a simple fill
 # Fix zooming for rotated media
@@ -477,9 +492,9 @@ Warning: the following new features require new permissions (to detect all these
 		<li id="v2017.219.2144"><b>2017.219.2144</b>
 		<pre>
 + Custom scale factor and snap points for zooming
-# (chr) In recent Chrome versions initial size couldn't be applied for images larger than the viewport
+# (chr) In recent Chrome versions initial size couldn't be applied for images larger than the view-port
 * Default value for "Enlarge small images" has been changed to <b>50%</b>
-* Single click behaves as best fit (long-press function) on images that have the same width or height as their viewport, and they are in their original size or fit to the window
+* Single click behaves as best fit (long-press function) on images that have the same width or height as their view-port, and they are in their original size or fit to the window
 * Opener now ignores empty data: URIs, also it will get the image source from <i>currentSrc</i> instead of <i>src</i>
 * Warning pop-up for frame extractor on possible high memory usage
 		</pre>
@@ -521,7 +536,7 @@ Warning: the following new features require new permissions (to detect all these
 		<pre>
 # Changing volume using shortcuts didn't work
 # (opr) Menu could stuck after panning
-# Flip shortucts were flipped
+# Flip shortcuts were flipped
 * Updated URLs for search by image providers
 * (chr) Make use of <a href="https://developer.chrome.com/extensions/event_pages">Event Pages</a>
 * Other minor fixes
@@ -551,7 +566,7 @@ Warning: the following new features require new permissions (to detect all these
 * Drop option for long-press delay (300ms will be used)
 * Load host favicons when the list appears instead on mouse over
 * Add "loop" to default media attributes
-* Use upscaling for images only
+* Use up-scaling for images only
 * (ffx) Disable browser functions for image while the extension is active (less conflict with the default viewer)
 		</pre>
 		</li>
@@ -636,7 +651,7 @@ Warning: the following new features require new permissions (to detect all these
 
 		<li id="v0.9.5"><b>0.9.5 - November 03, 2014</b>
 		<pre>
-# Zooming didn't work with mousewheel over the button in the floating menu
+# Zooming didn't work with mouse-wheel over the button in the floating menu
 * Some code polishing...
 		</pre>
 		</li>
