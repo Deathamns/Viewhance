@@ -107,18 +107,21 @@ class Platform(base.PlatformBase):
         if not os.path.isfile(key):
             return
 
-        with open(os.devnull) as devnull:
-            publickey = subprocess.Popen(
-                ['openssl', 'rsa', '-pubout', '-outform', 'DER', '-in', key],
-                stdout=subprocess.PIPE, stderr=devnull
-            ).stdout.read()
+        try:
+            with open(os.devnull) as devnull:
+                publickey = subprocess.Popen(
+                    ['openssl', 'rsa', '-pubout', '-outform', 'DER', '-in', key],
+                    stdout=subprocess.PIPE, stderr=devnull
+                ).stdout.read()
 
-            signature = subprocess.Popen(
-                ['openssl', 'sha1', '-sign', key, zip_file],
-                stdout=subprocess.PIPE, stderr=devnull
-            ).stdout.read()
+                signature = subprocess.Popen(
+                    ['openssl', 'sha1', '-sign', key, zip_file],
+                    stdout=subprocess.PIPE, stderr=devnull
+                ).stdout.read()
 
-        package = self.package_name + '.' + self.ext;
+            package = self.package_name + '.' + self.ext;
+        except:
+            return
 
         try: os.remove(package)
         except: pass
