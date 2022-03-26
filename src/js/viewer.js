@@ -2627,8 +2627,9 @@ media.togglePlay = function() {
 	}
 };
 
-media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
-	this.removeEventListener(e.type, onLoadedMetadata);
+var onLoadedMetadata = function() {
+	media.removeEventListener('loadedmetadata', onLoadedMetadata);
+	onLoadedMetadata = null;
 
 	var playerStateSaver;
 	var monitoredAttrs = mediaAttributes.slice(1, -2);
@@ -2701,7 +2702,7 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 		setTimeout(media.play.bind(media), 50);
 	}
 
-	if ( this.videoHeight ) {
+	if ( media.videoHeight ) {
 		init();
 		return;
 	}
@@ -2718,7 +2719,13 @@ media.addEventListener('loadedmetadata', function onLoadedMetadata(e) {
 	media.addEventListener('playing', function() {
 		this.poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
 	});
-});
+};
+
+if ( media.readyState < media.HAVE_METADATA ) {
+	media.addEventListener('loadedmetadata', onLoadedMetadata);
+} else {
+	onLoadedMetadata();
+}
 // eslint-disable-next-line padded-blocks
 };
 // eslint-disable-next-line padded-blocks
