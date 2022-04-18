@@ -158,7 +158,8 @@ Object.defineProperty(vAPI, 'mediaType', {
 
 		if ( vAPI.firefox ) {
 			media = document.head && document.head.querySelector(
-				'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"]'
+				'link[rel=stylesheet][href^="chrome://global/skin/media/TopLevel"],'
+				+ 'link[rel=stylesheet][href^="resource://content-accessible/TopLevel"]'
 			);
 			this._mediaType = '';
 
