@@ -1919,7 +1919,7 @@ init = function() {
 	}
 
 	// cfg.mode values: 0 - natural size; 1 - contain; 2 - best fit (fill)
-	if ( cfg.mode === 2 ) {
+	if ( vAPI.mediaType === 'img' && cfg.mode === 2 ) {
 		if ( mOrigWidth / mOrigHeight < winW / winH ) {
 			media.mode = MODE_WIDTH;
 
