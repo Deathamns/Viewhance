@@ -1850,11 +1850,13 @@ init = function() {
 	media.addEventListener('dragend', toggleDraggable);
 
 	if ( vAPI.mediaType === 'video' ) {
-		media.addEventListener('qualityChanged', function() {
-			setTimeout(function() {
-				setOriginalDimensions();
-				resizeMedia(media.mode);
-			}, 100);
+		media.addEventListener('canplaythrough', function() {
+			media.dispatchEvent(new Event('resize'));
+		}, {once: true});
+
+		media.addEventListener('resize', function() {
+			setOriginalDimensions();
+			resizeMedia(media.mode);
 
 			if ( !menu ) {
 				return;

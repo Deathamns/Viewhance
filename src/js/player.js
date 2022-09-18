@@ -10,10 +10,6 @@ let startPlayer = function() {
 
 	const media = document.body.querySelector('video');
 
-	const onQualityChanged = function() {
-		media.dispatchEvent(new CustomEvent('qualityChanged', {bubbles: false}));
-	};
-
 	const onError = function() {
 		media.dispatchEvent(new Event('error', {bubbles: false}));
 	};
@@ -59,14 +55,13 @@ let startPlayer = function() {
 
 		dash.initialize(media, vAPI.extraFormatUrl, false);
 
-		dash.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, function() {
+		dash.on(dashjs.MediaPlayer.events.STREAM_ACTIVATED, function() {
 			generateQualityList(
 				dash.getBitrateInfoListFor('video'),
 				'qualityIndex'
 			);
+			dash.off(dashjs.MediaPlayer.events.STREAM_ACTIVATED);
 		});
-
-		dash.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_RENDERED, onQualityChanged);
 
 		dash.on(dashjs.MediaPlayer.events.ERROR, function() {
 			dash.reset();
@@ -94,8 +89,6 @@ let startPlayer = function() {
 			generateQualityList(hls.levels);
 			media.play();
 		});
-
-		hls.on(Hls.Events.LEVEL_SWITCHED, onQualityChanged);
 
 		hls.on(Hls.Events.ERROR, function(ev, data) {
 			if ( !data.fatal ) {
@@ -132,8 +125,6 @@ let startPlayer = function() {
 		};
 
 		media.setQuality = function(index) {
-			hls.loadLevel = index;
-			hls.nextLevel = index;
 			hls.currentLevel = index;
 		};
 	}
