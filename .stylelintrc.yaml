@@ -1,16 +1,19 @@
 rules:
     # Possible errors
+    annotation-no-unknown: true
     color-no-invalid-hex: true
     font-family-no-duplicate-names: true
     font-family-no-missing-generic-family-keyword: true
     named-grid-areas-no-invalid: true
     function-calc-no-unspaced-operator: true
     function-linear-gradient-no-nonstandard-direction: true
+    function-no-unknown: true
     string-no-newline: true
     unit-no-unknown: true
     custom-property-no-missing-var-function: true
     property-no-unknown: true
     keyframe-declaration-no-important: true
+    keyframe-block-no-duplicate-selectors: true
     declaration-block-no-duplicate-custom-properties: true
     declaration-block-no-duplicate-properties: true
     declaration-block-no-shorthand-property-overrides: true
@@ -45,6 +48,8 @@ rules:
     function-url-quotes: ["always", except: ["empty"]]
     # function-url-scheme-allowed-list: ""
     # function-url-scheme-disallowed-list: ""
+    import-notation: "url"
+    keyframe-selector-notation: "percentage-unless-within-keyword-only-block"
     # keyframes-name-pattern: ""
     # number-max-precision: 0
     # time-min-milliseconds: 0
@@ -56,12 +61,12 @@ rules:
     # property-allowed-list: ""
     # property-disallowed-list: ""
     property-no-vendor-prefix: true
-    declaration-block-no-redundant-longhand-properties: true
     # declaration-no-important: ""
     # declaration-property-unit-allowed-list: ""
     # declaration-property-unit-disallowed-list: ""
     # declaration-property-value-allowed-list: ""
     # declaration-property-value-disallowed-list: ""
+    declaration-block-no-redundant-longhand-properties: true
     # declaration-block-single-line-max-declarations: 0
     # selector-attribute-name-disallowed-list: ""
     # selector-attribute-operator-allowed-list: ""
@@ -84,6 +89,7 @@ rules:
     # selector-nested-pattern: ""
     # selector-no-qualifying-type: ""
     selector-no-vendor-prefix: true
+    selector-not-notation: "complex"
     # selector-pseudo-class-allowed-list: ""
     # selector-pseudo-class-disallowed-list: ""
     # selector-pseudo-element-allowed-list: ""
